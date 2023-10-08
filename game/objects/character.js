@@ -10,6 +10,7 @@ class Character {
 		this.h = h //Height
 
 		this.speed = 100 //Speed (px/sec)
+		this.controller = false //Is it being controlled?
 	}
 
 	// Move: dt, direction normal x, direction normal y

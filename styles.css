@@ -13,6 +13,10 @@ body, html {
     margin: auto;
     margin-left: auto;
     margin-right: auto;
+    
+    max-width: 100%; /* Ensure the canvas never exceeds the width of the window */
+    overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
+
     display: flex;
     justify-content: center;
     align-items: center;
