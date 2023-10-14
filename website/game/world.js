@@ -12,7 +12,7 @@ class World {
 	load () {
 		// Initialize all character
 		CHARACTER = []
-		CHARACTER[0] = new Character(0, 0, 120, 160)
+		CHARACTER[0] = new Character(canvasWidth/2-60, canvasHeight/2-80, 120, 160)
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
