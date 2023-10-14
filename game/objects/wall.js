@@ -9,6 +9,6 @@ class Walls {
 
     //Check if object is inside walls
     checkInside(obj) {
-        
+        //TODO: Use seperated axis theorem to find collisions.
     }
 }

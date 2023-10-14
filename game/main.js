@@ -1,19 +1,20 @@
 let menus = []
 let menu_state = ""
 let menu_open = false
+let gamestate = ""
 
 // Initialize game and load assets
 function gameLoad() {
     loadGameAssets()
-    
-    PLAYER = new Character(0, 0, 120, 160)
-    PLAYER_CONTROLLER = new Player(PLAYER)
+
+    //Start world game state
+    WORLD = new World("hub")
+    setState(WORLD)
 }
 
 // update game logic
 function gameUpdate(dt) {
-    // Update objects
-    PLAYER_CONTROLLER.update(dt)
+    updateState(dt)
 
     // Is menu open?
     if (menu_open) {
@@ -25,19 +26,8 @@ function gameUpdate(dt) {
 function gameDraw() {
     // Clear
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Background
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
-    // Render objects
-    ctx.fillStyle = "black";
-    ctx.fillRect(PLAYER.x, PLAYER.y, PLAYER.w, PLAYER.h)
-    ctx.drawImage(IMG.chicken, PLAYER.x, PLAYER.y, PLAYER.w, PLAYER.h);
-
-    // Set the font and text color
-    ctx.font = "30px Arial";
-    ctx.fillStyle = "blue";
-    ctx.fillText("Hello, World!", 50, 100);
+    drawState()
 
     // Is menu open?
     if (menu_open) {
@@ -47,14 +37,14 @@ function gameDraw() {
 
 // Run game loop
 gameLoad()
-let lastTimestamp = 0;
+let lastTimestamp = 0
 function gameLoop(timestamp) {
-    const dt = (timestamp - lastTimestamp) / 1000;
-    lastTimestamp = timestamp;
+    const dt = (timestamp - lastTimestamp) / 1000
+    lastTimestamp = timestamp
 
-    gameUpdate(dt);
-    gameDraw();
+    gameUpdate(dt)
+    gameDraw()
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop)
 }
-requestAnimationFrame(gameLoop);
+requestAnimationFrame(gameLoop)

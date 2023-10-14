@@ -9,6 +9,7 @@ class Player {
 
     // Update
     update(dt) {
+        //Handle movement inputs
         let dx = 0
         let dy = 0
         if (arrowKeys.left) {
@@ -21,7 +22,7 @@ class Player {
         } else if (arrowKeys.down) {
             dy += 1
         }
-        dx, dy = vec2Norm(dx, dy)
+        dx, dy = vec2Norm(dx, dy) //convert to direction normal
         this.obj.move(dt, dx, dy)
     }
 }

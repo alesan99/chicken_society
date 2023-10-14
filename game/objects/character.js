@@ -11,11 +11,13 @@ class Character {
 
 		this.speed = 100 //Speed (px/sec)
 		this.controller = false //Is it being controlled?
+
+		this.area = "" //Current area
 	}
 
 	// Move: dt, direction normal x, direction normal y
 	move(dt, nx, ny) {
-		this.x += nx*this.speed*dt //TODO: Built in speed and JUST take in the direction
+		this.x += nx*this.speed*dt
 		this.y += ny*this.speed*dt
 	}
 
