@@ -5,45 +5,45 @@ var PLAYER_CONTROLLER
 
 class World {
 	constructor (area) {
-        this.name = "world"
+		this.name = "world"
 		this.area = area || "hub" //Area name
 	}
 
-    load () {
-        // Initialize all character
-        CHARACTER = []
-        CHARACTER[1] = new Character(0, 0, 120, 160)
-        // Initialize Player controller
-        PLAYER = CHARACTER[1]
-        PLAYER_CONTROLLER = new Player(CHARACTER[1])
-        //TODO: Dynamically load in and remove players from an online session
+	load () {
+		// Initialize all character
+		CHARACTER = []
+		CHARACTER[0] = new Character(0, 0, 120, 160)
+		// Initialize Player controller
+		PLAYER = CHARACTER[0]
+		PLAYER_CONTROLLER = new Player(CHARACTER[0])
+		//TODO: Dynamically load in and remove players from an online session
 
-        //TODO: Area collision
-        //WALLS = new Wall(this.area)
+		//TODO: Area collision
+		//WALLS = new Wall(this.area)
 
-    }
+	}
 
-    update (dt) {
-        // Update objects
-        PLAYER_CONTROLLER.update(dt)
+	update (dt) {
+		// Update objects
+		PLAYER_CONTROLLER.update(dt)
+		for (const obj of CHARACTER) {
+			obj.update(dt)
+		}
 
-        //TODO: Update Collision
-    }
+		//TODO: Update Collision
+	}
 
-    draw () {
-        // Background
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight)
-    
-        // Render objects
-        ctx.fillStyle = "black";
-        ctx.fillRect(PLAYER.x, PLAYER.y, PLAYER.w, PLAYER.h) //collision
-        ctx.drawImage(IMG.chicken, PLAYER.x, PLAYER.y, PLAYER.w, PLAYER.h) //sprite
-    
-        // Set the font and text color
-        ctx.font = "30px Arial";
-        ctx.fillStyle = "blue";
-        ctx.fillText("Hello, World!", 50, 100);
-    }
+	draw () {
+		// Background
+		//ctx.fillStyle = "white"
+		//ctx.fillRect(0, 0, canvasWidth, canvasHeight)
+        // TODO: load background depending on area
+        ctx.drawImage(BACKGROUND.hub, 0, 0, canvasWidth, canvasHeight) //sprite
+
+		// Draw objects
+		for (const obj of CHARACTER) {
+			obj.draw()
+		}
+	}
 }
 

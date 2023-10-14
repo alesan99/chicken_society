@@ -3,6 +3,13 @@ let menu_state = ""
 let menu_open = false
 let gamestate = ""
 
+PROFILE = {
+    name: "Testing",
+    color: "#AAAAFF",
+    hat: 0,
+    money: 0,
+}
+
 // Initialize game and load assets
 function gameLoad() {
     loadGameAssets()
@@ -25,6 +32,7 @@ function gameUpdate(dt) {
 // Render to canvas
 function gameDraw() {
     // Clear
+    ctx.save()
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawState()
@@ -33,6 +41,7 @@ function gameDraw() {
     if (menu_open) {
         menus[menu_state].draw()
     }
+    ctx.restore()
 }
 
 // Run game loop
