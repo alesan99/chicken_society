@@ -10,11 +10,20 @@ PROFILE = {
     money: 0,
 }
 
+NETPLAY = false
+
 // Initialize game and load assets
 function gameLoad() {
     loadGameAssets()
 
-    //Start world game state
+    // Start netplay
+    try {
+        NETPLAY = new Netplay()
+    } catch (e) {
+        // Socket module wasn't loaded...
+    }
+
+    // Start world game state
     WORLD = new World("hub")
     setState(WORLD)
 }

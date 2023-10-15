@@ -91,6 +91,6 @@ class Character {
 		ctx.font = "20px Arial";
 		ctx.fillStyle = "black";
 		ctx.textAlign = 'center';
-		ctx.fillText(PROFILE.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-2);
+		ctx.fillText(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-2);
 	}
 }

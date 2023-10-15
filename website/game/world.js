@@ -10,9 +10,10 @@ class World {
 	}
 
 	load () {
-		// Initialize all character
-		CHARACTER = []
-		CHARACTER[0] = new Character(canvasWidth/2-60, canvasHeight/2-80, 120, 160)
+		// Initialize all characters
+		// TODO: Make these names less confusing, chicken maybe?
+		CHARACTER = {}
+		CHARACTER[0] = new Character(canvasWidth/2-60, canvasHeight/2-80, 120, 160, PROFILE.name)
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
@@ -26,11 +27,14 @@ class World {
 	update (dt) {
 		// Update objects
 		PLAYER_CONTROLLER.update(dt)
-		for (const obj of CHARACTER) {
+		for (const [id, obj] of Object.entries(CHARACTER)) {
 			obj.update(dt)
 		}
 
 		//TODO: Update Collision
+		if (NETPLAY) {
+			NETPLAY.update(dt)
+		}
 	}
 
 	draw () {
@@ -41,7 +45,7 @@ class World {
         ctx.drawImage(BACKGROUND.hub, 0, 0, canvasWidth, canvasHeight) //sprite
 
 		// Draw objects
-		for (const obj of CHARACTER) {
+		for (const [id, obj] of Object.entries(CHARACTER)) {
 			obj.draw()
 		}
 	}
