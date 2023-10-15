@@ -8,7 +8,7 @@ https://alesan99.github.io/chicken_society/
 
 Install Node.js at https://nodejs.org/en
 
-In VSCode execute the following in the project directory:
+In VSCode, execute the following commands in the project directory:
 ```
 npm init -y
 npm install express socket.io express-session
