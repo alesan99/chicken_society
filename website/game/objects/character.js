@@ -4,15 +4,18 @@ let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
 class Character {
 	//Initialize: x pos, y pos, width, height
-	constructor (x, y, w, h, name) {
+	constructor (x, y, w, h, profile) {
 		// Collision
 		this.x = x || 0
 		this.y = y || 0
+		this.oldx = this.x
+		this.oldy = this.y
 		this.w = w //Width
 		this.h = h //Height
 
 		// Properties
-		this.name = name || "NPC" //name
+		this.name = profile.name || "NPC" //name
+		this.color = profile.color || [255,255,255]
 		this.speed = 200 //Speed (px/sec)
 		this.controller = false //Is it being controlled?
 		this.area = "" //Current area
@@ -31,6 +34,8 @@ class Character {
 
 	// Move: dt, direction normal x, direction normal y
 	move(dt, nx, ny) {
+		this.oldx = this.x
+		this.oldy = this.y
 		this.x += nx*this.speed*dt
 		this.y += ny*this.speed*dt
 
@@ -76,21 +81,15 @@ class Character {
 
 	//TODO: Render
 	draw() {
-		let [x, y, w, h] = this.anim.getSprite()
-		//ctx.fillStyle = "black";
-		//ctx.fillRect(this.x, this.y, this.w, this.h) //collision
+		//DRAW.setColor(0,0,0,0.3)
+		//DRAW.rectangle(this.x, this.y, this.w, this.h) //collision
 
-		ctx.save()
-		ctx.translate(Math.floor(this.x)+this.w/2, Math.floor(this.y)+this.h/2)
-		// ctx.rotate(this.timer) // Spin
-		ctx.scale(this.flip, 1)
-		ctx.drawImage(IMG.chicken, x, y, w, h, -w/2, -h/2, w, h) //sprite
-		ctx.restore()
+		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
+		DRAW.image(IMG.chicken, this.anim, this.x+this.w/2, this.y+this.h/2, 0, this.flip, 1, 0.5, 0.5)
 
 		// Nametag
-		ctx.font = "20px Arial";
-		ctx.fillStyle = "black";
-		ctx.textAlign = 'center';
-		ctx.fillText(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-2);
+		DRAW.setFont(FONT.caption)
+		DRAW.setColor(1,0,0,1)
+		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-2, "center")
 	}
 }

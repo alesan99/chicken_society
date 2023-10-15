@@ -5,7 +5,7 @@ let gamestate = ""
 
 PROFILE = {
     name: "Testing",
-    color: "#AAAAFF",
+    color: [255,150,150],
     hat: 0,
     money: 0,
 }
@@ -26,6 +26,8 @@ function gameLoad() {
     // Start world game state
     WORLD = new World("hub")
     setState(WORLD)
+
+    DRAW = new Render(ctx)
 }
 
 // update game logic
@@ -41,8 +43,8 @@ function gameUpdate(dt) {
 // Render to canvas
 function gameDraw() {
     // Clear
-    ctx.save()
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+    DRAW.clear(0,0,0,1)
+    DRAW.push()
 
     drawState()
 
@@ -50,7 +52,7 @@ function gameDraw() {
     if (menu_open) {
         menus[menu_state].draw()
     }
-    ctx.restore()
+    DRAW.pop()
 }
 
 // Run game loop

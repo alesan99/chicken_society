@@ -1,7 +1,7 @@
 // Render module; useful functions for rendering stuff onto the screen.
 
 const canvasWidth = 960; const canvasHeight = 540;
-const canvasPadding = 10;
+const canvasPadding = 20;
 
 // Get a reference to the canvas element
 var canvas = document.getElementById("gameCanvas");

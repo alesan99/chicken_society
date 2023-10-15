@@ -3,7 +3,7 @@ var socket = io(); // No URL because it defaults to trying to connect to host th
 class Netplay {
 	constructor () {
         this.timer = 0
-        this.interval = 1/15 //Time inbetween sending data to server
+        this.interval = 10/60 //Time inbetween sending data to server
 
         // Client
         this.connect()
@@ -26,7 +26,10 @@ class Netplay {
         // Send position to server
         this.timer += dt
         if (this.timer > this.interval) {
-            socket.volatile.emit("player", [PLAYER.x, PLAYER.y]);
+            let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(PLAYER.oldx), Math.floor(PLAYER.oldy)]
+            if ((x != ox) || (y != oy)) {
+                socket.volatile.emit("player", [x, y]);
+            }
             this.timer = this.timer%this.interval
         }
     }
@@ -34,7 +37,7 @@ class Netplay {
     // TODO: move this code to world.js
     addPlayer (id, player) {
         if ((id != socket.id) && (CHARACTER[id] == null)) {
-            CHARACTER[id] = new Character(player.x, player.y, 120, 160, player.profile.name)
+            CHARACTER[id] = new Character(player.x, player.y, 120, 160, player.profile)
         }
     }
 

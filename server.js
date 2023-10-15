@@ -38,18 +38,14 @@ io.on("connection", (socket) => {
         playerList[socket.id].profile = profile;
 
         io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
-        // io.emit("addPlayer", socket.id, playerList[socket.id]); // Use this to exlude the sender
         console.log(profile);
     });
 
     socket.on("player", (position) => {
-        //console.log("message: " + msg);
-        //io.emit("chat message", msg); // Broadcast the message to all connected clients.
         if (playerList[socket.id]) {
             playerList[socket.id].x = position[0];
             playerList[socket.id].y = position[1];
 
-            console.log("Got position", socket.id)
             socket.broadcast.emit("player", socket.id, position); // Use this to exlude the sender
         };
     });

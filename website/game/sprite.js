@@ -2,13 +2,13 @@
 
 class Sprite {
 	//Initialize: image, frame count x & y, offset x & y, frame width & height
-	constructor (img, cx, cy, ox, oy, w, h) {
+	constructor (img, cx, cy, ox, oy, w, h, ow, oh) {
 		this.img = img
 		this.frame = []
 		for (let y = 0; y < cy; y++) { // Rows
 			this.frame[y] = []
 			for (let x = 0; x < cx; x++) { // Columns
-				this.frame[y][x] = [x*w+ox, y*h+oy, w, h] // x, y, w, h
+				this.frame[y][x] = [x*ow+ox, y*oh+oy, w, h] // x, y, w, h
 			}
 		}
 	}

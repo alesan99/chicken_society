@@ -13,7 +13,7 @@ class World {
 		// Initialize all characters
 		// TODO: Make these names less confusing, chicken maybe?
 		CHARACTER = {}
-		CHARACTER[0] = new Character(canvasWidth/2-60, canvasHeight/2-80, 120, 160, PROFILE.name)
+		CHARACTER[0] = new Character(canvasWidth/2-60, canvasHeight/2-80, 120, 160, PROFILE)
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
@@ -39,13 +39,18 @@ class World {
 
 	draw () {
 		// Background
-		//ctx.fillStyle = "white"
-		//ctx.fillRect(0, 0, canvasWidth, canvasHeight)
         // TODO: load background depending on area
-        ctx.drawImage(BACKGROUND.hub, 0, 0, canvasWidth, canvasHeight) //sprite
+		DRAW.setColor(255,255,255)
+        DRAW.image(BACKGROUND.hub, null, 0, 0) //sprite
 
-		// Draw objects
+		// Draw objects in the correct order
+		let drawQueue = []
 		for (const [id, obj] of Object.entries(CHARACTER)) {
+			drawQueue.push(obj)
+		}
+		drawQueue.sort((a, b) => a.y - b.y);
+		for (let i = 0; i < drawQueue.length; i++) {
+			const obj = drawQueue[i];
 			obj.draw()
 		}
 	}
