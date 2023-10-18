@@ -30,6 +30,7 @@ var playerList = {};
 io.on("connection", (socket) => {
     console.log("A user connected");
 
+    // Recieve information about players; Send out info to everyone
     socket.on("profile", (profile) => {
         playerList[socket.id] = {};
         playerList[socket.id].id = socket.id;
@@ -41,15 +42,27 @@ io.on("connection", (socket) => {
         console.log(profile);
     });
 
-    socket.on("player", (position) => {
+    // Recieved player data (position, velocity); Send out to everyone
+    socket.on("player", (position, velocity) => {
         if (playerList[socket.id]) {
             playerList[socket.id].x = position[0];
             playerList[socket.id].y = position[1];
+            playerList[socket.id].sx = position[2];
+            playerList[socket.id].sy = position[3];
 
             socket.broadcast.emit("player", socket.id, position); // Use this to exlude the sender
         };
     });
 
+    // Recieve chat message and send out to everyone
+    socket.on("chat", (text) => {
+        if (playerList[socket.id]) {
+            // TODO: Word filter
+            socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
+        };
+    });
+
+    // Player disconnected; Tell all players that someone disconnected
     socket.on("disconnect", () => {
         delete playerList[socket.id];
         io.emit("removePlayer", socket.id); // Use this to exlude the sender
@@ -57,8 +70,9 @@ io.on("connection", (socket) => {
 });
 
 // Start server on port TODO: How to deploy??
-server.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+const port = 3001
+server.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
 
 /*

@@ -19,6 +19,9 @@ class Character {
 		this.controller = false //Is it being controlled?
 		this.area = "" //Current area
 
+		this.sx = 0// Speed x
+		this.sy = 0// Speed y
+
 		// Graphics
 		this.sprite = SPRITE.chicken
 		this.anim = new Animation(this.sprite, 0)
@@ -29,6 +32,10 @@ class Character {
 		this.flip = 1
 
 		this.timer = 0
+
+		// Expressions
+		this.bubbleText = false // string, show speech bubble over character
+		this.bubbleTime = false // How long the bubble is visible (seconds)
 	}
 
 	// Move: dt, direction normal x, direction normal y
@@ -63,6 +70,12 @@ class Character {
 	}
 
 	update(dt) {
+		// Update movement
+		if ((this.sx == 0 && this.sy == 0) != true) {
+			this.move(dt, this.sx, this.sy)
+		}
+
+		// Update Animation
 		if (this.walking != this.oldwalking) {
 			if (this.walking) {
 				this.anim.playAnimation(ANIM.walk, 0.2)
@@ -75,6 +88,15 @@ class Character {
 		// Update walking or emote animation
 		this.anim.update(dt)
 
+		// Dissapear chat bubble after few seconds
+		if (this.bubbleTime != false) {
+			this.bubbleTime -= dt
+			if (this.bubbleTime < 0) {
+				this.bubbleTime = false
+				this.bubbleText = false
+			}
+		}
+
 		this.timer += dt
 	}
 
@@ -84,16 +106,59 @@ class Character {
 		//DRAW.rectangle(this.x, this.y, this.w, this.h) //collision
 
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(IMG.chicken, this.anim, this.x+this.w/2, this.y+this.h/2, 0, this.flip, 1, 0.5, 0.5)
+		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x+this.w/2, this.y+this.h/2, 0, this.flip, 1, 0.5, 0.5)
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x+this.w/2, this.y+this.h/2, 0, this.flip, 1, 0.5, 0.5)
 
 		// Nametag
 		DRAW.setFont(FONT.caption)
 		DRAW.setColor(1,0,0,1)
-		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-2, "center")
+		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-1, "center")
+
+		// Chat bubble
+		if (this.bubbleText != false) {
+			DRAW.setFont(FONT.chatBubble)
+			DRAW.setColor(255,255,255,1.0)
+			
+			DRAW.image(IMG.chatBubble, null, this.x+this.w/2, this.y, 0, 1, 1, 0.5, 1)
+			DRAW.setColor(1,0,0,1)
+
+			// Wrap text so it fits into the bubble
+			let text = this.bubbleText
+			let lineLength = 15 // How many characters can fit in a single line?
+			let line = 0
+			let verticalSpacing = 18
+			for (let i = 0; i < text.length; i += lineLength) {
+				let textSegment = text.substring(i, i+lineLength)
+				DRAW.text(textSegment, Math.floor(this.x)+this.w/2, Math.floor(this.y)+line*verticalSpacing -68 , "center")
+				line += 1
+			}
+		}
 	}
 
+	// Update appearance based on given profile
 	updateProfile(profile) {
 		this.name = profile.name || "NPC" //name
 		this.color = profile.color || [255,255,255]
 	}
+
+	// Display speech bubble
+	chatBubble(text) {
+		this.bubbleText = text
+		this.bubbleTime = 4
+	}
+}
+
+
+function wrapText(text, lineLength) {
+    if (typeof text !== 'string' || typeof lineLength !== 'number' || lineLength <= 0) {
+      return text
+    }
+  
+    let result = ''
+    for (let i = 0; i < text.length; i += lineLength) {
+      result += text.substring(i, lineLength) + '\n'
+    }
+  
+    return result
 }

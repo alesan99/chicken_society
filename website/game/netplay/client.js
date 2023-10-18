@@ -9,13 +9,19 @@ class Netplay {
         this.connect()
         // this.id = socket.id //TODO: Do something else? Ideally client should not know its server-side id.
 
+        // Player syncing information
+        this.oldx = 0
+        this.oldy = 0
+
         // Events
         socket.on("playerList", (playerList) => {this.getPlayerList(playerList)})
         socket.on("addPlayer", (id, player) => {this.addPlayer(id, player)})
         socket.on("removePlayer", (id) => {this.removePlayer(id)})
         socket.on("player", (id, position) => {this.recievePosition(id, position)})
+        socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 	}
 
+    // Connect to server for the first time and send information about yourself
     connect () {
         socket.timeout(10000).emitWithAck("profile", PROFILE, (err, val) => {
             console.log("could not connect to server :(")
@@ -26,11 +32,16 @@ class Netplay {
         // Send position to server
         this.timer += dt
         if (this.timer > this.interval) {
-            let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(PLAYER.oldx), Math.floor(PLAYER.oldy)]
+            // Calculate velocity of player
+            let [sx, sy] = vec2Norm(PLAYER.x-PLAYER.oldx, PLAYER.y-PLAYER.oldy)
+            // Check if position has changed since last time position was sent to the server
+            let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(this.oldx), Math.floor(this.oldy)]
             if ((x != ox) || (y != oy)) {
-                socket.volatile.emit("player", [x, y]);
+                socket.volatile.emit("player", [x, y, sx, sy])
             }
             this.timer = this.timer%this.interval
+            this.oldx = x
+            this.oldy = y
         }
     }
 
@@ -47,6 +58,7 @@ class Netplay {
         }
     }
 
+    // Recieve list of players
     getPlayerList (playerList) {
         console.log("recieved playerList")
 		for (const [id, p] of Object.entries(playerList)) {
@@ -57,11 +69,27 @@ class Netplay {
 		}
     }
 
+    // Recive player data from server and reflect changes
     recievePosition (id, position) {
-        console.log("recieved player data", id)
         if (CHARACTER[id]) {
+            // Position and speed
             CHARACTER[id].x = position[0]
             CHARACTER[id].y = position[1]
+            CHARACTER[id].sx = position[2]
+            CHARACTER[id].sy = position[3]
+        }
+    }
+
+    // Send chat to everyone
+    // TODO: Word filter
+    sendChat (text) {
+        socket.emit("chat", text)
+    }
+
+    recieveChat (id, text) {
+        console.log("recieved chat", text)
+        if (CHARACTER[id] != null) {
+            CHARACTER[id].chatBubble(text)
         }
     }
 }

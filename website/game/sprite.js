@@ -72,9 +72,9 @@ class Animation {
 		}
 	}
 
-	// Returns x, y, w, h of current frame
-	getSprite () {
-		let sprite_frame = this.sprite.frame[this.framey][this.framex]
+	// Returns x, y, w, h of current frame; offset gets a frame relative to the current frame
+	getSprite (offsetx=0 , offsety=0) {
+		let sprite_frame = this.sprite.frame[this.framey+offsety][this.framex+offsetx]
 		return sprite_frame
 	}
 }

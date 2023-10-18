@@ -12,6 +12,7 @@ class ChatObject {
 
     enter() {
         if (this.value.substring(0, 1) == "/") {
+            // Execute command
             let s = this.value.split(" ")
             let [command, arg, arg2, arg3] = [s[0], s[1], s[2], s[3]]
             
@@ -29,6 +30,13 @@ class ChatObject {
                     PROFILE.hat = Number(arg)
                     PLAYER.updateProfile(PROFILE)
                     break
+            }
+        } else {
+            // Send chat message
+            let message = this.value.substring(0, 15*3) // Max chat length
+            PLAYER.chatBubble(message)
+            if (NETPLAY != false) {
+                NETPLAY.sendChat(message)
             }
         }
 

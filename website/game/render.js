@@ -32,27 +32,31 @@ class Render {
     }
 
     // Draw image
-    // ImageObject, AnimObject or null, x pos., y pos., rotation, scale x, scale y, offset x, offset y
+    // ImageObject, [image bounds (x, y, w, h)] or null, x pos., y pos., rotation, scale x, scale y, offset x, offset y
     image(img, anim, x, y, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
-        this.push()
+        this.push() // save current render state to undo all transformations
 
+        // Get dimensions of image
 		let [qx, qy, qw, qh] = [0, 0, img.w, img.h]
         if (anim) {
-            [qx, qy, qw, qh] = anim.getSprite()
+            [qx, qy, qw, qh] = anim
         }
 
+        // Transform image
 		this.c.translate(Math.floor(x), Math.floor(y))
         this.c.rotate(r)
         this.c.scale(sx, sy)
         
+        // Recolor image if possible, then render image
+        let color = this.color
         let image = img.image
-        if (img.colorable) {
-            img.setColor(this.color[0],this.color[1],this.color[2],this.color[3])
+        if (img.colorable && ((color[0] == 255 && color[1] == 255 && color[2] == 255 && color[3] == 1.0) != true)) {
+            img.setColor(color[0],color[1],color[2],color[3])
             image = img.canvas
         }
         this.c.drawImage(image, qx, qy, qw, qh, -qw*ox, -qh*oy, qw, qh)
 
-        this.pop()
+        this.pop() // undo all transformations
     }
 
     // Draw primitives
