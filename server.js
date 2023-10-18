@@ -67,11 +67,16 @@ io.on("connection", (socket) => {
         delete playerList[socket.id];
         io.emit("removePlayer", socket.id); // Use this to exlude the sender
     });
+    socket.on("update", (profile) =>{
+        socket.broadcast.emit("update", socket.id, profile);
+        playerList[socket.id].profile = profile;
+        console.log(profile);
+    });
 });
 
 // Start server on port TODO: How to deploy??
-const localIPAddress = "localhost" //"10.104.58.91" // IPv4 or localhost
-const port = 3000
+const localIPAddress = "10.104.61.139" // IPv4 or localhost
+const port = 3002
 server.listen(port, localIPAddress, () => {
     console.log(`Server is running on http://${localIPAddress}:${port}`)
 })
