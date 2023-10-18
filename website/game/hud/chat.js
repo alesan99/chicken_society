@@ -21,6 +21,7 @@ class ChatObject {
                 case "/name":
                     PROFILE.name = arg
                     PLAYER.updateProfile(PROFILE)
+                    NETPLAY.sendProfile(PROFILE)
                     break
                 case "/color":
                     PROFILE.color = [Number(arg), Number(arg2), Number(arg3)]

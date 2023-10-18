@@ -22,6 +22,7 @@ class Netplay {
         socket.on("removePlayer", (id) => {this.removePlayer(id)})
         socket.on("player", (id, position) => {this.recievePosition(id, position)})
         socket.on("chat", (id, text) => {this.recieveChat(id, text)})
+        socket.on("update",(id, profile) => {this.recieveProfile(id, profile)})
 	}
 
     // Connect to server for the first time and send information about yourself
@@ -54,7 +55,7 @@ class Netplay {
     // TODO: move this code to world.js
     addPlayer (id, player) {
         if ((id != socket.id) && (CHARACTER[id] == null)) {
-            CHARACTER[id] = new Character(player.x, player.y, 120, 160, player.profile)
+            CHARACTER[id] = new Character(player.x, player.y, player.profile)
             this.newPlayerJoined = true
         }
     }
@@ -98,6 +99,14 @@ class Netplay {
         if (CHARACTER[id] != null) {
             CHARACTER[id].chatBubble(text)
         }
+    }
+    recieveProfile(id, profile){
+        console.log(id, profile)
+        CHARACTER[id].updateProfile(profile)
+        
+    }
+    sendProfile(profile){
+        socket.emit("update", profile)
     }
 }
 

@@ -67,6 +67,11 @@ io.on("connection", (socket) => {
         delete playerList[socket.id];
         io.emit("removePlayer", socket.id); // Use this to exlude the sender
     });
+    socket.on("update", (profile) =>{
+        socket.broadcast.emit("update", socket.id, profile);
+        playerList[socket.id].profile = profile;
+        console.log(profile);
+    });
 });
 
 // Start server on port TODO: How to deploy??
