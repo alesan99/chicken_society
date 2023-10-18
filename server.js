@@ -70,15 +70,8 @@ io.on("connection", (socket) => {
 });
 
 // Start server on port TODO: How to deploy??
-const port = 3001
-server.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
-/*
-const localIPAddress = "YOUR_LOCAL_IP_ADDRESS"; // Replace with your local IP address
-const port = 3000; // Or any other port you prefer
-
+const localIPAddress = "localhost" //"10.104.58.91" // IPv4 or localhost
+const port = 3000
 server.listen(port, localIPAddress, () => {
-    console.log(`Server is running on http://${localIPAddress}:${port}`);
-}); */
+    console.log(`Server is running on http://${localIPAddress}:${port}`)
+})

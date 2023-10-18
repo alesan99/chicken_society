@@ -4,14 +4,14 @@ let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
 class Character {
 	//Initialize: x pos, y pos, width, height
-	constructor (x, y, w, h, profile) {
+	constructor (x, y, profile) {
 		// Collision
 		this.x = x || 0
 		this.y = y || 0
 		this.oldx = this.x
 		this.oldy = this.y
-		this.w = w //Width
-		this.h = h //Height
+		this.w = 80 //Width
+		this.h = 60 //Height
 
 		// Properties
 		this.updateProfile(profile)
@@ -100,27 +100,26 @@ class Character {
 		this.timer += dt
 	}
 
-	//TODO: Render
 	draw() {
 		//DRAW.setColor(0,0,0,0.3)
 		//DRAW.rectangle(this.x, this.y, this.w, this.h) //collision
 
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x+this.w/2, this.y+this.h/2, 0, this.flip, 1, 0.5, 0.5)
+		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1)
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x+this.w/2, this.y+this.h/2, 0, this.flip, 1, 0.5, 0.5)
+		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1)
 
 		// Nametag
 		DRAW.setFont(FONT.caption)
 		DRAW.setColor(1,0,0,1)
-		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-1, "center")
+		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-75, "center")
 
 		// Chat bubble
 		if (this.bubbleText != false) {
 			DRAW.setFont(FONT.chatBubble)
 			DRAW.setColor(255,255,255,1.0)
 			
-			DRAW.image(IMG.chatBubble, null, this.x+this.w/2, this.y, 0, 1, 1, 0.5, 1)
+			DRAW.image(IMG.chatBubble, null, this.x+this.w/2, Math.max(100, Math.floor(this.y) -80), 0, 1, 1, 0.5, 1)
 			DRAW.setColor(1,0,0,1)
 
 			// Wrap text so it fits into the bubble
@@ -130,7 +129,7 @@ class Character {
 			let verticalSpacing = 18
 			for (let i = 0; i < text.length; i += lineLength) {
 				let textSegment = text.substring(i, i+lineLength)
-				DRAW.text(textSegment, Math.floor(this.x)+this.w/2, Math.floor(this.y)+line*verticalSpacing -68 , "center")
+				DRAW.text(textSegment, Math.floor(this.x)+this.w/2, Math.max(100, Math.floor(this.y) -80) + line*verticalSpacing-68, "center")
 				line += 1
 			}
 		}

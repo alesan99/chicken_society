@@ -14,7 +14,7 @@ class World {
 		// Initialize all characters
 		// TODO: Make these names less confusing, chicken maybe?
 		CHARACTER = {}
-		CHARACTER[0] = new Character(canvasWidth/2-60, canvasHeight/2-80, 120, 160, PROFILE)
+		CHARACTER[0] = new Character(canvasWidth/2-40, canvasHeight/2, PROFILE)
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])

@@ -12,6 +12,9 @@ class Netplay {
         // Player syncing information
         this.oldx = 0
         this.oldy = 0
+        this.oldsx = 0
+        this.oldsy = 0
+        this.newPlayerJoined = false
 
         // Events
         socket.on("playerList", (playerList) => {this.getPlayerList(playerList)})
@@ -34,14 +37,17 @@ class Netplay {
         if (this.timer > this.interval) {
             // Calculate velocity of player
             let [sx, sy] = vec2Norm(PLAYER.x-PLAYER.oldx, PLAYER.y-PLAYER.oldy)
-            // Check if position has changed since last time position was sent to the server
+            // Check if position has changed since last time position was sent to the server (or if there is a new player that needs this info.)
             let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(this.oldx), Math.floor(this.oldy)]
-            if ((x != ox) || (y != oy)) {
+            if ((x != ox) || (y != oy) || (sx != this.oldsx) || (sy != this.oldsy) || (this.newPlayerJoined == true)) {
                 socket.volatile.emit("player", [x, y, sx, sy])
+                this.newPlayerJoined = false // TODO: This should be handled by the server
             }
             this.timer = this.timer%this.interval
             this.oldx = x
             this.oldy = y
+            this.oldsx = sx
+            this.oldsy = sy
         }
     }
 
@@ -49,6 +55,7 @@ class Netplay {
     addPlayer (id, player) {
         if ((id != socket.id) && (CHARACTER[id] == null)) {
             CHARACTER[id] = new Character(player.x, player.y, 120, 160, player.profile)
+            this.newPlayerJoined = true
         }
     }
 

@@ -9,7 +9,7 @@ body, html {
 }
 
 /* Center game canvas */
-#canvas-container {
+#canvasContainer {
     margin: auto;
     margin-left: auto;
     margin-right: auto;
@@ -20,7 +20,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 960px;
+    width: 1920px; /* Do not change, it gets redefined in canvas.js */
     border: 3px solid rgb(221, 205, 57);
     padding: 10px;
 }
