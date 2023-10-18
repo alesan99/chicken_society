@@ -78,7 +78,7 @@ class Character {
 		// Update Animation
 		if (this.walking != this.oldwalking) {
 			if (this.walking) {
-				this.anim.playAnimation(ANIM.walk, 0.2)
+				this.anim.playAnimation(ANIM.walk[0], ANIM.walk[1])
 			} else {
 				this.anim.stopAnimation(null)
 			}
@@ -145,6 +145,13 @@ class Character {
 	chatBubble(text) {
 		this.bubbleText = text
 		this.bubbleTime = 4
+	}
+
+	// Play emote animation; will stop when player moves
+	emote(i) {
+		if (ANIM[i] != null) {
+			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
+		}
 	}
 }
 

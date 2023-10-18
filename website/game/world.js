@@ -56,7 +56,9 @@ class World {
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {
 			const obj = drawQueue[i];
-			obj.draw()
+			if (obj.area == PLAYER.area) {
+				obj.draw()
+			}
 		}
 
 		// HUD

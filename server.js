@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
 });
 
 // Start server on port TODO: How to deploy??
-const localIPAddress = "10.104.61.139" // IPv4 or localhost
+const localIPAddress = "10.104.58.91" // IPv4 or localhost
 const port = 3002
 server.listen(port, localIPAddress, () => {
     console.log(`Server is running on http://${localIPAddress}:${port}`)

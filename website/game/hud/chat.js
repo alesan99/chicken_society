@@ -33,6 +33,12 @@ class ChatObject {
                     PLAYER.updateProfile(PROFILE)
                     NETPLAY.sendProfile(PROFILE)
                     break
+                case "/area": // Warp to a different area
+                    PLAYER.area = arg
+                    break
+                case "/emote": // Play emote animation
+                    PLAYER.emote(arg)
+                    break
             }
         } else {
             // Send chat message
