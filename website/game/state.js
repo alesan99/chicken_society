@@ -7,10 +7,21 @@ function setState(state) {
 	game_state_name = game_state.name
 }
 
-function updateState(dt) {
+function stateUpdate(dt) {
 	game_state.update(dt)
 }
 
-function drawState() {
+function stateDraw() {
 	game_state.draw()
+}
+
+function stateKeyPress(key) {
+	if (game_state.keyPress) {
+		game_state.keyPress(key)
+	}
+}
+function stateKeyRelease(key) {
+	if (game_state.keyRelease) {
+		game_state.keyRelease(key)
+	}
 }

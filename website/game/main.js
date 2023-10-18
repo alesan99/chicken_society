@@ -5,7 +5,7 @@ let gamestate = ""
 
 PROFILE = {
     name: "Testing",
-    color: [255,150,150],
+    color: [100+Math.random()*155,100+Math.random()*155,100+Math.random()*155],
     hat: 0,
     money: 0,
 }
@@ -32,7 +32,7 @@ function gameLoad() {
 
 // update game logic
 function gameUpdate(dt) {
-    updateState(dt)
+    stateUpdate(dt)
 
     // Is menu open?
     if (menu_open) {
@@ -46,7 +46,7 @@ function gameDraw() {
     DRAW.clear(0,0,0,1)
     DRAW.push()
 
-    drawState()
+    stateDraw()
 
     // Is menu open?
     if (menu_open) {

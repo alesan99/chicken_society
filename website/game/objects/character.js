@@ -14,8 +14,7 @@ class Character {
 		this.h = h //Height
 
 		// Properties
-		this.name = profile.name || "NPC" //name
-		this.color = profile.color || [255,255,255]
+		this.updateProfile(profile)
 		this.speed = 200 //Speed (px/sec)
 		this.controller = false //Is it being controlled?
 		this.area = "" //Current area
@@ -91,5 +90,10 @@ class Character {
 		DRAW.setFont(FONT.caption)
 		DRAW.setColor(1,0,0,1)
 		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-2, "center")
+	}
+
+	updateProfile(profile) {
+		this.name = profile.name || "NPC" //name
+		this.color = profile.color || [255,255,255]
 	}
 }

@@ -2,6 +2,7 @@
 var CHARACTER
 var PLAYER
 var PLAYER_CONTROLLER
+var CHAT
 
 class World {
 	constructor (area) {
@@ -17,11 +18,12 @@ class World {
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
-		//TODO: Dynamically load in and remove players from an online session
 
 		//TODO: Area collision
 		//WALLS = new Wall(this.area)
 
+		// HUD
+		CHAT = new ChatObject()
 	}
 
 	update (dt) {
@@ -35,6 +37,9 @@ class World {
 		if (NETPLAY) {
 			NETPLAY.update(dt)
 		}
+
+		// HUD
+		CHAT.update(dt)
 	}
 
 	draw () {
@@ -53,6 +58,14 @@ class World {
 			const obj = drawQueue[i];
 			obj.draw()
 		}
+
+		// HUD
+		CHAT.draw()
 	}
+
+	keyPress(key) {
+		CHAT.keyPress(key)
+	}
+
 }
 

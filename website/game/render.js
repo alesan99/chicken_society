@@ -32,6 +32,7 @@ class Render {
     }
 
     // Draw image
+    // ImageObject, AnimObject or null, x pos., y pos., rotation, scale x, scale y, offset x, offset y
     image(img, anim, x, y, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
         this.push()
 
