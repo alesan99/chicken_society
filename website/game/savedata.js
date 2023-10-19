@@ -1,6 +1,7 @@
 // Store player data and game progress
 
 function makeProfile() {
+	const obj = JSON.parse(text);
 	let names = ["Orpington",
 		"Polish chicken",
 		"Henny Penny",
@@ -24,7 +25,8 @@ function makeProfile() {
 		"Gladys",
 		"Buckbeak",
 		"Sussex",
-		"Princess lay A"
+		"Princess lay A",
+		"Bitchass Jessica"
 	]
 
 	let profile = {
