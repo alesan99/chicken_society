@@ -10,7 +10,7 @@ function loadGameAssets() {
 	// World objects
 	IMG.chicken = new RenderImage("assets/chicken.png")
 	IMG.chicken.makeColorable()
-	SPRITE.chicken = new Sprite(IMG.chicken, 8, 6, 0, 0, 100, 128, 101, 129)
+	SPRITE.chicken = new Sprite(IMG.chicken, 8, 6, 0, 0, 128, 128, 129, 129)
 	ANIM.stand = [[0]]
 	ANIM.walk = [[1, 2], 0.2]
 	ANIM.dance = [[1, 2, 3], 0.2]
