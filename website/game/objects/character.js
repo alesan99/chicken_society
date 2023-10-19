@@ -12,6 +12,16 @@ class Character {
 		this.oldy = this.y
 		this.w = 80 //Width
 		this.h = 60 //Height
+		
+        this.shape = [
+			0, 0,
+			this.w, 0,
+			this.w, this.h,
+			0, this.h
+		]
+
+		this.active = true
+		this.static = false
 
 		// Properties
 		this.updateProfile(profile)

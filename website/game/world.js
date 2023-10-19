@@ -3,6 +3,7 @@ var CHARACTER
 var PLAYER
 var PLAYER_CONTROLLER
 var CHAT
+var OBJECTS
 
 class World {
 	constructor (area) {
@@ -18,6 +19,9 @@ class World {
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
+
+		// Physics objects
+		OBJECTS = [CHARACTER]
 
 		//TODO: Area collision
 		//WALLS = new Wall(this.area)
