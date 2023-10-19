@@ -17,6 +17,23 @@ function loadGameAssets() {
 	ANIM.sit = [[3], 99999]
 	ANIM.wave = [[4,5,4,5,4,5], 0.2]
 
+	// Chicken Customization
+	HATOFFSET = [
+		[[64,1],[64,1],[66,2],[66,9],[64,2],[64,2],[64,1],[64,1]],
+		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[64,1],[64,1]],
+		[[63,2],[63,2],[66,2],[66,9],[64,2],[64,2],[64,1],[64,1]]
+	]
+	ACCESSORYOFFSET = [
+		[[64,1],[64,1],[66,2],[66,9],[64,2],[64,2],[64,1],[64,1]],
+		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[64,1],[64,1]],
+		[[63,2],[63,2],[66,2],[66,9],[64,2],[64,2],[64,1],[64,1]]
+	]
+	IMG.hat = {}
+	IMG.hat["tophat"] = true
+	IMG.accessory = {}
+	IMG.accessory["scarf"] = true
+	IMG.accessory["chain"] = true
+
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
 
 	BACKGROUND.hub = new RenderImage("assets/areas/hub.png")
