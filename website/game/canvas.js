@@ -7,6 +7,7 @@ var ctx //canvas.getContext("2d")
 // Dimensions of canvas. Look at index.html to see actual dimensions
 const canvasWidth = canvas.width; const canvasHeight = canvas.height
 const canvasPadding = 20
+var canvasScale = 1
 
 const container = document.getElementById("canvasContainer")
 container.style.width = canvasWidth + "px"
@@ -14,21 +15,21 @@ container.style.width = canvasWidth + "px"
 
 // Get the 2D rendering context for the canvas if supported by browser
 if (canvas.getContext) {
-    ctx = canvas.getContext("2d")
+	ctx = canvas.getContext("2d")
 } else {
-    alert("Canvas is not supported in your browser.")
+	alert("Canvas is not supported in your browser.")
 }
 
 // Function to resize the canvas based on the window size
 function resizeCanvas() {
-    // Get the current window dimensions & determine the scaling factor to fit the canvas within the window
-    const windowWidth = window.innerWidth
-    const windowHeight = window.innerHeight
-    const scale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), windowHeight / (canvasHeight+canvasPadding)))
+	// Get the current window dimensions & determine the scaling factor to fit the canvas within the window
+	const windowWidth = window.innerWidth
+	const windowHeight = window.innerHeight
+	canvasScale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), windowHeight / (canvasHeight+canvasPadding)))
 
-    // Set the canvas dimensions to fit within the window (using CSS)
-    canvas.style.width = `${canvasWidth * scale}px`
-    canvas.style.height = `${canvasHeight * scale}px`
+	// Set the canvas dimensions to fit within the window (using CSS)
+	canvas.style.width = `${canvasWidth * canvasScale}px`
+	canvas.style.height = `${canvasHeight * canvasScale}px`
 }
 
 // Initial canvas resize

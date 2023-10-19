@@ -48,9 +48,9 @@ class World {
 
 	draw () {
 		// Background
-        // TODO: load background depending on area
+		// TODO: load background depending on area
 		DRAW.setColor(255,255,255)
-        DRAW.image(BACKGROUND.hub, null, 0, 0) //sprite
+		DRAW.image(BACKGROUND.hub, null, 0, 0) //sprite
 
 		// Draw objects in the correct order
 		let drawQueue = []

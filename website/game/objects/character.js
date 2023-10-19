@@ -13,7 +13,7 @@ class Character {
 		this.w = 80 //Width
 		this.h = 60 //Height
 		
-        this.shape = [
+		this.shape = [
 			0, 0,
 			this.w, 0,
 			this.w, this.h,
@@ -179,14 +179,14 @@ class Character {
 
 
 function wrapText(text, lineLength) {
-    if (typeof text !== 'string' || typeof lineLength !== 'number' || lineLength <= 0) {
-      return text
-    }
+	if (typeof text !== 'string' || typeof lineLength !== 'number' || lineLength <= 0) {
+	  return text
+	}
   
-    let result = ''
-    for (let i = 0; i < text.length; i += lineLength) {
-      result += text.substring(i, lineLength) + '\n'
-    }
+	let result = ''
+	for (let i = 0; i < text.length; i += lineLength) {
+	  result += text.substring(i, lineLength) + '\n'
+	}
   
-    return result
+	return result
 }

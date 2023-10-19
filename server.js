@@ -22,69 +22,69 @@ const io = new Server(server);
 const path = require("path"); // Import the "path" module.
 app.use(express.static(path.join(__dirname, "website"))); //serve static files from the "website" directory.
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/website/index.html");
+	res.sendFile(__dirname + "/website/index.html");
 });
 
 // User Connected! Start listening for any messages.
 var playerList = {};
 io.on("connection", (socket) => {
-    console.log("A user connected");
+	console.log("A user connected");
 
-    // Recieve information about players; Send out info to everyone
-    socket.on("profile", (profile) => {
-        playerList[socket.id] = {};
-        playerList[socket.id].id = socket.id;
-        playerList[socket.id].x = 0;
-        playerList[socket.id].y = 0;
-        playerList[socket.id].profile = profile;
+	// Recieve information about players; Send out info to everyone
+	socket.on("profile", (profile) => {
+		playerList[socket.id] = {};
+		playerList[socket.id].id = socket.id;
+		playerList[socket.id].x = 0;
+		playerList[socket.id].y = 0;
+		playerList[socket.id].profile = profile;
 
-        io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
-        console.log(profile);
-    });
+		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
+		console.log(profile);
+	});
 
-    // Recieved player data (position, velocity); Send out to everyone
-    socket.on("player", (position, velocity) => {
-        if (playerList[socket.id]) {
-            playerList[socket.id].x = position[0];
-            playerList[socket.id].y = position[1];
-            playerList[socket.id].sx = position[2];
-            playerList[socket.id].sy = position[3];
+	// Recieved player data (position, velocity); Send out to everyone
+	socket.on("player", (position, velocity) => {
+		if (playerList[socket.id]) {
+			playerList[socket.id].x = position[0];
+			playerList[socket.id].y = position[1];
+			playerList[socket.id].sx = position[2];
+			playerList[socket.id].sy = position[3];
 
-            socket.broadcast.emit("player", socket.id, position); // Use this to exlude the sender
-        };
-    });
+			socket.broadcast.emit("player", socket.id, position); // Use this to exlude the sender
+		};
+	});
 
-    // Recieve chat message and send out to everyone
-    socket.on("chat", (text) => {
-        if (playerList[socket.id]) {
-            // TODO: Word filter
-            socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
-        };
-    });
+	// Recieve chat message and send out to everyone
+	socket.on("chat", (text) => {
+		if (playerList[socket.id]) {
+			// TODO: Word filter
+			socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
+		};
+	});
 
-    // Player changed their own profile, update
-    socket.on("updateProfile", (profile) =>{
-        socket.broadcast.emit("updateProfile", socket.id, profile);
-        playerList[socket.id].profile = profile;
-    });
-    
-    // Player emoted
-    socket.on("emote", (emote) =>{
-        if (playerList[socket.id]) {
-            socket.broadcast.emit("emote", socket.id, emote);
-        }
-    });
+	// Player changed their own profile, update
+	socket.on("updateProfile", (profile) =>{
+		socket.broadcast.emit("updateProfile", socket.id, profile);
+		playerList[socket.id].profile = profile;
+	});
+	
+	// Player emoted
+	socket.on("emote", (emote) =>{
+		if (playerList[socket.id]) {
+			socket.broadcast.emit("emote", socket.id, emote);
+		}
+	});
 
-    // Player disconnected; Tell all players that someone disconnected
-    socket.on("disconnect", () => {
-        delete playerList[socket.id];
-        io.emit("removePlayer", socket.id); // Use this to exlude the sender
-    });
+	// Player disconnected; Tell all players that someone disconnected
+	socket.on("disconnect", () => {
+		delete playerList[socket.id];
+		io.emit("removePlayer", socket.id); // Use this to exlude the sender
+	});
 });
 
 // Start server on port TODO: How to deploy??
 const localIPAddress = "localhost" // ipv4 //"10.104.58.91" // IPv4 or localhost
 const port = 3000
 server.listen(port, localIPAddress, () => {
-    console.log(`Server is running on http://${localIPAddress}:${port}`)
+	console.log(`Server is running on http://${localIPAddress}:${port}`)
 })

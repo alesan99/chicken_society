@@ -25,3 +25,20 @@ function stateKeyRelease(key) {
 		game_state.keyRelease(key)
 	}
 }
+
+function stateMouseClick(button) {
+	if (game_state.mouseClick) {
+		game_state.mouseClick(button)
+	}
+}
+function stateMouseRelease(button) {
+	if (game_state.mouseRelease) {
+		game_state.mouseRelease(button)
+	}
+}
+
+function stateScroll(dy) {
+	if (game_state.scroll) {
+		game_state.scroll(dy)
+	}
+}

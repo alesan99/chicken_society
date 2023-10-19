@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Society</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chicken Society</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
-    <!-- Canvas to render Game -->
-    <div id="canvasContainer">
-        <canvas id="gameCanvas" width="1024" height="576"></canvas>
-    </div>
+	<!-- Canvas to render Game -->
+	<div id="canvasContainer">
+		<canvas id="gameCanvas" width="1024" height="576"></canvas>
+	</div>
+	<!-- Invisible text input used to force mobile devices to open keyboard -->
+	<input id="gameTextInput" type="text" style="position:fixed;left:0px";>
 
-    <!-- TODO: Use local version of socket (file downloaded at node_modules/socket.io/client-dist/socket.io.js) -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="game/netplay/client.js"></script>
+	<!-- TODO: Use local version of socket (file downloaded at node_modules/socket.io/client-dist/socket.io.js) -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="game/netplay/client.js"></script>
 
-    <!-- Run game code -->
-    <script src="game/canvas.js"></script>
-    <script src="game/render.js"></script>
+	<!-- Run game code -->
+	<script src="game/canvas.js"></script>
+	<script src="game/render.js"></script>
 
-    <script src="game/vec2.js"></script>
-    <script src="game/objects/character.js"></script>
-    <script src="game/objects/player.js"></script>
+	<script src="game/vec2.js"></script>
+	<script src="game/objects/character.js"></script>
+	<script src="game/objects/player.js"></script>
 
-    <script src="game/hud/chat.js"></script>
-    <script src="game/state.js"></script>
-    <script src="game/world.js"></script>
-    <script src="game/input.js"></script>
-    <script src="game/assets.js"></script>
-    <script src="game/sprite.js"></script>
-    <script src="game/savedata.js"></script>
+	<script src="game/hud/chat.js"></script>
+	<script src="game/state.js"></script>
+	<script src="game/world.js"></script>
+	<script src="game/input.js"></script>
+	<script src="game/assets.js"></script>
+	<script src="game/sprite.js"></script>
+	<script src="game/savedata.js"></script>
 
-    <script src="game/main.js"></script>
+	<script src="game/main.js"></script>
 </body>
 
 </html>

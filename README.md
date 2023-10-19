@@ -4,8 +4,6 @@ Play here:
 https://alesan99.github.io/chicken_society/
 
 ## Starting the server
-** (Using Node.js temporarily, WILL CHANGE) **
-
 Install Node.js at https://nodejs.org/en
 
 In VSCode, execute the following command in the project directory:

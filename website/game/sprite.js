@@ -35,21 +35,32 @@ class Animation {
 		if (this.playing) {
 			// Update animation
 			let delay = this.delay
-			if (delay.isArray) {
+			if (delay.isArray) { // If array of delays, set to the current delay
 				delay = delay[this.animFrameNum || 0]
-				// TODO: having an array of delay makes the timer math below wrong, change it to use a while loop instead
 			}
-			let originalTimer = this.timer + (1/delay)*dt
-			this.timer = (this.timer + (1/delay)*dt)%(this.animLength)
-			// Check if animation finished if it shouldn't loop
-			if ((this.stopFrame != null) && originalTimer > (this.animLength)) {
-				this.setFrame(this.stopFrame, null)
-				this.playing = false
-			} else {
-				// Update frame
-				let i = Math.floor(this.timer)
-				this.animFrameNum = i // position in the animation, not the actual frame number
-				this.setFrame(this.frames[i], null)
+
+			// this.timer = (this.timer + (1/delay)*dt)%(this.animLength)
+			this.timer += dt
+			while (this.timer > delay) {
+				this.timer -= delay
+
+				this.animFrameNum += 1 // position in the animation, not the actual frame number
+
+				// Check if animation finished if it shouldn't loop
+				if ((this.stopFrame != null) && this.animFrameNum >= (this.animLength)) {
+					this.setFrame(this.stopFrame, null)
+					this.timer = 0
+					this.playing = false
+					break
+				} else {
+					// Update frame
+					this.animFrameNum = this.animFrameNum%this.animLength // Loop animation
+					this.setFrame(this.frames[this.animFrameNum], null)
+
+					if (delay.isArray) { // If array of delays, set to the current delay
+						delay = delay[this.animFrameNum || 0]
+					}
+				}
 			}
 		}
 	}
@@ -58,8 +69,12 @@ class Animation {
 		this.playing = true
 		this.frames = frames
 		this.animLength = frames.length
+
 		this.timer = 0
 		this.delay = delay
+		this.animFrameNum = 0
+		this.setFrame(this.frames[this.animFrameNum], null)
+
 		this.stopFrame = dont_loop
 	}
 

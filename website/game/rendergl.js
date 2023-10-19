@@ -1,84 +1,84 @@
 // Rendering functions for a 'webgl' canvas.
 
 class Render {
-    constructor (canvas) {
-        this.c = false
-        if (canvas) {
-            this.setCanvas(canvas)
-        }
+	constructor (canvas) {
+		this.c = false
+		if (canvas) {
+			this.setCanvas(canvas)
+		}
 
-        this.color = [1,1,1,1]
-        this.font = false
+		this.color = [1,1,1,1]
+		this.font = false
 	}
 
-    setCanvas(canvas) {
-        this.c = canvas
-    }
+	setCanvas(canvas) {
+		this.c = canvas
+	}
 
-    // Erase everything
-    clear(r,g,b,a=1.0) {
-        this.c.clearColor(r,g,b,1.0);
-        this.c.clear(this.c.COLOR_BUFFER_BIT);
-    }
+	// Erase everything
+	clear(r,g,b,a=1.0) {
+		this.c.clearColor(r,g,b,1.0);
+		this.c.clear(this.c.COLOR_BUFFER_BIT);
+	}
 
-    // Set color of next thing that will be drawn
-    setColor(r,g,b,a=1.0) {
-        this.c.clearColor(r, g, b, a);
-    }
+	// Set color of next thing that will be drawn
+	setColor(r,g,b,a=1.0) {
+		this.c.clearColor(r, g, b, a);
+	}
 
-    // Draw image
-    image(img, x, y, r, sx, sy, qx, qy, qw, qh) {
-        this.c.bindTexture(this.c.TEXTURE_2D, imageTexture);
-    }
+	// Draw image
+	image(img, x, y, r, sx, sy, qx, qy, qw, qh) {
+		this.c.bindTexture(this.c.TEXTURE_2D, imageTexture);
+	}
 
-    // Draw primitives
-    rectangle(x, y, w, h) {
+	// Draw primitives
+	rectangle(x, y, w, h) {
 
-    }
+	}
 
-    circle(x, y, r, segments) {
+	circle(x, y, r, segments) {
 
-    }
+	}
 
-    line(points) {
+	line(points) {
 
-    }
+	}
 
-    setFont(font) {
+	setFont(font) {
 
-    }
+	}
 
-    text(string, x, y, align) {
+	text(string, x, y, align) {
 
-    }
+	}
 
-    // Transform
-    translate(x, y) {
+	// Transform
+	translate(x, y) {
 
-    }
+	}
 
-    push() {
+	push() {
 
-    }
+	}
 
-    pop() {
+	pop() {
 
-    }
+	}
 }
 
 class RenderImage {
-    constructor (src) {
-        this.image = new Image()
-        this.image.src = src
+	constructor (src) {
+		this.image = new Image()
+		this.image.src = src
 	}
 
-    makeColorable () {
-        
-    }
+	makeColorable () {
+		
+	}
 }
 
 class RenderFont {
-    constructor (name, size) {
+	constructor (name, size) {
 
 	}
 }
