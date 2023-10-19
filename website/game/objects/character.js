@@ -19,8 +19,8 @@ class Character {
 		this.controller = false //Is it being controlled?
 		this.area = "" //Current area
 
-		this.sx = 0// Speed x
-		this.sy = 0// Speed y
+		this.sx = false // Speed x
+		this.sy = false // Speed y
 
 		// Graphics
 		this.sprite = SPRITE.chicken
@@ -46,9 +46,8 @@ class Character {
 		this.y += ny*this.speed*dt
 
 		// Find direction player is facing
-		this.oldwalking = this.walking
 		this.walking = true
-		if (nx == 0 && ny == 0) {
+		if ((nx == 0) && (ny == 0)) {
 			this.walking = false
 		} else if (Math.abs(ny) >= Math.abs(nx)) {
 			if (ny > 0) {
@@ -71,8 +70,14 @@ class Character {
 
 	update(dt) {
 		// Update movement
-		if ((this.sx == 0 && this.sy == 0) != true) {
-			this.move(dt, this.sx, this.sy)
+		if (this.controller != PLAYER_CONTROLLER) {
+			// Update other clients
+			if ((this.sx == false && this.sy == false) != true) {
+				this.move(dt, this.sx, this.sy)
+			} else {
+				this.walking = false
+			}
+			console.log(this.walking, this.oldwalking, this.sy)
 		}
 
 		// Update Animation
@@ -98,6 +103,7 @@ class Character {
 		}
 
 		this.timer += dt
+		this.oldwalking = this.walking
 	}
 
 	draw() {
@@ -139,6 +145,12 @@ class Character {
 	updateProfile(profile) {
 		this.name = profile.name || "NPC" //name
 		this.color = profile.color || [255,255,255]
+		//Send profile to server if this is the player
+		if (this.controller == PLAYER_CONTROLLER) {
+			if (NETPLAY != false) {
+				NETPLAY.sendProfile(PROFILE)
+			}
+		}
 	}
 
 	// Display speech bubble

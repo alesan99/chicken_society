@@ -22,7 +22,8 @@ class Netplay {
         socket.on("removePlayer", (id) => {this.removePlayer(id)})
         socket.on("player", (id, position) => {this.recievePosition(id, position)})
         socket.on("chat", (id, text) => {this.recieveChat(id, text)})
-        socket.on("update",(id, profile) => {this.recieveProfile(id, profile)})
+        socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
+        socket.on("emote", (id, emote) => {this.recieveEmote(id, emote)})
 	}
 
     // Connect to server for the first time and send information about yourself
@@ -100,13 +101,27 @@ class Netplay {
             CHARACTER[id].chatBubble(text)
         }
     }
-    recieveProfile(id, profile){
-        console.log(id, profile)
-        CHARACTER[id].updateProfile(profile)
-        
+
+    // Update Profile when changed
+    sendProfile(profile) {
+        socket.emit("updateProfile", profile)
     }
-    sendProfile(profile){
-        socket.emit("update", profile)
+    recieveProfile(id, profile) {
+        console.log("received profile", profile)
+        if (CHARACTER[id] != null) {
+            CHARACTER[id].updateProfile(profile)
+        }
+    }
+
+    //Emote
+    sendEmote(emote) {
+        socket.emit("emote", emote)
+    }
+    recieveEmote(id, emote) {
+        console.log("recieved emote", emote)
+        if (CHARACTER[id] != null) {
+            CHARACTER[id].emote(emote)
+        }
     }
 }
 

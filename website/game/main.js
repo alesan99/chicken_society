@@ -3,12 +3,7 @@ let menu_state = ""
 let menu_open = false
 let gamestate = ""
 
-PROFILE = {
-    name: "Testing",
-    color: [100+Math.random()*155,100+Math.random()*155,100+Math.random()*155],
-    hat: 0,
-    money: 0,
-}
+PROFILE = makeProfile()
 
 NETPLAY = false
 

@@ -62,21 +62,29 @@ io.on("connection", (socket) => {
         };
     });
 
+    // Player changed their own profile, update
+    socket.on("updateProfile", (profile) =>{
+        socket.broadcast.emit("updateProfile", socket.id, profile);
+        playerList[socket.id].profile = profile;
+    });
+    
+    // Player emoted
+    socket.on("emote", (emote) =>{
+        if (playerList[socket.id]) {
+            socket.broadcast.emit("emote", socket.id, emote);
+        }
+    });
+
     // Player disconnected; Tell all players that someone disconnected
     socket.on("disconnect", () => {
         delete playerList[socket.id];
         io.emit("removePlayer", socket.id); // Use this to exlude the sender
     });
-    socket.on("update", (profile) =>{
-        socket.broadcast.emit("update", socket.id, profile);
-        playerList[socket.id].profile = profile;
-        console.log(profile);
-    });
 });
 
 // Start server on port TODO: How to deploy??
-const localIPAddress = "10.104.58.91" // IPv4 or localhost
-const port = 3002
+const localIPAddress = "localhost" // ipv4 //"10.104.58.91" // IPv4 or localhost
+const port = 3000
 server.listen(port, localIPAddress, () => {
     console.log(`Server is running on http://${localIPAddress}:${port}`)
 })
