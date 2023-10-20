@@ -35,8 +35,8 @@ function makeProfile() {
 			Math.floor(100 + Math.random()*155),
 			Math.floor(100 + Math.random()*155)
 		],
-		hat: 0,
-		clothing: 0,
+		hat: false,
+		accessory: false,
 		money: 0,
 		pet: false
 	}

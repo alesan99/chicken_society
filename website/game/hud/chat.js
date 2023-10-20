@@ -27,7 +27,11 @@ class ChatObject {
 					PLAYER.updateProfile(PROFILE)
 					break
 				case "/hat":
-					PROFILE.hat = Number(arg)
+					PROFILE.hat = arg
+					PLAYER.updateProfile(PROFILE)
+					break
+				case "/accessory":
+					PROFILE.accessory = arg
 					PLAYER.updateProfile(PROFILE)
 					break
 				case "/area": // Warp to a different area

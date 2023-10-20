@@ -4,6 +4,8 @@ class Sprite {
 	//Initialize: image, frame count x & y, offset x & y, frame width & height
 	constructor (img, cx, cy, ox, oy, w, h, ow, oh) {
 		this.img = img
+		this.w = w
+		this.h = h
 		this.frame = []
 		for (let y = 0; y < cy; y++) { // Rows
 			this.frame[y] = []
@@ -11,6 +13,10 @@ class Sprite {
 				this.frame[y][x] = [x*ow+ox, y*oh+oy, w, h] // x, y, w, h
 			}
 		}
+	}
+
+	getFrame (x, y) {
+		return this.frame[y][x]
 	}
 }
 
