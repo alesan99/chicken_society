@@ -2,14 +2,13 @@
 
 let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
-class Character {
+class Character extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
 	constructor (x, y, profile) {
 		// Collision
+		super(x,y,80,60)
 		this.x = x || 0
 		this.y = y || 0
-		this.oldx = this.x
-		this.oldy = this.y
 		this.w = 80 //Width
 		this.h = 60 //Height
 		
@@ -50,10 +49,9 @@ class Character {
 
 	// Move: dt, direction normal x, direction normal y
 	move(dt, nx, ny) {
-		this.oldx = this.x
-		this.oldy = this.y
-		this.x += nx*this.speed*dt
-		this.y += ny*this.speed*dt
+		let x = this.x + nx*this.speed*dt
+		let y = this.y + ny*this.speed*dt
+		this.setPosition(x, y)
 
 		// Find direction player is facing
 		this.walking = true

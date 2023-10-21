@@ -1,9 +1,10 @@
 // Warp object; Moves player to a different location when touched.
 
-class Warp {
+class Warp extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
 	constructor (x, y, w, h, area) {
 		// Collision
+		super(x,y,w,h)
 		this.x = x
 		this.y = y
 		this.w = w

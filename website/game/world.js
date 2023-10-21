@@ -12,6 +12,7 @@ class World {
 	}
 
 	load () {
+		createSpatialHash(canvasWidth, canvasHeight, 100)
 		// Initialize all characters
 		// TODO: Make these names less confusing, chicken maybe?
 		CHARACTER = {}
@@ -67,6 +68,9 @@ class World {
 
 		// HUD
 		CHAT.draw()
+
+		// DEBUG physics
+		drawPhysics()
 	}
 
 	keyPress(key) {

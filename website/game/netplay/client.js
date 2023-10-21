@@ -82,8 +82,7 @@ class Netplay {
 	recievePosition (id, position) {
 		if (CHARACTER[id]) {
 			// Position and speed
-			CHARACTER[id].x = position[0]
-			CHARACTER[id].y = position[1]
+			CHARACTER[id].setPosition(position[0], position[1])
 			CHARACTER[id].sx = position[2]
 			CHARACTER[id].sy = position[3]
 		}
