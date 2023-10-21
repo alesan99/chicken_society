@@ -1,13 +1,11 @@
 //Physics object base class
 
 class PhysicsObject {
-	//Initialize: x pos, y pos, width, height
-	constructor (x, y, w, h) {
-		// Position, size, and speed
+	//Initialize: x pos, y pos
+	constructor (x, y) {
+		// Position and speed
 		this.x = x
 		this.y = y
-		this.w = w
-		this.h = h
 		this.sx = 0
 		this.sy = 0
 		this.static = false
@@ -15,8 +13,6 @@ class PhysicsObject {
 		
 		this.oldx = x
 		this.oldy = y
-		this.oldw = w
-		this.oldh = h
 
 		// Spatial Hash location
 		this.cellx = 0
@@ -35,35 +31,33 @@ class PhysicsObject {
 		this.updateCellLocation()
 	}
 
-	setSize(w, h) {
-		if (w != null) {
-			this.w = w
-		}
-		if (h != null) {
-			this.h = h
-		}
+	setSize() {
 		this.updateCellLocation()
 	}
 
 	updateCellLocation() {
-		// New cell location? Check.
+		// New cell location? Check using bounding box of object's shape.
 		let [cx, cy, cw, ch] = [this.cellx, this.celly, this.cellw, this.cellh]
-		let [ncx, ncy, ncw, nch] = getSpatialCoords(this.x,this.y,this.w,this.h)
+		let [ncx, ncy, ncw, nch] = getSpatialCoords(this.x+this.shape.x1,this.y+this.shape.y1,this.x+this.shape.x2,this.y+this.shape.y2)
 		if (!(cx == ncx && cy == ncy && cw == ncw && ch == nch)) {
 			// TODO: Optimize this
 			// Remove references to this object from old location
-			for (let x = cx; x <= cx+cw; x++) {
-				for (let y = cy; y <= cy+ch; y++) {
+			for (let x = cx; x <= cw; x++) {
+				for (let y = cy; y <= ch; y++) {
 					removeFromSpatialCell(x, y, this)
 				}
 			}
 			// Add references to this object in new location
-			for (let x = ncx; x <= ncx+ncw; x++) {
-				for (let y = ncy; y <= ncy+nch; y++) {
+			for (let x = ncx; x <= ncw; x++) {
+				for (let y = ncy; y <= nch; y++) {
 					putToSpatialCell(x, y, this)
 				}
 			}
 			[this.cellx, this.celly, this.cellw, this.cellh] = [ncx, ncy, ncw, nch]
 		}
+	}
+
+	destroy() {
+
 	}
 }

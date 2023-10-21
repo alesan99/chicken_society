@@ -84,10 +84,10 @@ class Animation {
 		this.stopFrame = dont_loop
 	}
 
-	stopAnimation (frame) {
+	stopAnimation (fx, fy) {
 		this.playing = false
-		if (frame != null) {
-			this.setFrame(frame)
+		if ((fx != null) || (fy != null)) {
+			this.setFrame(fx, fy)
 		}
 	}
 

@@ -29,6 +29,7 @@ class Render {
 		this.color[2] = b
 		this.color[3] = a
 		this.c.fillStyle = `rgb(${r},${g},${b})`
+		this.c.strokeStyle = `rgb(${r},${g},${b})`
 		this.c.globalAlpha = a;
 	}
 
@@ -61,8 +62,12 @@ class Render {
 	}
 
 	// Draw primitives
-	rectangle(x, y, w, h) {
-		this.c.fillRect(x, y, w, h)
+	rectangle(x, y, w, h, fill) {
+		if (fill == "line") {
+			this.c.rect(x, y, w, h)
+		} else {
+			this.c.fillRect(x, y, w, h)
+		}
 	}
 
 	circle(x, y, r, segments) {

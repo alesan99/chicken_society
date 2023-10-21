@@ -1,9 +1,11 @@
 // World state; Displays a location, has moving characters with collision. 
+var OBJECTS
 var CHARACTER
 var PLAYER
 var PLAYER_CONTROLLER
 var CHAT
 var OBJECTS
+var DEBUGPHYSICS = false
 
 class World {
 	constructor (area) {
@@ -13,16 +15,20 @@ class World {
 
 	load () {
 		createSpatialHash(canvasWidth, canvasHeight, 100)
+		// Physics objects
+		OBJECTS = {}
+		OBJECTS["Character"] = {}
+		OBJECTS["Warp"] = {}
+
+		OBJECTS["Warp"][0] = new Warp(650,220, 69,95)
+		
 		// Initialize all characters
 		// TODO: Make these names less confusing, chicken maybe?
-		CHARACTER = {}
+		CHARACTER = OBJECTS["Character"] //shorthand
 		CHARACTER[0] = new Character(canvasWidth/2-40, canvasHeight/2, PROFILE)
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
-
-		// Physics objects
-		OBJECTS = [CHARACTER]
 
 		//TODO: Area collision
 		//WALLS = new Wall(this.area)
@@ -37,6 +43,7 @@ class World {
 		for (const [id, obj] of Object.entries(CHARACTER)) {
 			obj.update(dt)
 		}
+		updatePhysics(OBJECTS, dt)
 
 		//TODO: Update Collision
 		if (NETPLAY) {
@@ -66,11 +73,13 @@ class World {
 			}
 		}
 
+		// DEBUG physics
+		if (DEBUGPHYSICS) {
+			drawPhysics(OBJECTS)
+		}
+
 		// HUD
 		CHAT.draw()
-
-		// DEBUG physics
-		drawPhysics()
 	}
 
 	keyPress(key) {

@@ -38,7 +38,7 @@ class Netplay {
 		this.timer += dt
 		if (this.timer > this.interval) {
 			// Calculate velocity of player
-			let [sx, sy] = vec2Norm(PLAYER.x-PLAYER.oldx, PLAYER.y-PLAYER.oldy)
+			let [sx, sy] = [PLAYER.sx, PLAYER.sy]
 			// Check if position has changed since last time position was sent to the server (or if there is a new player that needs this info.)
 			let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(this.oldx), Math.floor(this.oldy)]
 			if ((x != ox) || (y != oy) || (sx != this.oldsx) || (sy != this.oldsy) || (this.newPlayerJoined == true)) {
@@ -63,6 +63,7 @@ class Netplay {
 
 	removePlayer (id) {
 		if (id != socket.id) {
+			CHARACTER[id].destroy()
 			delete CHARACTER[id]
 		}
 	}
@@ -83,8 +84,7 @@ class Netplay {
 		if (CHARACTER[id]) {
 			// Position and speed
 			CHARACTER[id].setPosition(position[0], position[1])
-			CHARACTER[id].sx = position[2]
-			CHARACTER[id].sy = position[3]
+			CHARACTER[id].move(position[2]/CHARACTER[id].speed, position[3]/CHARACTER[id].speed)
 		}
 	}
 

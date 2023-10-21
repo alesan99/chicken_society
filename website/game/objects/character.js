@@ -6,21 +6,22 @@ class Character extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
 	constructor (x, y, profile) {
 		// Collision
-		super(x,y,80,60)
+		super(x,y)
 		this.x = x || 0
 		this.y = y || 0
 		this.w = 80 //Width
-		this.h = 60 //Height
+		this.h = 40 //Height
 		
-		this.shape = [
+		this.shape = new Shape(
 			0, 0,
 			this.w, 0,
 			this.w, this.h,
 			0, this.h
-		]
+		)
 
 		this.active = true
 		this.static = false
+		this.setPosition(null,null)
 
 		// Properties
 		this.updateProfile(profile)
@@ -28,8 +29,8 @@ class Character extends PhysicsObject {
 		this.controller = false //Is it being controlled?
 		this.area = "" //Current area
 
-		this.sx = false // Speed x
-		this.sy = false // Speed y
+		this.sx = 0 // Speed x
+		this.sy = 0 // Speed y
 
 		// Graphics
 		this.sprite = SPRITE.chicken
@@ -47,11 +48,10 @@ class Character extends PhysicsObject {
 		this.bubbleTime = false // How long the bubble is visible (seconds)
 	}
 
-	// Move: dt, direction normal x, direction normal y
-	move(dt, nx, ny) {
-		let x = this.x + nx*this.speed*dt
-		let y = this.y + ny*this.speed*dt
-		this.setPosition(x, y)
+	// Move: direction normal x, direction normal y
+	move(nx, ny) {
+		this.sx = nx*this.speed
+		this.sy = ny*this.speed
 
 		// Find direction player is facing
 		this.walking = true
@@ -78,14 +78,14 @@ class Character extends PhysicsObject {
 
 	update(dt) {
 		// Update movement
+		// TODO: Remove?
 		if (this.controller != PLAYER_CONTROLLER) {
 			// Update other clients
 			if ((this.sx == false && this.sy == false) != true) {
-				this.move(dt, this.sx, this.sy)
+
 			} else {
 				this.walking = false
 			}
-			console.log(this.walking, this.oldwalking, this.sy)
 		}
 
 		// Update Animation
@@ -93,7 +93,7 @@ class Character extends PhysicsObject {
 			if (this.walking) {
 				this.anim.playAnimation(ANIM.walk[0], ANIM.walk[1])
 			} else {
-				this.anim.stopAnimation(null)
+				this.anim.stopAnimation(0, null)
 			}
 		}
 		// Face in the current direction
@@ -128,7 +128,7 @@ class Character extends PhysicsObject {
 			let y = this.y+this.h - SPRITE.chicken.h + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
 			let centerX = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][0]/SPRITE.accessory[this.accessory].w
 			let centerY = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][1]/SPRITE.accessory[this.accessory].h
-			DRAW.image(IMG.accessory[this.accessory], SPRITE.accessory[this.accessory].getFrame(0, dir_lookup[this.dir]), x, y, 0, this.flip, 1, centerX, centerY)
+			DRAW.image(IMG.accessory[this.accessory], SPRITE.accessory[this.accessory].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
 
 		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
@@ -138,7 +138,7 @@ class Character extends PhysicsObject {
 			let y = this.y+this.h - SPRITE.chicken.h + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
 			let centerX = IMG.hat[this.hat].center[dir_lookup[this.dir]][0]/SPRITE.hat[this.hat].w
 			let centerY = IMG.hat[this.hat].center[dir_lookup[this.dir]][1]/SPRITE.hat[this.hat].h
-			DRAW.image(IMG.hat[this.hat], SPRITE.hat[this.hat].getFrame(0, dir_lookup[this.dir]), x, y, 0, this.flip, 1, centerX, centerY)
+			DRAW.image(IMG.hat[this.hat], SPRITE.hat[this.hat].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
 
 		// Nametag
@@ -190,6 +190,7 @@ class Character extends PhysicsObject {
 	// Play emote animation; will stop when player moves
 	emote(i) {
 		if (ANIM[i] != null) {
+			this.dir = "down"
 			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
 		}
 	}

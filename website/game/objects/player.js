@@ -23,6 +23,6 @@ class Player {
 			dy += 1
 		}
 		[dx, dy] = vec2Norm(dx, dy) //convert to direction normal
-		this.obj.move(dt, dx, dy)
+		this.obj.move(dx, dy)
 	}
 }

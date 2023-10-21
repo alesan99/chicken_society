@@ -43,6 +43,9 @@ class ChatObject {
 						NETPLAY.sendEmote(arg)
 					}
 					break
+				case "/debug": // Debug physics
+					DEBUGPHYSICS = true
+					break
 			}
 		} else {
 			// Send chat message
