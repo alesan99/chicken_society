@@ -13,7 +13,7 @@ function loadGameAssets() {
 	SPRITE.chicken = new Sprite(IMG.chicken, 8, 6, 0, 0, 128, 128, 129, 129)
 	ANIM.stand = [[0]]
 	ANIM.walk = [[1, 2], 0.2]
-	ANIM.dance = [[1, 2, 3, 5, 4, 6, 7], 0.4]
+	ANIM.dance = [[1, 2, 5, 4, 6, 7, 6, 7], 0.3]
 	ANIM.sit = [[3], 99999]
 	ANIM.wave = [[4,5,4,5,4,5], 0.2]
 
