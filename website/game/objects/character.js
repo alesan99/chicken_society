@@ -123,16 +123,19 @@ class Character {
 		// Chicken and accessories
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
 		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1)
+
 		DRAW.setColor(255,255,255,1.0)
-		if ((this.accessory != false) && (IMG.accessory[this.accessory] != null)) { // Accessory
+		if ((this.accessory != false) && (IMG.accessory[this.accessory] != null) && (SPRITE.accessory[this.accessory] != null)) { // Accessory
 			let x = this.x+this.w/2 - (SPRITE.chicken.w/2)*this.flip + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
 			let y = this.y+this.h - SPRITE.chicken.h + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
 			let centerX = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][0]/SPRITE.accessory[this.accessory].w
 			let centerY = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][1]/SPRITE.accessory[this.accessory].h
 			DRAW.image(IMG.accessory[this.accessory], SPRITE.accessory[this.accessory].getFrame(0, dir_lookup[this.dir]), x, y, 0, this.flip, 1, centerX, centerY)
 		}
+
 		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
-		if ((this.hat != false) && (IMG.hat[this.hat] != null)) { // Hat
+		
+		if ((this.hat != false) && (IMG.hat[this.hat] != null) && (SPRITE.hat[this.hat] != null)) { // Hat
 			let x = this.x+this.w/2 - (SPRITE.chicken.w/2)*this.flip + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
 			let y = this.y+this.h - SPRITE.chicken.h + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
 			let centerX = IMG.hat[this.hat].center[dir_lookup[this.dir]][0]/SPRITE.hat[this.hat].w
@@ -141,8 +144,8 @@ class Character {
 		}
 
 		// Nametag
-		DRAW.setFont(FONT.caption)
-		DRAW.setColor(1,0,0,1)
+		DRAW.setFont(FONT.caption, 4)
+		DRAW.setColor(255,255,255,1)
 		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-75, "center")
 
 		// Chat bubble

@@ -34,7 +34,10 @@ function loadGameAssets() {
 	SPRITE.hat = {}
 	IMG.hat["tophat"] = true
 	for (const [name, value] of Object.entries(IMG.hat)) {
-		IMG.hat[name] = new RenderImage(`assets/hats/${name}.png`)
+		let async = function() {
+			SPRITE.hat[name] = new Sprite(IMG.hat[name], 1, 3, 0, 0, IMG.hat[name].w, (IMG.hat[name].h-2)/3, IMG.hat[name].w, (IMG.hat[name].h-2)/3+1)
+		}
+		IMG.hat[name] = new RenderImage(`assets/hats/${name}.png`, async)
 		IMG.hat[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
 		fetch(`assets/hats/${name}.json`).then(response => {
 			if (!response.ok) {
@@ -48,14 +51,17 @@ function loadGameAssets() {
 		.catch(error => {
 			console.log("There was a problem loading the JSON file:", error)
 		})
-		SPRITE.hat[name] = new Sprite(IMG.hat[name], 1, 3, 0, 0, 74, 67, 74, 68)
+		
 	}
 	IMG.accessory = {}
 	SPRITE.accessory = {}
 	IMG.accessory["scarf"] = true
 	IMG.accessory["chains"] = true
 	for (const [name, value] of Object.entries(IMG.accessory)) {
-		IMG.accessory[name] = new RenderImage(`assets/accessories/${name}.png`)
+		let async = function() {
+			SPRITE.accessory[name] = new Sprite(IMG.accessory[name], 1, 3, 0, 0, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3+1)
+		}
+		IMG.accessory[name] = new RenderImage(`assets/accessories/${name}.png`, async)
 		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
 		fetch(`assets/accessories/${name}.json`).then(response => {
 			if (!response.ok) {
@@ -69,7 +75,6 @@ function loadGameAssets() {
 		.catch(error => {
 			console.log("There was a problem loading the JSON file:", error)
 		})
-		SPRITE.accessory[name] = new Sprite(IMG.accessory[name], 1, 3, 0, 0, 128, 128, 128, 129)
 	}
 
 	// Area graphics

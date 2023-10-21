@@ -9,6 +9,7 @@ class Render {
 
 		this.color = [255,255,255,1]
 		this.font = false
+		this.fontOutline
 	}
 
 	setCanvas(canvas) {
@@ -97,13 +98,36 @@ class Render {
 		}
 	}
 
-	setFont(font) {
-		this.c.font = `${font.size}px ${font.name}`;
+	// Font; RenderFont object, optional outline with thickness in px
+	setFont(font, outline) {
+		this.c.font = `${font.size}px ${font.name}`
+		if (outline != null) {
+			this.fontOutline = outline
+		} else {
+			this.fontOutline = false
+		}
 	}
 
 	text(string, x, y, align="left") {
 		this.c.textAlign = align // left, right, center
+		if (this.fontOutline) {
+			// Draw outline by rendering font with thick line strokes
+			// Preserve old color and line width to not interfere with later draw calls
+			let [oldLineWidth, oldMiterLimit] = [this.c.lineWidth, this.c.miterLimit]
+			let [ocr,ocg,ocb,oca] = [this.color[0],this.color[1],this.color[2],this.color[3]]
+			this.c.miterLimit = 2
+			this.setColor(0,0,0,1.0)
+			this.setLineWidth(this.fontOutline || 8)
+			this.c.strokeText(string, x, y)
+			this.setColor(ocr,ocg,ocb,oca)
+			this.setLineWidth(oldLineWidth)
+			this.c.miterLimit = oldMiterLimit
+		}
 		this.c.fillText(string, x, y)
+	}
+
+	setLineWidth(thickness) {
+		ctx.lineWidth = thickness
 	}
 
 	// Transform
@@ -121,7 +145,7 @@ class Render {
 }
 
 class RenderImage {
-	constructor (src) {
+	constructor (src, asyncFunc) {
 		this.image = new Image()
 		this.image.src = src
 		this.src = src
@@ -133,6 +157,10 @@ class RenderImage {
 			if (this.colorable) {
 				this.canvas.width = this.w
 				this.canvas.height = this.h
+			}
+			// Images are loaded asynchronously, so pass this function if you need to do anything with the image data
+			if (asyncFunc) {
+				asyncFunc()
 			}
 		}
 		this.canvas = false
