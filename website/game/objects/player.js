@@ -22,7 +22,7 @@ class Player {
 		} else if (arrowKeys.down) {
 			dy += 1
 		}
-		[dx, dy] = vec2Norm(dx, dy) //convert to direction normal
+		[dx, dy] = vec2Unit(dx, dy) //convert to direction normal
 		this.obj.move(dx, dy)
 	}
 }

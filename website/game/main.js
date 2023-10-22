@@ -54,7 +54,7 @@ function gameDraw() {
 gameLoad()
 let lastTimestamp = 0
 function gameLoop(timestamp) {
-	const dt = (timestamp - lastTimestamp) / 1000
+	const dt = Math.min((timestamp - lastTimestamp) / 1000, 0.5) // Delta time; should be capped (currently at 0.5 sec)
 	lastTimestamp = timestamp
 
 	gameUpdate(dt)

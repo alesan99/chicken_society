@@ -13,11 +13,17 @@ class Warp extends PhysicsObject {
 		this.area = area
 
 		this.shape = new Shape(
+			0, -this.h/2,
+			this.w/2, 0,
+			0, this.h/2,
+			-this.w/2, 0
+		)
+		/** this.shape = new Shape(
 			-this.w/2, -this.h/2,
 			this.w/2, -this.h/2,
 			this.w/2, this.h/2,
 			-this.w/2, this.h/2
-		)
+		) */
 
 		this.active = true
 		this.static = true

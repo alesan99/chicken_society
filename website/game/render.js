@@ -64,14 +64,22 @@ class Render {
 	// Draw primitives
 	rectangle(x, y, w, h, fill) {
 		if (fill == "line") {
+			this.c.beginPath()
 			this.c.rect(x, y, w, h)
+			this.c.stroke()
 		} else {
 			this.c.fillRect(x, y, w, h)
 		}
 	}
 
-	circle(x, y, r, segments) {
-
+	circle(x, y, r, fill) {
+		this.c.beginPath()
+		this.c.arc(x, y, r, 0, 2 * Math.PI)
+		if (fill == "line") {
+			this.c.stroke()
+		} else {
+			this.c.fill()
+		}
 	}
 
 	line(points) {
