@@ -27,7 +27,7 @@ class Warp extends PhysicsObject {
 	}
 
 	collide (name, obj, nx, ny) {
-		if (name == "Character") {
+		if (name == "Character" && obj == PLAYER) {
 			WORLD.loadArea(this.area)
 		}
 		return false

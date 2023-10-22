@@ -195,6 +195,14 @@ class Character extends PhysicsObject {
 			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
 		}
 	}
+
+	// Collision
+	collide(name, obj, nx, ny) {
+		if (name == "Character") {
+			return false
+		}
+		return true
+	}
 }
 
 

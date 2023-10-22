@@ -62,7 +62,7 @@ class ChatObject {
 	}
 
 	keyPress(key) {
-		if ((key == "/" && !this.typing) || (key == "Escape" && this.typing)) {
+		if (((key == "/" || key == "\\") && !this.typing) || (key == "Escape" && this.typing)) {
 			this.typing = !this.typing
 			this.open = !this.open
 		} else if (this.typing) {
