@@ -1,15 +1,17 @@
-//Walls, collides with other objects to stop them
+//Wall, collides with other objects to stop them
 
-class Walls extends PhysicsObject {
+class Wall extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
-	constructor (config) {
-		super(0,0,0,0)
-		this.config = config // configuration string
-		this.polys = [] //list of polygons
-	}
+	constructor (...points) {
+		// Collision
+		super(0,0)
+		this.x = 0
+		this.y = 0
 
-	//Check if object is inside walls
-	checkInside(obj) {
-		//TODO: Use seperated axis theorem to find collisions.
+		this.shape = new Shape(...points)
+
+		this.active = true
+		this.static = true
+		this.setPosition(null,null)
 	}
 }

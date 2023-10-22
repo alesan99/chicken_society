@@ -8,10 +8,10 @@ class Shape {
 		this.vCount = this.v.length/2
 		this.n = [] // side normals
 		// Bounding box; used to quickly figure out if two shapes could possibly be colliding
-		this.x1 = 0 // Top left point
-		this.y1 = 0
-		this.x2 = 1 // Bottom right point
-		this.y2 = 1
+		this.x1 = this.v[0] // Top left point
+		this.y1 = this.v[1]
+		this.x2 = this.v[0] // Bottom right point
+		this.y2 = this.v[1]
 		
 		for (let i = 0; i < this.v.length; i+= 2) {
 			// Find out minimum and maximum values for bounding box

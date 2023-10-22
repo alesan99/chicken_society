@@ -9,7 +9,7 @@ class Character extends PhysicsObject {
 		super(x,y)
 		this.x = x || 0
 		this.y = y || 0
-		this.w = 80 //Width
+		this.w = 70 //Width
 		this.h = 40 //Height
 		
 		this.shape = new Shape(

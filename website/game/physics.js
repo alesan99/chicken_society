@@ -3,60 +3,53 @@
 // Update physics; (list of objects, deltaTime)
 function updatePhysics(objs, dt) {
 	for (const [_, objsList] of Object.entries(objs)) { // Look through list of object types
-		for (const [ia, a] of Object.entries(objsList)) { // Look at each object
-			// Only update object if 'active' in physics space AND not static
-			a.DEBUGCOLLIDED = false
-			if (a.active && !a.static) {
-				// New (possible) location
-				let nx = a.x + a.sx*dt
-				let ny = a.y + a.sy*dt
+		if (!objsList.dontUpdate) { // Don't bother updating these objects (Will always be static, like walls)
+			for (const [ia, a] of Object.entries(objsList)) { // Look at each object
+				// Only update object if 'active' in physics space AND not static
+				a.DEBUGCOLLIDED = false
+				if (a.active && !a.static) {
+					// New (possible) location
+					let nx = a.x + a.sx*dt
+					let ny = a.y + a.sy*dt
 
-				let collided = false
+					let collided = false
 
-				// Range covered by object and it's movement
-				let rx1 = a.shape.x1+Math.min(a.x, nx)
-				let ry1 = a.shape.y1+Math.min(a.y, ny)
-				let rx2 = a.shape.x2+Math.max(a.x, nx)
-				let ry2 = a.shape.y2+Math.max(a.y, nx)
+					// Range covered by object and it's movement
+					let rx1 = a.shape.x1+Math.min(a.x, nx)
+					let ry1 = a.shape.y1+Math.min(a.y, ny)
+					let rx2 = a.shape.x2+Math.max(a.x, nx)
+					let ry2 = a.shape.y2+Math.max(a.y, nx)
 
-				// Loop through all objects in the range using Spatial hash
-				for (const [ib, b] of retrieveSpatialCells(rx1,ry1, rx2,ry2).entries()) {
-					// TODO: Check collision
-					if (b.active) {
-						if (!(a == b)) { // Shouldn't collide with itself
-							// Only check for collision if bounding boxes will overlap
-							if (isAABBColliding(nx+a.shape.x1,ny+a.shape.y1,nx+a.shape.x2,ny+a.shape.y2,
-								b.x+b.shape.x1,b.y+b.shape.y1,b.x+b.shape.x2,b.y+b.shape.y2)) {
-								let [coll1, moveAxisX, moveAxisY, dist] = checkCollision(a, b, nx, ny)
-								let [coll2] = checkCollision(a, b, a.x, a.y) // Unneccessary, remove to improve performance. This is just here to stop players from getting stuck ontop of eachother
-								if (coll1) {
-									a.DEBUGCOLLIDED = true
-									collided = true
-									// Push object A
-									nx += moveAxisX*dist
-									ny += moveAxisY*dist
+					// Loop through all objects in the range using Spatial hash
+					for (const [ib, b] of retrieveSpatialCells(rx1,ry1, rx2,ry2).entries()) {
+						// TODO: Check collision
+						if (b.active) {
+							if (!(a == b)) { // Shouldn't collide with itself
+								// Only check for collision if bounding boxes will overlap
+								if (isAABBColliding(nx+a.shape.x1,ny+a.shape.y1,nx+a.shape.x2,ny+a.shape.y2,
+									// Time to do polygonal collision check
+									b.x+b.shape.x1,b.y+b.shape.y1,b.x+b.shape.x2,b.y+b.shape.y2)) {
+									let [coll1, moveAxisX, moveAxisY, dist] = checkCollision(a, b, nx, ny)
+									// let [coll2] = checkCollision(a, b, a.x, a.y) // Unneccessary, remove to improve performance. This is just here to stop players from getting stuck ontop of eachother
+									if (coll1) {
+										a.DEBUGCOLLIDED = true
+										collided = true
+										// Push object A
+										nx += moveAxisX*dist
+										ny += moveAxisY*dist
+
+										// TODO: Collision callbacks
+									}
 								}
 							}
-
-							// Temporary axis-alligned bounding box collision; only counts as a collision if
-							// 1. The two objects (A & B) are not currently colliding
-							// 2. If object A WILL collide with object B after moving
-							/**
-							if (!isAABBColliding(a.x+a.shape.x1,a.y+a.shape.y1,a.x+a.shape.x2,a.y+a.shape.y2,
-								b.x+b.shape.x1,b.y+b.shape.y1,b.x+b.shape.x2,b.y+b.shape.y2)
-								&& isAABBColliding(nx+a.shape.x1,ny+a.shape.y1,nx+a.shape.x2,ny+a.shape.y2,
-								b.x+b.shape.x1,b.y+b.shape.y1,b.x+b.shape.x2,b.y+b.shape.y2)) {
-								collided = true
-							}
-							*/
 						}
 					}
-				}
 
-				// only move if it didn't collide with anything
-				//if (collided == false) {
-					a.setPosition(nx, ny)
-				//}
+					// only move if it didn't collide with anything
+					//if (collided == false) {
+						a.setPosition(nx, ny)
+					//}
+				}
 			}
 		}
 	}
@@ -119,7 +112,6 @@ function checkCollision(a, b, fax, fay) {
 		// In SAT, all there must be an overlap on ALL axes, so no overlap in this one axis means there is no collision
 		if (!(max2 >= min1 && max1 >= min2)) {
 			return [false, 0,0,0]
-			// return [minx, miny, maxx, maxy, setsxl, setsxr, setsyu, setsyd]
 		}
 		
 		// else, get overlap (and record axis if minimum)
@@ -144,53 +136,7 @@ function checkCollision(a, b, fax, fay) {
 		}
 	}
 
-	//resolve collision
-	/**
-	if (minAxis) {
-		let upFacing = dot(0,-1, moveAxisX,moveAxisY)
-		if (sx != 0 && math.abs(moveAxisX) > 0.0001) {
-			// TODO: Slide on steep slopes
-			if (moveAxisX < 0) {
-				maxx = math.min(maxx, fx+moveAxisX*overlap)
-				collided = true
-				if (Math.abs(upFacing) < 0.0001) { //is it a vertical wall?
-					setsxr = 0 // comment out to mitigate false collisions
-					b:collide("right", c,d)
-				}
-			} else if (moveAxisX > 0) {
-				minx = math.max(minx, fx+moveAxisX*overlap)
-				collided = true
-				if (Math.abs(upFacing) < 0.0001) { //is it a vertical wall?
-					setsxl = 0 // comment out to mitigate false collisions
-					b:collide("left", c,d)
-				}
-			}
-		}
-		//if (math.abs(moveAxisY) > 0.0001 && !(upFacing == 1 and minAxis <= shape.pointCount) {
-			if (moveAxisY < 0) {
-				maxy = math.min(maxy, fy+moveAxisY*overlap)
-				setsyd = 0
-				collided = true
-				b:collide("down", c,d)
-				b.groundNormalX = moveAxisX
-				b.groundNormalY = moveAxisY
-	 		} else if (moveAxisY > 0) {
-				if (upFacing == -1) {
-					miny = math.max(miny, fy+moveAxisY*overlap)
-				}
-				setsyu = 0
-				collided = true
-				b:collide("up", c,d)
-			}
-		//}
-		b.moveAxisX = moveAxisX
-		b.moveAxisY = moveAxisY
-		b.minAxis = minAxis
-
-		d.collided = true
-	} */
 	return [true, moveAxisX, moveAxisY, overlap]
-	//return [minx, miny, maxx, maxy, setsxl, setsxr, setsyu, setsyd]
 }
 
 // Spatial Hash functions; A grid that is used to find nearby objects without iterating through every single object
@@ -270,24 +216,26 @@ function drawPhysics(objs) {
 		}
 	}
 	// Draw hitboxes
-	for (const [_, objsList] of Object.entries(objs)) { // Look through list of object types
+	for (const [name, objsList] of Object.entries(objs)) { // Look through list of object types
 		for (const [i, a] of Object.entries(objsList)) { // Look at each object
-			DRAW.push()
-			DRAW.translate(a.x, a.y)
-
-			// Draw object's shape and bounding box
-			DRAW.setColor(0,0,0,1.0)
-			if (a.DEBUGCOLLIDED != false) { // Turn red if currently colliding
-				DRAW.setColor(255,0,0,1.0)
+			if (typeof a === "object") {
+				DRAW.push()
+				DRAW.translate(a.x, a.y)
+	
+				// Draw object's shape and bounding box
+				DRAW.setColor(0,0,80,1.0)
+				if (a.DEBUGCOLLIDED == true) { // Turn red if currently colliding
+					DRAW.setColor(255,0,0,1.0)
+				}
+				DRAW.setLineWidth(1)
+				DRAW.rectangle(a.shape.x1, a.shape.y1, a.shape.w, a.shape.h, "line")
+				DRAW.setLineWidth(2)
+				DRAW.polygon(a.shape.v, "line")
+	
+				//DRAW.circle(0, 0, 3, "fill") // Object center (Shape's origin)
+	
+				DRAW.pop()
 			}
-			DRAW.setLineWidth(1)
-			DRAW.rectangle(a.shape.x1, a.shape.y1, a.shape.w, a.shape.h, "line")
-			DRAW.setLineWidth(2)
-			DRAW.polygon(a.shape.v, "line")
-
-			DRAW.circle(0, 0, 3, "fill") // Object center (Shape's origin)
-
-			DRAW.pop()
 		}
 	}
 }

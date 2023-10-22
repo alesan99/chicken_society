@@ -87,3 +87,19 @@ function loadGameAssets() {
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
 }
+
+function loadJSON(filePath, callBack) {
+	fetch(filePath).then(response => {
+		if (!response.ok) {
+			console.log("JSON Network response was not ok")
+		}
+		return response.json()
+	})
+	.then(data => {
+		callBack(data)
+	})
+	.catch(error => {
+		console.log("There was a problem loading the JSON file:", error)
+	})
+}
+

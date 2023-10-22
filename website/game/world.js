@@ -19,8 +19,10 @@ class World {
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
 		OBJECTS["Warp"] = {}
+		OBJECTS["Wall"] = {}
+		OBJECTS["Wall"].dontUpdate = true
 
-		OBJECTS["Warp"][0] = new Warp(650,220, 69,95)
+		OBJECTS["Warp"][0] = new Warp(650,440, 69,95) // Just for testing REMOVE
 		
 		// Initialize all characters
 		// TODO: Make these names less confusing, chicken maybe?
@@ -35,6 +37,20 @@ class World {
 
 		// HUD
 		CHAT = new ChatObject()
+
+		// Load walls
+		// TODO: Put this somewhere else and clean up
+		loadJSON(`assets/areas/${this.area}.json`, (data) => {
+			// Go through each polygon
+			if (data.walls) {
+				let i = 0
+				for (const poly of data.walls) {
+					// Create wall object
+					i++
+					OBJECTS["Wall"][i] = new Wall(...poly)
+				}
+			}
+		})
 	}
 
 	update (dt) {
