@@ -1,8 +1,8 @@
 //Functions to interact with states
 let game_state = false
 let game_state_name = ""
-function setState(state) {
-	state.load()
+function setState(state, args) {
+	state.load(args)
 	game_state = state
 	game_state_name = game_state.name
 }

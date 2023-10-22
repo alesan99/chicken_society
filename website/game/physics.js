@@ -2,7 +2,7 @@
 
 // Update physics; (list of objects, deltaTime)
 function updatePhysics(objs, dt) {
-	for (const [_, objsList] of Object.entries(objs)) { // Look through list of object types
+	for (const [objsName, objsList] of Object.entries(objs)) { // Look through list of object types
 		if (!objsList.dontUpdate) { // Don't bother updating these objects (Will always be static, like walls)
 			for (const [ia, a] of Object.entries(objsList)) { // Look at each object
 				// Only update object if 'active' in physics space AND not static
@@ -30,25 +30,23 @@ function updatePhysics(objs, dt) {
 									// Time to do polygonal collision check
 									b.x+b.shape.x1,b.y+b.shape.y1,b.x+b.shape.x2,b.y+b.shape.y2)) {
 									let [coll1, moveAxisX, moveAxisY, dist] = checkCollision(a, b, nx, ny)
-									// let [coll2] = checkCollision(a, b, a.x, a.y) // Unneccessary, remove to improve performance. This is just here to stop players from getting stuck ontop of eachother
 									if (coll1) {
-										a.DEBUGCOLLIDED = true
-										collided = true
-										// Push object A
-										nx += moveAxisX*dist
-										ny += moveAxisY*dist
-
-										// TODO: Collision callbacks
+										// Objects are overlapping, if both collision callbacks return true then push
+										if (a.collide(b.objName, b, moveAxisX, moveAxisY) && b.collide(a.objName, a, -moveAxisX, -moveAxisY)) {
+											a.DEBUGCOLLIDED = true
+											collided = true
+											// Push object A by changing its new position
+											nx += moveAxisX*dist
+											ny += moveAxisY*dist
+										}
 									}
 								}
 							}
 						}
 					}
 
-					// only move if it didn't collide with anything
-					//if (collided == false) {
-						a.setPosition(nx, ny)
-					//}
+					// Finally move to 'new' position
+					a.setPosition(nx, ny)
 				}
 			}
 		}
@@ -159,6 +157,14 @@ function createSpatialHash(ww, wh, cs) {
 		hash[x] = []
 		for (let y = 0; y <= ch; y++) {
 			hash[x][y] = new Map()
+		}
+	}
+}
+
+function clearSpatialHash() {
+	for (let x = 0; x <= cw; x++) {
+		for (let y = 0; y <= ch; y++) {
+			hash[x][y].clear()
 		}
 	}
 }

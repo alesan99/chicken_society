@@ -8,46 +8,56 @@ var OBJECTS
 var DEBUGPHYSICS = false
 
 class World {
-	constructor (area) {
+	constructor () {
 		this.name = "world"
-		this.area = area || "hub" //Area name
+		this.area = "hub" //Area name
 	}
 
-	load () {
+	load (area) {
 		createSpatialHash(canvasWidth, canvasHeight, 100)
 		// Physics objects
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
-		OBJECTS["Warp"] = {}
-		OBJECTS["Wall"] = {}
-		OBJECTS["Wall"].dontUpdate = true
 
-		OBJECTS["Warp"][0] = new Warp(650,440, 69,95) // Just for testing REMOVE
-		
 		// Initialize all characters
-		// TODO: Make these names less confusing, chicken maybe?
 		CHARACTER = OBJECTS["Character"] //shorthand
 		CHARACTER[0] = new Character(canvasWidth/2-40, canvasHeight/2, PROFILE)
 		// Initialize Player controller
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0])
 
-		//TODO: Area collision
-		//WALLS = new Wall(this.area)
-
 		// HUD
 		CHAT = new ChatObject()
 
-		// Load walls
-		// TODO: Put this somewhere else and clean up
+		this.loadArea(area)
+	}
+
+	loadArea (area) {
+		this.area = area || "hub"
+		
+		OBJECTS["Warp"] = {}
+		OBJECTS["Wall"] = {}
+		OBJECTS["Wall"].dontUpdate = true
+		clearSpatialHash()
+
+		// Load Area data
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {
-			// Go through each polygon
+			// Load area walls
+			// Go through each polygon & make wall
 			if (data.walls) {
 				let i = 0
 				for (const poly of data.walls) {
 					// Create wall object
 					i++
 					OBJECTS["Wall"][i] = new Wall(...poly)
+				}
+			}
+			// Load warps
+			if (data.warps) {
+				let i = 0
+				for (const warp of data.warps) {
+					i++
+					OBJECTS["Warp"][i] = new Warp(...warp) // Just for testing REMOVE
 				}
 			}
 		})
@@ -74,7 +84,7 @@ class World {
 		// Background
 		// TODO: load background depending on area
 		DRAW.setColor(255,255,255)
-		DRAW.image(BACKGROUND.hub, null, 0, 0) //sprite
+		DRAW.image(BACKGROUND[this.area], null, 0, 0) //sprite
 
 		// Draw objects in the correct order
 		let drawQueue = []

@@ -10,6 +10,7 @@ class Wall extends PhysicsObject {
 
 		this.shape = new Shape(...points)
 
+		this.objName = "Wall"
 		this.active = true
 		this.static = true
 		this.setPosition(null,null)

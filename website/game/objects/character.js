@@ -19,6 +19,7 @@ class Character extends PhysicsObject {
 			0, this.h
 		)
 
+		this.objName = "Character"
 		this.active = true
 		this.static = false
 		this.setPosition(null,null)

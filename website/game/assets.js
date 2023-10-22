@@ -8,10 +8,11 @@ FONT = []
 
 function loadGameAssets() {
 	// World objects
+	// Chicken
 	IMG.chicken = new RenderImage("assets/chicken.png")
 	IMG.chicken.makeColorable()
 	SPRITE.chicken = new Sprite(IMG.chicken, 8, 6, 0, 0, 128, 128, 129, 129)
-	ANIM.stand = [[0]]
+	ANIM.stand = [[0]] // Animations format. [[Frame 1, Frame 2...], [Delay 1, Delay 2...]]
 	ANIM.walk = [[1, 2], 0.2]
 	ANIM.dance = [[1, 2, 5, 4, 6, 7, 6, 7], 0.3]
 	ANIM.sit = [[3], 99999]
@@ -34,61 +35,52 @@ function loadGameAssets() {
 	CHICKENROTATION = [ // Rotation of chicken hat & accessory for each frame
 		0,0,0,0,0,0,-Math.PI*0.5,0
 	]
+	// List of all hats to load
 	IMG.hat = {}
 	SPRITE.hat = {}
 	IMG.hat["tophat"] = true
+
 	for (const [name, value] of Object.entries(IMG.hat)) {
+		// Load image, create sprite frames when image is loaded, and load hat centers from JSON
 		let async = function() {
 			SPRITE.hat[name] = new Sprite(IMG.hat[name], 1, 3, 0, 0, IMG.hat[name].w, (IMG.hat[name].h-2)/3, IMG.hat[name].w, (IMG.hat[name].h-2)/3+1)
 		}
 		IMG.hat[name] = new RenderImage(`assets/hats/${name}.png`, async)
 		IMG.hat[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
-		fetch(`assets/hats/${name}.json`).then(response => {
-			if (!response.ok) {
-				console.log("JSON Network response was not ok")
-			}
-			return response.json()
-		})
-		.then(data => {
+		loadJSON(`assets/hats/${name}.json`, (data) => {
 			IMG.hat[name].center = data.center
 		})
-		.catch(error => {
-			console.log("There was a problem loading the JSON file:", error)
-		})
-		
 	}
+	// List of all accessories to load
 	IMG.accessory = {}
 	SPRITE.accessory = {}
 	IMG.accessory["scarf"] = true
 	IMG.accessory["chains"] = true
+
 	for (const [name, value] of Object.entries(IMG.accessory)) {
+		// Load image, create sprite frames when image is loaded, and load accessory centers from JSON
 		let async = function() {
 			SPRITE.accessory[name] = new Sprite(IMG.accessory[name], 1, 3, 0, 0, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3+1)
 		}
 		IMG.accessory[name] = new RenderImage(`assets/accessories/${name}.png`, async)
 		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
-		fetch(`assets/accessories/${name}.json`).then(response => {
-			if (!response.ok) {
-				console.log("JSON Network response was not ok")
-			}
-			return response.json()
-		})
-		.then(data => {
+		loadJSON(`assets/accessories/${name}.json`, (data) => {
 			IMG.accessory[name].center = data.center
-		})
-		.catch(error => {
-			console.log("There was a problem loading the JSON file:", error)
 		})
 	}
 
 	// Area graphics
-	BACKGROUND.hub = new RenderImage("assets/areas/hub.png")
+	// TODO: Load these on the fly (only when needed)
+	BACKGROUND["hub"] = new RenderImage("assets/areas/hub.png")
+	BACKGROUND["arcade"] = new RenderImage("assets/areas/arcade.png")
 
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
 }
 
+// Load array with JSON data; filePath, callBack function called after file is finished loading
 function loadJSON(filePath, callBack) {
+	// JSON file must be loaded asynchronously
 	fetch(filePath).then(response => {
 		if (!response.ok) {
 			console.log("JSON Network response was not ok")
