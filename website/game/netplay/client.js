@@ -7,7 +7,6 @@ class Netplay {
 
 		// Client
 		this.connect()
-		// this.id = socket.id //TODO: Do something else? Ideally client should not know its server-side id.
 
 		// Player syncing information
 		this.oldx = 0

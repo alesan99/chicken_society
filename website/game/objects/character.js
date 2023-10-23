@@ -3,10 +3,10 @@
 let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
 class Character extends PhysicsObject {
-	//Initialize: x pos, y pos, width, height
-	constructor (x, y, profile) {
+	//Initialize: spatialHash, x pos, y pos, width, height
+	constructor (spatialHash, x, y, profile) {
 		// Collision
-		super(x,y)
+		super(spatialHash,x,y)
 		this.x = x || 0
 		this.y = y || 0
 		this.w = 70 //Width

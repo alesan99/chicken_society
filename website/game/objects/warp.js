@@ -2,9 +2,9 @@
 
 class Warp extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
-	constructor (area, fromArea, x, y, w, h) {
+	constructor (spatialHash,area, fromArea, x, y, w, h) {
 		// Collision
-		super(x,y)
+		super(spatialHash,x,y)
 		this.x = x
 		this.y = y
 		this.w = w

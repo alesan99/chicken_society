@@ -2,9 +2,9 @@
 
 class Wall extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
-	constructor (...points) {
+	constructor (spatialHash,...points) {
 		// Collision
-		super(0,0)
+		super(spatialHash,0,0)
 		this.x = 0
 		this.y = 0
 

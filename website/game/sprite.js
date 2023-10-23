@@ -29,7 +29,7 @@ class Animation {
 		this.framex = fx || 0
 		this.framey = fy || 0
 
-		//TODO: Animation
+		// Animation
 		this.playing = false
 		this.frames = false
 		this.animLength = 0

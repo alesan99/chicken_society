@@ -1,7 +1,7 @@
 // Collision & physics system
 
 // Update physics; (list of objects, deltaTime)
-function updatePhysics(objs, dt) {
+function updatePhysics(objs, spatialHash, dt) {
 	for (const [objsName, objsList] of Object.entries(objs)) { // Look through list of object types
 		if (!objsList.dontUpdate) { // Don't bother updating these objects (Will always be static, like walls)
 			for (const [ia, a] of Object.entries(objsList)) { // Look at each object
@@ -21,8 +21,7 @@ function updatePhysics(objs, dt) {
 					let ry2 = a.shape.y2+Math.max(a.y, nx)
 
 					// Loop through all objects in the range using Spatial hash
-					for (const [ib, b] of retrieveSpatialCells(rx1,ry1, rx2,ry2).entries()) {
-						// TODO: Check collision
+					for (const [ib, b] of spatialHash.retrieveCells(rx1,ry1, rx2,ry2).entries()) {
 						if (b.active) {
 							if (!(a == b)) { // Shouldn't collide with itself
 								// Only check for collision if bounding boxes will overlap
@@ -122,15 +121,14 @@ function checkCollision(a, b, fax, fay) {
 		// use the axis with the least overlap
 		// if they have the same overlap, check which intersection has the closest distance to the origin
 		if ((o < overlap - 0.0001) || (Math.abs(o - overlap) < 0.0001 && Math.abs(intersectionMin) < Math.abs(axisIntersectionMin))) {
-			
-				overlap = o
-				minAxis = side
-				axisIntersectionMin = intersectionMin
-				if (minAxis < pointCountB) { //belongs to polygon B
-					[moveAxisX,moveAxisY] = [axisX,axisY]
-				} else { //belongs to polygon A
-					[moveAxisX,moveAxisY] = [-axisX,-axisY]
-				}
+			overlap = o
+			minAxis = side
+			axisIntersectionMin = intersectionMin
+			if (minAxis < pointCountB) { //belongs to polygon B
+				[moveAxisX,moveAxisY] = [axisX,axisY]
+			} else { //belongs to polygon A
+				[moveAxisX,moveAxisY] = [-axisX,-axisY]
+			}
 		}
 	}
 
@@ -139,86 +137,83 @@ function checkCollision(a, b, fax, fay) {
 
 // Spatial Hash functions; A grid that is used to find nearby objects without iterating through every single object
 // The Hash is a 2D array with a list as each element. This list is a 'cell' and a cell contains every object in that space.
-let hash = []
-let worldw = 1 // Size of world in pixels
-let worldh = 1
-let cw = 0 // Number of cells horizontally -1
-let ch = 0 // Number of cells vertically -1
-let cellSize = 100
-function createSpatialHash(ww, wh, cs) {
-	cellSize = cs
-	cw = Math.ceil(ww/cellSize)
-	ch = Math.ceil(wh/cellSize)
-	worldw = ww
-	worldh = wh
-
-	hash = []
-	for (let x = 0; x <= cw; x++) {
-		hash[x] = []
-		for (let y = 0; y <= ch; y++) {
-			hash[x][y] = new Map()
+class SpatialHash {
+	constructor (ww, wh, cs) {
+		// Create hash map
+		this.worldw = ww  // Size of world in pixels
+		this.worldh = wh
+		this.cellSize = cs
+		this.cw = Math.ceil(ww/this.cellSize) // Number of cells horizontally -1
+		this.ch = Math.ceil(wh/this.cellSize) // Number of cells vertically -1
+	
+		this.hash = []
+		for (let x = 0; x <= this.cw; x++) {
+			this.hash[x] = []
+			for (let y = 0; y <= this.ch; y++) {
+				this.hash[x][y] = new Map()
+			}
 		}
+
+		this.objAppearedMap = new Map() // Reusable map to keep track of objects in the retrieve function
 	}
-}
 
-function clearSpatialHash() {
-	for (let x = 0; x <= cw; x++) {
-		for (let y = 0; y <= ch; y++) {
-			hash[x][y].clear()
-		}
-	}
-}
-
-// TODO: Make this a class so there can be multiple instances (Needed for mini-games)
-// Given world corrdinates find which cell range the object is in
-function getSpatialCoords(x1, y1, x2, y2) {
-	let cx1 = Math.floor(Math.min(Math.max(x1, 0), worldw)/cellSize)
-	let cy1 = Math.floor(Math.min(Math.max(y1, 0), worldh)/cellSize)
-	let cx2 = Math.floor(Math.min(Math.max(x2, 0), worldw)/cellSize)
-	let cy2 = Math.floor(Math.min(Math.max(y2, 0), worldh)/cellSize)
-	return [cx1, cy1, cx2, cy2]
-}
-
-function getSpatialCell(cx, cy) {
-	return hash[cx][cy]
-}
-
-function putToSpatialCell(cx, cy, obj) {
-	hash[cx][cy].set(obj, obj) // Store the object in the hash by directly using obj as the key
-}
-
-function removeFromSpatialCell(cx, cy, obj) {
-	hash[cx][cy].delete(obj)
-}
-
-// Compiles all objects in a range of cells into a list
-let objAppearedMap = new Map()
-function retrieveSpatialCells(x1, y1, x2, y2) {
-	objAppearedMap.clear()
-	let [cx1, cy1, cx2, cy2] = getSpatialCoords(x1, y1, x2, y2)
-	// Loop through range of cells
-	for (let x = cx1; x <= cx2; x++) {
-		for (let y = cy1; y <= cy2; y++) {
-			// Add objects to object list without duplicates
-			let cell = getSpatialCell(x, y)
-			for (const [obji, obj] of cell.entries()) {
-				objAppearedMap.set(obj, obj)
+	clear() {
+		for (let x = 0; x <= this.cw; x++) {
+			for (let y = 0; y <= this.ch; y++) {
+				this.hash[x][y].clear()
 			}
 		}
 	}
-	return objAppearedMap
+
+	// Given world corrdinates find which cell range the object is in
+	getCoords(x1, y1, x2, y2) {
+		let cx1 = Math.floor(Math.min(Math.max(x1, 0), this.worldw)/this.cellSize)
+		let cy1 = Math.floor(Math.min(Math.max(y1, 0), this.worldh)/this.cellSize)
+		let cx2 = Math.floor(Math.min(Math.max(x2, 0), this.worldw)/this.cellSize)
+		let cy2 = Math.floor(Math.min(Math.max(y2, 0), this.worldh)/this.cellSize)
+		return [cx1, cy1, cx2, cy2]
+	}
+
+	getCell(cx, cy) {
+		return this.hash[cx][cy]
+	}
+
+	putToCell(cx, cy, obj) {
+		this.hash[cx][cy].set(obj, obj)// Store the object in the hash by directly using obj as the key
+	}
+	removeFromCell(cx, cy, obj) {
+		this.hash[cx][cy].delete(obj)
+	}
+
+	// Compiles all objects in a range of cells into a list
+	retrieveCells(x1, y1, x2, y2) {	
+		this.objAppearedMap.clear()
+		let [cx1, cy1, cx2, cy2] = this.getCoords(x1, y1, x2, y2)
+		// Loop through range of cells
+		for (let x = cx1; x <= cx2; x++) {
+			for (let y = cy1; y <= cy2; y++) {
+				// Add objects to object list without duplicates
+				let cell = this.getCell(x, y)
+				for (const [obji, obj] of cell.entries()) {
+					this.objAppearedMap.set(obj, obj)
+				}
+			}
+		}
+		return this.objAppearedMap
+	}
 }
 
 // Debug draw all hitboxes
-function drawPhysics(objs) {
+function drawPhysics(objs, spatialHash) {
 	// Draw Spatial Hash
 	DRAW.setColor(0,0,0,0.5)
 	DRAW.setFont(FONT.caption)
 	DRAW.setLineWidth(1)
-	for (let x = 0; x <= cw; x++) {
-		for (let y = 0; y <= ch; y++) {
+	for (let x = 0; x <= spatialHash.cw; x++) {
+		for (let y = 0; y <= spatialHash.ch; y++) {
+			let cellSize = spatialHash.cellSize
 			DRAW.polygon([x*cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize+cellSize, x*cellSize,y*cellSize+cellSize], "line")
-			DRAW.text(getSpatialCell(x, y).size,x*cellSize+cellSize/2,y*cellSize+cellSize/2)
+			DRAW.text(spatialHash.getCell(x, y).size,x*cellSize+cellSize/2,y*cellSize+cellSize/2)
 		}
 	}
 	// Draw hitboxes

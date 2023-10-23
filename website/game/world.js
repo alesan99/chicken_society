@@ -1,4 +1,5 @@
 // World state; Displays a location, has moving characters with collision. 
+var PHYSICSWORLD
 var OBJECTS
 var CHARACTER
 var PLAYER
@@ -14,17 +15,18 @@ class World {
 	}
 
 	load (area) {
-		createSpatialHash(canvasWidth, canvasHeight, 100)
+		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
+
 		// Physics objects
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
 
 		// Initialize all characters
 		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Character(canvasWidth/2-40, canvasHeight/2, PROFILE)
-		// Initialize Player controller
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2-40, canvasHeight/2, PROFILE)
+		
 		PLAYER = CHARACTER[0]
-		PLAYER_CONTROLLER = new Player(CHARACTER[0])
+		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
 
 		// HUD
 		CHAT = new ChatObject()
@@ -38,7 +40,7 @@ class World {
 		OBJECTS["Warp"] = {}
 		OBJECTS["Wall"] = {}
 		OBJECTS["Wall"].dontUpdate = true
-		clearSpatialHash()
+		PHYSICSWORLD.clear()
 
 		// Load Area data
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {
@@ -49,7 +51,7 @@ class World {
 				for (const poly of data.walls) {
 					// Create wall object
 					i++
-					OBJECTS["Wall"][i] = new Wall(...poly)
+					OBJECTS["Wall"][i] = new Wall(PHYSICSWORLD, ...poly)
 				}
 			}
 			// Load warps
@@ -57,7 +59,7 @@ class World {
 				let i = 0
 				for (const warp of data.warps) {
 					i++
-					OBJECTS["Warp"][i] = new Warp(...warp) // Just for testing REMOVE
+					OBJECTS["Warp"][i] = new Warp(PHYSICSWORLD, ...warp)
 				}
 			}
 		})
@@ -69,7 +71,7 @@ class World {
 		for (const [id, obj] of Object.entries(CHARACTER)) {
 			obj.update(dt)
 		}
-		updatePhysics(OBJECTS, dt)
+		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
 
 		//TODO: Update Collision
 		if (NETPLAY) {
@@ -82,7 +84,6 @@ class World {
 
 	draw () {
 		// Background
-		// TODO: load background depending on area
 		DRAW.setColor(255,255,255)
 		DRAW.image(BACKGROUND[this.area], null, 0, 0) //sprite
 
@@ -101,7 +102,7 @@ class World {
 
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
-			drawPhysics(OBJECTS)
+			drawPhysics(OBJECTS, PHYSICSWORLD)
 		}
 
 		// HUD
