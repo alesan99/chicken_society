@@ -65,11 +65,11 @@ class PhysicsObject {
 	}
 
 	destroy() {
-		let [cx, cy, cw, ch] = getSpatialCoords(this.x+this.shape.x1,this.y+this.shape.y1,this.x+this.shape.x2,this.y+this.shape.y2)
+		let [cx, cy, cw, ch] = this.spatialHash.getCoords(this.x+this.shape.x1,this.y+this.shape.y1,this.x+this.shape.x2,this.y+this.shape.y2)
 		// Remove references to this object
 		for (let x = cx; x <= cw; x++) {
 			for (let y = cy; y <= ch; y++) {
-				removeFromSpatialCell(x, y, this)
+				this.spatialHash.removeFromCell(x, y, this)
 			}
 		}
 		this.DELETE = true

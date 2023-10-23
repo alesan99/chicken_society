@@ -38,7 +38,8 @@ function gameUpdate(dt) {
 // Render to canvas
 function gameDraw() {
 	// Clear
-	DRAW.clear(0,0,0,1)
+	// Note: The canvas is no longer cleared. It is safe to assume there will always be a background covering up the last frame
+	// DRAW.clear(0,0,0,1)
 	DRAW.push()
 
 	stateDraw()
@@ -47,6 +48,11 @@ function gameDraw() {
 	if (menu_open) {
 		menus[menu_state].draw()
 	}
+
+	// Display FPS
+	DRAW.setFont(FONT.caption)
+	DRAW.text(Math.round(FPS) + " FPS",0,20)
+
 	DRAW.pop()
 }
 
@@ -55,6 +61,7 @@ gameLoad()
 let lastTimestamp = 0
 function gameLoop(timestamp) {
 	const dt = Math.min((timestamp - lastTimestamp) / 1000, 0.5) // Delta time; should be capped (currently at 0.5 sec)
+	FPS = 1/((timestamp - lastTimestamp) / 1000)
 	lastTimestamp = timestamp
 
 	gameUpdate(dt)
