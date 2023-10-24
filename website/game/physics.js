@@ -233,7 +233,7 @@ function drawPhysics(objs, spatialHash) {
 				DRAW.setLineWidth(2)
 				DRAW.polygon(a.shape.v, "line")
 	
-				//DRAW.circle(0, 0, 3, "fill") // Object center (Shape's origin)
+				DRAW.circle(0, 0, 3, "fill") // Object center (Shape's origin)
 	
 				DRAW.pop()
 			}

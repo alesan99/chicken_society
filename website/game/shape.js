@@ -21,7 +21,7 @@ class Shape {
 			this.x2 = Math.max(this.x2, vx)
 			this.y2 = Math.max(this.y2, vy)
 
-			// TODO: Calculate normals
+			// Calculate normals
 			let side1 = i
 			let side2 = ((side1+2)%this.v.length) // get next point (loop back around if last point)
 			let [v1x, v1y] = [this.v[side1], this.v[side1+1]]

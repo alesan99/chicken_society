@@ -13,10 +13,10 @@ class Character extends PhysicsObject {
 		this.h = 40 //Height
 		
 		this.shape = new Shape(
-			0, 0,
-			this.w, 0,
-			this.w, this.h,
-			0, this.h
+			-this.w/2, -this.h,
+			this.w/2, -this.h,
+			this.w/2, 0,
+			-this.w/2, 0
 		)
 
 		this.objName = "Character"
@@ -41,6 +41,7 @@ class Character extends PhysicsObject {
 		this.oldwalking = this.walking
 		this.dir = "down"
 		this.flip = 1
+		this.imageOffsety = 4
 
 		this.timer = 0
 
@@ -116,43 +117,46 @@ class Character extends PhysicsObject {
 	}
 
 	draw() {
-		//DRAW.setColor(0,0,0,0.3)
-		//DRAW.rectangle(this.x, this.y, this.w, this.h) //collision
+		// Shadow
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.shadow, null, this.x, this.y+this.imageOffsety +3, 0, 1, 1, 0.5, 1)
 
 		// Chicken and accessories
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1)
+		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x, this.y+this.imageOffsety, 0, this.flip, 1, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
 		if ((this.accessory != false) && (IMG.accessory[this.accessory] != null) && (SPRITE.accessory[this.accessory] != null)) { // Accessory
-			let x = this.x+this.w/2 - (SPRITE.chicken.w/2)*this.flip + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
-			let y = this.y+this.h - SPRITE.chicken.h + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
+			let x = this.x - (SPRITE.chicken.w/2)*this.flip + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
+			let y = this.y+this.imageOffsety - SPRITE.chicken.h + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
 			let centerX = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][0]/SPRITE.accessory[this.accessory].w
 			let centerY = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][1]/SPRITE.accessory[this.accessory].h
 			DRAW.image(IMG.accessory[this.accessory], SPRITE.accessory[this.accessory].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
 
-		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x+this.w/2, this.y+this.h, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
+		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x, this.y+this.imageOffsety, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
 		
 		if ((this.hat != false) && (IMG.hat[this.hat] != null) && (SPRITE.hat[this.hat] != null)) { // Hat
-			let x = this.x+this.w/2 - (SPRITE.chicken.w/2)*this.flip + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
-			let y = this.y+this.h - SPRITE.chicken.h + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
+			let x = this.x - (SPRITE.chicken.w/2)*this.flip + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
+			let y = this.y+this.imageOffsety - SPRITE.chicken.h + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
 			let centerX = IMG.hat[this.hat].center[dir_lookup[this.dir]][0]/SPRITE.hat[this.hat].w
 			let centerY = IMG.hat[this.hat].center[dir_lookup[this.dir]][1]/SPRITE.hat[this.hat].h
 			DRAW.image(IMG.hat[this.hat], SPRITE.hat[this.hat].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
+	}
 
+	drawOver() {
 		// Nametag
 		DRAW.setFont(FONT.caption, 4)
 		DRAW.setColor(255,255,255,1)
-		DRAW.text(this.name, Math.floor(this.x)+this.w/2, Math.floor(this.y)-75, "center")
+		DRAW.text(this.name, Math.floor(this.x), Math.floor(this.y)-115, "center")
 
 		// Chat bubble
 		if (this.bubbleText != false) {
 			DRAW.setFont(FONT.chatBubble)
 			DRAW.setColor(255,255,255,1.0)
 			
-			DRAW.image(IMG.chatBubble, null, this.x+this.w/2, Math.max(100, Math.floor(this.y) -80), 0, 1, 1, 0.5, 1)
+			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -120), 0, 1, 1, 0.5, 1)
 			DRAW.setColor(1,0,0,1)
 
 			// Wrap text so it fits into the bubble
@@ -162,7 +166,7 @@ class Character extends PhysicsObject {
 			let verticalSpacing = 18
 			for (let i = 0; i < text.length; i += lineLength) {
 				let textSegment = text.substring(i, i+lineLength)
-				DRAW.text(textSegment, Math.floor(this.x)+this.w/2, Math.max(100, Math.floor(this.y) -80) + line*verticalSpacing-68, "center")
+				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -120) + line*verticalSpacing-68, "center")
 				line += 1
 			}
 		}

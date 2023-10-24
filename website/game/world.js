@@ -23,7 +23,7 @@ class World {
 
 		// Initialize all characters
 		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2-40, canvasHeight/2, PROFILE)
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2, canvasHeight/2, PROFILE)
 		
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
@@ -34,6 +34,7 @@ class World {
 		this.loadArea(area)
 	}
 
+	// Load Area data; loads background image & objects
 	loadArea (area) {
 		this.area = area || "hub"
 		
@@ -105,6 +106,11 @@ class World {
 			NETPLAY.update(dt)
 		}
 
+		// Background element animations
+		for (const [i, anim] of Object.entries(BACKGROUNDANIM[this.area])) {
+			anim.update(dt)
+		}
+
 		// HUD
 		CHAT.update(dt)
 	}
@@ -132,6 +138,14 @@ class World {
 		for (let i = 0; i < drawQueue.length; i++) {
 			const obj = drawQueue[i];
 			obj.draw()
+		}
+
+		// Draw object overlays
+		for (let i = 0; i < drawQueue.length; i++) {
+			const obj = drawQueue[i];
+			if (obj.drawOver) {
+				obj.drawOver()
+			}
 		}
 
 		// DEBUG physics

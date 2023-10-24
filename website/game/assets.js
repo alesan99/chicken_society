@@ -21,6 +21,7 @@ function loadGameAssets() {
 	ANIM.sit = [[3], 99999]
 	ANIM.wave = [[4,5,4,5,4,5], 0.2]
 
+	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
 
 	// Chicken Customization
