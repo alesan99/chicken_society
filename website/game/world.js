@@ -12,6 +12,7 @@ class World {
 	constructor () {
 		this.name = "world"
 		this.area = "hub" //Area name
+		this.oldArea = "hub" //Where did the player just come from? (Think warps)
 	}
 
 	load (area) {
@@ -36,6 +37,7 @@ class World {
 
 	// Load Area data; loads background image & objects
 	loadArea (area) {
+		this.oldArea = this.area
 		this.area = area || "hub"
 		
 		OBJECTS["Warp"] = {}
@@ -83,7 +85,15 @@ class World {
 			// Load warps
 			if (data.warps) {
 				for (const [name, warp] of Object.entries(data.warps)) {
-					OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, warp.x, warp.y, warp.w, warp.h)
+					OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, warp.facing, warp.x, warp.y, warp.w, warp.h)
+				}
+				
+				// Get spawn location
+				for (const [i, obj] of Object.entries(OBJECTS["Warp"])) {
+					if (obj.fromArea == this.oldArea) {
+						PLAYER.setPosition(obj.frontx, obj.fronty)
+						PLAYER.dir = obj.facing
+					}
 				}
 			}
 			// Load NPCS

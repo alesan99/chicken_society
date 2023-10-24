@@ -16,6 +16,7 @@
         "arcadeEntrance": {
             "to": "arcade",
             "from": "arcade",
+            "facing": "right",
             "x": 83,
             "y": 410,
             "w": 50,
@@ -24,6 +25,7 @@
         "chictoriasSecretEntrance": {
             "to": "chictoriassecret",
             "from": "chictoriassecret",
+            "facing": "left",
             "x": 876,
             "y": 386,
             "w": 50,
