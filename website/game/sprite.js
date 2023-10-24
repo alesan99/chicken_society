@@ -18,6 +18,10 @@ class Sprite {
 	getFrame (x, y) {
 		return this.frame[y][x]
 	}
+
+	draw () {
+		DRAW.image(this.img, this.getFrame(0,0), this.drawx, this.drawy)
+	}
 }
 
 //Animation object; Takes in sprite and decides which frame to display

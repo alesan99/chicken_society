@@ -1,10 +1,13 @@
 //Load images, audio, and other data
 
-BACKGROUND = []
 IMG = []
 SPRITE = []
 ANIM = []
 FONT = []
+BACKGROUND = []
+BACKGROUNDIMG = []
+BACKGROUNDSPRITE = []
+BACKGROUNDANIM = []
 
 function loadGameAssets() {
 	// World objects
@@ -68,11 +71,6 @@ function loadGameAssets() {
 			IMG.accessory[name].center = data.center
 		})
 	}
-
-	// Area graphics
-	// TODO: Load these on the fly (only when needed)
-	BACKGROUND["hub"] = new RenderImage("assets/areas/hub.png")
-	BACKGROUND["arcade"] = new RenderImage("assets/areas/arcade.png")
 
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
