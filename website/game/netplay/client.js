@@ -23,6 +23,7 @@ class Netplay {
 		socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 		socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
 		socket.on("emote", (id, emote) => {this.recieveEmote(id, emote)})
+		socket.on("area", (id, area) => {this.recieveArea(id, area)})
 	}
 
 	// Connect to server for the first time and send information about yourself
@@ -55,7 +56,7 @@ class Netplay {
 	// TODO: move this code to world.js
 	addPlayer (id, player) {
 		if ((id != socket.id) && (CHARACTER[id] == null)) {
-			CHARACTER[id] = new Character(player.x, player.y, player.profile)
+			CHARACTER[id] = new Character(PHYSICSWORLD, player.x, player.y, player.profile, WORLD.area)
 			this.newPlayerJoined = true
 		}
 	}
@@ -119,6 +120,17 @@ class Netplay {
 		console.log("recieved emote", emote)
 		if (CHARACTER[id] != null) {
 			CHARACTER[id].emote(emote)
+		}
+	}
+
+	//Area
+	sendArea(area) {
+		socket.emit("area", area)
+	}
+	recieveArea(id, area) {
+		console.log("recieved area", area)
+		if (CHARACTER[id] != null) {
+			CHARACTER[id].area = area
 		}
 	}
 }

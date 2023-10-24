@@ -74,6 +74,13 @@ io.on("connection", (socket) => {
 			socket.broadcast.emit("emote", socket.id, emote);
 		}
 	});
+	
+	// Player moved area
+	socket.on("area", (area) =>{
+		if (playerList[socket.id]) {
+			socket.broadcast.emit("area", socket.id, area);
+		}
+	});
 
 	// Player disconnected; Tell all players that someone disconnected
 	socket.on("disconnect", () => {

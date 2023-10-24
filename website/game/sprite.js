@@ -18,10 +18,6 @@ class Sprite {
 	getFrame (x, y) {
 		return this.frame[y][x]
 	}
-
-	draw () {
-		DRAW.image(this.img, this.getFrame(0,0), this.drawx, this.drawy)
-	}
 }
 
 //Animation object; Takes in sprite and decides which frame to display
@@ -108,5 +104,26 @@ class Animation {
 	getSprite (offsetx=0 , offsety=0) {
 		let sprite_frame = this.sprite.frame[this.framey+offsety][this.framex+offsetx]
 		return sprite_frame
+	}
+}
+
+// Drawable Sprite; Can be directly rendered with .draw() function
+
+class DrawableSprite {
+	//Initialize: image, 
+	constructor (sprite, anim, drawx, drawy, worldy) {
+		this.sprite = sprite
+		this.anim = anim
+		this.drawx = drawx // Position on screen
+		this.drawy = drawy
+		this.y = worldy // Position in world
+	}
+
+	draw () {
+		let anim = this.sprite.getFrame(0,0)
+		if (this.anim) {
+			anim = this.anim.getSprite(0,0)
+		}
+		DRAW.image(this.sprite.img, anim, this.drawx, this.drawy)
 	}
 }

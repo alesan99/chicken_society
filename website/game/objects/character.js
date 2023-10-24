@@ -4,7 +4,7 @@ let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
 class Character extends PhysicsObject {
 	//Initialize: spatialHash, x pos, y pos, width, height
-	constructor (spatialHash, x, y, profile) {
+	constructor (spatialHash, x, y, profile, area) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x || 0
@@ -28,7 +28,7 @@ class Character extends PhysicsObject {
 		this.updateProfile(profile)
 		this.speed = 200 //Speed (px/sec)
 		this.controller = false //Is it being controlled?
-		this.area = "" //Current area
+		this.area = area || "" //Current area
 
 		this.sx = 0 // Speed x
 		this.sy = 0 // Speed y

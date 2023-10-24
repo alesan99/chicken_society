@@ -66,13 +66,17 @@
         },
         "fountain": {
             "image": "hub-fountain.jpg",
-            "framesx": 1,
+            "framesx": 2,
             "framesy": 1,
+            "anim": {
+                "frames": [0,1],
+                "delay": 0.2
+            },
             "ox": 0,
             "oy": 0,
             "qw": 88,
             "qh": 106,
-            "ow": 0,
+            "ow": 88,
             "oh": 0,
 
             "x": 412,

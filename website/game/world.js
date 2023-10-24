@@ -24,7 +24,7 @@ class World {
 
 		// Initialize all characters
 		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2, canvasHeight/2, PROFILE)
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2, canvasHeight/2, PROFILE, this.area)
 		
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
@@ -39,6 +39,8 @@ class World {
 	loadArea (area) {
 		this.oldArea = this.area
 		this.area = area || "hub"
+
+		PLAYER.area = this.area
 		
 		OBJECTS["Warp"] = {}
 		OBJECTS["Wall"] = {}
@@ -61,14 +63,13 @@ class World {
 					if (!BACKGROUNDIMG[this.area][img]) {
 						BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
 					}
-					BACKGROUNDSPRITE[this.area][name] = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.ox, s.oy, s.qw, s.qh, s.ow, s.oh)
-					BACKGROUNDSPRITE[this.area][name].drawx = s.x // Position on screen
-					BACKGROUNDSPRITE[this.area][name].drawy = s.y
-					BACKGROUNDSPRITE[this.area][name].y = s.worldy // Where is it in the world? (aka it is in front of chickens here)
+					let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.ox, s.oy, s.qw, s.qh, s.ow, s.oh)
+					BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
 					// If defined, play animation
 					if (s.anim) {
-						BACKGROUNDANIM[this.area][name] = new Animation(BACKGROUNDSPRITE[this.area][name], 0, 0)
+						BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
 						BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
+						BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
 					}
 				}
 			}

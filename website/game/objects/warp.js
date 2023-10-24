@@ -41,6 +41,9 @@ class Warp extends PhysicsObject {
 
 	collide (name, obj, nx, ny) {
 		if (name == "Character" && obj == PLAYER) {
+			if (NETPLAY != false) {
+				NETPLAY.sendArea(this.area)
+			}
 			WORLD.loadArea(this.area)
 		}
 		return false
