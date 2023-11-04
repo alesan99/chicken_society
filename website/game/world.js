@@ -168,9 +168,28 @@ class World {
 		CHAT.draw()
 	}
 
+	// Received keyboard input
 	keyPress(key) {
+		// Control Player
+		PLAYER_CONTROLLER.keyPress(key)
+		
 		CHAT.keyPress(key)
 	}
+	keyRelease(key) {
+		// Control Player
+		PLAYER_CONTROLLER.keyRelease(key)
+	}
 
+	// Recieved mouse input
+	mouseClick(button, x, y) {
+		// Control player by dragging mouse button on screen
+		PLAYER_CONTROLLER.mouseClick(button, x, y)
+
+		CHAT.mouseClick(button, x, y)
+	}
+
+	mouseRelease(button, x, y) {
+		PLAYER_CONTROLLER.mouseRelease(button, x, y)
+	}
 }
 

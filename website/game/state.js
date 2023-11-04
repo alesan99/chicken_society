@@ -26,14 +26,14 @@ function stateKeyRelease(key) {
 	}
 }
 
-function stateMouseClick(button) {
+function stateMouseClick(button, x, y) {
 	if (game_state.mouseClick) {
-		game_state.mouseClick(button)
+		game_state.mouseClick(button, x, y)
 	}
 }
-function stateMouseRelease(button) {
+function stateMouseRelease(button, x, y) {
 	if (game_state.mouseRelease) {
-		game_state.mouseRelease(button)
+		game_state.mouseRelease(button, x, y)
 	}
 }
 

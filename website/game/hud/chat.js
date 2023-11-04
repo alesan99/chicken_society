@@ -76,6 +76,19 @@ class ChatObject {
 		}
 	}
 
+	keyRelease(key) {
+		
+	}
+
+	mouseClick(button, x, y) {
+		
+	}
+
+	mouseRelease(button, x, y) {
+		
+	}
+
+
 	draw() {
 		// Display whats being typed
 		if (this.open) {

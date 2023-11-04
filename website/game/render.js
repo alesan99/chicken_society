@@ -196,7 +196,7 @@ class RenderImage {
 		this.c.globalCompositeOperation = "destination-atop"
 		this.c.globalAlpha = 1
 		this.c.drawImage(this.image, 0, 0)
-		this.c.globalCompositeOperation = "lighter"
+		// this.c.globalCompositeOperation = "lighter"
 		this.c.globalCompositeOperation = "multiply"
 		this.c.globalAlpha = 1
 		this.c.drawImage(this.image, 0, 0)
