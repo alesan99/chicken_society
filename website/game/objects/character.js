@@ -48,6 +48,7 @@ class Character extends PhysicsObject {
 		// Expressions
 		this.bubbleText = false // string, show speech bubble over character
 		this.bubbleTime = false // How long the bubble is visible (seconds)
+		this.bubbleTimer = 0
 	}
 
 	// Move: direction normal x, direction normal y
@@ -105,8 +106,8 @@ class Character extends PhysicsObject {
 
 		// Dissapear chat bubble after few seconds
 		if (this.bubbleTime != false) {
-			this.bubbleTime -= dt
-			if (this.bubbleTime < 0) {
+			this.bubbleTimer += dt
+			if (this.bubbleTime > this.bubbleTime) {
 				this.bubbleTime = false
 				this.bubbleText = false
 			}
@@ -155,8 +156,15 @@ class Character extends PhysicsObject {
 		if (this.bubbleText != false) {
 			DRAW.setFont(FONT.chatBubble)
 			DRAW.setColor(255,255,255,1.0)
+
+			// Goofy chat bubble animation
+			// Slowly embiggen bubble
+			let t = Math.min(1, this.bubbleTimer*6) // Animation position
+			let scale = easing("easeOutQuad", t)
+			// Wiggle bubble
+			let flip = 1-Math.floor((this.bubbleTimer%1)*2)*2
 			
-			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -120), 0, 1, 1, 0.5, 1)
+			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -120), 0, scale*flip, scale, 0.5, 1)
 			DRAW.setColor(1,0,0,1)
 
 			// Wrap text so it fits into the bubble
@@ -190,6 +198,7 @@ class Character extends PhysicsObject {
 	chatBubble(text) {
 		this.bubbleText = text
 		this.bubbleTime = 4
+		this.bubbleTimer = 0
 	}
 
 	// Play emote animation; will stop when player moves
