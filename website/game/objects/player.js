@@ -1,7 +1,7 @@
 //Player object, listens to inputs to control another object
 
 class Player {
-	//Initialize: x pos, y pos, width, height
+	//Initialize: object
 	constructor (obj) {
 		this.obj = obj
 		obj.controller = this
@@ -28,7 +28,7 @@ class Player {
 			let targetX = mx-char.x
 			let targetY = my-char.y + 20
 
-			if ( ((char.x - mx)**2 + (char.y-20 - my)**2) >= char.speed**2*dt ) { // Don't move if already close enough to the target location
+			if ( ((char.x - mx)**2 + (char.y-20 - my)**2) >= char.speed*dt ) { // Don't move if already close enough to the target location
 				let [dx, dy] = vec2Unit(targetX, targetY) //convert to direction normal
 				this.obj.move(dx, dy)
 			} else {

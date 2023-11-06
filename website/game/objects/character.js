@@ -12,14 +12,18 @@ class Character extends PhysicsObject {
 		this.w = 70 //Width
 		this.h = 40 //Height
 		
+		let bevel = 16 // bevel hitbox so you slide into doorways (TODO: Only do this for main player for performance reasons?)
 		this.shape = new Shape(
-			-this.w/2, -this.h,
-			this.w/2, -this.h,
-			this.w/2, 0,
-			-this.w/2, 0
+			-this.w/2, -this.h+bevel,
+			-this.w/2+bevel, -this.h,
+			this.w/2-bevel, -this.h,
+			this.w/2, -this.h+bevel,
+			this.w/2, 0-bevel,
+			this.w/2-bevel, 0,
+			(-this.w/2)+bevel, 0,
+			(-this.w/2), 0-bevel
 		)
 
-		this.objName = "Character"
 		this.active = true
 		this.static = false
 		this.setPosition(null,null)
@@ -181,13 +185,13 @@ class Character extends PhysicsObject {
 	}
 
 	// Update appearance based on given profile
-	updateProfile(profile) {
-		this.name = profile.name || "NPC" //name
+	updateProfile(profile, sendToServer) {
+		this.name = profile.name || "" //name
 		this.color = profile.color || [255,255,255]
 		this.hat = profile.hat || false
 		this.accessory = profile.accessory || false
 		//Send profile to server if this is the player
-		if (this.controller == PLAYER_CONTROLLER) {
+		if (sendToServer && this.controller == PLAYER_CONTROLLER) {
 			if (NETPLAY != false) {
 				NETPLAY.sendProfile(PROFILE)
 			}
@@ -195,10 +199,9 @@ class Character extends PhysicsObject {
 	}
 
 	// Display speech bubble
-	chatBubble(text) {
+	chatBubble(text, time) {
 		this.bubbleText = text
-		this.bubbleTime = 4
-		this.bubbleTimer = 0
+		this.bubbleTime = time || 4
 	}
 
 	// Play emote animation; will stop when player moves
@@ -211,7 +214,7 @@ class Character extends PhysicsObject {
 
 	// Collision
 	collide(name, obj, nx, ny) {
-		if (name == "Character") {
+		if (name == "Character" || name == "Trigger") {
 			return false
 		}
 		return true

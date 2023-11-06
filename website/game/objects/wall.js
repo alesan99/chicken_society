@@ -1,7 +1,7 @@
 //Wall, collides with other objects to stop them
 
 class Wall extends PhysicsObject {
-	//Initialize: x pos, y pos, width, height
+	//Initialize: list of points
 	constructor (spatialHash,...points) {
 		// Collision
 		super(spatialHash,0,0)
@@ -10,7 +10,6 @@ class Wall extends PhysicsObject {
 
 		this.shape = new Shape(...points)
 
-		this.objName = "Wall"
 		this.active = true
 		this.static = true
 		this.setPosition(null,null)

@@ -14,6 +14,8 @@ class PhysicsObject {
 		this.oldx = x
 		this.oldy = y
 
+		this.collisions = new Map()
+
 		// Spatial Hash location
 		this.spatialHash = spatialHash
 		this.cellx = 0
@@ -62,6 +64,14 @@ class PhysicsObject {
 	// Object collided; object name, object, normal x, normal y
 	collide(name, obj, nx, ny) {
 		return true
+	}
+
+	startCollide(name, obj) {
+		
+	}
+
+	stopCollide(name, obj) {
+		
 	}
 
 	destroy() {

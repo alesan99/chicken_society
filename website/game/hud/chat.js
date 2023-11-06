@@ -20,19 +20,19 @@ class ChatObject {
 			switch (command) {
 				case "/name":
 					PROFILE.name = arg
-					PLAYER.updateProfile(PROFILE)
+					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/color":
 					PROFILE.color = [Number(arg), Number(arg2), Number(arg3)]
-					PLAYER.updateProfile(PROFILE)
+					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/hat":
 					PROFILE.hat = arg
-					PLAYER.updateProfile(PROFILE)
+					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/accessory":
 					PROFILE.accessory = arg
-					PLAYER.updateProfile(PROFILE)
+					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/area": // Warp to a different area
 					PLAYER.area = arg
