@@ -8,6 +8,7 @@ var NPCS
 var CHAT
 var OBJECTS
 var DEBUGPHYSICS = false
+var BUTT_RED
 
 class World {
 	constructor () {
@@ -33,6 +34,7 @@ class World {
 
 		// HUD
 		CHAT = new ChatObject()
+		BUTT_RED = new Button(false, false, 50,50,200,200)
 
 		this.loadArea(area)
 	}
@@ -192,6 +194,7 @@ class World {
 
 		// HUD
 		CHAT.draw()
+		BUTT_RED.draw()
 	}
 
 	// Received keyboard input
