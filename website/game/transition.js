@@ -38,19 +38,25 @@ const transitionFunctions = {
 
 			// Choose an animation
 			switch (currentTransition) {
+				// Loading Screen; just a black screen
+				case "loading":
+					DRAW.setColor(0, 0, 0, 1.0)
+					DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
+					break
+				// Fade; Slowly Fades
 				case "fade":
 					t2 = easing("easeOutCubic", t)
 					DRAW.setColor(0, 0, 0, t2)
-					DRAW.rectangle(0, 0, 1024, 580, "fill")
+					DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
 					break
+				// Iris; Black circle closes  around a point
 				case "iris":
 					t2 = easing("easeOutCubic", t)
-					console.log(currentTransition)
 					DRAW.setColor(0, 0, 0, 1)
 					//DRAW.rectangle(0, 0, 1024, 580, "fill")
 
-					DRAW.setLineWidth(t2*2058)
-					DRAW.circle(properties[0], properties[1], 1024, "line")
+					DRAW.setLineWidth(t2*canvasWidth*2)
+					DRAW.circle(properties[0], properties[1], canvasWidth, "line")
 					break
 			}
 		}

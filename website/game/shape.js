@@ -33,6 +33,7 @@ class Shape {
 			this.n.push(axisX, axisY) // add to list of normals
 		}
 
+		// Bounding box dimensions
 		this.w = this.x2-this.x1
 		this.h = this.y2-this.y1
 	}

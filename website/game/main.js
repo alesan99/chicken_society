@@ -52,6 +52,7 @@ function gameDraw() {
 	}
 
 	// Display FPS
+	DRAW.setColor(255,255,255,1.0)
 	DRAW.setFont(FONT.caption)
 	DRAW.text(Math.round(FPS) + " FPS",0,20)
 

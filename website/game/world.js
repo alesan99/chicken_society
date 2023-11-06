@@ -40,7 +40,8 @@ class World {
 	}
 
 	// Load Area data; loads background image & objects
-	loadArea (area) {
+	// (Area name, function to call after loading is successful)
+	loadArea (area, endFunc) {
 		this.oldArea = this.area
 		this.area = area || "hub"
 
@@ -102,7 +103,7 @@ class World {
 				// Get spawn location
 				for (const [i, obj] of Object.entries(OBJECTS["Warp"])) {
 					if (obj.fromArea == this.oldArea) {
-						PLAYER.setPosition(obj.frontx, obj.fronty)
+						PLAYER.setPosition(obj.frontx, obj.fronty+PLAYER.shape.h/2)
 						PLAYER.dir = obj.facing
 					}
 				}
@@ -113,6 +114,11 @@ class World {
 					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
 					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.roamRadius)
 				}
+			}
+
+			// Call function passed to loadArea after loading is successful
+			if (endFunc) {
+				endFunc()
 			}
 		})
 	}
