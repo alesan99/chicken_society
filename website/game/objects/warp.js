@@ -33,19 +33,21 @@ class Warp extends PhysicsObject {
 			-this.w/2, this.h/2
 		)
 
-		this.objName = "Warp"
 		this.active = true
 		this.static = true
 		this.setPosition(null,null)
 	}
 
 	collide (name, obj, nx, ny) {
+		return false
+	}
+
+	startCollide (name, obj, nx, ny) {
 		if (name == "Character" && obj == PLAYER) {
 			if (NETPLAY != false) {
 				NETPLAY.sendArea(this.area)
 			}
 			WORLD.loadArea(this.area)
 		}
-		return false
 	}
 }

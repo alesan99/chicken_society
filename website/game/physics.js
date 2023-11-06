@@ -1,11 +1,13 @@
 // Collision & physics system
 
 // Update physics; (list of objects, deltaTime)
+let listOfCollisions = new Map()
 function updatePhysics(objs, spatialHash, dt) {
 	for (const [objsName, objsList] of Object.entries(objs)) { // Look through list of object types
 		if (!objsList.dontUpdate) { // Don't bother updating these objects (Will always be static, like walls)
 			for (const [ia, a] of Object.entries(objsList)) { // Look at each object
 				// Only update object if 'active' in physics space AND not static
+				listOfCollisions.clear()
 				a.DEBUGCOLLIDED = false
 				if (a.active && !a.static) {
 					// New (possible) location
@@ -14,7 +16,7 @@ function updatePhysics(objs, spatialHash, dt) {
 
 					let collided = false
 
-					// Range covered by object and it's movement
+					// Range covered by object and its movement
 					let rx1 = a.shape.x1+Math.min(a.x, nx)
 					let ry1 = a.shape.y1+Math.min(a.y, ny)
 					let rx2 = a.shape.x2+Math.max(a.x, nx)
@@ -31,15 +33,39 @@ function updatePhysics(objs, spatialHash, dt) {
 									let [coll1, moveAxisX, moveAxisY, dist] = checkCollision(a, b, nx, ny)
 									if (coll1) {
 										// Objects are overlapping, if both collision callbacks return true then push
-										if (a.collide(b.objName, b, moveAxisX, moveAxisY) && b.collide(a.objName, a, -moveAxisX, -moveAxisY)) {
+										let testColl1 = a.collide(b.constructor.name, b, moveAxisX, moveAxisY)
+										let testColl2 = b.collide(a.constructor.name, a, -moveAxisX, -moveAxisY)
+										if (testColl1 && testColl2) {
 											a.DEBUGCOLLIDED = true
 											collided = true
 											// Push object A by changing its new position
 											nx += moveAxisX*dist
 											ny += moveAxisY*dist
 										}
+										// note down the collision to tell if its colliding for the first or last time
+										if (a.collisions) {
+											listOfCollisions.set(b,true)
+											if (!a.collisions.get(b)) {
+												let testColl1 = a.startCollide(b.constructor.name, b, moveAxisX, moveAxisY)
+												let testColl2 = b.startCollide(a.constructor.name, a, -moveAxisX, -moveAxisY)
+											}
+											a.collisions.set(b,true)
+										}
 									}
 								}
+							}
+						}
+					}
+
+					// Check when object are no longer colliding
+					if (a.collisions) {
+						for (const [b, coll] of a.collisions.entries()) {
+							if (!(listOfCollisions.get(b)) && coll == true) {
+								if (b) {
+									let testColl1 = a.stopCollide(b.constructor.name, b)
+									let testColl2 = b.stopCollide(a.constructor.name, a)
+								}
+								a.collisions.set(b,false)
 							}
 						}
 					}

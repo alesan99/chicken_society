@@ -4,6 +4,7 @@ var OBJECTS
 var CHARACTER
 var PLAYER
 var PLAYER_CONTROLLER
+var NPCS
 var CHAT
 var OBJECTS
 var DEBUGPHYSICS = false
@@ -23,6 +24,7 @@ class World {
 		OBJECTS["Character"] = {}
 
 		// Initialize all characters
+		NPCS = {}
 		CHARACTER = OBJECTS["Character"] //shorthand
 		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2, canvasHeight/2, PROFILE, this.area)
 		
@@ -42,7 +44,14 @@ class World {
 
 		PLAYER.area = this.area
 		
+		// Clear any uneeded objects
+		for (const [name, npc] of Object.entries(NPCS)) {
+			// Delete all NPCs
+			delete NPCS[name]
+			delete OBJECTS["Character"][name]
+		}
 		OBJECTS["Warp"] = {}
+		OBJECTS["Trigger"] = {}
 		OBJECTS["Wall"] = {}
 		OBJECTS["Wall"].dontUpdate = true
 		PHYSICSWORLD.clear()
@@ -58,7 +67,6 @@ class World {
 			// Load additional Sprites & Animations
 			if (data.sprites) {
 				for (const [name, s] of Object.entries(data.sprites)) {
-					// TODO: Finish this.
 					let img = s.image
 					if (!BACKGROUNDIMG[this.area][img]) {
 						BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
@@ -99,14 +107,32 @@ class World {
 			}
 			// Load NPCS
 			if (data.NPCs) {
-				
+				for (const [name, npc] of Object.entries(data.NPCs)) {
+					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
+					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.roamRadius)
+				}
 			}
 		})
+	}
+
+	// Register an object as part of the physics world
+	spawnObject(name, obj, id) {
+		if (id === undefined) {
+			id = 0
+			while (OBJECTS[name].hasOwnProperty(id.toString())) {
+				id++
+			}
+		}
+		OBJECTS[name][id] = obj
+		return obj
 	}
 
 	update (dt) {
 		// Update objects
 		PLAYER_CONTROLLER.update(dt)
+		for (const [id, obj] of Object.entries(NPCS)) {
+			obj.update(dt)
+		}
 		for (const [id, obj] of Object.entries(CHARACTER)) {
 			obj.update(dt)
 		}
