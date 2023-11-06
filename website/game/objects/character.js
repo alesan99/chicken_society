@@ -96,22 +96,24 @@ class Character extends PhysicsObject {
 		}
 
 		// Update Animation
-		if (this.walking != this.oldwalking) {
-			if (this.walking) {
-				this.anim.playAnimation(ANIM.walk[0], ANIM.walk[1])
-			} else {
-				this.anim.stopAnimation(0, null)
+		if (!this.static) { // Only update animation if character can move
+			if (this.walking != this.oldwalking) {
+				if (this.walking) {
+					this.anim.playAnimation(ANIM.walk[0], ANIM.walk[1])
+				} else {
+					this.anim.stopAnimation(0, null)
+				}
 			}
+			// Face in the current direction
+			this.anim.setFrame(null, dir_lookup[this.dir])
+			// Update walking or emote animation
+			this.anim.update(dt)
 		}
-		// Face in the current direction
-		this.anim.setFrame(null, dir_lookup[this.dir])
-		// Update walking or emote animation
-		this.anim.update(dt)
 
 		// Dissapear chat bubble after few seconds
 		if (this.bubbleTime != false) {
 			this.bubbleTimer += dt
-			if (this.bubbleTime > this.bubbleTime) {
+			if (this.bubbleTimer > this.bubbleTime) {
 				this.bubbleTime = false
 				this.bubbleText = false
 			}
@@ -158,27 +160,39 @@ class Character extends PhysicsObject {
 
 		// Chat bubble
 		if (this.bubbleText != false) {
-			DRAW.setFont(FONT.chatBubble)
-			DRAW.setColor(255,255,255,1.0)
+			let offsetY = 130
 
 			// Goofy chat bubble animation
 			// Slowly embiggen bubble
-			let t = Math.min(1, this.bubbleTimer*6) // Animation position
-			let scale = easing("easeOutQuad", t)
+			let animLength = 1/6
+			let endAnimLength = 1/8
+			let scale = 1
+			if (this.bubbleTimer < animLength) {
+				// Grow
+				let t = Math.min(1, this.bubbleTimer/animLength) // Animation position
+				scale = easing("easeOutQuad", t)
+			} else if (this.bubbleTimer > this.bubbleTime-endAnimLength) {
+				// Shrink
+				let t = Math.min(1, (this.bubbleTime-this.bubbleTimer)/endAnimLength) // Animation position
+				console.log(t)
+				scale = easing("easeOutQuad", t)
+			}
 			// Wiggle bubble
 			let flip = 1-Math.floor((this.bubbleTimer%1)*2)*2
 			
-			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -120), 0, scale*flip, scale, 0.5, 1)
-			DRAW.setColor(1,0,0,1)
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1)
 
 			// Wrap text so it fits into the bubble
+			DRAW.setFont(FONT.chatBubble)
+			DRAW.setColor(0,0,0,scale**2)
 			let text = this.bubbleText
 			let lineLength = 15 // How many characters can fit in a single line?
 			let line = 0
 			let verticalSpacing = 18
 			for (let i = 0; i < text.length; i += lineLength) {
 				let textSegment = text.substring(i, i+lineLength)
-				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -120) + line*verticalSpacing-68, "center")
+				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-68, "center")
 				line += 1
 			}
 		}
@@ -202,6 +216,7 @@ class Character extends PhysicsObject {
 	chatBubble(text, time) {
 		this.bubbleText = text
 		this.bubbleTime = time || 4
+		this.bubbleTimer = 0
 	}
 
 	// Play emote animation; will stop when player moves

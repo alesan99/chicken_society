@@ -71,7 +71,6 @@ function loadGameAssets() {
 		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
 		loadJSON(`assets/accessories/${name}.json`, (data) => {
 			IMG.accessory[name].center = data.center
-			console.log(IMG.accessory[name].center)
 		})
 	}
 

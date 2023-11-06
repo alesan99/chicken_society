@@ -155,6 +155,15 @@ class Render {
 	pop() {
 		this.c.restore()
 	}
+
+	// Mask
+	mask(enable) {
+		if (enable) {
+			this.c.globalCompositeOperation = "destination-atop"
+		} else {
+			this.c.globalCompositeOperation = "source-over"
+		}
+	}
 }
 
 class RenderImage {

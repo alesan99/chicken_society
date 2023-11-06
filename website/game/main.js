@@ -28,6 +28,7 @@ function gameLoad() {
 // update game logic
 function gameUpdate(dt) {
 	stateUpdate(dt)
+	Transition.update(dt)
 
 	// Is menu open?
 	if (menu_open) {
@@ -43,6 +44,7 @@ function gameDraw() {
 	DRAW.push()
 
 	stateDraw()
+	Transition.draw()
 
 	// Is menu open?
 	if (menu_open) {
