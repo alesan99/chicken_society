@@ -3,7 +3,7 @@ const loginButton = document.getElementById("login");
 
 loginButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const username = loginForm.username.value;
+    const username = loginForm("username").value;
     console.log(username);
     if (username === "Mikey") {
         alert("You have successfully logged in.");
