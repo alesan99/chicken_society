@@ -2,18 +2,21 @@
 
 class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around
-	constructor (obj, dialogue, roamRadius) {
+	constructor (obj, dialogue, facing="down", roamRadius) {
 		this.obj = obj
 		obj.controller = this
+
+        // Adjust object
+        this.obj.facing = facing
 
         // Walk around
         this.originX = this.obj.x
         this.originY = this.obj.y
 		this.roamRadius = roamRadius
-        this.waitTime = 1
+        this.waitTime = 2
         this.walkTime = 1
-        this.walkTimer = 0
-        this.dir = [1, 0]
+        this.walkTimer = this.walkTime
+        this.dir = [1, 0] // Walking direction vector
 
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
