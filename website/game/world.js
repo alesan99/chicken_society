@@ -41,7 +41,7 @@ class World {
 
 	// Load Area data; loads background image & objects
 	// (Area name, function to call after loading is successful)
-	loadArea (area, endFunc) {
+	loadArea (area, fromWarp, endFunc) {
 		this.oldArea = this.area
 		this.area = area || "hub"
 
@@ -97,12 +97,12 @@ class World {
 			// Load warps
 			if (data.warps) {
 				for (const [name, warp] of Object.entries(data.warps)) {
-					OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, warp.facing, warp.x, warp.y, warp.w, warp.h)
+					OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, name, warp.fromWarp, warp.facing, warp.x, warp.y, warp.w, warp.h)
 				}
 				
 				// Get spawn location
 				for (const [i, obj] of Object.entries(OBJECTS["Warp"])) {
-					if (obj.fromArea == this.oldArea) {
+					if ((obj.fromWarp && obj.fromWarp == fromWarp) || (obj.fromArea && obj.fromArea == this.fromArea)) {
 						PLAYER.setPosition(obj.frontx, obj.fronty+PLAYER.shape.h/2)
 						PLAYER.dir = obj.facing
 					}

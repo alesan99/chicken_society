@@ -2,7 +2,7 @@
 
 class Warp extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
-	constructor (spatialHash,area, fromArea, facing, x, y, w, h) {
+	constructor (spatialHash,area, fromArea, name, fromWarp, facing, x, y, w, h) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x
@@ -12,6 +12,8 @@ class Warp extends PhysicsObject {
 
 		this.area = area
 		this.fromArea = fromArea
+		this.name = name
+		this.fromWarp = fromWarp // Name of Warp that leads to this one
 		this.facing = facing || "down" // Where is the warp/door facing?
 		this.frontx = this.x // Where to place player when spawning from this warp
 		this.fronty = this.y
@@ -59,7 +61,7 @@ class Warp extends PhysicsObject {
 			// Display black screen while area is loading...
 			Transition.start("loading", "in", 100, null, null)
 			// Actually start loading Area
-			WORLD.loadArea(this.area, () => {
+			WORLD.loadArea(this.area, this.name, () => {
 				// Transition in once loading is done
 				Transition.start("iris", "in", 0.4, [character.x, character.y-40], () => {
 					PLAYER.static = false // Let player move after transition is done

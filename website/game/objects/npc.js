@@ -6,11 +6,16 @@ class NPC {
 		this.obj = obj
 		obj.controller = this
 
+        // Walk around
         this.originX = this.obj.x
         this.originY = this.obj.y
 		this.roamRadius = roamRadius
+        this.waitTime = 1
+        this.walkTime = 1
         this.walkTimer = 0
+        this.dir = [1, 0]
 
+        // Dialogue Trigger
         this.dialogue = dialogue || [""]
         let range = 50
         this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y, () => this.speak(), [-range,-range, range,-range, range,range, -range,range]))
@@ -20,12 +25,43 @@ class NPC {
 	update(dt) {
 		let char = this.obj
 
-        this.walkTimer = (this.walkTimer + 6*dt)%(Math.PI*2)
-
 		// walk around
         if (this.roamRadius) {
-            let [dx, dy] = [Math.cos(this.walkTimer), Math.sin(this.walkTimer)]
-            char.move(dx, dy)
+            // Only walk if they aren't talking
+            if (!char.bubbleTime) {
+                let distanceFromOrigin = Math.sqrt((char.x - this.originX)**2 + (char.y - this.originY)**2)
+                console.log(distanceFromOrigin)
+
+                this.walkTimer += dt
+                if (this.walkTimer > this.walkTime+this.waitTime) {
+                    // Start over
+                    // Pick random waiting time and walking time
+                    this.waitTime = Math.random()*5 + 3
+                    this.walkTime = Math.random()*0.4 + 0.2
+
+                    this.walkTimer = 0
+                } else if (this.walkTimer > this.walkTime) {
+                    // Wait
+                    let angle = (Math.PI/2)*Math.floor(Math.random()*4)
+                    this.dir[0] = Math.cos(angle)
+                    this.dir[1] = Math.sin(angle)
+                    
+                    let nextDistanceFromOrigin = Math.sqrt((char.x+this.dir[0] - this.originX)**2 + (char.y+this.dir[1] - this.originY)**2)
+                    // Go turn around if currently outside of roam radius
+                    if (distanceFromOrigin > this.roamRadius && nextDistanceFromOrigin > distanceFromOrigin) {
+                        this.dir[0] = -this.dir[0]
+                        this.dir[1] = -this.dir[1]
+                    }
+
+                    char.move(0, 0)
+                } else {
+                    // Walk
+                    let [dx, dy] = [this.dir[0], this.dir[1]]
+                    char.move(dx, dy)
+                }
+            } else {
+                char.move(0, 0)
+            }
         }
 
         this.trigger.setPosition(char.x, char.y)

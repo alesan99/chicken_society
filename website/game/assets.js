@@ -20,6 +20,7 @@ function loadGameAssets() {
 	ANIM.dance = [[1, 2, 5, 4, 6, 7, 6, 7], 0.3]
 	ANIM.sit = [[3], 99999]
 	ANIM.wave = [[4,5,4,5,4,5], 0.2]
+	ANIM.teabag = [[0,3,0,3,0,3,0,3,0,3], 0.15]
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")

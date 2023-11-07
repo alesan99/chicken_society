@@ -97,16 +97,18 @@ class Character extends PhysicsObject {
 
 		// Update Animation
 		if (this.walking != this.oldwalking) {
-			if (this.walking && !this.static) { // Walk if moving and not statically locked
+			if (this.walking) { // Walk if moving
 				this.anim.playAnimation(ANIM.walk[0], ANIM.walk[1])
 			} else {
 				this.anim.stopAnimation(0, null)
 			}
 		}
-		// Face in the current direction
-		this.anim.setFrame(null, dir_lookup[this.dir])
-		// Update walking or emote animation
-		this.anim.update(dt)
+		if (!this.static) { // Don't update animation if not movable
+			// Face in the current direction
+			this.anim.setFrame(null, dir_lookup[this.dir])
+			// Update walking or emote animation
+			this.anim.update(dt)
+		}
 
 		// Dissapear chat bubble after few seconds
 		if (this.bubbleTime != false) {
@@ -194,7 +196,7 @@ class Character extends PhysicsObject {
 				let lastChar = text.substring(i2, i2)
 				let nextChar = text.substring(i2+1, i2+1)
 				// Wrap at closest space if next word is cut-off
-				if (lastChar != " " && nextChar != " ") {
+				if (lineString.length == lineLength && lastChar != " " && nextChar != " ") {
 					let closestSpace = lineString.lastIndexOf(" ")
 					if (closestSpace != -1) {
 						i2 = i+closestSpace
@@ -202,7 +204,7 @@ class Character extends PhysicsObject {
 				}
 
 				let textSegment = text.substring(i, i2).trim()
-				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-72, "center")
+				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-74, "center")
 				i = i2+1
 				line += 1
 				console.log(i, text.length)
