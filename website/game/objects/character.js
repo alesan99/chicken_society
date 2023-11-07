@@ -51,6 +51,7 @@ class Character extends PhysicsObject {
 
 		// Expressions
 		this.bubbleText = false // string, show speech bubble over character
+		this.bubbleTextWrapped = false // List of strings; represents each line of the speech bubble text
 		this.bubbleTime = false // How long the bubble is visible (seconds)
 		this.bubbleTimer = 0
 	}
@@ -182,32 +183,14 @@ class Character extends PhysicsObject {
 			DRAW.setColor(255,255,255,1.0)
 			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1)
 
-			// Wrap text so it fits into the bubble
+			// Render wrapped text so it fits into the bubble
 			DRAW.setFont(FONT.chatBubble)
 			DRAW.setColor(0,0,0,scale**2)
-			let text = this.bubbleText
-			let lineLength = 15 // How many characters can fit in a single line?
-			let line = 0
-			let verticalSpacing = 18
-			let i = 0
-			while (i < text.length) {
-				let i2 = i+lineLength
-				let lineString = text.substring(i, i2)
-				let lastChar = text.substring(i2, i2)
-				let nextChar = text.substring(i2+1, i2+1)
-				// Wrap at closest space if next word is cut-off
-				if (lineString.length == lineLength && lastChar != " " && nextChar != " ") {
-					let closestSpace = lineString.lastIndexOf(" ")
-					if (closestSpace != -1) {
-						i2 = i+closestSpace
-					}
-				}
 
-				let textSegment = text.substring(i, i2).trim()
-				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-74, "center")
-				i = i2+1
-				line += 1
-				console.log(i, text.length)
+			let verticalSpacing = 18
+			for (let line = 0; line < this.bubbleTextWrapped.length; line++) {
+				let textSegment = this.bubbleTextWrapped[line]
+				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-(this.bubbleTextWrapped.length*verticalSpacing/2)-41, "center")
 			}
 		}
 	}
@@ -231,6 +214,34 @@ class Character extends PhysicsObject {
 		this.bubbleText = text
 		this.bubbleTime = time || 4
 		this.bubbleTimer = 0
+
+		// Wrap text so it fits in text bubble
+		this.bubbleTextWrapped = []
+
+		let fullText = this.bubbleText
+		let lineLength = 15 // How many characters can fit in a single line?
+		let line = 0
+		let i = 0
+		while (i < fullText.length) {
+			let i2 = Math.min(i+lineLength, fullText.length)
+			let lineString = fullText.substring(i, i2)
+			// Check if line ended in the middle of a word
+			let lastChar = fullText.substring(i2, i2)
+			let nextChar = fullText.substring(i2+1, i2+1)
+			// Wrap at closest space if next word is cut-off
+			if (lineString.length == lineLength && lastChar != " " && nextChar != " ") {
+				let closestSpace = lineString.lastIndexOf(" ")
+				if (closestSpace != -1) { // Only separate at last space if an instance was found
+					i2 = i+closestSpace
+				}
+			}
+
+			// Add line to list of lines
+			let textSegment = fullText.substring(i, i2).trim()
+			this.bubbleTextWrapped.push(textSegment)
+			i = i2+1
+			line += 1
+		}
 	}
 
 	// Play emote animation; will stop when player moves
@@ -248,18 +259,4 @@ class Character extends PhysicsObject {
 		}
 		return true
 	}
-}
-
-
-function wrapText(text, lineLength) {
-	if (typeof text !== 'string' || typeof lineLength !== 'number' || lineLength <= 0) {
-	  return text
-	}
-  
-	let result = ''
-	for (let i = 0; i < text.length; i += lineLength) {
-	  result += text.substring(i, lineLength) + '\n'
-	}
-  
-	return result
 }
