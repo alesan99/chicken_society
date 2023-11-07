@@ -156,12 +156,16 @@ class Character extends PhysicsObject {
 	drawOver() {
 		// Nametag
 		DRAW.setFont(FONT.caption, 4)
-		DRAW.setColor(255,255,255,1)
-		DRAW.text(this.name, Math.floor(this.x), Math.floor(this.y)-115, "center")
+		if (this.npc) {
+			DRAW.setColor(180,180,180,1)
+		} else {
+			DRAW.setColor(255,255,255,1)
+		}
+		DRAW.text(this.name, Math.floor(this.x), Math.floor(this.y)-126, "center")
 
 		// Chat bubble
 		if (this.bubbleText != false) {
-			let offsetY = 130
+			let offsetY = 140
 
 			// Goofy chat bubble animation
 			// Slowly embiggen bubble

@@ -16,7 +16,7 @@
     "warps": {
         "arcadeExit": {
             "to": "hub",
-            "from": "hub",
+            "fromWarp": "arcadeEntrance",
             "facing": "left",
             "x": 826,
             "y": 327,
@@ -25,25 +25,48 @@
         }
     },
 
-	"sprites": {
-		"fountain": {
-			"image": "hub-fountain.jpg",
-			"framesx": 2,
-			"framesy": 1,
-			"anim": {
-				"frames": [0,1],
-				"delay": 0.2
-			},
-			"ox": 0,
-			"oy": 0,
-			"qw": 88,
-			"qh": 106,
-			"ow": 88,
-			"oh": 0,
-	
-			"x": 412,
-			"y": 350,
-			"worldy": 456
-		}
-	}
+	"NPCs": {
+        "gamer": {
+            "profile": {
+                "name": "Gamer",
+                "color": [200, 210, 255],
+                "hat": "visors",
+                "accessory": "alesanaccessories"
+            },
+            "x": 300,
+            "y": 400,
+            "facing": "down",
+            "roamRadius": 20,
+            "dialogue": [
+				"Hey, dude! Check out some of our retro machines.",
+				"We have lots of gnarly games to try.",
+				"How high can you get?",
+                "Totally tubular, right?",
+				"Radical!",
+				"Cowabunga",
+				"Bodacious!"
+            ]
+        },
+		"expert": {
+            "profile": {
+                "name": "Pro Gamer",
+                "color": [40, 40, 40],
+                "hat": false,
+                "accessory": false
+            },
+            "x": 820,
+            "y": 500,
+            "facing": "right",
+            "roamRadius": false,
+            "dialogue": [
+				"Psst. Type /emote dance",
+				"Psst. Type /emote wave",
+				"Psst. Type /emote sit",
+				"Psst. Type /hat tophat",
+				"Psst. Type /accessory scarf",
+				"Psst. Press the '/' key to open the chat.",
+				"Psst. Change your name with /name YOURNAME"
+			]
+        }
+    }
 }

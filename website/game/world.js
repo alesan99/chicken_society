@@ -196,6 +196,12 @@ class World {
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
 			drawPhysics(OBJECTS, PHYSICSWORLD)
+
+			// Display Corrdinates
+			let [mouseX, mouseY] = getMousePos()
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.setFont(FONT.caption, false)
+			DRAW.text(`(${mouseX}, ${mouseY})`, mouseX+10, mouseY+20)
 		}
 
 		// HUD

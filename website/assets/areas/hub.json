@@ -17,8 +17,7 @@
     "warps": {
         "arcadeEntrance": {
             "to": "arcade",
-            "from": "arcade",
-            "fromWarp": "arcade",
+            "fromWarp": "arcadeExit",
             "facing": "right",
             "x": 83,
             "y": 410,

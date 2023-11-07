@@ -44,6 +44,7 @@ function loadGameAssets() {
 	IMG.hat = {}
 	SPRITE.hat = {}
 	IMG.hat["tophat"] = true
+	IMG.hat["visors"] = true
 
 	for (const [name, value] of Object.entries(IMG.hat)) {
 		// Load image, create sprite frames when image is loaded, and load hat centers from JSON
@@ -62,6 +63,7 @@ function loadGameAssets() {
 	IMG.accessory["scarf"] = true
 	IMG.accessory["chains"] = true
 	IMG.accessory["beefcakeaccessories"] = true
+	IMG.accessory["alesanaccessories"] = true
 
 	for (const [name, value] of Object.entries(IMG.accessory)) {
 		// Load image, create sprite frames when image is loaded, and load accessory centers from JSON
@@ -72,6 +74,7 @@ function loadGameAssets() {
 		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
 		loadJSON(`assets/accessories/${name}.json`, (data) => {
 			IMG.accessory[name].center = data.center
+			console.log(name, data.center)
 		})
 	}
 

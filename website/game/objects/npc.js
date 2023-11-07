@@ -5,9 +5,10 @@ class NPC {
 	constructor (obj, dialogue, facing="down", roamRadius) {
 		this.obj = obj
 		obj.controller = this
+        obj.npc = true
 
         // Adjust object
-        this.obj.facing = facing
+        this.obj.dir = facing
 
         // Walk around
         this.originX = this.obj.x
@@ -21,7 +22,7 @@ class NPC {
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
         let range = 50
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y, () => this.speak(), [-range,-range, range,-range, range,range, -range,range]))
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range]))
 	}
 
 	// Update
@@ -33,7 +34,6 @@ class NPC {
             // Only walk if they aren't talking
             if (!char.bubbleTime) {
                 let distanceFromOrigin = Math.sqrt((char.x - this.originX)**2 + (char.y - this.originY)**2)
-                console.log(distanceFromOrigin)
 
                 this.walkTimer += dt
                 if (this.walkTimer > this.walkTime+this.waitTime) {
@@ -67,7 +67,7 @@ class NPC {
             }
         }
 
-        this.trigger.setPosition(char.x, char.y)
+        this.trigger.setPosition(char.x, char.y-char.shape.h/2)
 	}
 
     speak() {
