@@ -68,5 +68,18 @@
 				"Psst. Change your name with /name YOURNAME"
 			]
         }
+    },
+
+    "triggers": {
+        "minigame1": {
+            "x": 160,
+            "y": 458,
+            "shape": [-20,-20, 20,-20, 20,20, -20,20],
+
+            "click": true,
+
+            "action": "minigame",
+            "minigameName": "slots"
+        }
     }
 }

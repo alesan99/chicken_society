@@ -49,6 +49,23 @@ const transitionFunctions = {
 					DRAW.setColor(0, 0, 0, t2)
 					DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
 					break
+				// Wipe; Screen Wipe
+				case "wipeRight":
+					t2 = easing("easeInQuad", t)
+					if (direction == "in") {
+						t2 = easing("easeOutQuad", t)
+					}
+					DRAW.setColor(0, 0, 0, 1.0)
+					DRAW.rectangle(0, 0, canvasWidth*t2, canvasHeight, "fill")
+					break
+				case "wipeLeft":
+					t2 = 1-easing("easeInQuad", t)
+					if (direction == "in") {
+						t2 = 1-easing("easeOutQuad", t)
+					}
+					DRAW.setColor(0, 0, 0, 1.0)
+					DRAW.rectangle(canvasWidth*t2, 0, canvasWidth-canvasWidth*t2, canvasHeight, "fill")
+					break
 				// Iris; Black circle closes  around a point
 				case "iris":
 					t2 = easing("easeOutCubic", t)

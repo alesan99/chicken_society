@@ -6,6 +6,7 @@ class Player {
 		this.obj = obj
 		obj.controller = this
 
+		// Inputs
 		this.arrowKeys = {
 			left: false,
 			right: false,
@@ -13,6 +14,9 @@ class Player {
 			down: false
 		}
 		this.mouseHold = false
+
+		// Which triggers is the player currently inside of?
+		this.triggers = new Map()
 	}
 
 	// Update
@@ -52,6 +56,26 @@ class Player {
 		}
 	}
 
+	// Interact with nearby triggers
+	interact() {
+		let char = this.obj
+		if (this.triggers.size > 0) {
+			// Find closest trigger that player is overlapping
+			let closestTrigger = false
+			let closestDist = Infinity
+			for (const [key, trigger] of this.triggers.entries()) {
+				let dist = ((trigger.x-char.x)**2 + (trigger.y-(char.y-char.shape.h/2))**2)
+				if (dist < closestDist) {
+					closestTrigger = trigger
+					closestDist = dist
+				}
+			}
+			if (closestTrigger) {
+				closestTrigger.doAction()
+			}
+		}
+	}
+
 	// Inputs
 	keyPress(key) {
 		switch (key) {
@@ -67,6 +91,12 @@ class Player {
 				break
 			case "ArrowDown":
 				this.arrowKeys.down = true
+				break
+			case " ":
+				this.interact()
+				break
+			case "Space":
+				this.interact()
 				break
 		}
 	}
@@ -100,6 +130,21 @@ class Player {
 		// Check if left mouse button is being held
 		if (button == 0) {
 			this.mouseHold = false
+		}
+	}
+
+	// Collide
+	startCollide(name, obj) {
+		let char = this.obj
+		if (name == "Trigger") {
+			this.triggers.set(obj, obj)
+		}
+	}
+
+	stopCollide(name, obj) {
+		let char = this.obj
+		if (name == "Trigger") {
+			this.triggers.delete(obj)
 		}
 	}
 }

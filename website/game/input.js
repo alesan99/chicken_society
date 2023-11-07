@@ -11,11 +11,11 @@ document.addEventListener("mousemove", mouseMoved);
 // Keyboard inputs
 function keyPressed(event) {
 	event.preventDefault()
-	stateKeyPress(event.key)
+	stateKeyPress(event.key, event.code)
 }
 function keyReleased(event) {
 	event.preventDefault()
-	stateKeyRelease(event.key)
+	stateKeyRelease(event.key, event.code)
 }
 
 // Mouse inputs

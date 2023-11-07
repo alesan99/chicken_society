@@ -15,14 +15,14 @@ function stateDraw() {
 	game_state.draw()
 }
 
-function stateKeyPress(key) {
+function stateKeyPress(key, code) {
 	if (game_state.keyPress) {
-		game_state.keyPress(key)
+		game_state.keyPress(key, code)
 	}
 }
-function stateKeyRelease(key) {
+function stateKeyRelease(key, code) {
 	if (game_state.keyRelease) {
-		game_state.keyRelease(key)
+		game_state.keyRelease(key, code)
 	}
 }
 

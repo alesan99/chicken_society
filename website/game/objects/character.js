@@ -263,4 +263,18 @@ class Character extends PhysicsObject {
 		}
 		return true
 	}
+
+	startCollide(name, obj) {
+		// Handle player collisions
+		if (this.controller && this.controller.startCollide) {
+			this.controller.startCollide(name, obj)
+		}
+	}
+
+	stopCollide(name, obj) {
+		// Handle player collisions
+		if (this.controller && this.controller.stopCollide) {
+			this.controller.stopCollide(name, obj)
+		}
+	}
 }

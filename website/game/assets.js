@@ -74,10 +74,10 @@ function loadGameAssets() {
 		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
 		loadJSON(`assets/accessories/${name}.json`, (data) => {
 			IMG.accessory[name].center = data.center
-			console.log(name, data.center)
 		})
 	}
 
+	FONT.big = new RenderFont("Arial", 40)
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
 }

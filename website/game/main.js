@@ -19,8 +19,8 @@ function gameLoad() {
 	}
 
 	// Start world game state
-	WORLD = new World()
-	setState(WORLD, "hub")
+	WORLD = new World("hub")
+	setState(WORLD)
 
 	DRAW = new Render(ctx)
 }

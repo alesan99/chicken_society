@@ -9,15 +9,15 @@ var CHAT
 var OBJECTS
 var DEBUGPHYSICS = false
 var BUTT_RED
+var MINIGAME
 
 class World {
-	constructor () {
+	constructor (area="hub") {
 		this.name = "world"
-		this.area = "hub" //Area name
-		this.oldArea = "hub" //Where did the player just come from? (Think warps)
-	}
+		this.area = area //Area name
+		this.oldArea = area //Where did the player just come from? (Think warps)
 
-	load (area) {
+		// Initialize Physics world
 		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
 
 		// Physics objects
@@ -36,14 +36,26 @@ class World {
 		CHAT = new ChatObject()
 		BUTT_RED = new Button(false, false, 50,50,200,200)
 
+		// Minigames
+		MINIGAME = new MinigameState()
+
 		this.loadArea(area)
+	}
+
+	load () {
+
 	}
 
 	// Load Area data; loads background image & objects
 	// (Area name, function to call after loading is successful)
-	loadArea (area, fromWarp, endFunc) {
+	loadArea (area="hub", fromWarp, endFunc) {
+		// Let server know player is moving
+		if (NETPLAY != false) {
+			NETPLAY.sendArea(area)
+		}
+
 		this.oldArea = this.area
-		this.area = area || "hub"
+		this.area = area
 
 		PLAYER.area = this.area
 		
@@ -66,6 +78,7 @@ class World {
 		BACKGROUNDANIM[this.area] = {}
 
 		// Load Area data
+		// TODO: move this elsewhere because its messy
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {
 			// Load additional Sprites & Animations
 			if (data.sprites) {
@@ -113,6 +126,26 @@ class World {
 				for (const [name, npc] of Object.entries(data.NPCs)) {
 					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
 					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius)
+				}
+			}
+			
+			// Load triggers
+			if (data.triggers) {
+				for (const [name, trig] of Object.entries(data.triggers)) {
+					let func = false
+					// trig.action is a string describing what the trigger should do, create a function based on that
+					let action = trig.action
+					if (action == "minigame") {
+						// Start minigame
+						func = function() {
+							PLAYER.static = true // Don't let player move
+							Transition.start("wipeLeft", "out", 0.8, null, () => {
+								setState(MINIGAME, trig.minigameName) // Start minigame after transition
+								Transition.start("wipeRight", "in", 0.8, null, null)
+							})
+						}
+					}
+					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, func, trig.shape)
 				}
 			}
 
@@ -200,8 +233,8 @@ class World {
 			// Display Corrdinates
 			let [mouseX, mouseY] = getMousePos()
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.setFont(FONT.caption, false)
-			DRAW.text(`(${mouseX}, ${mouseY})`, mouseX+10, mouseY+20)
+			DRAW.setFont(FONT.caption, 4)
+			DRAW.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, mouseX+10, mouseY+20)
 		}
 
 		// HUD
@@ -210,13 +243,13 @@ class World {
 	}
 
 	// Received keyboard input
-	keyPress(key) {
+	keyPress(key, code) {
 		// Control Player
 		PLAYER_CONTROLLER.keyPress(key)
 		
 		CHAT.keyPress(key)
 	}
-	keyRelease(key) {
+	keyRelease(key, code) {
 		// Control Player
 		PLAYER_CONTROLLER.keyRelease(key)
 	}

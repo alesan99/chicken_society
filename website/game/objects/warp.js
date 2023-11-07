@@ -54,10 +54,6 @@ class Warp extends PhysicsObject {
 	doWarp (character) {
 		PLAYER.static = true // Don't let player move when in the process of warping
 		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
-			// Let server know player is moving
-			if (NETPLAY != false) {
-				NETPLAY.sendArea(this.area)
-			}
 			// Display black screen while area is loading...
 			Transition.start("loading", "in", 100, null, null)
 			// Actually start loading Area

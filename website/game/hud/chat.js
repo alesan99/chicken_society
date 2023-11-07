@@ -35,7 +35,7 @@ class ChatObject {
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/area": // Warp to a different area
-					PLAYER.area = arg
+					WORLD.loadArea(arg, "chatWarp")
 					break
 				case "/emote": // Play emote animation
 					PLAYER.emote(arg)
