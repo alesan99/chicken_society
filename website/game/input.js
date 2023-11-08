@@ -34,12 +34,12 @@ function convertMouseCoordsToScreen(mouseX, mouseY) {
 function mouseMoved(event) {
 	var pos = [event.clientX, event.clientY];
 	
-	[mouseX, mouseY] = convertMouseCoordsToScreen(pos[0], pos[1])
+	[mouseScreenX, mouseScreenY] = convertMouseCoordsToScreen(pos[0], pos[1])
 }
 
 // Postion; returns [x, y]
 function getMousePos() {
-	return [mouseX, mouseY]
+	return [mouseScreenX, mouseScreenY]
 }
 
 function mouseClicked(event) {

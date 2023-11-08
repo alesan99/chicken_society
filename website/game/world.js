@@ -34,7 +34,6 @@ class World {
 
 		// HUD
 		CHAT = new ChatObject()
-		BUTT_RED = new Button(false, false, 50,50,200,200)
 
 		// Minigames
 		MINIGAME = new MinigameState()
@@ -239,7 +238,6 @@ class World {
 
 		// HUD
 		CHAT.draw()
-		BUTT_RED.draw()
 	}
 
 	// Received keyboard input
@@ -264,6 +262,8 @@ class World {
 
 	mouseRelease(button, x, y) {
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
+		CHAT.mouseRelease(button, x, y)
+
 	}
 }
 
