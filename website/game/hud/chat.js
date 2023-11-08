@@ -90,6 +90,10 @@ class ChatObject {
 
 
 	draw() {
+		// Placeholder graphic
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.chat, null, canvasWidth/2-IMG.chat.w/2, canvasHeight-IMG.chat.h)
+
 		// Display whats being typed
 		if (this.open) {
 			DRAW.setColor(0,0,0,0.5)

@@ -25,6 +25,9 @@ function loadGameAssets() {
 	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
 
+	// HUD
+	IMG.chat = new RenderImage("assets/hud/chat.png")
+
 	// Chicken Customization
 	// TODO: Clean up this horrible code
 	HATOFFSET = [ // Center of chicken head where hat should be placed
