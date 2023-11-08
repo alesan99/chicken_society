@@ -35,7 +35,7 @@ function loadGameAssets() {
 	ACCESSORYOFFSET = [ // Center of chicken chin where accessory should be placed
 		[[64,55],[64,55],[66,56],[66,63],[64,55],[64,55],[59,62],[64,55]],
 		[[89,49],[89,49],[86,52],[66,63],[64,55],[64,55],[59,62],[64,55]],
-		[[63,56],[63,56],[66,57],[66,63],[64,55],[64,55],[59,62],[64,55]]
+		[[63,56],[63,56],[68,57],[66,63],[64,55],[64,55],[59,62],[64,55]]
 	]
 	CHICKENROTATION = [ // Rotation of chicken hat & accessory for each frame
 		0,0,0,0,0,0,-Math.PI*0.5,0
