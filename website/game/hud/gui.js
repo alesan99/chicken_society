@@ -1,5 +1,5 @@
 class Button {
-    constructor(label, action, x, y, w, h) { //in px
+    constructor(label, action, x, y, w, h) { //in px, label is text on button, action is function to call when clicked  
         this.label = label;
         this.action = action;
         this.x = x;
@@ -7,6 +7,7 @@ class Button {
         this.w = w;
         this.h = h;
         this.hover = false;
+        this.holding = false;
     }
 
     checkMouseInside(){
@@ -16,18 +17,39 @@ class Button {
         }
         return false;
     }
-    update(){
+    update(dt){
         this.hover = this.checkMouseInside();
     }
 
     click(){
+        console.log("click");
+        console.log(this.action);
         if (this.hover) {//this should only click if you're hovering over the button
+            this.holding = true
+        }
+    }
+    clickRelease(){
+        if (this.holding == true){
+            this.holding = false;
             this.action();
         }
     }
 
+
+
     draw(){
-        DRAW.setColor(255,0,0,1); //transparent red
+        if (this.holding == true){
+            DRAW.setColor(20,0,0,1); //dark
+        } else if (this.hover == true){
+            DRAW.setColor(255,0,0,1); //medium
+        } else {
+            DRAW.setColor(255,100,100,1); //light
+        }
+        
         DRAW.rectangle(this.x, this.y, this.w, this.h);
+
     }
 }
+
+//need to add states
+//need callbacks, click, clickRelease

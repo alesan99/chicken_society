@@ -6,8 +6,10 @@ class ChatObject {
 		this.value = ""
 		this.open = false
 		this.typing = false
-
 		this.timer = 0
+		// var BUTT_RED
+		BUTT_RED = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED"); console.log("jeyeyeyeyeyeyeyey")}, 50,50,200,200) 
+
 	}
 
 	enter() {
@@ -81,11 +83,14 @@ class ChatObject {
 	}
 
 	mouseClick(button, x, y) {
+		BUTT_RED.click(button, x, y)
+			
+		
 		
 	}
 
 	mouseRelease(button, x, y) {
-		
+		BUTT_RED.clickRelease(button, x, y)
 	}
 
 
@@ -102,9 +107,13 @@ class ChatObject {
 			}
 			DRAW.text(s, 40, canvasHeight-20, "left")
 		}
+		BUTT_RED.draw()
+
 	}
 
 	update(dt) {
 		this.timer = (this.timer + dt)%1
+		BUTT_RED.update(dt)
+
 	}
 }

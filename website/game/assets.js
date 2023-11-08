@@ -77,6 +77,7 @@ function loadGameAssets() {
 
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
+	FONT.guiLabel = new RenderFont("Times New Roman", 30)
 }
 
 // Load array with JSON data; filePath, callBack function called after file is finished loading
