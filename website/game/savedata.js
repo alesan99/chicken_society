@@ -37,7 +37,7 @@ function makeProfile() {
 		],
 		hat: false,
 		accessory: false,
-		money: 0,
+		nuggets: 10,
 		pet: false
 	}
 
