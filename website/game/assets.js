@@ -9,12 +9,14 @@ BACKGROUNDIMG = []
 BACKGROUNDSPRITE = []
 BACKGROUNDANIM = []
 
+DIRECTORYTREE = {}
+
 function loadGameAssets() {
 	// World objects
 	// Chicken
 	IMG.chicken = new RenderImage("assets/chicken.png")
 	IMG.chicken.makeColorable()
-	SPRITE.chicken = new Sprite(IMG.chicken, 8, 6, 0, 0, 128, 128, 129, 129)
+	SPRITE.chicken = new Sprite(IMG.chicken, 8, 6, 128,128, 0,0, 1,1)
 	ANIM.stand = [[0]] // Animations format. [[Frame 1, Frame 2...], [Delay 1, Delay 2...]]
 	ANIM.walk = [[1, 2], 0.2]
 	ANIM.dance = [[1, 2, 5, 4, 6, 7, 6, 7], 0.3]
@@ -24,6 +26,8 @@ function loadGameAssets() {
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
+	IMG.action = new RenderImage("assets/action.png")
+	SPRITE.action = new Sprite(IMG.action, 4,1, 60,50)
 
 	// HUD
 	IMG.chat = new RenderImage("assets/hud/chat.png")
@@ -31,19 +35,16 @@ function loadGameAssets() {
 	// Chicken Customization
 	// TODO: Clean up this horrible code
 
-	fetch('/getDirectoryTree')
-	.then(response => {
-		if (!response.ok) {
-			throw new Error('Failed to fetch directory tree')
-		}
-		return response.json()
-	})
-	.then(data => {
-		console.log(JSON.stringify(data, null, 2)) // Pretty-print JSON
-	})
-	.catch(error => {
-		console.error(error)
-	});
+	DIRECTORYTREE = fetch('/getDirectoryTree')
+		.then(response => {
+			if (!response.ok) { throw new Error('Failed to fetch directory tree'); };
+			return response.json()
+		})
+		.then(data => {
+			DIRECTORYTREE = data
+		})
+		.catch(error => { console.error(error) });
+	console.log(DIRECTORYTREE)
 
 	HATOFFSET = [ // Center of chicken head where hat should be placed
 		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]],
@@ -67,7 +68,7 @@ function loadGameAssets() {
 	for (const [name, value] of Object.entries(IMG.hat)) {
 		// Load image, create sprite frames when image is loaded, and load hat centers from JSON
 		let async = function() {
-			SPRITE.hat[name] = new Sprite(IMG.hat[name], 1, 3, 0, 0, IMG.hat[name].w, (IMG.hat[name].h-2)/3, IMG.hat[name].w, (IMG.hat[name].h-2)/3+1)
+			SPRITE.hat[name] = new Sprite(IMG.hat[name], 1, 3, IMG.hat[name].w,(IMG.hat[name].h-2)/3, 0,0, 1,1)
 		}
 		IMG.hat[name] = new RenderImage(`assets/hats/${name}.png`, async)
 		IMG.hat[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
@@ -86,7 +87,7 @@ function loadGameAssets() {
 	for (const [name, value] of Object.entries(IMG.accessory)) {
 		// Load image, create sprite frames when image is loaded, and load accessory centers from JSON
 		let async = function() {
-			SPRITE.accessory[name] = new Sprite(IMG.accessory[name], 1, 3, 0, 0, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3+1)
+			SPRITE.accessory[name] = new Sprite(IMG.accessory[name], 1, 3, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3, 0,0, 1,1)
 		}
 		IMG.accessory[name] = new RenderImage(`assets/accessories/${name}.png`, async)
 		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]

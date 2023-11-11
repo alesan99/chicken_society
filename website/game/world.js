@@ -86,7 +86,7 @@ class World {
 					if (!BACKGROUNDIMG[this.area][img]) {
 						BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
 					}
-					let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.ox, s.oy, s.qw, s.qh, s.ow, s.oh)
+					let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
 					BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
 					// If defined, play animation
 					if (s.anim) {
@@ -254,16 +254,17 @@ class World {
 
 	// Recieved mouse input
 	mouseClick(button, x, y) {
+		if (CHAT.mouseClick(button, x, y)) {
+			return true
+		}
+
 		// Control player by dragging mouse button on screen
 		PLAYER_CONTROLLER.mouseClick(button, x, y)
-
-		CHAT.mouseClick(button, x, y)
 	}
 
 	mouseRelease(button, x, y) {
-		PLAYER_CONTROLLER.mouseRelease(button, x, y)
 		CHAT.mouseRelease(button, x, y)
-
+		PLAYER_CONTROLLER.mouseRelease(button, x, y)
 	}
 }
 

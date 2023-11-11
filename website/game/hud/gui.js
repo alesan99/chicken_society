@@ -35,8 +35,6 @@ class Button {
         }
     }
 
-
-
     draw(){
         if (this.holding == true){
             DRAW.setColor(20,0,0,1); //dark

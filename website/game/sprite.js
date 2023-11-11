@@ -1,16 +1,16 @@
 //Sprite object; Takes in an image with multiple frames and splits it up to render just one frame
 
 class Sprite {
-	//Initialize: image, frame count x & y, offset x & y, frame width & height
-	constructor (img, cx, cy, ox, oy, w, h, ow, oh) {
+	//Initialize: image, frame count x & y, offset x & y, frame width & height, offset width & height to start splitting the image
+	constructor (img, fx=1, fy=1, w, h, ox=0, oy=0, sepx=0, sepy=0) {
 		this.img = img
 		this.w = w
 		this.h = h
 		this.frame = []
-		for (let y = 0; y < cy; y++) { // Rows
+		for (let y = 0; y < fy; y++) { // Rows
 			this.frame[y] = []
-			for (let x = 0; x < cx; x++) { // Columns
-				this.frame[y][x] = [x*ow+ox, y*oh+oy, w, h] // x, y, w, h
+			for (let x = 0; x < fx; x++) { // Columns
+				this.frame[y][x] = [x*(w+sepx)+ox, y*(h+sepy)+oy, w, h] // x, y, w, h
 			}
 		}
 	}
@@ -24,7 +24,7 @@ class Sprite {
 
 class Animation {
 	//Initialize: image, 
-	constructor (sprite, fx, fy) {
+	constructor (sprite, fx=0, fy=0) {
 		this.sprite = sprite
 		this.framex = fx || 0
 		this.framey = fy || 0
