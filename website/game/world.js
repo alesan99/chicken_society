@@ -230,6 +230,15 @@ class World {
 		if (DEBUGPHYSICS) {
 			drawPhysics(OBJECTS, PHYSICSWORLD)
 
+			// Display click triggers
+			DRAW.setColor(120,0,80,1.0)
+			for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
+				if (obj.clickRegion) {
+					let r = obj.clickRegion // region
+					DRAW.rectangle(obj.x+r.x, obj.y+r.y, r.w, r.h, "line")
+				}
+			}
+
 			// Display Corrdinates
 			let [mouseX, mouseY] = getMousePos()
 			DRAW.setColor(255,255,255,1.0)
@@ -259,9 +268,10 @@ class World {
 			return true
 		}
 		
+		// Click on click triggers
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
-			if (obj.click) {
-				obj.click(button, x, y)
+			if (obj.click && obj.click(button, x, y)) {
+				return true
 			}
 		}
 

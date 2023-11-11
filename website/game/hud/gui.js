@@ -22,10 +22,9 @@ class Button {
     }
 
     click(){
-        console.log("click");
-        console.log(this.action);
         if (this.hover) {//this should only click if you're hovering over the button
             this.holding = true
+            return true
         }
     }
     clickRelease(){

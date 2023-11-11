@@ -8,7 +8,7 @@ class ChatObject {
 		this.typing = false
 		this.timer = 0
 		// var BUTT_RED
-		BUTT_RED = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED"); console.log("jeyeyeyeyeyeyeyey")}, 50,50,200,200) 
+		BUTT_RED = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, 50,50,200,200) 
 
 	}
 
@@ -87,17 +87,15 @@ class ChatObject {
 	}
 
 	mouseClick(button, x, y) {
-		BUTT_RED.click(button, x, y)
-			
-		
-		
+		if (BUTT_RED.click(button, x, y)) {
+			return true
+		}
 	}
 
 	mouseRelease(button, x, y) {
 		BUTT_RED.clickRelease(button, x, y)
 	}
-
-
+	
 	draw() {
 		// Placeholder graphic
 		DRAW.setColor(255,255,255,1.0)

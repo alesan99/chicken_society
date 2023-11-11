@@ -22,7 +22,8 @@ class NPC {
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
         let range = 50
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range], clickRegion || [-range/2,-range/2, range/2,range/2]))
+        let defaultClickRegion = [-40,-100,80,120]
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range], clickRegion || defaultClickRegion))
 	}
 
 	// Update

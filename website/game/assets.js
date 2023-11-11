@@ -37,16 +37,16 @@ function loadGameAssets() {
 	// Chicken Customization
 	// TODO: Clean up this horrible code
 
-	DIRECTORYTREE = fetch('/getDirectoryTree')
-		.then(response => {
-			if (!response.ok) { throw new Error('Failed to fetch directory tree'); };
-			return response.json()
-		})
-		.then(data => {
-			DIRECTORYTREE = data
-		})
-		.catch(error => { console.error(error) });
-	console.log(DIRECTORYTREE)
+	// DIRECTORYTREE = fetch('/getDirectoryTree')
+	// 	.then(response => {
+	// 		if (!response.ok) { throw new Error('Failed to fetch directory tree'); };
+	// 		return response.json()
+	// 	})
+	// 	.then(data => {
+	// 		DIRECTORYTREE = data
+	// 	})
+	// 	.catch(error => { console.error(error) });
+	// console.log(DIRECTORYTREE)
 
 	HATOFFSET = [ // Center of chicken head where hat should be placed
 		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]],
