@@ -3,7 +3,10 @@ let menu_state = ""
 let menu_open = false
 let gamestate = ""
 
+var CURSOR = {on: false, cursor: "auto"}
+
 PROFILE = makeProfile()
+SAVEDATA = makeSaveData()
 
 NETPLAY = false
 
@@ -27,12 +30,25 @@ function gameLoad() {
 
 // update game logic
 function gameUpdate(dt) {
+	// Reset mouse cursor
+	CURSOR.on = false
+
 	stateUpdate(dt)
 	Transition.update(dt)
 
 	// Is menu open?
 	if (menu_open) {
 		menus[menu_state].update(dt)
+	}
+
+	// Set cursor at last
+	let targetCursor = "auto"
+	if (CURSOR.on) {
+		targetCursor = "pointer"
+	}
+	if (CURSOR.cursor != targetCursor) {
+		canvas.style.cursor = targetCursor
+		CURSOR.cursor = targetCursor
 	}
 }
 

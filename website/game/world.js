@@ -8,7 +8,6 @@ var NPCS
 var CHAT
 var OBJECTS
 var DEBUGPHYSICS = false
-var BUTT_RED
 var MINIGAME
 
 class World {
@@ -137,6 +136,11 @@ class World {
 					if (action == "minigame") {
 						// Start minigame
 						func = function() {
+							// Does this trigger cost something?
+							if (trig.cost) {
+								removeNuggets(trig.cost)
+							}
+
 							PLAYER.static = true // Don't let player move
 							Transition.start("wipeLeft", "out", 0.8, null, () => {
 								setState(MINIGAME, trig.minigameName) // Start minigame after transition
@@ -144,7 +148,10 @@ class World {
 							})
 						}
 					}
-					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, func, trig.shape, this.clickRegion)
+					if (trig.cost && trig.icon) {
+						trig.icon.text = trig.cost
+					}
+					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, func, trig.shape, trig.icon, trig.clickRegion)
 				}
 			}
 
@@ -170,6 +177,9 @@ class World {
 	update (dt) {
 		// Update objects
 		PLAYER_CONTROLLER.update(dt)
+		for (const [id, obj] of Object.entries(NPCS)) {
+			obj.update(dt)
+		}
 		for (const [name, objList] of Object.entries(OBJECTS)) {
 			for (const [id, obj] of Object.entries(objList)) {
 				if (obj.update) {
@@ -215,6 +225,11 @@ class World {
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {
 			const obj = drawQueue[i];
+			obj.draw()
+		}
+
+		// Show action bubble above clickable elements like NPCs
+		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 			obj.draw()
 		}
 

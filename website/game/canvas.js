@@ -12,7 +12,6 @@ var canvasScale = 1
 const container = document.getElementById("canvasContainer")
 container.style.width = canvasWidth + "px"
 
-
 // Get the 2D rendering context for the canvas if supported by browser
 if (canvas.getContext) {
 	ctx = canvas.getContext("2d")

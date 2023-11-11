@@ -76,12 +76,18 @@
         "minigame1": {
             "x": 160,
             "y": 458,
-            "shape": [-20,-20, 20,-20, 20,20, -20,20],
+            "shape": [-40,-40, 40,-40, 40,40, -40,40],
 
-            "click": true,
+            "clickRegion": [-70,-100, 80,140],
+            "icon": {
+                "frame": 2,
+                "x": -20,
+                "y": -100
+            },
 
             "action": "minigame",
-            "minigameName": "slots"
+            "minigameName": "slots",
+            "cost": 1
         }
     }
 }

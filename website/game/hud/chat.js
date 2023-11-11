@@ -1,4 +1,5 @@
 //Chat Object; Open up menu with 
+var BUTT_RED
 
 class ChatObject {
 	//Initialize
@@ -46,8 +47,8 @@ class ChatObject {
 					}
 					break
 				case "/nuggets":
-					PROFILE.nuggets = Number(arg)
-					PLAYER.updateProfile(PROFILE, "sendToServer")
+					SAVEDATA.nuggets = Number(arg)
+					// PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/debug": // Debug physics
 					DEBUGPHYSICS = true
@@ -102,7 +103,7 @@ class ChatObject {
 		DRAW.image(IMG.chat, null, canvasWidth/2-IMG.chat.w/2, canvasHeight-IMG.chat.h)
 
 		// Nugget display
-		let displayString = `✖ ${PROFILE.nuggets.toLocaleString()}`
+		let displayString = `✖ ${SAVEDATA.nuggets.toLocaleString()}`
 		DRAW.image(IMG.nugget, null, 12, 526)
 		DRAW.setFont(FONT.hud)
 		DRAW.setColor(0,0,0,1.0)

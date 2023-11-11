@@ -23,7 +23,7 @@ class NPC {
         this.dialogue = dialogue || [""]
         let range = 50
         let defaultClickRegion = [-40,-100,80,120]
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range], clickRegion || defaultClickRegion))
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range], {frame:0,x:0,y:-120}, clickRegion || defaultClickRegion))
 	}
 
 	// Update
@@ -68,7 +68,12 @@ class NPC {
             }
         }
 
+        // Stick trigger to NPC
         this.trigger.setPosition(char.x, char.y-char.shape.h/2)
+        // Reset trigger if activated
+        if (char.bubbleText == false && this.trigger.activated) {
+            this.trigger.reset()
+        }
 	}
 
     speak() {

@@ -15,7 +15,7 @@ class Sprite {
 		}
 	}
 
-	getFrame (x, y) {
+	getFrame (x=0, y=0) {
 		return this.frame[y][x]
 	}
 }

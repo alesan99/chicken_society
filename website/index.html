@@ -9,15 +9,16 @@
 </head>
 
 <body>
+	<!-- Canvas to render Game -->
+	<div id="canvasContainer">
+		<canvas id="gameCanvas" width="1024" height="576"></canvas>
+	</div>
+	<!-- User login stuff -->
 	<div>
 		<form id="login-stuff">
 			<input id="username-field" class="login-stuff" type="text" placeholder="Username" maxlength="16" autocomplete="off">
 			<input id="login" type="submit" value="Login">
 		</form>
-	</div>
-	<!-- Canvas to render Game -->
-	<div id="canvasContainer">
-		<canvas id="gameCanvas" width="1024" height="576"></canvas>
 	</div>
 	<!-- Invisible text input used to force mobile devices to open keyboard -->
 	<input id="gameTextInput" type="text" style="position:fixed;left:0px";>

@@ -27,7 +27,7 @@ function loadGameAssets() {
 	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
 	IMG.action = new RenderImage("assets/action.png")
-	SPRITE.action = new Sprite(IMG.action, 4,1, 60,50)
+	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
 
 	// HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")

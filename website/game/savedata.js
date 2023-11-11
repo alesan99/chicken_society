@@ -37,16 +37,28 @@ function makeProfile() {
 		],
 		hat: false,
 		accessory: false,
-		nuggets: 10,
 		pet: false
-	}
-
-	let savedata = {
-		items: [],
-		house: [],
-		furniture: []
-
 	}
 	
 	return profile
+}
+
+function makeSaveData() {
+	let saveData = {
+		items: [],
+		house: [],
+		furniture: [],
+		nuggets: 10
+	}
+
+	return saveData
+}
+
+// Remove nugget currency. TODO: Fancy animations
+function removeNuggets(nuggets) {
+	SAVEDATA.nuggets -= nuggets
+}
+
+function addNuggets() {
+	SAVEDATA.nuggets += nuggets
 }

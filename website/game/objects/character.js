@@ -112,7 +112,7 @@ class Character extends PhysicsObject {
 		}
 
 		// Dissapear chat bubble after few seconds
-		if (this.bubbleTime != false) {
+		if (this.bubbleText != false) {
 			this.bubbleTimer += dt
 			if (this.bubbleTimer > this.bubbleTime) {
 				this.bubbleTime = false
