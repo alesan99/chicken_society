@@ -30,6 +30,8 @@ function loadGameAssets() {
 	SPRITE.action = new Sprite(IMG.action, 4,1, 60,50)
 
 	// HUD
+	IMG.nugget = new RenderImage("assets/nugget.png")
+	IMG.ammo = new RenderImage("assets/hud/ammo.png")
 	IMG.chat = new RenderImage("assets/hud/chat.png")
 
 	// Chicken Customization
@@ -97,6 +99,7 @@ function loadGameAssets() {
 	}
 
 	FONT.big = new RenderFont("Arial", 40)
+	FONT.hud = new RenderFont("Arial", 28)
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
 	FONT.guiLabel = new RenderFont("Times New Roman", 30)

@@ -45,6 +45,10 @@ class ChatObject {
 						NETPLAY.sendEmote(arg)
 					}
 					break
+				case "/nuggets":
+					PROFILE.nuggets = Number(arg)
+					PLAYER.updateProfile(PROFILE, "sendToServer")
+					break
 				case "/debug": // Debug physics
 					DEBUGPHYSICS = true
 					break
@@ -98,6 +102,17 @@ class ChatObject {
 		// Placeholder graphic
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.chat, null, canvasWidth/2-IMG.chat.w/2, canvasHeight-IMG.chat.h)
+
+		// Nugget display
+		let displayString = `✖ ${PROFILE.nuggets.toLocaleString()}`
+		DRAW.image(IMG.nugget, null, 12, 526)
+		DRAW.setFont(FONT.hud)
+		DRAW.setColor(0,0,0,1.0)
+		DRAW.text(displayString, 60, 556+4, "left")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.text(displayString, 60, 556, "left")
+
+		DRAW.image(IMG.ammo, null, 904, 526)
 
 		// Display whats being typed
 		if (this.open) {
