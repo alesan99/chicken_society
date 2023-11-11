@@ -2,7 +2,7 @@
 
 class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around
-	constructor (obj, dialogue, facing="down", roamRadius) {
+	constructor (obj, dialogue, facing="down", roamRadius, clickRegion) {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
@@ -22,7 +22,7 @@ class NPC {
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
         let range = 50
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range]))
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range], clickRegion || [-range/2,-range/2, range/2,range/2]))
 	}
 
 	// Update

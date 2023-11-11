@@ -124,7 +124,7 @@ class World {
 			if (data.NPCs) {
 				for (const [name, npc] of Object.entries(data.NPCs)) {
 					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
-					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius)
+					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius, npc.clickRegion)
 				}
 			}
 			
@@ -144,7 +144,7 @@ class World {
 							})
 						}
 					}
-					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, func, trig.shape)
+					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, func, trig.shape, this.clickRegion)
 				}
 			}
 
@@ -170,11 +170,12 @@ class World {
 	update (dt) {
 		// Update objects
 		PLAYER_CONTROLLER.update(dt)
-		for (const [id, obj] of Object.entries(NPCS)) {
-			obj.update(dt)
-		}
-		for (const [id, obj] of Object.entries(CHARACTER)) {
-			obj.update(dt)
+		for (const [name, objList] of Object.entries(OBJECTS)) {
+			for (const [id, obj] of Object.entries(objList)) {
+				if (obj.update) {
+					obj.update(dt)
+				}
+			}
 		}
 		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
 
@@ -256,6 +257,12 @@ class World {
 	mouseClick(button, x, y) {
 		if (CHAT.mouseClick(button, x, y)) {
 			return true
+		}
+		
+		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
+			if (obj.click) {
+				obj.click(button, x, y)
+			}
 		}
 
 		// Control player by dragging mouse button on screen
