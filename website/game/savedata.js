@@ -48,7 +48,11 @@ function makeSaveData() {
 		items: [],
 		house: [],
 		furniture: [],
-		nuggets: 10
+		nuggets: 10,
+
+		highscores: {
+			runner: 0
+		}
 	}
 
 	return saveData

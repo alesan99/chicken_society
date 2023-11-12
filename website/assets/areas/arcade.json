@@ -6,7 +6,7 @@
         [705,237, 705,192, 908,356, 908,397],
         [949,576, 860,455, 860,395, 995,576],
          
-        [241,312, 241,267, 507,267, 507,312],
+        [241,312, 241,287, 507,287, 507,312],
 
         [560,279, 549,239, 621,239, 621, 279],
 
@@ -30,13 +30,13 @@
 	"NPCs": {
         "gamer": {
             "profile": {
-                "name": "Gamer",
+                "name": "Bud",
                 "color": [200, 210, 255],
                 "hat": "visors",
                 "accessory": "alesanaccessories"
             },
-            "x": 300,
-            "y": 400,
+            "x": 406,
+            "y": 271,
             "facing": "down",
             "roamRadius": 20,
             "dialogue": [
@@ -88,6 +88,23 @@
             "action": "minigame",
             "minigameName": "runner",
             "cost": 1
+        }
+    },
+
+    
+    "sprites": {
+        "alley2": {
+            "image": "arcade-layers.png",
+            "framesx": 1,
+            "framesy": 1,
+            "ox": 0,
+            "oy": 0,
+            "qw": 265,
+            "qh": 72,
+
+            "x": 244,
+            "y": 244,
+            "worldy": 292
         }
     }
 }

@@ -14,7 +14,7 @@ const MinigameRunner = new class {
 		minigame = this
 
 		this.started = false
-		this.highscore = 0
+		this.highscore = SAVEDATA.highscores.runner
 
 		this.img = {}
 		this.sprite = {}
@@ -22,6 +22,7 @@ const MinigameRunner = new class {
 		this.sprite.chicken = new Sprite(this.img.chicken, 5,1, 96,128)
 		this.img.arcadeCabinet = new RenderImage("game/minigames/runner/arcade_cabinet.png")
 		this.img.fence = new RenderImage("game/minigames/runner/fence.png")
+		this.sprite.fence = new Sprite(this.img.fence, 3,1, 50,92)
 		this.img.background = new RenderImage("game/minigames/runner/background.png")
 
 		this.start()
@@ -44,6 +45,7 @@ const MinigameRunner = new class {
 		this.objects["ground"][0] = new Ground(this.world, 0, canvasHeight-200)
 
 		this.timer = 1
+		this.backgroundScroll = 0
 		this.speed = 1
 	}
 
@@ -53,6 +55,7 @@ const MinigameRunner = new class {
 		}
 
 		this.speed += 0.01*dt
+		this.backgroundScroll = (this.backgroundScroll + this.chicken.sx*1.2*dt)%680
 
 		this.timer -= this.speed*dt
 		if (this.timer < 0) {
@@ -93,7 +96,9 @@ const MinigameRunner = new class {
 	draw() {
 		// Background
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(this.img.background, null, 172, 38, 0, 2, 2)
+		DRAW.image(this.img.background, [0,0,680,340], 172, 38)
+		DRAW.image(this.img.background, [0,340,680,480-340], 172-this.backgroundScroll, 38+340)
+		DRAW.image(this.img.background, [0,340,680,480-340], 172+680-this.backgroundScroll, 38+340)
 		
 		let cameraX = this.chicken.x-270
 
@@ -101,7 +106,7 @@ const MinigameRunner = new class {
 			obj.draw(cameraX)
 		}
 
-		this.objects["chicken"][0].draw(cameraX)
+		this.chicken.draw(cameraX)
 
 		// Arcade Cabinet overlay
 		DRAW.setColor(255,255,255,1.0)
@@ -109,11 +114,12 @@ const MinigameRunner = new class {
 
 		// Score
 		DRAW.setColor(0,0,0,1.0)
-		DRAW.setFont(FONT.big)
-		DRAW.text("Highscore:" + this.highscore,600,80)
-		DRAW.text("Score:" + this.score,600,110)
+		DRAW.setFont(FONT.hud)
+		DRAW.text("Highscore: " + this.highscore,630,80)
+		DRAW.text("Score: " + this.score,630,110)
 
 		// Start?
+		DRAW.setFont(FONT.big)
 		if (this.died) {
 			DRAW.text("DIED",canvasWidth/2,canvasHeight/2,"center")
 			if (this.score == this.highscore) {
@@ -177,6 +183,10 @@ const MinigameRunner = new class {
 			this.objects["chicken"][0].jump()
 		}
 	}
+
+	exit() {
+		SAVEDATA.highscores.runner = this.highscore
+	}
 }()
 
 RubberChicken = class extends PhysicsObject {
@@ -203,9 +213,14 @@ RubberChicken = class extends PhysicsObject {
 		this.anim.playAnimation([0,1,2,3], 0.05)
 
 		this.falling = true
+		this.spin = false
+		this.rotation = 0
 	}
 	jump() {
 		if (this.falling != true) {
+			if (Math.random() > 0.9) {
+				this.spin = true
+			}
 			this.sy = -1000
 		}
 	}
@@ -213,9 +228,15 @@ RubberChicken = class extends PhysicsObject {
 		this.anim.update(dt)
 		this.sx = 400*minigame.speed
 		this.sy += 3500*dt
+
+		if (this.spin) {
+			this.rotation += 20*dt
+		}
 	}
 	collide(name,obj,nx,ny) {
 		if (ny < 0) {
+			this.spin = false
+			this.rotation = 0
 			this.sy = Math.min(this.sy, 0)
 		}
 		if (name == "Fence") {
@@ -238,7 +259,7 @@ RubberChicken = class extends PhysicsObject {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.shadow, null, this.x-x, canvasHeight-200, 0, 0.8,1, 0.5,0.5)
 
-		DRAW.image(minigame.img.chicken, this.anim.getSprite(), this.x-x, this.y, 0, 1,1, 0.5,0.5)
+		DRAW.image(minigame.img.chicken, this.anim.getSprite(), this.x-x, this.y, this.rotation, 1,1, 0.5,0.5)
 	}
 }
 Ground = class extends PhysicsObject {
@@ -292,6 +313,16 @@ Fence = class extends PhysicsObject {
 
 		this.type = type
 
+		this.frame = 0
+		if (this.type == "normal") {
+			let choice = Math.floor(Math.random()*20)
+			if ((minigame.score > 20 && choice <= 1) || (minigame.score > 40 && choice <= 4)) {
+				this.frame = 1
+			} else if (choice == 5) {
+				this.frame = 2
+			}
+		}
+
 		this.passed = false
 	}
 	update(dt) {
@@ -313,7 +344,7 @@ Fence = class extends PhysicsObject {
 	draw(x) {
 		DRAW.setColor(255,255,255,1.0)
 
-		DRAW.image(minigame.img.fence, null, this.x-x, this.y, 0, 1,1, 0.5,0.5)
+		DRAW.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.5,0.5)
 	}
 	collide(name) {
 		if (name == "Ground") {
