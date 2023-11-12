@@ -86,7 +86,7 @@
             },
 
             "action": "minigame",
-            "minigameName": "slots",
+            "minigameName": "runner",
             "cost": 1
         }
     }

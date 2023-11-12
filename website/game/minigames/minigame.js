@@ -8,6 +8,8 @@ class MinigameState {
 	load(minigameName) {
 		if (minigameName == "slots") {
 			this.minigame = MinigameSlots
+		} else if (minigameName == "runner") {
+			this.minigame = MinigameRunner
 		}
         this.minigame.load()
 	}
@@ -30,6 +32,10 @@ class MinigameState {
 	// Exit minigame
 	exit() {
         Transition.start("wipeLeft", "out", 0.8, null, () => {
+			// Unload minigame assets
+			if (this.minigame.exit) {
+				this.minigame.exit()
+			}
             PLAYER.static = false
             setState(WORLD) // Go back to world
             Transition.start("wipeRight", "in", 0.8, null, null)
@@ -53,8 +59,8 @@ class MinigameState {
         this.minigame.keyRelease(key)
 	}
 
-	mouseClick(x, y, button) {
+	mouseClick(button, x, y) {
 		// Control minigame
-        this.minigame.mouseClick(x, y, button)
+        this.minigame.mouseClick(button, x, y)
 	}
 }

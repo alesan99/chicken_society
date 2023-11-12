@@ -38,7 +38,7 @@ const MinigameSlots = new class {
 		
 	}
 
-	mouseClick(x, y, button) {
+	mouseClick(button, x, y) {
 
 	}
 }()

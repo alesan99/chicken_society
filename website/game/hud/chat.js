@@ -8,8 +8,9 @@ class ChatObject {
 		this.open = false
 		this.typing = false
 		this.timer = 0
-		// var BUTT_RED
-		BUTT_RED = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, 50,50,200,200) 
+
+		this.buttons = []
+		this.buttons[0] = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, 235,534,32,37) 
 
 	}
 
@@ -88,13 +89,21 @@ class ChatObject {
 	}
 
 	mouseClick(button, x, y) {
-		if (BUTT_RED.click(button, x, y)) {
-			return true
+		for (let button of this.buttons) {
+			if (button.click(button, x, y)) {
+				return true
+			}
 		}
+		return false
 	}
 
 	mouseRelease(button, x, y) {
-		BUTT_RED.clickRelease(button, x, y)
+		for (let button of this.buttons) {
+			if (button.clickRelease(button, x, y)) {
+				return true
+			}
+		}
+		return false
 	}
 	
 	draw() {
@@ -125,13 +134,16 @@ class ChatObject {
 			}
 			DRAW.text(s, 40, canvasHeight-20, "left")
 		}
-		BUTT_RED.draw()
 
+		for (let button of this.buttons) {
+			button.draw()
+		}
 	}
 
 	update(dt) {
 		this.timer = (this.timer + dt)%1
-		BUTT_RED.update(dt)
-
+		for (let button of this.buttons) {
+			button.update(dt)
+		}
 	}
 }

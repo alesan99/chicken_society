@@ -59,6 +59,6 @@ function removeNuggets(nuggets) {
 	SAVEDATA.nuggets -= nuggets
 }
 
-function addNuggets() {
+function addNuggets(nuggets) {
 	SAVEDATA.nuggets += nuggets
 }
