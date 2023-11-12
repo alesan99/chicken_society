@@ -10,8 +10,13 @@ class ChatObject {
 		this.timer = 0
 
 		this.buttons = []
-		this.buttons[0] = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, 235,534,32,37) 
+		this.buttons[0] = new Button(false, ()=>{PLAYER.emote("wave")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34) 
+		this.buttons[1] = new Button(false, ()=>{this.enter()}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, 661,535, 34,34) 
+		this.buttons[2] = new Button(false, ()=>{PLAYER.chatBubble("Customization Menu")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34) 
+		this.buttons[3] = new Button(false, ()=>{PLAYER.chatBubble("Map")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34) 
+		this.buttons[4] = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34) 
 
+		this.buttons[5] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0}, {visible: false}, 255,534, 406,36) 
 	}
 
 	enter() {
@@ -43,9 +48,6 @@ class ChatObject {
 					break
 				case "/emote": // Play emote animation
 					PLAYER.emote(arg)
-					if (NETPLAY != false) {
-						NETPLAY.sendEmote(arg)
-					}
 					break
 				case "/nuggets":
 					SAVEDATA.nuggets = Number(arg)
@@ -71,11 +73,17 @@ class ChatObject {
 
 	keyPress(key) {
 		if (((key == "/" || key == "\\") && !this.typing) || (key == "Escape" && this.typing)) {
+			// Start Typing
 			this.typing = !this.typing
 			this.open = !this.open
 		} else if (this.typing) {
+			// Add character to input bar
 			if (key.length == 1) {
-				this.value += key
+				// Only add character if it can fit
+				DRAW.setFont(FONT.caption)
+				if (DRAW.getTextWidth(this.value + key) < 396) {
+					this.value += key
+				}
 			} else if (key == "Backspace") {
 				this.value = this.value.substring(0, this.value.length-1)
 			} else if (key == "Enter") {
@@ -109,7 +117,7 @@ class ChatObject {
 	draw() {
 		// Placeholder graphic
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(IMG.chat, null, canvasWidth/2-IMG.chat.w/2, canvasHeight-IMG.chat.h)
+		DRAW.image(IMG.chat, SPRITE.chat.getFrame(0,0), 202, 525)
 
 		// Nugget display
 		let displayString = `✖ ${SAVEDATA.nuggets.toLocaleString()}`
@@ -122,21 +130,22 @@ class ChatObject {
 
 		DRAW.image(IMG.ammo, null, 904, 526)
 
-		// Display whats being typed
-		if (this.open) {
-			DRAW.setColor(0,0,0,0.5)
-			DRAW.rectangle(0, canvasHeight-40, canvasWidth, 30)
-			DRAW.setFont(FONT.caption)
-			DRAW.setColor(255,255,255,1)
-			let s = this.value
-			if (this.timer > 0.5) {
-				s += "|"
-			}
-			DRAW.text(s, 40, canvasHeight-20, "left")
-		}
-
+		// Render all buttons
 		for (let button of this.buttons) {
 			button.draw()
+		}
+
+		// Display whats being typed
+		if (this.open) {
+			// DRAW.setColor(0,0,0,0.5)
+			// DRAW.rectangle(0, canvasHeight-40, canvasWidth, 30)
+			DRAW.setFont(FONT.caption)
+			DRAW.setColor(0, 0, 0, 1)
+			let s = this.value
+			if (this.timer <= 0.5) {
+				s += "|"
+			}
+			DRAW.text(s, 262, canvasHeight-19, "left")
 		}
 	}
 

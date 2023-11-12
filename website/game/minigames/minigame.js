@@ -1,16 +1,14 @@
-// Minigame state; Runs a given minigame script while allowing the player to still chat and exit the game
+// Minigame state;
+// Runs a given minigame script while allowing the player to still chat and exit the game
 
+var MINIGAMES = {}
 class MinigameState {
 	constructor() {
 
 	}
 
 	load(minigameName) {
-		if (minigameName == "slots") {
-			this.minigame = MinigameSlots
-		} else if (minigameName == "runner") {
-			this.minigame = MinigameRunner
-		}
+		this.minigame = MINIGAMES[minigameName]
         this.minigame.load()
 	}
 

@@ -1,4 +1,4 @@
-const MinigameSlots = new class {
+MINIGAMES["slots"] = new class {
 	constructor() {
 		
 	}

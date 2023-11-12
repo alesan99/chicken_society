@@ -131,7 +131,7 @@ class Character extends PhysicsObject {
 
 		// Chicken and accessories
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(IMG.chicken, this.anim.getSprite(), this.x, this.y+this.imageOffsety, 0, this.flip, 1, 0.5, 1)
+		DRAW.image(IMG.chicken, this.anim.getFrame(), this.x, this.y+this.imageOffsety, 0, this.flip, 1, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
 		if ((this.accessory != false) && (IMG.accessory[this.accessory] != null) && (SPRITE.accessory[this.accessory] != null)) { // Accessory
@@ -142,7 +142,7 @@ class Character extends PhysicsObject {
 			DRAW.image(IMG.accessory[this.accessory], SPRITE.accessory[this.accessory].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
 
-		DRAW.image(IMG.chicken, this.anim.getSprite(null, 3), this.x, this.y+this.imageOffsety, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
+		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), this.x, this.y+this.imageOffsety, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
 		
 		if ((this.hat != false) && (IMG.hat[this.hat] != null) && (SPRITE.hat[this.hat] != null)) { // Hat
 			let x = this.x - (SPRITE.chicken.w/2)*this.flip + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
@@ -253,6 +253,10 @@ class Character extends PhysicsObject {
 		if (ANIM[i] != null) {
 			this.dir = "down"
 			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
+
+			if ((NETPLAY != false) && (this == PLAYER)) {
+				NETPLAY.sendEmote(arg)
+			}
 		}
 	}
 

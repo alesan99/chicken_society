@@ -33,6 +33,8 @@ function loadGameAssets() {
 	IMG.nugget = new RenderImage("assets/nugget.png")
 	IMG.ammo = new RenderImage("assets/hud/ammo.png")
 	IMG.chat = new RenderImage("assets/hud/chat.png")
+	SPRITE.chat = new Sprite(IMG.chat, 1,1, 620,51)
+	SPRITE.chatButton = new Sprite(IMG.chat, 3,5, 36,36, 0,51)
 
 	// Chicken Customization
 	// TODO: Clean up this horrible code
@@ -98,6 +100,7 @@ function loadGameAssets() {
 		})
 	}
 
+	FONT.pixel = new RenderFont("Pixel", 16)
 	FONT.big = new RenderFont("Arial", 40)
 	FONT.hud = new RenderFont("Arial", 28)
 	FONT.caption = new RenderFont("Arial", 20)

@@ -43,6 +43,7 @@ function convertMouseCoordsToScreen(mouseX, mouseY) {
 }
 
 function mouseMoved(event) {
+	event.preventDefault();
 	var pos = [event.clientX, event.clientY];
 	
 	[mouseScreenX, mouseScreenY] = convertMouseCoordsToScreen(pos[0], pos[1])
@@ -54,6 +55,7 @@ function getMousePos() {
 }
 
 function mouseClicked(event) {
+	event.preventDefault();
 	let [x, y] = getMousePos()
 	stateMouseClick(event.button, x, y)
 }
@@ -82,6 +84,7 @@ function convertTouchCoordsToScreen(mouseX, mouseY) {
 let touchX = 0
 let touchY = 0
 function touchStart(event) {
+	event.preventDefault();
 	var touch = event.touches[0];
 	[mouseScreenX, mouseScreenY] = convertTouchCoordsToScreen(touch.clientX, touch.clientY)
 
@@ -91,6 +94,7 @@ function touchEnd(event) {
 	stateMouseRelease(0, mouseScreenX, mouseScreenY)
 }
 function touchMoved(event) {
+	event.preventDefault();
 	var touch = event.touches[0];
 	[mouseScreenX, mouseScreenY] = convertTouchCoordsToScreen(touch.clientX, touch.clientY)
 }

@@ -101,7 +101,7 @@ class Animation {
 	}
 
 	// Returns x, y, w, h of current frame; offset gets a frame relative to the current frame
-	getSprite (offsetx=0 , offsety=0) {
+	getFrame (offsetx=0 , offsety=0) {
 		let sprite_frame = this.sprite.frame[this.framey+offsety][this.framex+offsetx]
 		return sprite_frame
 	}
@@ -122,7 +122,7 @@ class DrawableSprite {
 	draw () {
 		let anim = this.sprite.getFrame(0,0)
 		if (this.anim) {
-			anim = this.anim.getSprite(0,0)
+			anim = this.anim.getFrame(0,0)
 		}
 		DRAW.image(this.sprite.img, anim, this.drawx, this.drawy)
 	}

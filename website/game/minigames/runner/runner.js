@@ -5,7 +5,7 @@ let Fence
 let Ground
 let minigame
 
-const MinigameRunner = new class {
+MINIGAMES["runner"] = new class {
 	constructor() {
 		
 	}
@@ -25,6 +25,10 @@ const MinigameRunner = new class {
 		this.sprite.fence = new Sprite(this.img.fence, 3,1, 50,92)
 		this.img.background = new RenderImage("game/minigames/runner/background.png")
 
+		this.blinkAnim = 0
+		this.scoreAnim = 0
+		this.deadAnim = 0
+
 		this.start()
 		this.started = false
 	}
@@ -40,7 +44,7 @@ const MinigameRunner = new class {
 			ground: {}
 		}
 		this.world = new SpatialHash(canvasWidth, canvasHeight, canvasWidth)
-		this.objects["chicken"][0] = new RubberChicken(this.world, 0, 0)
+		this.objects["chicken"][0] = new RubberChicken(this.world, 0, canvasHeight-200-80)
 		this.chicken = this.objects["chicken"][0]
 		this.objects["ground"][0] = new Ground(this.world, 0, canvasHeight-200)
 
@@ -50,6 +54,12 @@ const MinigameRunner = new class {
 	}
 
 	update(dt) {
+		this.blinkAnim = (this.blinkAnim + dt) % 1
+		this.scoreAnim = Math.max(0, this.scoreAnim - 7*dt)
+		if (this.died) {
+			this.deadAnim = (this.deadAnim + 3*dt) % (Math.PI*2)
+		}
+
 		if (this.started != true) {
 			return true
 		}
@@ -113,21 +123,43 @@ const MinigameRunner = new class {
 		DRAW.image(this.img.arcadeCabinet)
 
 		// Score
-		DRAW.setColor(0,0,0,1.0)
-		DRAW.setFont(FONT.hud)
-		DRAW.text("Highscore: " + this.highscore,630,80)
-		DRAW.text("Score: " + this.score,630,110)
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.setFont(FONT.pixel)
+		let scale = 1+easing("easeInQuad", this.scoreAnim)*0.1
+		let highScale = 1
+		if (this.scoreAnim > 1) {
+			scale = 1+easing("easeOutCubic", (2-this.scoreAnim))*0.1
+		}
+		if (this.score == this.highscore) {
+			highScale = scale
+		}
+		DRAW.text("Highscore: " + this.highscore, 620,80, "left", 0, highScale,highScale)
+		DRAW.text("Score: " + this.score, 620,110, "left", 0, scale,scale)
 
 		// Start?
-		DRAW.setFont(FONT.big)
+		DRAW.setFont(FONT.pixel)
 		if (this.died) {
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2,"center")
+			DRAW.setColor(0,0,0,1.0)
+			DRAW.text("DIED",canvasWidth/2-4,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2+4,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,canvasHeight/2-4,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,canvasHeight/2+4,"center",Math.sin(this.deadAnim)*0.2,2,2)
 			if (this.score == this.highscore) {
-				DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+100,"center")
+				DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+100,"center",0,2,2)
 			}
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.text("DIED",canvasWidth/2,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
 		} else if (this.started != true) {
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50,"center")
-			DRAW.text("Press anything to start!",canvasWidth/2,canvasHeight/2+100,"center")
+			DRAW.setColor(0,0,0,1.0)
+			DRAW.text("CHICKEN RUN",canvasWidth/2-4,canvasHeight/2-50,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2+4,canvasHeight/2-50,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50-4,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50+4,"center",0,3,3)
+			if (this.blinkAnim > 0.5) {
+				DRAW.text("Press anything to start!",canvasWidth/2,canvasHeight/2+100,"center",0,1,1)
+			}
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50,"center",0,3,3)
 		}
 		
 		// DEBUG physics
@@ -150,6 +182,7 @@ const MinigameRunner = new class {
 
 	addPoint() {
 		this.score += 1
+		this.scoreAnim = 2
 		if (this.score%10 == 0) {
 			addNuggets(1)
 		}
@@ -259,7 +292,7 @@ RubberChicken = class extends PhysicsObject {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.shadow, null, this.x-x, canvasHeight-200, 0, 0.8,1, 0.5,0.5)
 
-		DRAW.image(minigame.img.chicken, this.anim.getSprite(), this.x-x, this.y, this.rotation, 1,1, 0.5,0.5)
+		DRAW.image(minigame.img.chicken, this.anim.getFrame(), this.x-x, this.y, this.rotation, 1,1, 0.5,0.5)
 	}
 }
 Ground = class extends PhysicsObject {
@@ -297,7 +330,7 @@ Fence = class extends PhysicsObject {
 		this.x = x
 		this.y = y
 		this.w = 20
-		this.h = 80
+		this.h = 60
 
 		this.shape = new Shape(
 			-this.w/2,-this.h/2,

@@ -133,6 +133,11 @@ class World {
 					let func = false
 					// trig.action is a string describing what the trigger should do, create a function based on that
 					let action = trig.action
+					if (trig.cost && trig.icon) {
+						trig.icon.text = trig.cost
+					}
+					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, null, trig.shape, trig.icon, trig.clickRegion)
+					
 					if (action == "minigame") {
 						// Start minigame
 						func = function() {
@@ -143,15 +148,14 @@ class World {
 
 							PLAYER.static = true // Don't let player move
 							Transition.start("wipeLeft", "out", 0.8, null, () => {
+								OBJECTS["Trigger"][name].reset()
 								setState(MINIGAME, trig.minigameName) // Start minigame after transition
 								Transition.start("wipeRight", "in", 0.8, null, null)
 							})
 						}
 					}
-					if (trig.cost && trig.icon) {
-						trig.icon.text = trig.cost
-					}
-					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, func, trig.shape, trig.icon, trig.clickRegion)
+
+					OBJECTS["Trigger"][name].action = func
 				}
 			}
 

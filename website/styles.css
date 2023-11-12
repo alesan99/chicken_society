@@ -24,3 +24,10 @@ body, html {
 	border: 3px solid rgb(221, 205, 57);
 	padding: 10px;
 }
+
+/* Load fonts */
+@font-face {
+	font-family: 'Pixel';
+	src: url('assets/fonts/publicpixel.ttf') format('truetype');
+	/* You can include additional font formats here for better browser compatibility */
+}

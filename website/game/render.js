@@ -35,19 +35,21 @@ class Render {
 
 	// Draw image
 	// ImageObject, [image bounds (x, y, w, h)] or null, x pos., y pos., rotation, scale x, scale y, offset x, offset y
-	image(img, anim, x, y, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
-		this.push() // save current render state to undo all transformations
+	image(img, anim, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
+		let transform = ((r != 0) || (sx != 1) || (sy != 1) || (ox != 0) || (ox != 0)) // For perfomance reasons, only attempt to transform if settings are not default
+		if (transform) {
+			// Transform image
+			this.push() // save current render state to undo all transformations
+			this.c.translate(Math.floor(x), Math.floor(y))
+			this.c.rotate(r)
+			this.c.scale(sx, sy)
+		}
 
 		// Get dimensions of image
 		let [qx, qy, qw, qh] = [0, 0, img.w, img.h]
 		if (anim) {
 			[qx, qy, qw, qh] = anim
 		}
-
-		// Transform image
-		this.c.translate(Math.floor(x), Math.floor(y))
-		this.c.rotate(r)
-		this.c.scale(sx, sy)
 		
 		// Recolor image if possible, then render image
 		let color = this.color
@@ -56,9 +58,12 @@ class Render {
 			img.setColor(color[0],color[1],color[2],color[3])
 			image = img.canvas
 		}
-		this.c.drawImage(image, qx, qy, qw, qh, -qw*ox, -qh*oy, qw, qh)
-
-		this.pop() // undo all transformations
+		if (!transform) {
+			this.c.drawImage(image, qx, qy, qw, qh, x, y, qw, qh)
+		} else {
+			this.c.drawImage(image, qx, qy, qw, qh, -qw*ox, -qh*oy, qw, qh)
+			this.pop() // undo all transformations
+		}
 	}
 
 	// Draw primitives
@@ -121,8 +126,24 @@ class Render {
 		}
 	}
 
-	text(string, x, y, align="left") {
+	// Get width of text when using the current font.
+	getTextWidth(text) {
+		return this.c.measureText(text).width
+	}
+
+	// Render Text with optional transformations
+	text(string, x, y, align="left", r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
 		this.c.textAlign = align // left, right, center
+
+		let transform = ((r != 0) || (sx != 1) || (sy != 1) || (ox != 0) || (ox != 0)) // For perfomance reasons, only attempt to transform if settings are not default
+		if (transform) {
+			// Transform image
+			this.push() // save current render state to undo all transformations
+			this.c.translate(Math.floor(x), Math.floor(y))
+			this.c.rotate(r)
+			this.c.scale(sx, sy)
+		}
+
 		if (this.fontOutline) {
 			// Draw outline by rendering font with thick line strokes
 			// Preserve old color and line width to not interfere with later draw calls
@@ -136,7 +157,12 @@ class Render {
 			this.setLineWidth(oldLineWidth)
 			this.c.miterLimit = oldMiterLimit
 		}
-		this.c.fillText(string, x, y)
+		if (!transform) {
+			this.c.fillText(string, x, y)
+		} else {
+			this.c.fillText(string, -ox, -oy)
+			this.pop() // undo all transformations
+		}
 	}
 
 	setLineWidth(thickness) {
