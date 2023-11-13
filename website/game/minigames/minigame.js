@@ -29,6 +29,9 @@ class MinigameState {
 
 	// Exit minigame
 	exit() {
+		if (Transition.playing()==true){
+			return
+		}
         Transition.start("wipeLeft", "out", 0.8, null, () => {
 			// Unload minigame assets
 			if (this.minigame.exit) {
