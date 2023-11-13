@@ -1,6 +1,6 @@
 //Customize Player Menu; Menu with options to modify player profile and customize chicken
 
-MENUS["customizeMenu"] = new class extends Menu {
+MENUS["customization"] = new class extends Menu {
 	//Initialize
 	constructor () {
 		super(234,104, 560,350)

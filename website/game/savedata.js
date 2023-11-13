@@ -47,6 +47,7 @@ function makeSaveData() {
 	let saveData = {
 		hats: ["none"],
 		accessories: ["none"],
+		items: [],
 		
 		pets: [],
 
@@ -70,4 +71,38 @@ function removeNuggets(nuggets) {
 
 function addNuggets(nuggets) {
 	SAVEDATA.nuggets += nuggets
+}
+
+function spendNuggets(cost) {
+	if (SAVEDATA.nuggets >= cost) {
+		removeNuggets(cost)
+		return true
+	} else {
+		return false
+	}
+}
+
+// Get items like clothing and consumables
+function addItem(type, id) {
+	let category = "items"
+	if (type == "hat") {
+		category = "hats"
+	} else if (type == "accessory") {
+		category = "accessories"
+	}
+	SAVEDATA[category].push(id)
+}
+
+function removeItem(type, id) {
+	let category = "items"
+	if (type == "hat") {
+		category = "hats"
+	} else if (type == "accessory") {
+		category = "accessories"
+	}
+	const indexToRemove = SAVEDATA[category].indexOf(id)
+
+	if (indexToRemove !== -1) {
+		SAVEDATA[category].splice(indexToRemove, 1);
+	}
 }

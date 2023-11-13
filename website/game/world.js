@@ -124,7 +124,7 @@ class World {
 			if (data.NPCs) {
 				for (const [name, npc] of Object.entries(data.NPCs)) {
 					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
-					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius, npc.clickRegion)
+					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius, npc.clickRegion, npc.shop)
 				}
 			}
 			

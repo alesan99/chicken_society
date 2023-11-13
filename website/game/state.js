@@ -66,12 +66,12 @@ function stateScroll(dy) {
 }
 
 // Open pop-up menu
-function openMenu(name) {
+function openMenu(name, args) {
 	if (open_menu) {
 		closeMenu()
 	}
 	open_menu = name
-	MENUS[name].load()
+	MENUS[name].load(args)
 }
 
 function closeMenu() {

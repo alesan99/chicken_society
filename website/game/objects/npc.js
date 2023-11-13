@@ -2,7 +2,7 @@
 
 class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around
-	constructor (obj, dialogue, facing="down", roamRadius, clickRegion) {
+	constructor (obj, dialogue, facing="down", roamRadius, clickRegion, shop) {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
@@ -19,11 +19,22 @@ class NPC {
         this.walkTimer = this.walkTime
         this.dir = [1, 0] // Walking direction vector
 
+        // Behavior
+        this.shop = shop // Open up shopping menu to prompt player to buy stuff
+
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
         let range = 50
         let defaultClickRegion = [-40,-100,80,120]
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, () => this.speak(), [-range,-range, range,-range, range,range, -range,range], {frame:0,x:0,y:-120}, clickRegion || defaultClickRegion))
+        let func = () => {
+            // Speak when clicked or near
+            this.speak()
+            // Open shop if specified
+            if (this.shop) {
+                openMenu("shop", this.shop)
+            }
+        }
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, [-range,-range, range,-range, range,range, -range,range], {frame:0,x:0,y:-120}, clickRegion || defaultClickRegion))
 	}
 
 	// Update
