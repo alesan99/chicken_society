@@ -80,7 +80,9 @@ function loadGameAssets() {
 		HAT[name].image = new RenderImage(`assets/hats/${name}.png`, async)
 		HAT[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
 		HAT[name].cost = 0
+		HAT[name].name = ""
 		loadJSON(`assets/hats/${name}.json`, (data) => {
+			HAT[name].name = data.name
 			HAT[name].center = data.center
 			HAT[name].cost = data.cost
 		})
@@ -100,7 +102,9 @@ function loadGameAssets() {
 		ACCESSORY[name].image = new RenderImage(`assets/accessories/${name}.png`, async)
 		ACCESSORY[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
 		ACCESSORY[name].cost = 0
+		ACCESSORY[name].name = ""
 		loadJSON(`assets/accessories/${name}.json`, (data) => {
+			ACCESSORY[name].name = data.name
 			ACCESSORY[name].center = data.center
 			ACCESSORY[name].cost = data.cost
 		})

@@ -38,7 +38,17 @@ MENUS["shop"] = new class extends Menu {
 
 	// TODO: maybe this should be in a different file so items can also be earned in other ways?
 	buyItem(itemType, itemId) {
-		if (spendNuggets(1)) {
+		let item = ITEM[itemId]
+		if (itemType == "hat") { // TODO: Handle this better
+			item = HAT[itemId]
+		} else if (itemType == "accessory") {
+			item = ACCESSORY[itemId]
+		} else if (itemType == "item") {
+			item = ITEM[itemId]
+		} else if (itemType == "furniture") {
+			item = FURNITURE[itemId]
+		}
+		if (spendNuggets(item.cost)) {
 			addItem(itemType, itemId)
 		}
 	}
