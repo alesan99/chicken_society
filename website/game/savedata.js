@@ -45,6 +45,11 @@ function makeProfile() {
 
 function makeSaveData() {
 	let saveData = {
+		hats: ["none"],
+		accessories: ["none"],
+		
+		pets: [],
+
 		items: [],
 		house: [],
 		furniture: [],

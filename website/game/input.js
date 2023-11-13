@@ -14,10 +14,6 @@ document.addEventListener("mousemove", mouseMoved)
 canvas.addEventListener("touchstart", touchStart)
 canvas.addEventListener("touchend", touchEnd)
 canvas.addEventListener("touchmove", touchMoved)
-// Prevent scrolling when touching the canvas
-// document.body.addEventListener("touchstart", function (e) { if (e.target == canvas) { e.preventDefault(); }}, false)
-// document.body.addEventListener("touchend", function (e) {if (e.target == canvas) { e.preventDefault(); }}, false)
-// document.body.addEventListener("touchmove", function (e) { if (e.target == canvas) { e.preventDefault(); }}, false)
 
 // Keyboard inputs
 function keyPressed(event) {
@@ -70,6 +66,11 @@ function mouseScroll(event) {
 	return delta
 }
 
+function checkMouseInside(x, y, w, h) {
+	// Check if mouse is inside a box
+	return ((mouseScreenX > x) && (mouseScreenX < x+w) && (mouseScreenY > y) && (mouseScreenY < y+h))
+}
+
 // Handle touches. Convert one touch to a mouse input
 function convertTouchCoordsToScreen(mouseX, mouseY) {
 	var rect = canvas.getBoundingClientRect() // abs. size of element
@@ -84,11 +85,11 @@ function convertTouchCoordsToScreen(mouseX, mouseY) {
 let touchX = 0
 let touchY = 0
 function touchStart(event) {
-	event.preventDefault();
 	var touch = event.touches[0];
 	[mouseScreenX, mouseScreenY] = convertTouchCoordsToScreen(touch.clientX, touch.clientY)
 
 	stateMouseClick(0, mouseScreenX, mouseScreenY)
+	event.preventDefault();
 }
 function touchEnd(event) {
 	stateMouseRelease(0, mouseScreenX, mouseScreenY)

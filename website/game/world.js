@@ -32,7 +32,8 @@ class World {
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
 
 		// HUD
-		CHAT = new ChatObject()
+		CHAT = MENUS["chatMenu"]
+		CHAT.load()
 
 		// Minigames
 		MINIGAME = new MinigameState()

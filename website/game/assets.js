@@ -29,12 +29,15 @@ function loadGameAssets() {
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
 
-	// HUD
+	// CHAT MENU & HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")
 	IMG.ammo = new RenderImage("assets/hud/ammo.png")
 	IMG.chat = new RenderImage("assets/hud/chat.png")
 	SPRITE.chat = new Sprite(IMG.chat, 1,1, 620,51)
 	SPRITE.chatButton = new Sprite(IMG.chat, 3,5, 36,36, 0,51)
+
+	// MENUS
+	IMG.menu = new RenderImage("assets/gui/menu.png")
 
 	// Chicken Customization
 	// TODO: Clean up this horrible code

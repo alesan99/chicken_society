@@ -1,8 +1,3 @@
-let menus = []
-let menu_state = ""
-let menu_open = false
-let gamestate = ""
-
 var CURSOR = {on: false, cursor: "auto"}
 
 PROFILE = makeProfile()
@@ -34,12 +29,8 @@ function gameUpdate(dt) {
 	CURSOR.on = false
 
 	stateUpdate(dt)
-	Transition.update(dt)
 
-	// Is menu open?
-	if (menu_open) {
-		menus[menu_state].update(dt)
-	}
+	Transition.update(dt)
 
 	// Set cursor at last
 	let targetCursor = "auto"
@@ -60,12 +51,8 @@ function gameDraw() {
 	DRAW.push()
 
 	stateDraw()
-	Transition.draw()
 
-	// Is menu open?
-	if (menu_open) {
-		menus[menu_state].draw()
-	}
+	Transition.draw()
 
 	// Display FPS
 	DRAW.setColor(255,255,255,1.0)

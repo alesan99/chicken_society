@@ -40,16 +40,19 @@ class Trigger extends PhysicsObject {
 	update(dt) {
 		// Is mouse inside clickable region?
 		if (this.clickRegion) {
-			let [mouseX, mouseY] = getMousePos()
-	
-			let cr = this.clickRegion
-			if ((this.activated == false) && mouseX-this.x > cr.x && mouseY-this.y > cr.y && mouseX-this.x < cr.x+cr.w && mouseY-this.y < cr.y+cr.h) {
+			if ((this.activated == false) && this.checkMouseOver()) {
 				this.mouseOver = true
 				CURSOR.on = true
 			} else {
 				this.mouseOver = false
 			}
 		}
+	}
+
+	checkMouseOver() {
+		let [mouseX, mouseY] = getMousePos()
+		let cr = this.clickRegion
+		return (mouseX-this.x > cr.x && mouseY-this.y > cr.y && mouseX-this.x < cr.x+cr.w && mouseY-this.y < cr.y+cr.h)
 	}
 
 	draw() {
@@ -100,7 +103,7 @@ class Trigger extends PhysicsObject {
     }
 
 	click(button, x, y) {
-		if (this.clickRegion && this.mouseOver) {
+		if (this.clickRegion && ((this.activated == false) && this.checkMouseOver())) {
 			this.doAction()
 			return true
 		}

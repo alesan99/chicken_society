@@ -1,18 +1,21 @@
-//Chat Object; Open up menu with 
-var BUTT_RED
+//Chat Menu; Menu with input field for chat messages and buttons for emotes and settings
 
-class ChatObject {
+MENUS["chatMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {
+		super(202,525, 620,51)
+	}
+
+	load() {
 		this.value = ""
 		this.open = false
 		this.typing = false
 		this.timer = 0
 
-		this.buttons = []
+		this.buttons = {}
 		this.buttons[0] = new Button(false, ()=>{PLAYER.emote("wave")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34) 
 		this.buttons[1] = new Button(false, ()=>{this.enter()}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, 661,535, 34,34) 
-		this.buttons[2] = new Button(false, ()=>{PLAYER.chatBubble("Customization Menu")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34) 
+		this.buttons[2] = new Button(false, ()=>{openMenu("customizeMenu")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34) 
 		this.buttons[3] = new Button(false, ()=>{PLAYER.chatBubble("Map")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34) 
 		this.buttons[4] = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34) 
 
@@ -97,21 +100,11 @@ class ChatObject {
 	}
 
 	mouseClick(button, x, y) {
-		for (let button of this.buttons) {
-			if (button.click(button, x, y)) {
-				return true
-			}
-		}
-		return false
+		return super.mouseClick(button, x, y)
 	}
 
 	mouseRelease(button, x, y) {
-		for (let button of this.buttons) {
-			if (button.clickRelease(button, x, y)) {
-				return true
-			}
-		}
-		return false
+		return super.mouseRelease(button, x, y)
 	}
 	
 	draw() {
@@ -131,9 +124,7 @@ class ChatObject {
 		DRAW.image(IMG.ammo, null, 904, 526)
 
 		// Render all buttons
-		for (let button of this.buttons) {
-			button.draw()
-		}
+		this.drawButtons()
 
 		// Display whats being typed
 		if (this.open) {
@@ -151,8 +142,6 @@ class ChatObject {
 
 	update(dt) {
 		this.timer = (this.timer + dt)%1
-		for (let button of this.buttons) {
-			button.update(dt)
-		}
+		this.updateButtons(dt)
 	}
-}
+}()

@@ -33,6 +33,7 @@ class Button {
     }
 
     click(){
+        this.hover = this.checkMouseInside();
         if (this.hover) {//this should only click if you're hovering over the button
             this.holding = true
             return true
