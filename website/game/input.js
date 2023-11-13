@@ -17,10 +17,18 @@ canvas.addEventListener("touchmove", touchMoved)
 
 // Keyboard inputs
 function keyPressed(event) {
+	if (event.target.tagName.toLowerCase() === 'input') {
+		// Input field is focused, allow default action
+		return;
+	}
 	event.preventDefault()
 	stateKeyPress(event.key, event.code)
 }
 function keyReleased(event) {
+	if (event.target.tagName.toLowerCase() === 'input') {
+		// Input field is focused, allow default action
+		return;
+	}
 	event.preventDefault()
 	stateKeyRelease(event.key, event.code)
 }

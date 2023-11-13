@@ -29,6 +29,9 @@ app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/website/index.html");
 });
 
+// Handle logins
+require("./server/login.js")
+
 // Set up client syncing
 const {listenToClient} = require("./server/sync.js");
 

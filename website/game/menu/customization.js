@@ -8,7 +8,21 @@ MENUS["customization"] = new class extends Menu {
 
     load () {
 		this.buttons = {}
-		this.buttons[0] = new Button("Confirm", ()=>{closeMenu()}, null, 665,399, 100,32)
+		this.buttons["confirm"] = new Button("Confirm", ()=>{closeMenu()}, null, 665,399, 100,32)
+
+		// Profile loading from local browser storage (NOT from server)
+		this.buttons["load"] = new Button("Load", ()=>{
+			let data = loadSaveData();
+			if (data) {
+				SAVEDATA = data;
+				PROFILE = SAVEDATA.profile;
+				PLAYER.updateProfile(PROFILE, "sendToServer");
+			}
+		}, null, 445,399, 100,32)
+		this.buttons["save"] = new Button("Save", ()=>{
+			saveSaveData(SAVEDATA);
+			PROFILE = SAVEDATA.profile;
+		}, null, 555,399, 100,32)
 
         // Name
 		this.buttons[1] = new Button("Confirm", ()=>{}, null, 665,162, 100,32)

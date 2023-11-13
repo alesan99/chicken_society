@@ -1,7 +1,7 @@
 var CURSOR = {on: false, cursor: "auto"}
 
-PROFILE = makeProfile()
 SAVEDATA = makeSaveData()
+PROFILE = SAVEDATA.profile
 
 NETPLAY = false
 

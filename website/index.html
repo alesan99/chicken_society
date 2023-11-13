@@ -13,11 +13,12 @@
 	<div id="canvasContainer">
 		<canvas id="gameCanvas" width="1024" height="576"></canvas>
 	</div>
-	<!-- User login stuff -->
+	<!-- User login stuff action="https://yourdomain.com/login" method="post"-->
 	<div>
-		<form id="login-stuff">
-			<input id="username-field" class="login-stuff" type="text" placeholder="Username" maxlength="16" autocomplete="off">
-			<input id="login" type="submit" value="Login">
+		<form id="loginForm">
+			<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username" maxlength="16" autocomplete="off" required />
+			<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
+			<button id="login" class="login-stuff" type="button">Login</button>
 		</form>
 	</div>
 	<!-- Invisible text input used to force mobile devices to open keyboard -->
@@ -33,6 +34,8 @@
 	<!-- Run game code -->
 	<script src="game/canvas.js"></script>
 	<script src="game/render.js"></script>
+
+	<script src="game/login.js"></script>
 
 	<script src="game/vec2.js"></script>
 	<script src="game/shape.js"></script>
