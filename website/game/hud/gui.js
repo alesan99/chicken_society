@@ -68,6 +68,10 @@ class Button {
             }
             
             DRAW.rectangle(this.x, this.y, this.w, this.h);
+            DRAW.setFont(FONT.guiLabel)
+            DRAW.setColor(0,0,0,1)
+            DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, "center")
+            
         }
 
     }
