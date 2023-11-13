@@ -1,0 +1,41 @@
+{
+	"walls": [
+        [0,0, 1024,0, 1024,261, 0,261],
+
+        [952,261, 1024,261, 1024,576],
+
+        [0,576, 1024,576, 1024,600, 0,600]
+    ],
+
+    "warps": {
+        "alleywayExit": {
+            "to": "hub",
+            "fromWarp": "alleywayEntrance",
+            "facing": "right",
+            "x": 0,
+            "y": 408,
+            "w": 30,
+            "h": 300
+        }
+    },
+
+	"NPCs": {
+		"expert": {
+            "profile": {
+                "name": "???",
+                "color": [40, 80, 50],
+                "hat": false,
+                "accessory": false
+            },
+            "x": 810,
+            "y": 300,
+            "facing": "up",
+            "roamRadius": 30,
+            "dialogue": [
+                "I got the good stuff.",
+				"Money upfront.",
+                "How much do ya want?"
+			]
+        }
+    }
+}

@@ -32,6 +32,15 @@
             "y": 386,
             "w": 50,
             "h": 40
+        },
+        "alleywayEntrance": {
+            "to": "alleyway",
+            "fromWarp": "alleywayExit",
+            "facing": "left",
+            "x": 859,
+            "y": 301,
+            "w": 40,
+            "h": 70
         }
     },
 
