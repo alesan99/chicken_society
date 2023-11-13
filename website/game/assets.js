@@ -4,6 +4,7 @@ IMG = []
 SPRITE = []
 ANIM = []
 FONT = []
+
 BACKGROUND = []
 BACKGROUNDIMG = []
 BACKGROUNDSPRITE = []
@@ -67,41 +68,47 @@ function loadGameAssets() {
 		0,0,0,0,0,0,-Math.PI*0.5,0
 	]
 	// List of all hats to load
-	IMG.hat = {}
-	SPRITE.hat = {}
-	IMG.hat["tophat"] = true
-	IMG.hat["visors"] = true
+	HAT = {}
+	HAT["tophat"] = {}
+	HAT["visors"] = {}
 
-	for (const [name, value] of Object.entries(IMG.hat)) {
+	for (const [name, value] of Object.entries(HAT)) {
 		// Load image, create sprite frames when image is loaded, and load hat centers from JSON
 		let async = function() {
-			SPRITE.hat[name] = new Sprite(IMG.hat[name], 1, 3, IMG.hat[name].w,(IMG.hat[name].h-2)/3, 0,0, 1,1)
+			HAT[name].sprite = new Sprite(HAT[name].image, 1, 3, HAT[name].image.w,(HAT[name].image.h-2)/3, 0,0, 1,1)
 		}
-		IMG.hat[name] = new RenderImage(`assets/hats/${name}.png`, async)
-		IMG.hat[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+		HAT[name].image = new RenderImage(`assets/hats/${name}.png`, async)
+		HAT[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+		HAT[name].cost = 0
 		loadJSON(`assets/hats/${name}.json`, (data) => {
-			IMG.hat[name].center = data.center
+			HAT[name].center = data.center
+			HAT[name].cost = data.cost
 		})
 	}
 	// List of all accessories to load
-	IMG.accessory = {}
-	SPRITE.accessory = {}
-	IMG.accessory["scarf"] = true
-	IMG.accessory["chains"] = true
-	IMG.accessory["beefcakeaccessories"] = true
-	IMG.accessory["alesanaccessories"] = true
+	ACCESSORY = {}
+	ACCESSORY["scarf"] = {}
+	ACCESSORY["chains"] = {}
+	ACCESSORY["beefcakeaccessories"] = {}
+	ACCESSORY["alesanaccessories"] = {}
 
-	for (const [name, value] of Object.entries(IMG.accessory)) {
+	for (const [name, value] of Object.entries(ACCESSORY)) {
 		// Load image, create sprite frames when image is loaded, and load accessory centers from JSON
 		let async = function() {
-			SPRITE.accessory[name] = new Sprite(IMG.accessory[name], 1, 3, IMG.accessory[name].w, (IMG.accessory[name].h-2)/3, 0,0, 1,1)
+			ACCESSORY[name].sprite = new Sprite(ACCESSORY[name].image, 1, 3, ACCESSORY[name].image.w, (ACCESSORY[name].image.h-2)/3, 0,0, 1,1)
 		}
-		IMG.accessory[name] = new RenderImage(`assets/accessories/${name}.png`, async)
-		IMG.accessory[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
+		ACCESSORY[name].image = new RenderImage(`assets/accessories/${name}.png`, async)
+		ACCESSORY[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
+		ACCESSORY[name].cost = 0
 		loadJSON(`assets/accessories/${name}.json`, (data) => {
-			IMG.accessory[name].center = data.center
+			ACCESSORY[name].center = data.center
+			ACCESSORY[name].cost = data.cost
 		})
 	}
+
+	// List of all items to load
+	FURNITURE = {}
+	ITEM = {}
 
 	FONT.pixel = new RenderFont("Pixel", 16)
 	FONT.big = new RenderFont("Arial", 40)

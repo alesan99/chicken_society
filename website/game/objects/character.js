@@ -135,22 +135,24 @@ class Character extends PhysicsObject {
 		DRAW.image(IMG.chicken, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip, 1, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
-		if ((this.accessory != false) && (IMG.accessory[this.accessory] != null) && (SPRITE.accessory[this.accessory] != null)) { // Accessory
+		if ((this.accessory != false) && (ACCESSORY[this.accessory] != null) && (ACCESSORY[this.accessory].sprite != null)) { // Accessory
+			// Figure out the center of the accessory to place it on the center of the chicken's 'neck'
 			let x = drawX - (SPRITE.chicken.w/2)*this.flip + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
 			let y = drawY+this.imageOffsety - SPRITE.chicken.h + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
-			let centerX = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][0]/SPRITE.accessory[this.accessory].w
-			let centerY = IMG.accessory[this.accessory].center[dir_lookup[this.dir]][1]/SPRITE.accessory[this.accessory].h
-			DRAW.image(IMG.accessory[this.accessory], SPRITE.accessory[this.accessory].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
+			let centerX = ACCESSORY[this.accessory].center[dir_lookup[this.dir]][0]/ACCESSORY[this.accessory].sprite.w
+			let centerY = ACCESSORY[this.accessory].center[dir_lookup[this.dir]][1]/ACCESSORY[this.accessory].sprite.h
+			DRAW.image(ACCESSORY[this.accessory].image, ACCESSORY[this.accessory].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
 
 		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
 		
-		if ((this.hat != false) && (IMG.hat[this.hat] != null) && (SPRITE.hat[this.hat] != null)) { // Hat
+		if ((this.hat != false) && (HAT[this.hat] != null) && (HAT[this.hat].sprite != null)) { // Hat
+			// Figure out the center of the hat to place it on the center of the chicken's head
 			let x = drawX - (SPRITE.chicken.w/2)*this.flip + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
 			let y = drawY+this.imageOffsety - SPRITE.chicken.h + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
-			let centerX = IMG.hat[this.hat].center[dir_lookup[this.dir]][0]/SPRITE.hat[this.hat].w
-			let centerY = IMG.hat[this.hat].center[dir_lookup[this.dir]][1]/SPRITE.hat[this.hat].h
-			DRAW.image(IMG.hat[this.hat], SPRITE.hat[this.hat].getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
+			let centerX = HAT[this.hat].center[dir_lookup[this.dir]][0]/HAT[this.hat].sprite.w
+			let centerY = HAT[this.hat].center[dir_lookup[this.dir]][1]/HAT[this.hat].sprite.h
+			DRAW.image(HAT[this.hat].image, HAT[this.hat].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
 		}
 	}
 

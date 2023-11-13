@@ -16,9 +16,18 @@ MENUS["shop"] = new class extends Menu {
 		for (let i = 0; i < this.items.length; i++) {
 			let itemId = this.items[i][1]
 			let itemType = this.items[i][0]
-			let itemName = itemId
-			let item = itemName // TODO: store item .json information somewhere
-			let price = 0
+			let item = ITEM[itemId]
+			if (itemType == "hat") { // TODO: Handle this better
+				item = HAT[itemId]
+			} else if (itemType == "accessory") {
+				item = ACCESSORY[itemId]
+			} else if (itemType == "item") {
+				item = ITEM[itemId]
+			} else if (itemType == "furniture") {
+				item = FURNITURE[itemId]
+			}
+			let itemName = item.name
+			let price = item.cost
 
 			let itemButton = new Button(itemName, ()=>{}, null, 250,160+(40*i), 240,32)
 			let buyButton = new Button(price, ()=>{this.buyItem(itemType, itemId)}, null, 510,160+(40*i), 70,32)
