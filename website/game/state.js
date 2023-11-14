@@ -1,4 +1,6 @@
-//Functions to interact with states
+// State Handler; Handles which "mode" the game is currently in.
+// For example: the world shouldn't update if you're playing a minigame
+// Functions to interact with states
 let game_state = false
 let game_state_name = ""
 let open_menu = false
@@ -76,4 +78,11 @@ function openMenu(name, args) {
 
 function closeMenu() {
 	open_menu = false
+}
+
+function getOpenMenu() {
+	if (open_menu) {
+		return open_menu
+	}
+	return false
 }

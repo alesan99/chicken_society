@@ -25,26 +25,34 @@ MENUS["customization"] = new class extends Menu {
 		}, null, 555,399, 100,32)
 
         // Name
-		this.buttons[1] = new Button("Confirm", ()=>{}, null, 665,162, 100,32)
+		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 665,162, 100,32)
         // Color
-		this.buttons[2] = new Button("Random", ()=>{
+		this.buttons["color"] = new Button("Random", ()=>{
             PROFILE.color = [Math.floor(100 + Math.random()*155),
                 Math.floor(100 + Math.random()*155),
                 Math.floor(100 + Math.random()*155)];
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 665,202, 100,32)
         // Hat
-		this.buttons[3] = new Button("Random", ()=>{
+		this.buttons["hatLeft"] = new Button("<", ()=>{
             PROFILE.hat = SAVEDATA.hats[Math.floor(Math.random()*SAVEDATA.hats.length)];
             PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 665,242, 100,32)
+        }, null, 605,242, 32,32)
+		this.buttons["hatRight"] = new Button(">", ()=>{
+            PROFILE.hat = SAVEDATA.hats[Math.floor(Math.random()*SAVEDATA.hats.length)];
+            PLAYER.updateProfile(PROFILE, "sendToServer");
+        }, null, 733,242, 32,32)
         // Accessory
-		this.buttons[4] = new Button("Random", ()=>{
+		this.buttons["accessoryLeft"] = new Button("<", ()=>{
             PROFILE.accessory = SAVEDATA.accessories[Math.floor(Math.random()*SAVEDATA.accessories.length)];
 			PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 665,282, 100,32)
+        }, null, 605,282, 32,32)
+		this.buttons["accessoryRight"] = new Button(">", ()=>{
+            PROFILE.accessory = SAVEDATA.accessories[Math.floor(Math.random()*SAVEDATA.accessories.length)];
+			PLAYER.updateProfile(PROFILE, "sendToServer");
+        }, null, 733,282, 32,32)
         // Pet
-		this.buttons[5] = new Button("Confirm", ()=>{}, null, 665,322, 100,32)
+		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,322, 100,32)
     }
 
 	keyPress(key) {
@@ -70,15 +78,17 @@ MENUS["customization"] = new class extends Menu {
         // Text
         DRAW.setColor(112, 50, 16, 1.0)
         DRAW.setFont(FONT.caption)
-        DRAW.text("Chicken Profile", 520, 142, "center")
+        DRAW.text("Chicken Profile", 512, 142, "center")
 
-        DRAW.text("Display Name", 520, 184, "left")
-        DRAW.text("Color", 520, 224, "left")
-        DRAW.text("Hat", 520, 264, "left")
-        DRAW.text("Accessory", 520, 304, "left")
-        DRAW.text("Pet", 520, 344, "left")
+        DRAW.text("Display Name", 460, 184, "left")
+        DRAW.text("Color", 460, 224, "left")
+        DRAW.text("Hat", 460, 264, "left")
+        DRAW.text(PROFILE.hat, 686, 264, "center")
+        DRAW.text("Accessory", 460, 304, "left")
+        DRAW.text(PROFILE.accessory, 686, 304, "center")
+        DRAW.text("Pet", 460, 344, "left")
 
-        PLAYER.draw(362,340)
+        PLAYER.draw(342,340)
 
 		// Render all buttons
 		this.drawButtons()
