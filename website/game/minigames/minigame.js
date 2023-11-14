@@ -10,10 +10,14 @@ class MinigameState {
 	load(minigameName) {
 		this.minigame = MINIGAMES[minigameName]
         this.minigame.load()
+
+		this.exitButton = new Button("Exit", () => {this.exit()}, null, 900,50, 80,80)
 	}
 
 	update(dt) {
         this.minigame.update(dt)
+
+		this.exitButton.update(dt)
 
 		// HUD
 		CHAT.update(dt)
@@ -22,6 +26,8 @@ class MinigameState {
 	draw() {
         // Render minigame contents
         this.minigame.draw()
+
+		this.exitButton.draw()
 		
 		// HUD
 		CHAT.draw()
@@ -61,7 +67,20 @@ class MinigameState {
 	}
 
 	mouseClick(button, x, y) {
+		if (this.exitButton.click()) {
+			return true
+		}
 		// Control minigame
         this.minigame.mouseClick(button, x, y)
+	}
+
+	mouseRelease(button, x, y) {
+		if (this.exitButton.clickRelease()) {
+			return true
+		}
+		// Control minigame
+		if (this.minigame.mouseRelease) {
+			this.minigame.mouseRelease(button, x, y)
+		}
 	}
 }

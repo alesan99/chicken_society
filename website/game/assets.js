@@ -67,8 +67,16 @@ function loadGameAssets() {
 	CHICKENROTATION = [ // Rotation of chicken hat & accessory for each frame
 		0,0,0,0,0,0,-Math.PI*0.5,0
 	]
+
+	// Load all items
+	ITEMLIST = {
+		hats: {},
+		accessories: {},
+		furniture: {},
+		items: {}
+	}
 	// List of all hats to load
-	HAT = {}
+	HAT = ITEMLIST.hats
 	HAT["tophat"] = {}
 	HAT["visors"] = {}
 
@@ -88,7 +96,7 @@ function loadGameAssets() {
 		})
 	}
 	// List of all accessories to load
-	ACCESSORY = {}
+	ACCESSORY = ITEMLIST.accessories
 	ACCESSORY["scarf"] = {}
 	ACCESSORY["chains"] = {}
 	ACCESSORY["beefcakeaccessories"] = {}
@@ -111,8 +119,8 @@ function loadGameAssets() {
 	}
 
 	// List of all items to load
-	FURNITURE = {}
-	ITEM = {}
+	FURNITURE = ITEMLIST.furniture
+	ITEM = ITEMLIST.items
 
 	FONT.pixel = new RenderFont("Pixel", 16)
 	FONT.big = new RenderFont("Arial", 40)

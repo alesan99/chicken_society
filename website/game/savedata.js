@@ -151,3 +151,27 @@ function removeItem(type, id) {
 		SAVEDATA[category].splice(indexToRemove, 1);
 	}
 }
+
+function getItemData(id, type) {
+	let category
+	if (type) {
+		category = type
+	} else {
+		for (const cat in ITEMLIST) {
+			if (ITEMLIST[cat].includes(id)) {
+				category = cat
+				break
+			}
+		}
+	}
+
+	if (category == "hat") {
+		return HAT[id]
+	} else if (type == "accessory") {
+		return ACCESSORY[id]
+	} else if (type == "furniture") {
+		return FURNITURE[id]
+	} else {
+		return ITEM[id]
+	}
+}
