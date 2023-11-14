@@ -23,7 +23,7 @@ function loadGameAssets() {
 	ANIM.dance = [[1, 2, 5, 4, 6, 7, 6, 7], 0.3]
 	ANIM.sit = [[3], 99999]
 	ANIM.wave = [[4,5,4,5,4,5], 0.2]
-	ANIM.teabag = [[0,3,0,3,0,3,0,3,0,3], 0.15]
+	ANIM.tbag = [[0,3,0,3,0,3,0,3,0,3], 0.15]
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
@@ -36,6 +36,8 @@ function loadGameAssets() {
 	IMG.chat = new RenderImage("assets/hud/chat.png")
 	SPRITE.chat = new Sprite(IMG.chat, 1,1, 620,51)
 	SPRITE.chatButton = new Sprite(IMG.chat, 3,5, 36,36, 0,51)
+	IMG.emoteMenu = new RenderImage("assets/gui/emote.png")
+	SPRITE.emoteButton = new Sprite(IMG.emoteMenu, 3,7, 36,36, 0,110)
 
 	// MENUS
 	IMG.menu = new RenderImage("assets/gui/menu.png")

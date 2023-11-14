@@ -12,12 +12,16 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.typing = false
 		this.timer = 0
 
+		this.emoteMenu = MENUS["emoteMenu"]
+		this.emoteMenu.load()
+		this.emoteMenuOpen = false
+
 		this.buttons = {}
-		this.buttons[0] = new Button(false, ()=>{PLAYER.emote("wave")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34) 
+		this.buttons[0] = new Button(false, ()=>{this.emoteMenuOpen = !this.emoteMenuOpen}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34) 
 		this.buttons[1] = new Button(false, ()=>{this.enter()}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, 661,535, 34,34) 
-		this.buttons[2] = new Button(false, ()=>{openMenu("customization")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34) 
-		this.buttons[3] = new Button(false, ()=>{PLAYER.chatBubble("Map")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34) 
-		this.buttons[4] = new Button(false, ()=>{PLAYER.chatBubble("GET FUCKED")}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34) 
+		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34) 
+		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34) 
+		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34) 
 
 		this.buttons[5] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0}, {visible: false}, 255,534, 406,36) 
 	}
@@ -100,10 +104,25 @@ MENUS["chatMenu"] = new class extends Menu {
 	}
 
 	mouseClick(button, x, y) {
+		// Emote Menu
+		if (this.emoteMenuOpen) {
+			if (this.emoteMenu.mouseClick(button, x, y)) {
+				return true
+			} else {
+				this.emoteMenuOpen = false
+				return true
+			}
+		}
 		return super.mouseClick(button, x, y)
 	}
 
 	mouseRelease(button, x, y) {
+		// Emote Menu
+		if (this.emoteMenuOpen) {
+			if (this.emoteMenu.mouseRelease(button, x, y)) {
+				return true
+			}
+		}
 		return super.mouseRelease(button, x, y)
 	}
 	
@@ -138,10 +157,20 @@ MENUS["chatMenu"] = new class extends Menu {
 			}
 			DRAW.text(s, 262, canvasHeight-19, "left")
 		}
+
+		// Emote Menu
+		if (this.emoteMenuOpen) {
+			this.emoteMenu.draw()
+		}
 	}
 
 	update(dt) {
 		this.timer = (this.timer + dt)%1
 		this.updateButtons(dt)
+
+		// Emote Menu
+		if (this.emoteMenuOpen) {
+			this.emoteMenu.update(dt)
+		}
 	}
 }()
