@@ -4,18 +4,22 @@
 var MINIGAMES = {}
 class MinigameState {
 	constructor() {
-
+		this.name = "minigame"
 	}
 
 	load(minigameName) {
 		this.minigame = MINIGAMES[minigameName]
         this.minigame.load()
 
+		NETPLAY.sendMinigame(this.minigame, minigameName)
+
 		this.exitButton = new Button("Exit", () => {this.exit()}, null, 900,50, 80,80)
 	}
 
 	update(dt) {
         this.minigame.update(dt)
+		
+		NETPLAY.update(dt)
 
 		this.exitButton.update(dt)
 

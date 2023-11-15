@@ -1,20 +1,16 @@
+// Main Game Loop; This is the first file that initializes the game.
+var NETPLAY = false
 var CURSOR = {on: false, cursor: "auto"}
 
-SAVEDATA = makeSaveData()
-PROFILE = SAVEDATA.profile
-
-NETPLAY = false
+var SAVEDATA = makeSaveData()
+var PROFILE = SAVEDATA.profile
 
 // Initialize game and load assets
 function gameLoad() {
 	loadGameAssets()
 
 	// Start netplay
-	try {
-		NETPLAY = new Netplay()
-	} catch (e) {
-		// Socket module wasn't loaded...
-	}
+	NETPLAY = new Netplay()
 
 	// Start world game state
 	WORLD = new World("hub")

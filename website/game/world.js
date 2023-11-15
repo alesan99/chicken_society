@@ -49,9 +49,7 @@ class World {
 	// (Area name, function to call after loading is successful)
 	loadArea (area="hub", fromWarp, endFunc) {
 		// Let server know player is moving
-		if (NETPLAY != false) {
-			NETPLAY.sendArea(area)
-		}
+		NETPLAY.sendArea(area)
 
 		this.oldArea = this.area
 		this.area = area
@@ -194,10 +192,7 @@ class World {
 		}
 		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
 
-		//TODO: Update Collision
-		if (NETPLAY) {
-			NETPLAY.update(dt)
-		}
+		NETPLAY.update(dt)
 
 		// Background element animations
 		for (const [i, anim] of Object.entries(BACKGROUNDANIM[this.area])) {

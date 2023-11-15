@@ -210,9 +210,7 @@ class Character extends PhysicsObject {
 		this.accessory = profile.accessory || false
 		//Send profile to server if this is the player
 		if (sendToServer && this.controller == PLAYER_CONTROLLER) {
-			if (NETPLAY != false) {
-				NETPLAY.sendProfile(PROFILE)
-			}
+			NETPLAY.sendProfile(PROFILE)
 		}
 	}
 
@@ -257,8 +255,8 @@ class Character extends PhysicsObject {
 			this.dir = "down"
 			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
 
-			if ((NETPLAY != false) && (this == PLAYER)) {
-				NETPLAY.sendEmote(arg)
+			if (this == PLAYER) {
+				NETPLAY.sendEmote(i)
 			}
 		}
 	}

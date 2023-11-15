@@ -11,6 +11,10 @@ function setState(state, args) {
 	game_state_name = game_state.name
 }
 
+function getState() {
+	return game_state_name
+}
+
 function stateUpdate(dt) {
 	game_state.update(dt)
 	// Is menu open?

@@ -1,6 +1,8 @@
 // Recieves client information and relays it to every other client.
 const {io, playerList} = require("../server.js");
 
+var minigameData = {};
+
 // User Connected! Start listening for any messages.
 function listenToClient(socket) {
 	// Creates listeners for client messages
@@ -63,6 +65,52 @@ function listenToClient(socket) {
 	socket.on("disconnect", () => {
 		delete playerList[socket.id];
 		io.emit("removePlayer", socket.id); // Use this to exlude the sender
+	});
+
+	// Minigames
+	// Player joined minigame
+	socket.on("minigame", (minigameName) => {
+		if (!playerList[socket.id]) {
+			return false
+		}
+
+		if (minigameName) {
+			// Joined minigame
+			if (!minigameData[minigameName]) {
+				minigameData[minigameName] = {
+					players: {},
+					data: {},
+					host: false
+				};
+			}
+
+			minigameData[minigameName].players[socket.id] = true; // connected
+			minigameData[minigameName].data[socket.id] = {}; // what is their minigame like?
+
+			let role = "host";
+			if (Object.keys(minigameData[minigameName].players).length > 1) {
+				role = "player";
+			} else {
+				minigameData[minigameName].host = socket.id
+			}
+			socket.emit("minigameRole", role, minigameData[minigameName].players);
+
+			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+				io.to(id).emit("minigameAddPlayer", socket.id);
+			}
+		} else {
+			// Left minigame
+			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+				io.to(id).emit("minigameRemovePlayer", socket.id);
+			}
+		}
+	});
+	// Relay minigame data
+	socket.on("minigameData", (minigameName, data) => {
+		minigameData[minigameName].data[socket.id] = data
+		for (const [id, cpnnected] of Object.entries(minigameData[minigameName].players)) {
+			socket.broadcast.emit("minigame", socket.id, data);
+		}
 	});
 }
 

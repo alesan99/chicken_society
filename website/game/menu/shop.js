@@ -7,6 +7,8 @@ MENUS["shop"] = new class extends Menu {
 	}
 
     load (config) {
+		this.openTimer = 0
+
 		this.buttons = {}
 		this.buttons[0] = new Button("Confirm", ()=>{closeMenu()}, null, 665,399, 100,32)
 
@@ -71,10 +73,14 @@ MENUS["shop"] = new class extends Menu {
 	
 	draw() {
         // Window
-        DRAW.image(IMG.menu, null, this.x, this.y)
+		let scale = 1
+		if (this.openTimer < 1) {
+			scale = easing("easeOutBack", this.openTimer)
+		}
+        DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
 
         // Text
-        DRAW.setColor(112, 50, 16, 1.0)
+        DRAW.setColor(112, 50, 16, scale)
         DRAW.setFont(FONT.caption)
         DRAW.text(this.name, 520, 142, "center")
 
@@ -83,6 +89,8 @@ MENUS["shop"] = new class extends Menu {
 	}
 
 	update(dt) {
+		this.openTimer = Math.min(1, this.openTimer + 4*dt)
+
 		this.updateButtons(dt)
 	}
 }()

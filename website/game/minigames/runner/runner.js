@@ -13,6 +13,10 @@ MINIGAMES["runner"] = new class {
 	load() {
 		minigame = this
 
+		// Netplays data
+		this.data = {x:0, y:0, sx:0, sy:0, dead:false} // Your data
+		this.playerData = {} // Other clients' data
+
 		this.started = false
 		this.highscore = SAVEDATA.highscores.runner
 
@@ -37,6 +41,7 @@ MINIGAMES["runner"] = new class {
 		this.started = true
 		this.score = 0
 		this.died = false
+		this.data.dead = false
 
 		this.objects = {
 			chicken: {},
@@ -87,6 +92,12 @@ MINIGAMES["runner"] = new class {
 			}
 		}
 
+		// Update netplay data
+		this.data.x = this.chicken.x
+		this.data.y = this.chicken.y
+		this.data.sx = this.chicken.sx
+		this.data.sy = this.chicken.sy
+
 		let keysToDelete = []
 		let fences = this.objects["fence"]
 		for (const [id, obj] of Object.entries(fences)) {
@@ -117,6 +128,19 @@ MINIGAMES["runner"] = new class {
 		}
 
 		this.chicken.draw(cameraX)
+
+		// Other players
+		DRAW.setColor(255,255,255,0.5)
+		for (const [id, data] of Object.entries(this.playerData)) {
+			let frame = 0
+			if (data.dead) {
+				frame = 4
+			}
+			DRAW.image(minigame.img.chicken, this.sprite.chicken.getFrame(frame), data.x-cameraX, data.y, 0, 1,1, 0.5,0.5)
+			
+			DRAW.setFont(FONT.pixel)
+			DRAW.text(NETPLAY.playerList[id].name, data.x-cameraX, data.y-80, "center")
+		}
 
 		// Arcade Cabinet overlay
 		DRAW.setColor(255,255,255,1.0)
@@ -191,6 +215,7 @@ MINIGAMES["runner"] = new class {
 	die() {
 		this.died = true
 		this.started = false
+		this.data.dead = true
 	}
 
 	keyPress(key) {

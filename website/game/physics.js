@@ -9,11 +9,17 @@ function updatePhysics(objs, spatialHash, dt) {
 				// Only update object if 'active' in physics space AND not static
 				listOfCollisions.clear()
 				a.DEBUGCOLLIDED = false
-				if (a.active && !a.static) {
-					// New (possible) location
-					let nx = a.x + a.sx*dt
-					let ny = a.y + a.sy*dt
 
+				let nx = a.x
+				let ny = a.y
+
+				// New (possible) location
+				if (!a.static) {
+					nx = a.x + a.sx*dt
+					ny = a.y + a.sy*dt
+				}
+
+				if (a.active && !a.static) { // Check for collisions?
 					let collided = false
 
 					// Range covered by object and its movement
@@ -69,8 +75,10 @@ function updatePhysics(objs, spatialHash, dt) {
 							}
 						}
 					}
+				}
 
-					// Finally move to 'new' position
+				// Finally move to 'new' position
+				if (!(a.x == nx && a.y == ny)) {
 					a.setPosition(nx, ny)
 				}
 			}
