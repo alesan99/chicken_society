@@ -11,25 +11,50 @@ function listenToClient(socket) {
 
 	// Recieve information about players; Send out info to everyone
 	socket.on("profile", (profile) => {
-		playerList[socket.id] = {};
-		playerList[socket.id].id = socket.id;
-		playerList[socket.id].x = 0;
-		playerList[socket.id].y = 0;
-		playerList[socket.id].profile = profile;
+		// TODO: Restructure this
+		playerList[socket.id] = {
+			id: socket.id,
+
+			state: "world",
+			minigame: false,
+			area: "hub",
+
+			profile: profile,
+			name: profile.name,
+
+			chicken: {
+				x: 0,
+				y: 0,
+				sx: 0,
+				sy: 0,
+				static: false
+			},
+		};
 
 		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
 		console.log(profile);
 	});
 
-	// Recieved player data (position, velocity); Send out to everyone
-	socket.on("player", (position, velocity) => {
+	// Recieved chicken data (position, velocity); Send out to everyone
+	socket.on("chicken", (position, velocity) => {
 		if (playerList[socket.id]) {
-			playerList[socket.id].x = position[0];
-			playerList[socket.id].y = position[1];
-			playerList[socket.id].sx = position[2];
-			playerList[socket.id].sy = position[3];
+			playerList[socket.id].chicken.x = position[0];
+			playerList[socket.id].chicken.y = position[1];
+			playerList[socket.id].chicken.sx = position[2];
+			playerList[socket.id].chicken.sy = position[3];
 
-			socket.broadcast.emit("player", socket.id, position); // Use this to exlude the sender
+			socket.broadcast.emit("chicken", socket.id, position); // Use this to exlude the sender
+		};
+	});
+
+	socket.on("chickenAction", (position, velocity) => {
+		if (playerList[socket.id]) {
+			playerList[socket.id].chicken.x = position[0];
+			playerList[socket.id].chicken.y = position[1];
+			playerList[socket.id].chicken.sx = position[2];
+			playerList[socket.id].chicken.sy = position[3];
+
+			socket.broadcast.emit("chicken", socket.id, position); // Use this to exlude the sender
 		};
 	});
 
@@ -43,8 +68,10 @@ function listenToClient(socket) {
 
 	// Player changed their own profile, update
 	socket.on("updateProfile", (profile) =>{
-		socket.broadcast.emit("updateProfile", socket.id, profile);
-		playerList[socket.id].profile = profile;
+		if (playerList[socket.id]) {
+			socket.broadcast.emit("updateProfile", socket.id, profile);
+			playerList[socket.id].profile = profile;
+		}
 	});
 	
 	// Player emoted
@@ -57,6 +84,7 @@ function listenToClient(socket) {
 	// Player moved area
 	socket.on("area", (area) =>{
 		if (playerList[socket.id]) {
+			playerList[socket.id].area = area;
 			socket.broadcast.emit("area", socket.id, area);
 		}
 	});

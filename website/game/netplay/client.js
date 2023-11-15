@@ -5,15 +5,28 @@ var socket = io(); // No URL because it defaults to trying to connect to host th
 
 Netplay = class {
 	constructor () {
-		this.timer = 0
-		this.interval = 5/60 //Time inbetween sending data to server
+		// Communication timings
+		/* Three types of communication:
+		Update: This is informaton consistently sent on an interval to the server. May appear laggy and may not be recieved by the server.
+		Action: This is infromaton sent instantly to the server if possible, and otherwise will be bundled together then sent. This WILL be recieved by the server.
+		Urgent: This is information sent instantly to the server. This can only be done once within a time frame and it may not be recieved by the server.
+		TODO: This system is not implemented yet
+		*/
+		this.actionQueue = []
+		this.updateTimer = 0
+		this.updateInterval = 5/60 //Time inbetween sending data to server
+		this.updateTimestamp = 0 // When was the last time there was an update?
+
+		this.urgentQueue = []
+		this.urgentTimer = 0
+		this.urgentTime = 5/60 // Information can also be sent instantly so long as a message wasn't previously sent within this time.
 
 		this.timeOut = 10000 // Give up sending an important message after this amount of time (sec.)
 
-		// Other clients (lets call them players)
+		// Other Clients (lets call them players)
 		this.playerList = {}
 
-		// Client
+		// This Client
 		this.connect()
 
 		// Chicken syncing information
@@ -32,13 +45,13 @@ Netplay = class {
 
 		// Events
 		socket.on("playerList", (playerList) => {this.recievePlayerList(playerList)})
-		socket.on("addPlayer", (id, player) => {this.addPlayer(id, player)})
-		socket.on("removePlayer", (id) => {this.removePlayer(id)})
+		socket.on("addPlayer", (id, player) => {this.addPlayer(id, player)}) // currently unused
+		socket.on("removePlayer", (id) => {this.removePlayer(id)}) // currently unused
 
 		socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 		socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
 
-		socket.on("player", (id, position) => {this.recievePosition(id, position)})
+		socket.on("chicken", (id, position) => {this.recievePosition(id, position)})
 		socket.on("emote", (id, emote) => {this.recieveEmote(id, emote)})
 		socket.on("area", (id, area) => {this.recieveArea(id, area)})
 
@@ -56,41 +69,41 @@ Netplay = class {
 	}
 
 	update (dt) {
+		this.updateTimestamp += dt
+		this.updateTimer += dt
 		// Continually let server know what's happening
-		if (getState() == "world") { // World
-			// Send chicken position to server
-			this.timer += dt
-			if (this.timer > this.interval) {
+		if (this.updateTimer > this.updateInterval) {
+			if (getState() == "world") { // World
+				// Send chicken position to server
 				// Get velocity of player
 				let [sx, sy] = [PLAYER.sx, PLAYER.sy]
 				// Check if position has changed since last time position was sent to the server (or if there is a new player that needs this info.)
 				let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(this.oldx), Math.floor(this.oldy)]
 				if ((x != ox) || (y != oy) || (sx != this.oldsx) || (sy != this.oldsy) || (this.newPlayerJoined == true)) {
-					socket.volatile.emit("player", [x, y, sx, sy])
+					socket.volatile.emit("chicken", [x, y, sx, sy])
 					this.newPlayerJoined = false // TODO: This should be handled by the server
 				}
-				this.timer = this.timer%this.interval
 				this.oldx = x
 				this.oldy = y
 				this.oldsx = sx
 				this.oldsy = sy
-			}
-		} else if (getState() == "minigame") { // Playing minigame
-			// Send minigame data to server
-			this.timer += dt
-			if (this.timer > this.interval) {
+			} else if (getState() == "minigame") { // Playing minigame
+				// Send minigame data to server
 				this.sendMinigameData(this.minigame.data)
 			}
+
+			this.updateTimestamp = 0
+			this.updateTimer = this.updateTimer%this.updateInterval
 		}
 	}
 
-	addPlayer (id, player) {
+	addPlayer (id, playerData) {
 		if ((id != socket.id) && (this.playerList[id] == null)) {
-			this.playerList[id] = {
-				name: player.profile.name
-			}
+			this.playerList[id] = playerData
 			// TODO: move this code to world.js?
-			CHARACTER[id] = new Character(PHYSICSWORLD, player.x, player.y, player.profile, WORLD.area)
+			let chicken = playerData.chicken
+			CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
+			// CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
 			this.newPlayerJoined = true // New player! Let them know your information
 		}
 	}
@@ -106,10 +119,10 @@ Netplay = class {
 	// Recieve entire list of players when connecting for the first time
 	recievePlayerList (playerList) {
 		console.log("recieved playerList")
-		for (const [id, p] of Object.entries(playerList)) {
-			console.log(id, p.profile.name)
+		for (const [id, playerData] of Object.entries(playerList)) {
+			console.log(id, playerData.profile.name)
 			if ((id != socket.id) && (this.playerList[id] == null)) {
-				this.addPlayer(id, p)
+				this.addPlayer(id, playerData)
 			}
 		}
 	}
@@ -164,6 +177,7 @@ Netplay = class {
 	}
 	recieveArea(id, area) {
 		console.log("recieved area", area)
+		console.log(id, area)
 		if (CHARACTER[id] != null) {
 			CHARACTER[id].area = area
 		}
