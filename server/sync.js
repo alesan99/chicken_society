@@ -91,6 +91,18 @@ function listenToClient(socket) {
 
 	// Player disconnected; Tell all players that someone disconnected
 	socket.on("disconnect", () => {
+		if (!playerList[socket.id]) {
+			return false
+		}
+		if (playerList[socket.id].minigame) {
+			// Remove from minigame
+			let minigameName = playerList[socket.id].minigame
+			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+				if (id != socket.id) {
+					io.to(id).emit("minigameRemovePlayer", socket.id);
+				}
+			}
+		}
 		delete playerList[socket.id];
 		io.emit("removePlayer", socket.id); // Use this to exlude the sender
 	});
@@ -112,6 +124,8 @@ function listenToClient(socket) {
 				};
 			}
 
+			playerList[socket.id].minigame = minigameName
+
 			minigameData[minigameName].players[socket.id] = true; // connected
 			minigameData[minigameName].data[socket.id] = {}; // what is their minigame like?
 
@@ -124,20 +138,32 @@ function listenToClient(socket) {
 			socket.emit("minigameRole", role, minigameData[minigameName].players);
 
 			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-				io.to(id).emit("minigameAddPlayer", socket.id);
+				if (id != socket.id) {
+					io.to(id).emit("minigameAddPlayer", socket.id);
+				}
 			}
 		} else {
 			// Left minigame
+			playerList[socket.id].minigame = false
 			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-				io.to(id).emit("minigameRemovePlayer", socket.id);
+				if (id != socket.id) {
+					io.to(id).emit("minigameRemovePlayer", socket.id);
+				}
 			}
 		}
 	});
 	// Relay minigame data
 	socket.on("minigameData", (minigameName, data) => {
-		minigameData[minigameName].data[socket.id] = data
-		for (const [id, cpnnected] of Object.entries(minigameData[minigameName].players)) {
-			socket.broadcast.emit("minigame", socket.id, data);
+		if (!playerList[socket.id]) {
+			return false
+		}
+		if (minigameData[minigameName].data) { // Check if minigame has been loaded by server
+			minigameData[minigameName].data[socket.id] = data
+			for (const [id, cpnnected] of Object.entries(minigameData[minigameName].players)) {
+				if (id != socket.id) {
+					io.to(id).emit("minigame", socket.id, data);
+				}
+			}
 		}
 	});
 }

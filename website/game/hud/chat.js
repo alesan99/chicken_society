@@ -12,6 +12,9 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.typing = false
 		this.timer = 0
 
+		this.messages = [] // All chat messages recieved
+		this.messageLogTimer = 0 // How long left to display last message
+
 		this.emoteMenu = MENUS["emoteMenu"]
 		this.emoteMenu.load()
 		this.emoteMenuOpen = false
@@ -64,9 +67,9 @@ MENUS["chatMenu"] = new class extends Menu {
 					DEBUGPHYSICS = true
 					break
 			}
-		} else {
+		} else if (this.value.length > 0) {
 			// Send chat message
-			let message = this.value.substring(0, 15*3) // Max chat length
+			let message = this.value.substring(0, 15*3+2) // Max chat length
 			PLAYER.chatBubble(message)
 			NETPLAY.sendChat(message)
 		}
@@ -74,6 +77,18 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.value = ""
 		this.open = false
 		this.typing = false
+	}
+
+	// Display chat message and add to chat log.
+	message(message, name=false, display=true) {
+		let text = message
+		if (name) {
+			text = `${name}: ${message}`
+		}
+		this.messages.push(text)
+		if (display) {
+			this.messageLogTimer = 4
+		}
 	}
 
 	keyPress(key) {
@@ -156,6 +171,15 @@ MENUS["chatMenu"] = new class extends Menu {
 			DRAW.text(s, 262, canvasHeight-19, "left")
 		}
 
+		// Display chat messages
+		if (this.messageLogTimer > 0) {
+			DRAW.setColor(255, 255, 255, 1)
+			DRAW.image(IMG.chatMessage, null, 212, 490)
+			DRAW.setFont(FONT.caption)
+			DRAW.setColor(0, 0, 0, 1)
+			DRAW.text(this.messages[this.messages.length - 1], 226, 515, "left")
+		}
+
 		// Emote Menu
 		if (this.emoteMenuOpen) {
 			this.emoteMenu.draw()
@@ -163,7 +187,11 @@ MENUS["chatMenu"] = new class extends Menu {
 	}
 
 	update(dt) {
-		this.timer = (this.timer + dt)%1
+		// Update chat log display
+		this.messageLogTimer = Math.max(0, this.messageLogTimer - dt)
+
+		this.timer = (this.timer + dt)%1 // Blinking cursor
+
 		this.updateButtons(dt)
 
 		// Emote Menu

@@ -77,6 +77,7 @@ Netplay = class {
 				// Send chicken position to server
 				// Get velocity of player
 				let [sx, sy] = [PLAYER.sx, PLAYER.sy]
+				//let [sx, sy] = [(PLAYER.x-this.oldx)/this.updateInterval, (PLAYER.y-this.oldy)/this.updateInterval]
 				// Check if position has changed since last time position was sent to the server (or if there is a new player that needs this info.)
 				let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(this.oldx), Math.floor(this.oldy)]
 				if ((x != ox) || (y != oy) || (sx != this.oldsx) || (sy != this.oldsy) || (this.newPlayerJoined == true)) {
@@ -103,7 +104,7 @@ Netplay = class {
 			// TODO: move this code to world.js?
 			let chicken = playerData.chicken
 			CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
-			// CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
+			//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
 			this.newPlayerJoined = true // New player! Let them know your information
 		}
 	}
@@ -144,7 +145,13 @@ Netplay = class {
 
 	recieveChat (id, text) {
 		console.log("recieved chat", text)
-		if (CHARACTER[id] != null) {
+		if (this.playerList[id] != null) {
+			let display = false
+			if (PLAYER.area != this.playerList[id].area) {
+				display = true
+			}
+			console.log(PLAYER.area, this.playerList[id].area)
+			CHAT.message(text, this.playerList[id].name, display)
 			CHARACTER[id].chatBubble(text)
 		}
 	}
@@ -176,22 +183,24 @@ Netplay = class {
 		socket.emit("area", area)
 	}
 	recieveArea(id, area) {
-		console.log("recieved area", area)
-		console.log(id, area)
-		if (CHARACTER[id] != null) {
+		console.log("recieved area", id, area)
+		if (this.playerList[id] != null) {
+			this.playerList[id].area = area
 			CHARACTER[id].area = area
 		}
 	}
 
 	// Minigames
 	// Tell server if client started playing minigame
-	sendMinigame(minigame, minigameName) {
+	sendMinigame(minigame, minigameName=false) {
 		this.minigame = minigame
 		this.minigameName = minigameName
-		this.minigamePlayerList = {}
-		socket.timeout(this.timeOut).emitWithAck("minigame", minigameName, (err, val) => {
-			console.log("could not connect to server :(")
-		});
+		if (this.minigame) {
+			this.minigamePlayerList = {}
+			socket.timeout(this.timeOut).emitWithAck("minigame", minigameName, (err, val) => {
+				console.log("could not connect to server :(")
+			});
+		}
 	}
 	// Server will assign you a role in a minigame.
 	// host: You are the first player to start this minigame. Everyone will see the same thing that's happening in your game. 
@@ -216,8 +225,17 @@ Netplay = class {
 		}
 	}
 	removeMinigamePlayer (id) {
+		console.log("Attempting to remove player from minigame", id)
 		if (id != socket.id) {
+			for (const [id, data] of Object.entries(this.minigame.playerData)) {
+				console.log(id, data)
+			}
 			delete this.minigamePlayerList[id]
+			delete this.minigame.playerData[id]
+			
+			for (const [id, data] of Object.entries(this.minigame.playerData)) {
+				console.log(id, data)
+			}
 		}
 	}
 	// Send current minigame data in two ways:

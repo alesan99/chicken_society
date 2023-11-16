@@ -42,6 +42,9 @@ class MinigameState {
 		if (Transition.playing()==true){
 			return
 		}
+
+		NETPLAY.sendMinigame(false)
+
         Transition.start("wipeLeft", "out", 0.8, null, () => {
 			// Unload minigame assets
 			if (this.minigame.exit) {
