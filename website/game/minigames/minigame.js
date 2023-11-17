@@ -8,18 +8,22 @@ class MinigameState {
 	}
 
 	load(minigameName) {
+		// Load minigame and let server know you're playing
 		this.minigame = MINIGAMES[minigameName]
         this.minigame.load()
 
 		NETPLAY.sendMinigame(this.minigame, minigameName)
 
 		this.exitButton = new Button("Exit", () => {this.exit()}, null, 900,50, 80,80)
+		this.exited = false
 	}
 
 	update(dt) {
+		// Update minigame
         this.minigame.update(dt)
-		
-		NETPLAY.update(dt)
+		if (!this.exited) {
+			NETPLAY.update(dt)
+		}
 
 		this.exitButton.update(dt)
 
@@ -43,7 +47,8 @@ class MinigameState {
 			return
 		}
 
-		NETPLAY.sendMinigame(false)
+		this.exited = true
+		NETPLAY.sendMinigame(false) // Disconnect from minigame
 
         Transition.start("wipeLeft", "out", 0.8, null, () => {
 			// Unload minigame assets
@@ -74,7 +79,10 @@ class MinigameState {
 	}
 
 	mouseClick(button, x, y) {
-		if (this.exitButton.click()) {
+		if (CHAT.mouseClick(button, x, y)) {
+			return true
+		}
+		if (this.exitButton.click(button, x, y)) {
 			return true
 		}
 		// Control minigame
@@ -82,7 +90,10 @@ class MinigameState {
 	}
 
 	mouseRelease(button, x, y) {
-		if (this.exitButton.clickRelease()) {
+		if (CHAT.mouseRelease(button, x, y)) {
+			return true
+		}
+		if (this.exitButton.clickRelease(button, x, y)) {
 			return true
 		}
 		// Control minigame

@@ -7,9 +7,9 @@ Netplay = class {
 	constructor () {
 		// Communication timings
 		/* Three types of communication:
-		Update: This is informaton consistently sent on an interval to the server. May appear laggy and may not be recieved by the server.
-		Action: This is infromaton sent instantly to the server if possible, and otherwise will be bundled together then sent. This WILL be recieved by the server.
-		Urgent: This is information sent instantly to the server. This can only be done once within a time frame and it may not be recieved by the server.
+		Update: This is information consistently sent on an interval to the server. May appear laggy and may not be recieved by the server.
+		Action: This is information is sent instantly to the server if possible, and otherwise will be bundled together then sent. This WILL be recieved by the server.
+		Urgent: This is information is sent instantly to the server. This can only be done once within a time frame and it may not be recieved by the server.
 		TODO: This system is not implemented yet
 		*/
 		this.actionQueue = []
@@ -147,10 +147,9 @@ Netplay = class {
 		console.log("recieved chat", text)
 		if (this.playerList[id] != null) {
 			let display = false
-			if (PLAYER.area != this.playerList[id].area) {
+			if ((PLAYER.area != this.playerList[id].area) || (this.minigame)) { // Display chat message in chat log if chicken is not visible
 				display = true
 			}
-			console.log(PLAYER.area, this.playerList[id].area)
 			CHAT.message(text, this.playerList[id].name, display)
 			CHARACTER[id].chatBubble(text)
 		}
@@ -196,8 +195,14 @@ Netplay = class {
 		this.minigame = minigame
 		this.minigameName = minigameName
 		if (this.minigame) {
+			// Connecting to minigame
 			this.minigamePlayerList = {}
 			socket.timeout(this.timeOut).emitWithAck("minigame", minigameName, (err, val) => {
+				console.log("could not connect to server :(")
+			});
+		} else {
+			// Disconnecting from minigame
+			socket.timeout(this.timeOut).emitWithAck("minigame", false, (err, val) => {
 				console.log("could not connect to server :(")
 			});
 		}
@@ -206,10 +211,28 @@ Netplay = class {
 	// host: You are the first player to start this minigame. Everyone will see the same thing that's happening in your game. 
 	// player: Other people are already playing this minigame. You will only see what the host is experiencing while you let them know what you are doing.
 	// spectator: You are seeing what the host is seeing. You have no influence and have to send no data to them.
+	// TODO: If the host leaves, either kick everyone out or assign a new host
 	recieveMinigameRole(role, minigamePlayerList) {
 		console.log("Recieved minigame role:", role)
 		this.minigamePlayerList = minigamePlayerList
 		this.role = role
+
+		// Add each player listed in the minigame player list
+		for (const [id, playerData] of Object.entries(minigamePlayerList)) {
+			if (id != socket.id) {
+				// TODO: don't copypaste code
+				console.log("Player joined minigame:", id)
+				// Initialize minigame data
+				this.minigamePlayerList[id] = {}
+				this.minigame.playerData[id] = {}
+	
+				// Let minigame know a player joined
+				if (this.minigame.addPlayer) {
+					this.minigame.addPlayer(id)
+				}
+				// this.addMinigamePlayer(id)
+			}
+		}
 	}
 	getMinigameRole() {
 		return this.role
@@ -219,23 +242,28 @@ Netplay = class {
 	}
 	addMinigamePlayer (id) {
 		if ((id != socket.id) && (this.minigamePlayerList[id] == null)) {
-			console.log("player joined minigame:", id)
+			console.log("Player joined minigame:", id)
+			// Initialize minigame data
 			this.minigamePlayerList[id] = {}
 			this.minigame.playerData[id] = {}
+
+			// Let minigame know a player joined
+			if (this.minigame.addPlayer) {
+				this.minigame.addPlayer(id)
+			}
 		}
 	}
 	removeMinigamePlayer (id) {
-		console.log("Attempting to remove player from minigame", id)
 		if (id != socket.id) {
-			for (const [id, data] of Object.entries(this.minigame.playerData)) {
-				console.log(id, data)
+			console.log("Attempting to remove player from minigame", id)
+			// Let minigame know a player left
+			if (this.minigame.removePlayer) {
+				this.minigame.removePlayer(id)
 			}
+
+			// Delete all of their minigame-related data
 			delete this.minigamePlayerList[id]
 			delete this.minigame.playerData[id]
-			
-			for (const [id, data] of Object.entries(this.minigame.playerData)) {
-				console.log(id, data)
-			}
 		}
 	}
 	// Send current minigame data in two ways:
@@ -247,9 +275,10 @@ Netplay = class {
 		socket.volatile.emit("minigameData", this.minigameName, data)
 	}
 	recieveMinigameData(id, data) {
-		console.log("Recieved minigame data:", data)
-		this.oldMinigameData = data
-		this.minigame.playerData[id] = data
+		if (this.minigame && this.minigame.playerData[id]) {
+			this.oldMinigameData = data
+			this.minigame.playerData[id] = data
+		}
 	}
 }
 

@@ -97,10 +97,15 @@ function listenToClient(socket) {
 		if (playerList[socket.id].minigame) {
 			// Remove from minigame
 			let minigameName = playerList[socket.id].minigame
-			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-				if (id != socket.id) {
-					io.to(id).emit("minigameRemovePlayer", socket.id);
+			if (minigameName && minigameData[minigameName]) {
+				delete minigameData[minigameName].players[socket.id]
+				for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+					if (id != socket.id) {
+						io.to(id).emit("minigameRemovePlayer", socket.id);
+					}
 				}
+			} else {
+				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
 			}
 		}
 		delete playerList[socket.id];
@@ -144,12 +149,19 @@ function listenToClient(socket) {
 			}
 		} else {
 			// Left minigame
-			playerList[socket.id].minigame = false
-			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-				if (id != socket.id) {
-					io.to(id).emit("minigameRemovePlayer", socket.id);
+			// Remove from minigame
+			let minigameName = playerList[socket.id].minigame
+			if (minigameName && minigameData[minigameName]) {
+				delete minigameData[minigameName].players[socket.id]
+				for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+					if (id != socket.id) {
+						io.to(id).emit("minigameRemovePlayer", socket.id);
+					}
 				}
+			} else {
+				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
 			}
+			playerList[socket.id].minigame = false
 		}
 	});
 	// Relay minigame data
@@ -157,9 +169,15 @@ function listenToClient(socket) {
 		if (!playerList[socket.id]) {
 			return false
 		}
-		if (minigameData[minigameName].data) { // Check if minigame has been loaded by server
+
+		if (!minigameName) {
+			console.log(`Error: ${playerList[socket.id].name}'s minigame doesn't exist`)
+			return false
+		}
+
+		if (minigameData[minigameName] && minigameData[minigameName].data) { // Check if minigame has been loaded by server
 			minigameData[minigameName].data[socket.id] = data
-			for (const [id, cpnnected] of Object.entries(minigameData[minigameName].players)) {
+			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
 				if (id != socket.id) {
 					io.to(id).emit("minigame", socket.id, data);
 				}

@@ -82,6 +82,6 @@ class PhysicsObject {
 				this.spatialHash.removeFromCell(x, y, this)
 			}
 		}
-		this.DELETE = true
+		this.DELETED = true
 	}
 }

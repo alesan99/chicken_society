@@ -13,6 +13,11 @@ function updatePhysics(objs, spatialHash, dt) {
 				let nx = a.x
 				let ny = a.y
 
+				// Optional gravity
+				if (a.gravity) {
+					a.sy = a.sy + a.gravity*dt
+				}
+
 				// New (possible) location
 				if (!a.static) {
 					nx = a.x + a.sx*dt
@@ -30,7 +35,7 @@ function updatePhysics(objs, spatialHash, dt) {
 
 					// Loop through all objects in the range using Spatial hash
 					for (const [ib, b] of spatialHash.retrieveCells(rx1,ry1, rx2,ry2).entries()) {
-						if (b.active) {
+						if (b.active && (!b.DELETED)) {
 							if (!(a == b)) { // Shouldn't collide with itself
 								// Only check for collision if bounding boxes will overlap
 								if (isAABBColliding(nx+a.shape.x1,ny+a.shape.y1,nx+a.shape.x2,ny+a.shape.y2,
@@ -56,6 +61,7 @@ function updatePhysics(objs, spatialHash, dt) {
 												let testColl2 = b.startCollide(a.constructor.name, a, -moveAxisX, -moveAxisY)
 											}
 											a.collisions.set(b,true)
+											// TODO: also set this for b? Test if this is needed, as it might be for static objects
 										}
 									}
 								}
