@@ -1,6 +1,11 @@
 # Chicken Society
 
 Play here:
+
+https://chickensociety.net
+
+Development version:
+
 https://alesan99.github.io/chicken_society/
 
 ## Starting the server
