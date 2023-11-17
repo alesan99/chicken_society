@@ -130,3 +130,7 @@ dist
 .pnp.*
 TODO.txt
 _ignore/
+
+
+#Files ignored
+server/db/create_db.js
