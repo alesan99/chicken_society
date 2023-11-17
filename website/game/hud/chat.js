@@ -15,6 +15,10 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.messages = [] // All chat messages recieved
 		this.messageLogTimer = 0 // How long left to display last message
 
+		this.nuggets = SAVEDATA.nuggets // Nugget display. This is a rolling counter so it isn't exactly the same as SAVEDATA.nuggets
+		this.nuggetDiff = false // How many nuggets earned/lost
+		this.nuggetTimer = 0 // Nugget animation when you get more nuggets
+
 		this.emoteMenu = MENUS["emoteMenu"]
 		this.emoteMenu.load()
 		this.emoteMenuOpen = false
@@ -60,7 +64,8 @@ MENUS["chatMenu"] = new class extends Menu {
 					PLAYER.emote(arg)
 					break
 				case "/nuggets":
-					SAVEDATA.nuggets = Number(arg)
+					// SAVEDATA.nuggets = Number(arg)
+					addNuggets(Number(arg))
 					// PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/debug": // Debug physics
@@ -88,6 +93,87 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.messages.push(text)
 		if (display) {
 			this.messageLogTimer = 4
+		}
+	}
+
+	update(dt) {
+		// Update chat log display
+		this.messageLogTimer = Math.max(0, this.messageLogTimer - dt)
+
+		this.timer = (this.timer + dt)%1 // Blinking cursor
+
+		// Update nugget animation
+		if (this.nuggetTimer > 0) {
+			this.nuggetTimer = this.nuggetTimer - 1.4*dt
+			if (this.nuggetTimer < 0) {
+				this.nuggetTimer = 0
+				this.nuggetDiff = false
+			}
+		}
+		let speed = Math.max(Math.abs(SAVEDATA.nuggets-this.nuggets)*0.5, 1)
+		if (this.nuggets > SAVEDATA.nuggets) {
+			this.nuggets = Math.max(SAVEDATA.nuggets, this.nuggets - speed*10*dt)
+		} else if (this.nuggets < SAVEDATA.nuggets) {
+			this.nuggets = Math.min(SAVEDATA.nuggets, this.nuggets + speed*10*dt)
+		}
+
+		this.updateButtons(dt)
+
+		// Emote Menu
+		if (this.emoteMenuOpen) {
+			this.emoteMenu.update(dt)
+		}
+	}
+	
+	draw() {
+		// Placeholder graphic
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.chat, SPRITE.chat.getFrame(0,0), 202, 525)
+
+		// Nugget display
+		let displayString = `✖ ${Math.floor(this.nuggets).toLocaleString()}`
+		DRAW.image(IMG.nugget, null, 12, 526)
+		DRAW.setFont(FONT.hud)
+		DRAW.setColor(0,0,0,1.0)
+		DRAW.text(displayString, 60, 556+4, "left")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.text(displayString, 60, 556, "left")
+		// Nugget animation when nuggets change
+		if (this.nuggetDiff) {
+			DRAW.setColor(255,255,255,this.nuggetTimer)
+			DRAW.text(`${this.nuggetDiff.toLocaleString()}`, 90, 556-20-10*(1-this.nuggetTimer), "left")
+		}
+
+		DRAW.image(IMG.ammo, null, 904, 526)
+
+		// Render all buttons
+		this.drawButtons()
+
+		// Display whats being typed
+		if (this.open) {
+			// DRAW.setColor(0,0,0,0.5)
+			// DRAW.rectangle(0, canvasHeight-40, canvasWidth, 30)
+			DRAW.setFont(FONT.caption)
+			DRAW.setColor(0, 0, 0, 1)
+			let s = this.value
+			if (this.timer <= 0.5) {
+				s += "|"
+			}
+			DRAW.text(s, 262, canvasHeight-19, "left")
+		}
+
+		// Display chat messages
+		if (this.messageLogTimer > 0) {
+			DRAW.setColor(255, 255, 255, 1)
+			DRAW.image(IMG.chatMessage, null, 212, 490)
+			DRAW.setFont(FONT.caption)
+			DRAW.setColor(0, 0, 0, 1)
+			DRAW.text(this.messages[this.messages.length - 1], 226, 515, "left")
+		}
+
+		// Emote Menu
+		if (this.emoteMenuOpen) {
+			this.emoteMenu.draw()
 		}
 	}
 
@@ -138,65 +224,10 @@ MENUS["chatMenu"] = new class extends Menu {
 		}
 		return super.mouseRelease(button, x, y)
 	}
-	
-	draw() {
-		// Placeholder graphic
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(IMG.chat, SPRITE.chat.getFrame(0,0), 202, 525)
 
-		// Nugget display
-		let displayString = `✖ ${SAVEDATA.nuggets.toLocaleString()}`
-		DRAW.image(IMG.nugget, null, 12, 526)
-		DRAW.setFont(FONT.hud)
-		DRAW.setColor(0,0,0,1.0)
-		DRAW.text(displayString, 60, 556+4, "left")
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.text(displayString, 60, 556, "left")
-
-		DRAW.image(IMG.ammo, null, 904, 526)
-
-		// Render all buttons
-		this.drawButtons()
-
-		// Display whats being typed
-		if (this.open) {
-			// DRAW.setColor(0,0,0,0.5)
-			// DRAW.rectangle(0, canvasHeight-40, canvasWidth, 30)
-			DRAW.setFont(FONT.caption)
-			DRAW.setColor(0, 0, 0, 1)
-			let s = this.value
-			if (this.timer <= 0.5) {
-				s += "|"
-			}
-			DRAW.text(s, 262, canvasHeight-19, "left")
-		}
-
-		// Display chat messages
-		if (this.messageLogTimer > 0) {
-			DRAW.setColor(255, 255, 255, 1)
-			DRAW.image(IMG.chatMessage, null, 212, 490)
-			DRAW.setFont(FONT.caption)
-			DRAW.setColor(0, 0, 0, 1)
-			DRAW.text(this.messages[this.messages.length - 1], 226, 515, "left")
-		}
-
-		// Emote Menu
-		if (this.emoteMenuOpen) {
-			this.emoteMenu.draw()
-		}
-	}
-
-	update(dt) {
-		// Update chat log display
-		this.messageLogTimer = Math.max(0, this.messageLogTimer - dt)
-
-		this.timer = (this.timer + dt)%1 // Blinking cursor
-
-		this.updateButtons(dt)
-
-		// Emote Menu
-		if (this.emoteMenuOpen) {
-			this.emoteMenu.update(dt)
-		}
+	nuggetCounter(nuggets) {
+		// Play nugget animation
+		this.nuggetDiff = nuggets
+		this.nuggetTimer = 1
 	}
 }()

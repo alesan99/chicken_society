@@ -108,10 +108,20 @@ function loadSaveData(saveData) {
 // Remove nugget currency. TODO: Fancy animations
 function removeNuggets(nuggets) {
 	SAVEDATA.nuggets -= nuggets
+
+	// Play nugget animation in HUD
+	if (CHAT) {
+		CHAT.nuggetCounter(-nuggets)
+	}
 }
 
 function addNuggets(nuggets) {
 	SAVEDATA.nuggets += nuggets
+
+	// Play nugget animation in HUD
+	if (CHAT) {
+		CHAT.nuggetCounter(nuggets)
+	}
 }
 
 function spendNuggets(cost) {
