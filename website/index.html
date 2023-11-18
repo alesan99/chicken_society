@@ -17,9 +17,15 @@
 	<div>
 		<form id="loginForm">
 			<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username" maxlength="16" autocomplete="off" required />
-			<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
+			<input id="password-field" class="login-stuff" type="password" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
 			<button id="login" class="login-stuff" type="button">Login</button>
 		</form>
+		<form id="registerForm">
+			<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
+			<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
+			<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
+			<button id="register" class="register-stuff" type="button">Register</button>
+		  </form>
 	</div>
 	<!-- Invisible text input used to force mobile devices to open keyboard -->
 	<input id="gameTextInput" type="text" style="position:fixed;left:0px";>

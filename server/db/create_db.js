@@ -1,12 +1,12 @@
 const mysql = require("mysql");
-function initializeDB(){
-    const con = mysql.createConnection({
-        host: "0.0.0.0",
-        user: "root",
-        password: "root",
-        database: "chicken_society"
-    });
 
+function initializeDB(){
+  const con = mysql.createConnection({
+    host: "0.0.0.0",
+    user: "root",
+    password: "root",
+    database: "chicken_society"
+    });
     con.connect(function(err) {
         if (err) {
             console.log("Database connect failed")
