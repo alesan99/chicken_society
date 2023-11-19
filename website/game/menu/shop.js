@@ -15,41 +15,31 @@ MENUS["shop"] = new class extends Menu {
 		this.name = config.name || ""
 		this.items = config.items || []
         // Shop items
-		for (let i = 0; i < this.items.length; i++) {
-			let itemId = this.items[i][1]
-			let itemType = this.items[i][0]
-			let item = ITEM[itemId]
-			if (itemType == "hat") { // TODO: Handle this better
-				item = HAT[itemId]
-			} else if (itemType == "accessory") {
-				item = ACCESSORY[itemId]
-			} else if (itemType == "item") {
-				item = ITEM[itemId]
-			} else if (itemType == "furniture") {
-				item = FURNITURE[itemId]
-			}
-			let itemName = item.name
-			let price = item.cost
+		let i = 0
+		for (const [category, list] of Object.entries(this.items)) {
+			for (const [itemId, setPrice] of Object.entries(list)) {
+				let itemType = category
+				let item = getItemData(itemId, category)
 
-			let itemButton = new Button(itemName, ()=>{}, null, 250,160+(40*i), 240,32)
-			let buyButton = new Button(price, ()=>{this.buyItem(itemType, itemId)}, null, 510,160+(40*i), 70,32)
-			this.buttons[`${i}-item`] = itemButton
-			this.buttons[`${i}-buy`] = buyButton
+				let itemName = item.name
+				let price = setPrice
+				if (price == true) { // If not price is set by shop, use default
+					price = item.cost
+				}
+
+				let itemButton = new Button(itemName, ()=>{this.buyItem(itemType, itemId, i)}, null, 270,180+(31*i), 300,30)
+				// let buyButton = new Button(price, ()=>{this.buyItem(itemType, itemId)}, null, 510,160+(32*i), 70,30)
+				this.buttons[`${i}-item`] = itemButton
+				// this.buttons[`${i}-buy`] = buyButton
+
+				i += 1
+			}
 		}
     }
 
 	// TODO: maybe this should be in a different file so items can also be earned in other ways?
-	buyItem(itemType, itemId) {
-		let item = ITEM[itemId]
-		if (itemType == "hat") { // TODO: Handle this better
-			item = HAT[itemId]
-		} else if (itemType == "accessory") {
-			item = ACCESSORY[itemId]
-		} else if (itemType == "item") {
-			item = ITEM[itemId]
-		} else if (itemType == "furniture") {
-			item = FURNITURE[itemId]
-		}
+	buyItem(itemType, itemId, i) {
+		let item = ITEMS[itemType][itemId]
 		if (spendNuggets(item.cost)) {
 			addItem(itemType, itemId)
 		}
@@ -83,6 +73,20 @@ MENUS["shop"] = new class extends Menu {
         DRAW.setColor(112, 50, 16, scale)
         DRAW.setFont(FONT.caption)
         DRAW.text(this.name, 520, 142, "center")
+
+		// Prices
+        DRAW.text("Price", 640, 170, "center")
+        DRAW.text("Owned", 720, 170, "center")
+		// for (let i = 0; i < this.items.length; i++) {
+		// 	let itemId = this.items[i][1]
+		// 	let itemType = this.items[i][0]
+		// 	let item = getItemData(itemId, itemType)
+		// 	let itemName = item.name
+		// 	let price = item.cost
+		// 	DRAW.text(price, 640, 200+(31*i), "center")
+		// 	// How many you own
+		// 	DRAW.text(SAVEDATA.items[itemType][itemId], 720, 200+(31*i), "center")
+		// }
 
 		// Render all buttons
 		this.drawButtons()

@@ -49,12 +49,16 @@ MENUS["chatMenu"] = new class extends Menu {
 					PROFILE.color = [Number(arg), Number(arg2), Number(arg3)]
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
-				case "/hat":
-					PROFILE.hat = arg
+				case "/head":
+					PROFILE.head = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
-				case "/accessory":
-					PROFILE.accessory = arg
+				case "/face":
+					PROFILE.face = arg
+					PLAYER.updateProfile(PROFILE, "sendToServer")
+					break
+				case "/body":
+					PROFILE.body = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/scale": // Chicken size

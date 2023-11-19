@@ -44,25 +44,17 @@ function loadGameAssets() {
 	IMG.menu = new RenderImage("assets/gui/menu.png")
 
 	// Chicken Customization
-	// TODO: Clean up this horrible code
-
-	// DIRECTORYTREE = fetch('/getDirectoryTree')
-	// 	.then(response => {
-	// 		if (!response.ok) { throw new Error('Failed to fetch directory tree'); };
-	// 		return response.json()
-	// 	})
-	// 	.then(data => {
-	// 		DIRECTORYTREE = data
-	// 	})
-	// 	.catch(error => { console.error(error) });
-	// console.log(DIRECTORYTREE)
-
-	HATOFFSET = [ // Center of chicken head where hat should be placed
+	HEADOFFSET = [ // Center of chicken head where hat should be placed
 		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]],
 		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[4,62],[64,1]],
 		[[63,2],[63,2],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]]
 	]
-	ACCESSORYOFFSET = [ // Center of chicken chin where accessory should be placed
+	FACEOFFSET = [ // Center of chicken face where glasses should be placed
+		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]],
+		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[4,62],[64,1]],
+		[[63,2],[63,2],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]]
+	]
+	BODYOFFSET = [ // Center of chicken chin where accessory should be placed
 		[[64,55],[64,55],[66,56],[66,63],[64,55],[64,55],[59,62],[64,55]],
 		[[89,49],[89,49],[86,52],[66,63],[64,55],[64,55],[59,62],[64,55]],
 		[[63,56],[63,56],[68,57],[66,63],[64,55],[64,55],[59,62],[64,55]]
@@ -72,61 +64,44 @@ function loadGameAssets() {
 	]
 
 	// Load all items
-	ITEMLIST = {
-		hats: {},
-		accessories: {},
+	ITEMS = {
+		// Categories
+		head: {},
+		face: {},
+		body: {},
 		furniture: {},
-		items: {}
+		item: {}
 	}
-	// List of all hats to load
-	HAT = ITEMLIST.hats
-	HAT["tophat"] = {}
-	HAT["visors"] = {}
-	HAT["snapback"] = {}
-	HAT["hoodie"] = {}
-
-	for (const [name, value] of Object.entries(HAT)) {
-		// Load image, create sprite frames when image is loaded, and load hat centers from JSON
-		let async = function() {
-			HAT[name].sprite = new Sprite(HAT[name].image, 1, 3, HAT[name].image.w,(HAT[name].image.h-2)/3, 0,0, 1,1)
-		}
-		HAT[name].image = new RenderImage(`assets/hats/${name}.png`, async)
-		HAT[name].center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
-		HAT[name].cost = 0
-		HAT[name].name = ""
-		loadJSON(`assets/hats/${name}.json`, (data) => {
-			HAT[name].name = data.name
-			HAT[name].center = data.center
-			HAT[name].cost = data.cost
-		})
-	}
-	// List of all accessories to load
-	ACCESSORY = ITEMLIST.accessories
-	ACCESSORY["scarf"] = {}
-	ACCESSORY["chains"] = {}
-	ACCESSORY["silverchains"] = {}
-	ACCESSORY["beefcakeaccessories"] = {}
-	ACCESSORY["alesanaccessories"] = {}
-
-	for (const [name, value] of Object.entries(ACCESSORY)) {
-		// Load image, create sprite frames when image is loaded, and load accessory centers from JSON
-		let async = function() {
-			ACCESSORY[name].sprite = new Sprite(ACCESSORY[name].image, 1, 3, ACCESSORY[name].image.w, (ACCESSORY[name].image.h-2)/3, 0,0, 1,1)
-		}
-		ACCESSORY[name].image = new RenderImage(`assets/accessories/${name}.png`, async)
-		ACCESSORY[name].center = [[0.5, 0],[0.5, 0],[0.5, 0]]
-		ACCESSORY[name].cost = 0
-		ACCESSORY[name].name = ""
-		loadJSON(`assets/accessories/${name}.json`, (data) => {
-			ACCESSORY[name].name = data.name
-			ACCESSORY[name].center = data.center
-			ACCESSORY[name].cost = data.cost
-		})
-	}
-
 	// List of all items to load
-	FURNITURE = ITEMLIST.furniture
-	ITEM = ITEMLIST.items
+	ITEMS.head["tophat"] = {}
+	ITEMS.head["snapback"] = {}
+	ITEMS.head["hoodie"] = {}
+
+	ITEMS.face["visors"] = {}
+
+	ITEMS.body["scarf"] = {}
+	ITEMS.body["chains"] = {}
+	ITEMS.body["silverchains"] = {}
+	ITEMS.body["beefcakeaccessories"] = {}
+	ITEMS.body["alesanaccessories"] = {}
+
+	for (const [category, list] of Object.entries(ITEMS)) {
+		for (const [itemId, item] of Object.entries(list)) {
+			// Load image, create sprite frames when image is loaded, and load hat centers from JSON
+			let async = function() {
+				item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)
+			}
+			item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, async)
+			item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+			item.cost = 0
+			item.name = ""
+			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
+				item.name = data.name
+				item.center = data.center
+				item.cost = data.cost
+			})
+		}
+	}
 
 	FONT.pixel = new RenderFont("Pixel", 16)
 	FONT.big = new RenderFont("Arial", 40)
@@ -154,3 +129,15 @@ function loadJSON(filePath, callBack) {
 	})
 }
 
+	// TODO: Clean up this horrible code
+
+	// DIRECTORYTREE = fetch('/getDirectoryTree')
+	// 	.then(response => {
+	// 		if (!response.ok) { throw new Error('Failed to fetch directory tree'); };
+	// 		return response.json()
+	// 	})
+	// 	.then(data => {
+	// 		DIRECTORYTREE = data
+	// 	})
+	// 	.catch(error => { console.error(error) });
+	// console.log(DIRECTORYTREE)

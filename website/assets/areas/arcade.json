@@ -32,8 +32,9 @@
             "profile": {
                 "name": "Bud",
                 "color": [200, 210, 255],
-                "hat": "visors",
-                "accessory": "alesanaccessories"
+                "head": "visors",
+                "face": false,
+                "body": "alesanaccessories"
             },
             "x": 406,
             "y": 290,
@@ -54,8 +55,9 @@
             "profile": {
                 "name": "Pro Gamer",
                 "color": [40, 40, 40],
-                "hat": false,
-                "accessory": false
+                "head": false,
+                "face": false,
+                "body": false
             },
             "x": 820,
             "y": 500,

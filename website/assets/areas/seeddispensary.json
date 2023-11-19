@@ -31,8 +31,9 @@
             "profile": {
                 "name": "Seedtender",
                 "color": [132, 211, 74],
-                "hat": "snapback",
-                "accessory": "silverchains"
+                "head": "snapback",
+                "face": false,
+                "body": "silverchains"
             },
             "x": 830,
             "y": 360,

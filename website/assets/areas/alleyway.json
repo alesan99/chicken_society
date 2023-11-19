@@ -24,8 +24,9 @@
             "profile": {
                 "name": "???",
                 "color": [40, 80, 50],
-                "hat": "hoodie",
-                "accessory": false
+                "head": "hoodie",
+                "face": false,
+                "body": false
             },
             "x": 810,
             "y": 300,

@@ -35,26 +35,65 @@ MENUS["customization"] = new class extends Menu {
                 Math.floor(100 + Math.random()*155)];
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 665,202, 100,32)
-        // Hat
-		this.buttons["hatLeft"] = new Button("<", ()=>{
-            PROFILE.hat = SAVEDATA.hats[Math.floor(Math.random()*SAVEDATA.hats.length)];
+        // Head Item
+		this.buttons["headLeft"] = new Button("<", ()=>{
+			let keys = Object.keys(SAVEDATA.items.head);
+			if (keys.length === 0) {
+				PROFILE.head = false
+			} else {
+				PROFILE.head = keys[Math.floor(Math.random() * keys.length)];
+			}
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 605,242, 32,32)
-		this.buttons["hatRight"] = new Button(">", ()=>{
-            PROFILE.hat = SAVEDATA.hats[Math.floor(Math.random()*SAVEDATA.hats.length)];
+		this.buttons["headRight"] = new Button(">", ()=>{
+			let keys = Object.keys(SAVEDATA.items.head);
+			if (keys.length === 0) {
+				PROFILE.head = false
+			} else {
+				PROFILE.head = keys[Math.floor(Math.random() * keys.length)];
+			}
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 733,242, 32,32)
-        // Accessory
-		this.buttons["accessoryLeft"] = new Button("<", ()=>{
-            PROFILE.accessory = SAVEDATA.accessories[Math.floor(Math.random()*SAVEDATA.accessories.length)];
+        // Face Item
+		this.buttons["faceLeft"] = new Button("<", ()=>{
+			let keys = Object.keys(SAVEDATA.items.face);
+			if (keys.length == 0) {
+				PROFILE.face = false
+			} else {
+				PROFILE.face = keys[Math.floor(Math.random() * keys.length)];
+			}
 			PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 605,282, 32,32)
-		this.buttons["accessoryRight"] = new Button(">", ()=>{
-            PROFILE.accessory = SAVEDATA.accessories[Math.floor(Math.random()*SAVEDATA.accessories.length)];
+		this.buttons["faceRight"] = new Button(">", ()=>{
+			let keys = Object.keys(SAVEDATA.items.face);
+			if (keys.length == 0) {
+				PROFILE.face = false
+			} else {
+				PROFILE.face = keys[Math.floor(Math.random() * keys.length)];
+			}
 			PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 733,282, 32,32)
+		}, null, 733,282, 32,32)
+        // Body Item
+		this.buttons["bodyLeft"] = new Button("<", ()=>{
+			let keys = Object.keys(SAVEDATA.items.body);
+			if (keys.length == 0) {
+				PROFILE.body = false
+			} else {
+				PROFILE.body = keys[Math.floor(Math.random() * keys.length)];
+			}
+			PLAYER.updateProfile(PROFILE, "sendToServer");
+        }, null, 605,322, 32,32)
+		this.buttons["bodyRight"] = new Button(">", ()=>{
+			let keys = Object.keys(SAVEDATA.items.body);
+			if (keys.length == 0) {
+				PROFILE.body = false
+			} else {
+				PROFILE.body = keys[Math.floor(Math.random() * keys.length)];
+			}
+			PLAYER.updateProfile(PROFILE, "sendToServer");
+        }, null, 733,322, 32,32)
         // Pet
-		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,322, 100,32)
+		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
     }
 
 	keyPress(key) {
@@ -88,11 +127,13 @@ MENUS["customization"] = new class extends Menu {
 
         DRAW.text("Display Name", 460, 184, "left")
         DRAW.text("Color", 460, 224, "left")
-        DRAW.text("Hat", 460, 264, "left")
-        DRAW.text(PROFILE.hat, 686, 264, "center")
-        DRAW.text("Accessory", 460, 304, "left")
-        DRAW.text(PROFILE.accessory, 686, 304, "center")
-        DRAW.text("Pet", 460, 344, "left")
+        DRAW.text("Head Item", 460, 264, "left")
+        DRAW.text(PROFILE.head, 686, 264, "center")
+        DRAW.text("Face Item", 460, 304, "left")
+        DRAW.text(PROFILE.face, 686, 304, "center")
+        DRAW.text("Body Item", 460, 344, "left")
+        DRAW.text(PROFILE.body, 686, 344, "center")
+        DRAW.text("Pet", 460, 384, "left")
 
         PLAYER.draw(342,340)
 

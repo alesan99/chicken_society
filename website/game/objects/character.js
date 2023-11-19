@@ -136,24 +136,36 @@ class Character extends PhysicsObject {
 		DRAW.image(IMG.chicken, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
-		if ((this.accessory != false) && (ACCESSORY[this.accessory] != null) && (ACCESSORY[this.accessory].sprite != null)) { // Accessory
-			// Figure out the center of the accessory to place it on the center of the chicken's 'neck'
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
-			let centerX = ACCESSORY[this.accessory].center[dir_lookup[this.dir]][0]/ACCESSORY[this.accessory].sprite.w
-			let centerY = ACCESSORY[this.accessory].center[dir_lookup[this.dir]][1]/ACCESSORY[this.accessory].sprite.h
-			DRAW.image(ACCESSORY[this.accessory].image, ACCESSORY[this.accessory].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
+			// Figure out the center of the body item to place it on the center of the chicken's 'neck'
+			let item = ITEMS.body[this.body]
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (BODYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + BODYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[this.dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[this.dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 
 		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
 		
-		if ((this.hat != false) && (HAT[this.hat] != null) && (HAT[this.hat].sprite != null)) { // Hat
-			// Figure out the center of the hat to place it on the center of the chicken's head
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
-			let centerX = HAT[this.hat].center[dir_lookup[this.dir]][0]/HAT[this.hat].sprite.w
-			let centerY = HAT[this.hat].center[dir_lookup[this.dir]][1]/HAT[this.hat].sprite.h
-			DRAW.image(HAT[this.hat].image, HAT[this.hat].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
+			// Figure out the center of the face item to place it on the center of the chicken's face
+			let item = ITEMS.face[this.face]
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (FACEOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + FACEOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[this.dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[this.dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+		}
+
+		if ((this.head != false) && (ITEMS.head[this.head] != null) && (ITEMS.head[this.head].sprite != null)) { // Head item
+			// Figure out the center of the head item to place it on the center of the chicken's head
+			let item = ITEMS.head[this.head]
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (HEADOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + HEADOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[this.dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[this.dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 	}
 
@@ -207,8 +219,11 @@ class Character extends PhysicsObject {
 	updateProfile(profile, sendToServer) {
 		this.name = profile.name || "" //name
 		this.color = profile.color || [255,255,255]
-		this.hat = profile.hat || false
-		this.accessory = profile.accessory || false
+		this.head = profile.head || false
+		this.face = profile.face || false
+		this.body = profile.body || false
+		this.item = profile.item || false
+
 		this.scale = profile.scale || 1
 		//Send profile to server if this is the player
 		if (sendToServer && this.controller == PLAYER_CONTROLLER) {

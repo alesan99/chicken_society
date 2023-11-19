@@ -129,7 +129,7 @@ MINIGAMES["runner"] = new class {
 					if (Math.random() > 0.7) {
 						type = "sign"
 					}
-				} else if (this.score > 15) {
+				} else if (this.score > 10) {
 					if (Math.random() > 0.8) {
 						type = "sign"
 					}
