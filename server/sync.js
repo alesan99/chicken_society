@@ -1,7 +1,17 @@
 // Recieves client information and relays it to every other client.
 const {io, playerList} = require("../server.js");
 
-var minigameData = {};
+// Minigame data
+var minigameData = {
+	runner: {
+		// Temporary syncing data; can be discarded after players leave minigame
+		players: {},
+		data: {},
+		host: false,
+		// Should be stored by the server
+		highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
+	}
+};
 
 // User Connected! Start listening for any messages.
 function listenToClient(socket) {
@@ -125,7 +135,8 @@ function listenToClient(socket) {
 				minigameData[minigameName] = {
 					players: {},
 					data: {},
-					host: false
+					host: false,
+					highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
 				};
 			}
 
@@ -141,6 +152,8 @@ function listenToClient(socket) {
 				minigameData[minigameName].host = socket.id
 			}
 			socket.emit("minigameRole", role, minigameData[minigameName].players);
+			console.log(minigameData[minigameName].highscores)
+			socket.emit("minigameHighscores", minigameData[minigameName].highscores);
 
 			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
 				if (id != socket.id) {
@@ -165,7 +178,8 @@ function listenToClient(socket) {
 		}
 	});
 	// Relay minigame data
-	socket.on("minigameData", (minigameName, data) => {
+	socket.on("minigameData", (minigameName, newData) => {
+		// Recieving only CHANGED minigame data
 		if (!playerList[socket.id]) {
 			return false
 		}
@@ -176,14 +190,55 @@ function listenToClient(socket) {
 		}
 
 		if (minigameData[minigameName] && minigameData[minigameName].data) { // Check if minigame has been loaded by server
-			minigameData[minigameName].data[socket.id] = data
+			// Find changes & store new data
+			let data = minigameData[minigameName].data[socket.id]
+			for (const [key, value] of Object.entries(newData)) {
+				if (data[key] != value) {
+					data[key] = value
+				}
+			}
 			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
 				if (id != socket.id) {
+					// TODO: only send changed data
+					// This is will involve checking if each client even has the old data
 					io.to(id).emit("minigame", socket.id, data);
+				}
+			}
+			// Look for new highscore?
+			if (newData.score) {
+				if ((!minigameData[minigameName].highscores[0]) || (data.score > minigameData[minigameName].highscores[2][0])) {
+					console.log(`New Highscore in ${minigameName}!`, data.score, playerList[socket.id].name)
+					minigameData[minigameName].highscores.push([data.score, playerList[socket.id].name])
+					minigameData[minigameName].highscores.sort((a, b) => b[0] - a[0]);
+					minigameData[minigameName].highscores = minigameData[minigameName].highscores.slice(0, 3); // Limit to 3 highscores
+					// Send new highscore list to everyone
+					for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+						io.to(id).emit("minigameHighscores", minigameData[minigameName].highscores);
+					}
 				}
 			}
 		}
 	});
+	// socket.on("minigameHighscore", (minigameName, highscore) => {
+	// 	if (!playerList[socket.id]) {
+	// 		return false
+	// 	}
+
+	// 	if (!minigameName) {
+	// 		console.log(`Error: ${playerList[socket.id].name}'s minigame doesn't exist`)
+	// 		return false
+	// 	}
+
+	// 	if (highscore > minigameData[minigameName].highscores[0]) {
+	// 		minigameData[minigameName].highscores[0] = highscore
+	// 		minigameData[minigameName].highscores.sort((a, b) => b - a);
+	// 		for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+	// 			if (id != socket.id) {
+	// 				io.to(id).emit("minigameHighscores", minigameData[minigameName].highscores);
+	// 			}
+	// 		}
+	// 	}
+	// });
 }
 
 module.exports = {

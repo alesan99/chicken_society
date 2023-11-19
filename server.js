@@ -15,7 +15,10 @@ const http = require("http"); // Used to start server
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
-const io = new Server(server);
+// const msgpack = require("socket.io-msgpack-parser"); // Import the socket.io-msgpack-parser module. If this crashes run "npm ci" again
+const io = new Server(server, {
+	// parser: msgpack // Use msgpack for faster serialization TODO: make this work for the client (need to convert the entire game to use browserify)
+});
 
 var playerList = {};
 module.exports = {

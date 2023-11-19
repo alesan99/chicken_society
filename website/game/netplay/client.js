@@ -59,6 +59,7 @@ Netplay = class {
 		socket.on("minigame", (id, data) => {this.recieveMinigameData(id, data)})
 		socket.on("minigameAddPlayer", (id) => {this.addMinigamePlayer(id)})
 		socket.on("minigameRemovePlayer", (id) => {this.removeMinigamePlayer(id)})
+		socket.on("minigameHighscores", (id, data) => {this.recieveMinigameHighscores(id, data)})
 	}
 
 	// Connect to server for the first time and send information about yourself
@@ -272,12 +273,34 @@ Netplay = class {
 	// As a host: Assumes this client is the host of the game, this client decides what is happening in the minigame and every other player's minigame will reflect that.
 	// Example: You invite others to race with you. Obstacles randomly spawn on your screen, you will let the other clients know what spawned so the same thing shows up for them.
 	sendMinigameData(data) {
-		socket.volatile.emit("minigameData", this.minigameName, data)
+		let dataToSend = {};
+		let dataChanged = false;
+
+		// Check for differences between old and new data
+		for (let key in data) {
+			if (data[key] !== this.oldMinigameData[key]) {
+				dataToSend[key] = data[key];
+				dataChanged = true;
+			}
+		}
+
+		if (dataChanged) {
+			this.oldMinigameData = Object.assign({}, data);
+			socket.volatile.emit("minigameData", this.minigameName, dataToSend);
+		}
 	}
 	recieveMinigameData(id, data) {
 		if (this.minigame && this.minigame.playerData[id]) {
-			this.oldMinigameData = data
 			this.minigame.playerData[id] = data
+		}
+	}
+	// sendMinigameHighscore(highscore) {
+	// 	socket.volatile.emit("minigameHighscore", this.minigameName, highscore)
+	// }
+	recieveMinigameHighscores(data) {
+		if (this.minigame && this.minigame.highscores) {
+			console.log("Recieved new highscores!", data)
+			this.minigame.highscores = data
 		}
 	}
 }

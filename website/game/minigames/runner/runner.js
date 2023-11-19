@@ -16,7 +16,7 @@ MINIGAMES["runner"] = new class {
 		minigame = this
 
 		// Netplays data
-		this.data = {x:0, y:0, sx:0, sy:0, dead:false} // Your data
+		this.data = {x:0, y:0, sx:0, sy:0, dead:false, score:SAVEDATA.highscores.runner} // Your data
 		this.playerData = {} // Other clients' data
 
 		this.started = false
@@ -24,7 +24,7 @@ MINIGAMES["runner"] = new class {
 
 		this.score = 0
 		this.highscore = SAVEDATA.highscores.runner
-		this.worldHighscore = SAVEDATA.highscores.runner
+		this.highscores = [[0,"---"],[0,"---"],[0,"---"]]
 
 		this.timer = 1
 		this.backgroundScroll = 0
@@ -51,7 +51,7 @@ MINIGAMES["runner"] = new class {
 			ground: {}
 		}
 		this.world = new SpatialHash(canvasWidth, canvasHeight, canvasWidth)
-		this.objects["chicken"][0] = new RubberChicken(this.world, 0, canvasHeight-200-80, "player")
+		this.objects["chicken"][0] = new RubberChicken(this.world, 0, canvasHeight-200-60, "player")
 		this.chicken = this.objects["chicken"][0]
 		this.objects["ground"][0] = new Ground(this.world, 0, canvasHeight-200)
 	}
@@ -65,7 +65,7 @@ MINIGAMES["runner"] = new class {
 
 		// Reset player
 		this.chicken.x = 0
-		this.chicken.y = canvasHeight-200-80
+		this.chicken.y = canvasHeight-200-60
 		this.chicken.startRunning()
 
 		// delete all fences
@@ -141,10 +141,10 @@ MINIGAMES["runner"] = new class {
 		updatePhysics(this.objects, this.world, dt)
 
 		// Update netplay data
-		this.data.x = this.chicken.x
-		this.data.y = this.chicken.y
-		this.data.sx = this.chicken.sx
-		this.data.sy = this.chicken.sy
+		this.data.x = Math.floor(this.chicken.x)
+		this.data.y = Math.floor(this.chicken.y)
+		this.data.sx = Math.floor(this.chicken.sx)
+		this.data.sy = Math.floor(this.chicken.sy)
 
 		// Delete unused fences
 		let keysToDelete = []
@@ -196,46 +196,51 @@ MINIGAMES["runner"] = new class {
 		DRAW.setFont(FONT.pixel)
 		let scale = 1+easing("easeInQuad", this.scoreAnim)*0.1
 		let highScale = 1
-		let worldHighScale = 1
 		if (this.scoreAnim > 1) {
 			scale = 1+easing("easeOutCubic", (2-this.scoreAnim))*0.1
 		}
 		if (this.score == this.highscore) {
 			highScale = scale
 		}
-		if (this.score == this.worldHighscore) {
-			worldHighScale = scale
-		}
-		DRAW.text("World Record: " + this.worldHighscore, 620,80, "left", 0, worldHighScale,worldHighScale)
-		DRAW.text("Highscore: " + this.highscore, 620,80, "left", 0, highScale,highScale)
-		DRAW.text("Score: " + this.score, 620,110, "left", 0, scale,scale)
+		DRAW.text("Highscore: " + this.highscore, 590,95, "left", 0, highScale,highScale)
+		DRAW.text("Score: " + this.score, 590,120, "left", 0, scale,scale)
 
 		// Start?
 		DRAW.setFont(FONT.pixel)
 		if (this.dead) {
 			DRAW.setColor(0,0,0,1.0)
-			DRAW.text("DIED",canvasWidth/2-4,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			DRAW.text("DIED",canvasWidth/2+4,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2-4,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2+4,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			if (this.score == this.highscore) {
-				DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+100,"center",0,2,2)
-			}
+			DRAW.text("DIED",canvasWidth/2-4,240,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2+4,240,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,240-4,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,240+4,"center",Math.sin(this.deadAnim)*0.2,2,2)
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,240,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			if (this.score == this.highscore) {
+				DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+130,"center",0,2,2)
+			}
 		} else if (this.started != true) {
 			DRAW.setColor(0,0,0,1.0)
-			DRAW.text("CHICKEN RUN",canvasWidth/2-4,canvasHeight/2-50,"center",0,3,3)
-			DRAW.text("CHICKEN RUN",canvasWidth/2+4,canvasHeight/2-50,"center",0,3,3)
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50-4,"center",0,3,3)
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50+4,"center",0,3,3)
-			if (this.blinkAnim > 0.5) {
-				DRAW.text("Press anything to start!",canvasWidth/2,canvasHeight/2+100,"center",0,1,1)
-			}
+			DRAW.text("CHICKEN RUN",canvasWidth/2-4,240,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2+4,240,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,240-4,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,240+4,"center",0,3,3)
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,240,"center",0,3,3)
+			if (this.blinkAnim > 0.5) {
+				DRAW.text("Press anything to start!",canvasWidth/2,420,"center",0,1,1)
+			}
 		}
-		
+		// Leaderboard
+		if (this.started != true) {
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.text("Leaderboard", canvasWidth/2-140, 295, "left")
+			for (let i = 0; i < this.highscores.length; i++) {
+				let highscore = this.highscores[i][0]
+				let name = this.highscores[i][1]
+				DRAW.text(name + " - " + highscore, canvasWidth/2-140, 320 + i * 25, "left")
+			}
+		}
+
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
 			drawPhysics(this.objects, this.world)
@@ -262,11 +267,11 @@ MINIGAMES["runner"] = new class {
 		}
 
 		this.highscore = Math.max(this.highscore, this.score)
-		this.worldHighscore = Math.max(this.highscore, this.worldHighscore)
 	}
 
 	die() {
 		this.dead = true
+		this.data.score = this.highscore
 		this.started = false
 		this.data.dead = true
 	}
