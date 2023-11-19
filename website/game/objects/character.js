@@ -46,6 +46,7 @@ class Character extends PhysicsObject {
 		this.dir = "down"
 		this.flip = 1
 		this.imageOffsety = 4
+		this.scale = profile.scale || 1
 
 		this.timer = 0
 
@@ -128,43 +129,43 @@ class Character extends PhysicsObject {
 	draw(drawX=this.x, drawY=this.y) {
 		// Shadow
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, 1, 1, 0.5, 1)
+		DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1)
 
 		// Chicken and accessories
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(IMG.chicken, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip, 1, 0.5, 1)
+		DRAW.image(IMG.chicken, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
 		if ((this.accessory != false) && (ACCESSORY[this.accessory] != null) && (ACCESSORY[this.accessory].sprite != null)) { // Accessory
 			// Figure out the center of the accessory to place it on the center of the chicken's 'neck'
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + ACCESSORYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
 			let centerX = ACCESSORY[this.accessory].center[dir_lookup[this.dir]][0]/ACCESSORY[this.accessory].sprite.w
 			let centerY = ACCESSORY[this.accessory].center[dir_lookup[this.dir]][1]/ACCESSORY[this.accessory].sprite.h
-			DRAW.image(ACCESSORY[this.accessory].image, ACCESSORY[this.accessory].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
+			DRAW.image(ACCESSORY[this.accessory].image, ACCESSORY[this.accessory].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 
-		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip, 1, 0.5, 1) // Uncolored sprite
+		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
 		
 		if ((this.hat != false) && (HAT[this.hat] != null) && (HAT[this.hat].sprite != null)) { // Hat
 			// Figure out the center of the hat to place it on the center of the chicken's head
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (HATOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + HATOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
 			let centerX = HAT[this.hat].center[dir_lookup[this.dir]][0]/HAT[this.hat].sprite.w
 			let centerY = HAT[this.hat].center[dir_lookup[this.dir]][1]/HAT[this.hat].sprite.h
-			DRAW.image(HAT[this.hat].image, HAT[this.hat].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip, 1, centerX, centerY)
+			DRAW.image(HAT[this.hat].image, HAT[this.hat].sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 	}
 
 	drawOver() {
 		// Nametag
-		DRAW.setFont(FONT.caption, 4)
+		DRAW.setFont(FONT.nametag, 3)
 		if (this.npc) {
 			DRAW.setColor(180,180,180,1)
 		} else {
 			DRAW.setColor(255,255,255,1)
 		}
-		DRAW.text(this.name, Math.floor(this.x), Math.floor(this.y)-126, "center")
+		DRAW.text(this.name, Math.floor(this.x), Math.floor(this.y)-128*this.scale, "center")
 
 		// Chat bubble
 		if (this.bubbleText != false) {
@@ -208,6 +209,7 @@ class Character extends PhysicsObject {
 		this.color = profile.color || [255,255,255]
 		this.hat = profile.hat || false
 		this.accessory = profile.accessory || false
+		this.scale = profile.scale || 1
 		//Send profile to server if this is the player
 		if (sendToServer && this.controller == PLAYER_CONTROLLER) {
 			NETPLAY.sendProfile(PROFILE)

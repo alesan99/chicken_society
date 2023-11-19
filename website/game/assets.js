@@ -132,6 +132,7 @@ function loadGameAssets() {
 	FONT.big = new RenderFont("Arial", 40)
 	FONT.hud = new RenderFont("Arial", 28)
 	FONT.caption = new RenderFont("Arial", 20)
+	FONT.nametag = new RenderFont("Arial", 16)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
 	FONT.guiLabel = new RenderFont("Times New Roman", 20)
 }

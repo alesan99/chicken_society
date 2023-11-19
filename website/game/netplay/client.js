@@ -289,9 +289,14 @@ Netplay = class {
 			socket.volatile.emit("minigameData", this.minigameName, dataToSend);
 		}
 	}
-	recieveMinigameData(id, data) {
+	recieveMinigameData(id, newData) {
 		if (this.minigame && this.minigame.playerData[id]) {
-			this.minigame.playerData[id] = data
+			let data = this.minigame.playerData[id]
+			for (const [key, value] of Object.entries(newData)) {
+				if (data[key] != value) {
+					data[key] = value
+				}
+			}
 		}
 	}
 	// sendMinigameHighscore(highscore) {

@@ -152,7 +152,6 @@ function listenToClient(socket) {
 				minigameData[minigameName].host = socket.id
 			}
 			socket.emit("minigameRole", role, minigameData[minigameName].players);
-			console.log(minigameData[minigameName].highscores)
 			socket.emit("minigameHighscores", minigameData[minigameName].highscores);
 
 			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {

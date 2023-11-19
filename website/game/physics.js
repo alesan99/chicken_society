@@ -244,7 +244,7 @@ class SpatialHash {
 }
 
 // Debug draw all hitboxes
-function drawPhysics(objs, spatialHash) {
+function drawPhysics(objs, spatialHash, offsetX, offsetY) {
 	// Draw Spatial Hash
 	DRAW.setColor(0,0,0,0.5)
 	DRAW.setFont(FONT.caption)
@@ -269,7 +269,7 @@ function drawPhysics(objs, spatialHash) {
 					DRAW.setColor(255,0,0,1.0)
 				}
 				DRAW.setLineWidth(1)
-				DRAW.rectangle(a.shape.x1, a.shape.y1, a.shape.w, a.shape.h, "line")
+				DRAW.rectangle(a.shape.x1-offsetX, a.shape.y1-offsetY, a.shape.w, a.shape.h, "line")
 				DRAW.setLineWidth(2)
 				DRAW.polygon(a.shape.v, "line")
 	

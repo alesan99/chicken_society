@@ -57,8 +57,18 @@ MENUS["chatMenu"] = new class extends Menu {
 					PROFILE.accessory = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
+				case "/scale": // Chicken size
+					PROFILE.scale = arg
+					PLAYER.updateProfile(PROFILE, "sendToServer")
+					break
+				case "/speed": // Chicken speed
+					PLAYER.speed = arg
+					break
 				case "/area": // Warp to a different area
 					WORLD.loadArea(arg, "chatWarp")
+					break
+				case "/minigame": // Start minigame
+					setState(MINIGAME, arg)
 					break
 				case "/emote": // Play emote animation
 					PLAYER.emote(arg)
@@ -69,7 +79,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					// PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/debug": // Debug physics
-					DEBUGPHYSICS = true
+					DEBUGPHYSICS = !DEBUGPHYSICS
 					break
 			}
 		} else if (this.value.length > 0) {
@@ -130,27 +140,6 @@ MENUS["chatMenu"] = new class extends Menu {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.chat, SPRITE.chat.getFrame(0,0), 202, 525)
 
-		// Nugget display
-		let displayString = `✖ ${Math.floor(this.nuggets).toLocaleString()}`
-		DRAW.image(IMG.nugget, null, 12, 526)
-		DRAW.setFont(FONT.hud)
-		DRAW.setColor(0,0,0,1.0)
-		DRAW.text(displayString, 60, 556+4, "left")
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.text(displayString, 60, 556, "left")
-		// Nugget animation when nuggets change
-		if (this.nuggetDiff) {
-			let diffText = `${this.nuggetDiff.toLocaleString()}` // Show difference. Either in the form -10 or +10
-			if (this.nuggetDiff >= 0) {
-				diffText = "+" + diffText
-			}
-			DRAW.setColor(255,255,255,this.nuggetTimer)
-			DRAW.text(diffText , 90, 556-20-10*(1-this.nuggetTimer), "left")
-		}
-
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(IMG.ammo, null, 904, 526)
-
 		// Render all buttons
 		this.drawButtons()
 
@@ -180,6 +169,27 @@ MENUS["chatMenu"] = new class extends Menu {
 		if (this.emoteMenuOpen) {
 			this.emoteMenu.draw()
 		}
+
+		// Nugget HUD display
+		let displayString = `✖ ${Math.floor(this.nuggets).toLocaleString()}`
+		DRAW.image(IMG.nugget, null, 12, 526)
+		DRAW.setFont(FONT.hud)
+		DRAW.setColor(0,0,0,1.0)
+		DRAW.text(displayString, 60, 556+4, "left")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.text(displayString, 60, 556, "left")
+		// Nugget animation when nuggets change
+		if (this.nuggetDiff) {
+			let diffText = `${this.nuggetDiff.toLocaleString()}` // Show difference. Either in the form -10 or +10
+			if (this.nuggetDiff >= 0) {
+				diffText = "+" + diffText
+			}
+			DRAW.setColor(255,255,255,this.nuggetTimer)
+			DRAW.text(diffText , 90, 556-20-10*(1-this.nuggetTimer), "left")
+		}
+
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.ammo, null, 904, 526)
 	}
 
 	keyPress(key) {
