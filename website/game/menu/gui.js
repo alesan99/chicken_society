@@ -30,6 +30,9 @@ class Button {
     }
     update(dt){
         this.hover = this.checkMouseInside();
+        if (this.hover) {
+            CURSOR.on = true;
+        }
     }
 
     click(){
@@ -60,18 +63,19 @@ class Button {
             DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
         } else {
             if (this.holding == true){
-                DRAW.setColor(20,0,0,1); //dark
+                DRAW.setColor(216,175,121,1); //dark
             } else if (this.hover == true){
-                DRAW.setColor(255,0,0,1); //medium
+                DRAW.setColor(248,222,187,1); //medium
             } else {
-                DRAW.setColor(255,100,100,1); //light
+                DRAW.setColor(242,199,140,1); //light
             }
             
             DRAW.rectangle(this.x, this.y, this.w, this.h);
+            DRAW.setColor(168, 85, 38, 1)
+            DRAW.rectangle(this.x, this.y, this.w, this.h, "line");
             DRAW.setFont(FONT.guiLabel)
-            DRAW.setColor(0,0,0,1)
+            DRAW.setColor(112, 50, 16,1)
             DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, "center")
-            
         }
 
     }

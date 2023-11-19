@@ -20,11 +20,11 @@
     },
 
 	"NPCs": {
-		"expert": {
+		"dealer": {
             "profile": {
                 "name": "???",
                 "color": [40, 80, 50],
-                "hat": false,
+                "hat": "hoodie",
                 "accessory": false
             },
             "x": 810,

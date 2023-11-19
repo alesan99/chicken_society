@@ -82,6 +82,8 @@ function loadGameAssets() {
 	HAT = ITEMLIST.hats
 	HAT["tophat"] = {}
 	HAT["visors"] = {}
+	HAT["snapback"] = {}
+	HAT["hoodie"] = {}
 
 	for (const [name, value] of Object.entries(HAT)) {
 		// Load image, create sprite frames when image is loaded, and load hat centers from JSON
@@ -102,6 +104,7 @@ function loadGameAssets() {
 	ACCESSORY = ITEMLIST.accessories
 	ACCESSORY["scarf"] = {}
 	ACCESSORY["chains"] = {}
+	ACCESSORY["silverchains"] = {}
 	ACCESSORY["beefcakeaccessories"] = {}
 	ACCESSORY["alesanaccessories"] = {}
 

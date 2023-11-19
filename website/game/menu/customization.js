@@ -27,7 +27,7 @@ MENUS["customization"] = new class extends Menu {
 		}, null, 555,399, 100,32)
 
         // Name
-		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 665,162, 100,32)
+		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 625,162, 140,32)
         // Color
 		this.buttons["color"] = new Button("Random", ()=>{
             PROFILE.color = [Math.floor(100 + Math.random()*155),

@@ -140,10 +140,15 @@ MENUS["chatMenu"] = new class extends Menu {
 		DRAW.text(displayString, 60, 556, "left")
 		// Nugget animation when nuggets change
 		if (this.nuggetDiff) {
+			let diffText = `${this.nuggetDiff.toLocaleString()}` // Show difference. Either in the form -10 or +10
+			if (this.nuggetDiff >= 0) {
+				diffText = "+" + diffText
+			}
 			DRAW.setColor(255,255,255,this.nuggetTimer)
-			DRAW.text(`${this.nuggetDiff.toLocaleString()}`, 90, 556-20-10*(1-this.nuggetTimer), "left")
+			DRAW.text(diffText , 90, 556-20-10*(1-this.nuggetTimer), "left")
 		}
 
+		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.ammo, null, 904, 526)
 
 		// Render all buttons

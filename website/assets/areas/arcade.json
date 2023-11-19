@@ -36,9 +36,10 @@
                 "accessory": "alesanaccessories"
             },
             "x": 406,
-            "y": 271,
+            "y": 290,
             "facing": "down",
-            "roamRadius": 20,
+            "roamRadius": 1,
+            "range": 70,
             "dialogue": [
 				"Hey, dude! Check out some of our retro machines.",
 				"We have lots of gnarly games to try.",

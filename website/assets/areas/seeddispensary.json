@@ -1,0 +1,49 @@
+{
+	"walls": [
+        [180,136, 238,136, 238,276, 180,276],
+        [318,136, 866,136, 866,276, 318,276],
+
+        [180,276, 62,576, 0,576, 0,276],
+
+        [1024,276, 1024,576, 993,576, 866,276],
+
+        [720,276, 791,276, 811,459, 700,459],
+
+        [340,276, 528,276, 528,299, 340,299],
+
+        [0,576, 1024,576, 1024,600, 0,600]
+    ],
+
+    "warps": {
+        "seedDispensaryExit": {
+            "to": "hub",
+            "fromWarp": "seedDispensaryEntrance",
+            "facing": "down",
+            "x": 282,
+            "y": 244,
+            "w": 40,
+            "h": 40
+        }
+    },
+
+    "NPCs": {
+        "cashier": {
+            "profile": {
+                "name": "Seedtender",
+                "color": [132, 211, 74],
+                "hat": "snapback",
+                "accessory": "silverchains"
+            },
+            "x": 830,
+            "y": 360,
+            "facing": "left",
+            "roamRadius": 1,
+            "range": [-180,-50, 50,-50, 50,50, -160, 50],
+            "dialogue": [
+                "We love seed!",
+                "We've got free samples!",
+                "Everything here is legal. Trust me."
+            ]
+        }
+    }
+}
