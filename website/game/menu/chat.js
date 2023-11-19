@@ -30,7 +30,13 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34) 
 		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34) 
 
-		this.buttons[5] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0}, {visible: false}, 255,534, 406,36) 
+		this.textField = document.getElementById('gameTextInput');
+		this.textField.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter' || event.code === 'Enter') {
+				this.enter()
+			}
+		});
+		this.buttons[5] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0; this.textField.focus()}, {visible: false}, 255,534, 406,36) 
 	}
 
 	enter() {
@@ -96,6 +102,8 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.value = ""
 		this.open = false
 		this.typing = false
+		this.textField.value = ""
+		this.textField.blur()
 	}
 
 	// Display chat message and add to chat log.
@@ -115,6 +123,8 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.messageLogTimer = Math.max(0, this.messageLogTimer - dt)
 
 		this.timer = (this.timer + dt)%1 // Blinking cursor
+
+		this.value = this.textField.value
 
 		// Update nugget animation
 		if (this.nuggetTimer > 0) {
@@ -201,6 +211,10 @@ MENUS["chatMenu"] = new class extends Menu {
 			// Start Typing
 			this.typing = !this.typing
 			this.open = !this.open
+			if (this.typing) {
+				this.timer = 0
+				this.textField.focus()
+			}
 		} else if (this.typing) {
 			// Add character to input bar
 			if (key.length == 1) {
