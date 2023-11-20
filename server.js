@@ -19,7 +19,7 @@ const { Server } = require("socket.io");
 const io = new Server(server, {
 	// parser: msgpack // Use msgpack for faster serialization TODO: make this work for the client (need to convert the entire game to use browserify)
 });
-
+const db = require("./server/db/create_db.js");
 var playerList = {};
 module.exports = {
 	io, playerList, app
@@ -31,7 +31,29 @@ app.use(express.static(path.join(__dirname, "website"))); //serve static files f
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/website/index.html");
 });
-
+db.initializeDB;
+db.query("SHOW TABLES like 'user'", (err, result, fields) => {
+	// if (err) throw err;
+	// console.log(result);
+	if (result.length == 0) {
+		console.log("No user found");
+		const createTableQuery = `
+        CREATE TABLE user (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          username VARCHAR(255) NOT NULL,
+          password VARCHAR(255) NOT NULL,
+		  email VARCHAR(255) NOT NULL
+        )`;
+		db.query(createTableQuery, (createError) => {
+			if (createError) {
+			}
+			console.log('User table created');
+			});
+			}
+			else {
+		  		console.log('User table already exists');
+			}
+	});
 // Handle logins
 require("./server/login.js")
 
@@ -46,6 +68,7 @@ const {} = require("./server/requests.js");
 // Start server on port TODO: How to deploy??
 const localIPAddress = "localhost" // ipv4 //"10.104.58.91" // IPv4 or localhost
 const port = 3000
+
 server.listen(port, localIPAddress, () => {
 	console.log(`Server is running on http://${localIPAddress}:${port}`)
 })
