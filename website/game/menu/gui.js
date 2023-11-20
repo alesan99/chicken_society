@@ -53,6 +53,7 @@ class Button {
         if (!this.visible) {
             // Don't render if button was specified to be not visible
         } else if (this.image) {
+            // Render image for button
             let frame = 0
             if (this.holding == true){
                 frame = 2
@@ -62,6 +63,7 @@ class Button {
             DRAW.setColor(255,255,255,1)
             DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
         } else {
+            // Render button with basic rectangles if no image was provided
             if (this.holding == true){
                 DRAW.setColor(216,175,121,1); //dark
             } else if (this.hover == true){

@@ -13,7 +13,7 @@ MENUS["shop"] = new class extends Menu {
 		this.buttons[0] = new Button("Confirm", ()=>{closeMenu()}, null, 665,399, 100,32)
 
 		this.name = config.name || ""
-		this.items = config.items || []
+		this.items = config.items || {} // {category: {itemId: price}}
         // Shop items
 		let i = 0
 		for (const [category, list] of Object.entries(this.items)) {
@@ -77,16 +77,23 @@ MENUS["shop"] = new class extends Menu {
 		// Prices
         DRAW.text("Price", 640, 170, "center")
         DRAW.text("Owned", 720, 170, "center")
-		// for (let i = 0; i < this.items.length; i++) {
-		// 	let itemId = this.items[i][1]
-		// 	let itemType = this.items[i][0]
-		// 	let item = getItemData(itemId, itemType)
-		// 	let itemName = item.name
-		// 	let price = item.cost
-		// 	DRAW.text(price, 640, 200+(31*i), "center")
-		// 	// How many you own
-		// 	DRAW.text(SAVEDATA.items[itemType][itemId], 720, 200+(31*i), "center")
-		// }
+		let i = 0
+		for (const [category, list] of Object.entries(this.items)) {
+			for (const [itemId, setPrice] of Object.entries(list)) {
+				let itemType = category
+				let item = getItemData(itemId, itemType)
+				let itemName = item.name
+				let price = setPrice
+				if (price == true) { // If not price is set by shop, use default
+					price = item.cost
+				}
+				DRAW.text("$" + price, 640, 200+(31*i), "center")
+				// How many you own
+				let owned = SAVEDATA.items[itemType][itemId] || 0
+				DRAW.text(owned, 720, 200+(31*i), "center")
+				i += 1
+			}
+		}
 
 		// Render all buttons
 		this.drawButtons()

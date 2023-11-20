@@ -15,7 +15,7 @@ function makeSaveData() {
 			furniture: {},
 			item: {}
 		},
-		nuggets: 10,
+		nuggets: 100,
 		
 		pets: [],
 		house: [],
@@ -152,17 +152,21 @@ function removeItem(type, id) {
 	SAVEDATA.items[type][id] -= 1
 }
 
+function getItemCategory(id) {
+	for (const cat in ITEMS) {
+		if (ITEMS[cat][id]) {
+			return cat
+		}
+	}
+	return "item"
+}
+
 function getItemData(id, type) {
 	let category
 	if (type) {
 		category = type
 	} else {
-		for (const cat in ITEMS) {
-			if (ITEMS[cat].includes(id)) {
-				category = cat
-				break
-			}
-		}
+		category = getItemCategory(id)
 	}
 
 	return ITEMS[category][id]
