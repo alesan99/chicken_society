@@ -20,6 +20,20 @@ function makeSaveData() {
 		pets: [],
 		house: [],
 
+		quests: {
+			// Quest progress
+			// Each quest progress is a list of numbers Ex: [0, 0, 1]
+			// They will be marked as complete once the list matches or exceeds the predefined quest requirements
+			active: {
+				tutorial: [],
+				runner_highscore: []
+			},
+			// Completed quests will save the finished quest progress to compare with possible future updates
+			completed: {
+
+			}
+		},
+
 		highscores: {
 			runner: 0
 		}

@@ -32,8 +32,8 @@
             "profile": {
                 "name": "Bud",
                 "color": [200, 210, 255],
-                "head": "visors",
-                "face": false,
+                "head": false,
+                "face": "visors",
                 "body": "alesanaccessories"
             },
             "x": 406,

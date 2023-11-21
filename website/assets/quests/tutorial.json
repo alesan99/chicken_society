@@ -1,0 +1,13 @@
+{
+	"name": "Tutorial",
+	"description": "Discover what to do in Chicken Society!",
+
+	"progressStart": [false, false, false],
+
+	"progressFinish": [true, true, true],
+
+	"reward": {
+		"nuggets": 10,
+		"item": "tophat"
+	}
+}
