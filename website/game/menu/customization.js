@@ -37,35 +37,34 @@ MENUS["customization"] = new class extends Menu {
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 348,365, 100,32)
 
-        // Inventorty
+		// Inventory
+		this.tab = "allTab"
 		this.inventory = []
-		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all")}, null, 476,150, 46,34)
-		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head")}, null, 522,150, 34,34)
-		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face")}, null, 522+34*1,150, 34,34)
-		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body")}, null, 522+34*2,150, 34,34)
-		this.buttons["furitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture")}, null, 522+34*3,150, 34,34)
-		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item")}, null, 522+34*4,150, 34,34)
+		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all"); this.buttons[this.tab].selected=false; this.tab = "allTab"; this.buttons[this.tab].selected=true}, null, 476,150, 46,34)
+		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head"); this.buttons[this.tab].selected=false; this.tab = "headTab"; this.buttons[this.tab].selected=true}, null, 522,150, 34,34)
+		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face"); this.buttons[this.tab].selected=false; this.tab = "faceTab"; this.buttons[this.tab].selected=true}, null, 522+34*1,150, 34,34)
+		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body"); this.buttons[this.tab].selected=false; this.tab = "bodyTab"; this.buttons[this.tab].selected=true}, null, 522+34*2,150, 34,34)
+		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, null, 522+34*3,150, 34,34)
+		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, null, 522+34*4,150, 34,34)
 		this.filterInventory("all")
+		this.buttons["allTab"].selected = true
 
-		this.buttons["inventory"] = new GridSelector(
-			(itemId)=>{
+		this.buttons["inventory"] = new ItemGrid(
+			(itemId,itemType)=>{
 				// Set clothing item
-				if (PROFILE[getItemCategory(itemId)] && PROFILE[getItemCategory(itemId)] == itemId) {
-					PROFILE[getItemCategory(itemId)] = false;
+				if (PROFILE[itemType] && PROFILE[itemType] == itemId) {
+					PROFILE[itemType] = false;
 				} else {
-					PROFILE[getItemCategory(itemId)] = itemId;
+					PROFILE[itemType] = itemId;
 				}
 				PLAYER.updateProfile(PROFILE, "sendToServer");
-			}, this.inventory, 
-			(i,itemId)=>{
+			},
+			this.inventory, 
+			(itemId,itemType)=>{
 				// Is selected?
-				let category = getItemCategory(itemId)
-				if (PROFILE[category] && PROFILE[category] == itemId) {
+				if (PROFILE[itemType] && PROFILE[itemType] == itemId) {
 					return true
 				}
-			},
-			(i,itemId)=>{
-				return [ITEMS[getItemCategory(itemId)][itemId].image, ITEMS[getItemCategory(itemId)][itemId].sprite]
 			}, 476,184, 56,56, 5,3)
 
 		// this.buttons["bodyRight"] = new Button(">", ()=>{

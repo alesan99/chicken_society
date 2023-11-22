@@ -88,18 +88,20 @@ function loadGameAssets() {
 	for (const [category, list] of Object.entries(ITEMS)) {
 		for (const [itemId, item] of Object.entries(list)) {
 			// Load image, create sprite frames when image is loaded, and load hat centers from JSON
+			item.name = ""
+			item.description = ""
+			item.cost = 0
+			item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
+				item.name = data.name
+				item.description = data.description
+				item.center = data.center
+				item.cost = data.cost
+			})
 			let async = function() {
 				item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)
 			}
 			item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, async)
-			item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
-			item.cost = 0
-			item.name = ""
-			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
-				item.name = data.name
-				item.center = data.center
-				item.cost = data.cost
-			})
 		}
 	}
 
@@ -108,6 +110,7 @@ function loadGameAssets() {
 	FONT.hud = new RenderFont("Arial", 28)
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.nametag = new RenderFont("Arial", 16)
+	FONT.description = new RenderFont("Arial", 18)
 	FONT.chatBubble = new RenderFont("Courier New", 18)
 	FONT.guiLabel = new RenderFont("Times New Roman", 20)
 }

@@ -2,9 +2,9 @@
 	"name": "Tutorial",
 	"description": "Discover what to do in Chicken Society!",
 
-	"progressStart": [false, false, false],
+	"progressStart": [0, 0, 0],
 
-	"progressFinish": [true, true, true],
+	"progressFinish": [1, 1, 1],
 
 	"reward": {
 		"nuggets": 10,

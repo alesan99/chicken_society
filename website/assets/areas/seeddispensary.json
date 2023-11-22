@@ -29,7 +29,7 @@
     "NPCs": {
         "cashier": {
             "profile": {
-                "name": "Seedtender",
+                "name": "Bazooka Benny",
                 "color": [132, 211, 74],
                 "head": "snapback",
                 "face": false,

@@ -19,6 +19,7 @@ class Button {
 
         this.hover = false;
         this.holding = false;
+        this.selected = false;
     }
 
     checkMouseInside(){
@@ -68,6 +69,8 @@ class Button {
                 DRAW.setColor(216,175,121,1); //dark
             } else if (this.hover == true){
                 DRAW.setColor(248,222,187,1); //medium
+            } else if (this.selected == true){
+                DRAW.setColor(216,175,121,1); //dark
             } else {
                 DRAW.setColor(242,199,140,1); //light
             }
