@@ -200,7 +200,6 @@ function RGBtoHEX(r, g, b) {
 }
 
 function HEXtoRGB(hex) {
-	console.log(hex)
 	// Remove the '#' symbol
 	hex = hex.substring(1, 7);
 

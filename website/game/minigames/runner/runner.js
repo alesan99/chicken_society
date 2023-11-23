@@ -2,6 +2,7 @@
 // Control a chicken running to the right, jump over obstacles while the chicken slowly speeds up.
 // TODO: Improve this code and comment it
 
+if (true) {
 let RubberChicken
 let Fence
 let Ground
@@ -627,4 +628,5 @@ Fence = class extends PhysicsObject {
 		}
 		return true
 	}
+}
 }

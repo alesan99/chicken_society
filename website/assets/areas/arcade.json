@@ -74,7 +74,7 @@
     },
 
     "triggers": {
-        "minigame1": {
+        "runnerMinigame": {
             "x": 160,
             "y": 458,
             "shape": [-40,-40, 40,-40, 40,40, -40,40],
@@ -89,6 +89,23 @@
             "action": "minigame",
             "minigameName": "runner",
             "cost": 1
+        },
+        
+        "clawMachine": {
+            "x": 700,
+            "y": 279,
+            "shape": [-40,-40, 40,-40, 40,20, -40,20],
+
+            "clickRegion": [-50,-120, 80,120],
+            "icon": {
+                "frame": 2,
+                "x": -20,
+                "y": -100
+            },
+
+            "action": "minigame",
+            "minigameName": "claw",
+            "cost": 5
         }
     },
 
