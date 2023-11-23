@@ -30,7 +30,7 @@
         "cashier": {
             "profile": {
                 "name": "Bazooka Benny",
-                "color": [132, 211, 74],
+                "color": "#84d34a",
                 "head": "snapback",
                 "face": false,
                 "body": "silverchains"
@@ -44,7 +44,15 @@
                 "We love seed!",
                 "We've got free samples!",
                 "Everything here is legal. Trust me."
-            ]
+            ],
+            "shop": {
+                "name": "Seed Dispensary",
+                "items": {
+                    "item": {
+                        "seeds": true
+                    }
+                }
+            }
         }
     }
 }

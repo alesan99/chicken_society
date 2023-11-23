@@ -45,7 +45,7 @@ MENUS["shop"] = new class extends Menu {
 				}
 			},
 			this.inventory, 
-			(itemId,itemType)=>{
+			(itemId,itemType,over)=>{
 				// Is selected?
 				if (this.selectedItem == itemId) {
 					return true

@@ -72,11 +72,11 @@ function makeProfile() {
 
 	let profile = {
 		name: defaultNames[Math.floor(Math.random()*defaultNames.length)],
-		color: [
+		color: RGBtoHEX(
 			Math.floor(100 + Math.random()*155),
 			Math.floor(100 + Math.random()*155),
 			Math.floor(100 + Math.random()*155)
-		],
+		),
 		head: false,
 		face: false,
 		body: false,
@@ -187,7 +187,7 @@ function getItemData(id, type) {
 }
 
 // Color storage methods
-function RGBToHEX(r, g, b) {
+function RGBtoHEX(r, g, b) {
 	// Convert each RGB component to a two-digit hexadecimal value
 	const hexR = r.toString(16).padStart(2, '0');
 	const hexG = g.toString(16).padStart(2, '0');
@@ -199,7 +199,8 @@ function RGBToHEX(r, g, b) {
 	return hexColor;
 }
 
-function HEXToRGB(hex) {
+function HEXtoRGB(hex) {
+	console.log(hex)
 	// Remove the '#' symbol
 	hex = hex.substring(1, 7);
 

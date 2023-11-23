@@ -53,7 +53,10 @@ class Button {
     draw(){
         if (!this.visible) {
             // Don't render if button was specified to be not visible
-        } else if (this.image) {
+            return false
+        }
+
+        if (this.image) {
             // Render image for button
             let frame = 0
             if (this.holding == true){
@@ -78,11 +81,14 @@ class Button {
             DRAW.rectangle(this.x, this.y, this.w, this.h);
             DRAW.setColor(168, 85, 38, 1)
             DRAW.rectangle(this.x, this.y, this.w, this.h, "line");
+        }
+
+        // Label
+        if (this.label) {
             DRAW.setFont(FONT.guiLabel)
             DRAW.setColor(112, 50, 16,1)
             DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, "center")
         }
-
     }
 }
 

@@ -23,7 +23,7 @@
 		"dealer": {
             "profile": {
                 "name": "???",
-                "color": [40, 80, 50],
+                "color": "#285032",
                 "head": "hoodie",
                 "face": false,
                 "body": false

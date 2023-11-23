@@ -27,6 +27,9 @@ function loadGameAssets() {
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
 	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
+	IMG.replyBubble = new RenderImage("assets/reply_bubble.png")
+	SPRITE.replyBubble = new Sprite(IMG.replyBubble, 2,1, 64,32)
+	SPRITE.replyTrail = new Sprite(IMG.replyBubble, 2,1, 64,32, 0,32)
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
 
@@ -85,6 +88,8 @@ function loadGameAssets() {
 	ITEMS.body["beefcakeaccessories"] = {}
 	ITEMS.body["alesanaccessories"] = {}
 
+	ITEMS.item["seeds"] = {}
+
 	for (const [category, list] of Object.entries(ITEMS)) {
 		for (const [itemId, item] of Object.entries(list)) {
 			// Load image, create sprite frames when image is loaded, and load hat centers from JSON
@@ -95,8 +100,10 @@ function loadGameAssets() {
 			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
 				item.name = data.name
 				item.description = data.description
-				item.center = data.center
 				item.cost = data.cost
+				if (data.center) {
+					item.center = data.center
+				}
 			})
 			let async = function() {
 				item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)

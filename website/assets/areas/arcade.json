@@ -31,7 +31,7 @@
         "gamer": {
             "profile": {
                 "name": "Bud",
-                "color": [200, 210, 255],
+                "color": "#c8d2ff",
                 "head": false,
                 "face": "visors",
                 "body": "alesanaccessories"
@@ -54,7 +54,7 @@
 		"expert": {
             "profile": {
                 "name": "Pro Gamer",
-                "color": [40, 40, 40],
+                "color": "#282828",
                 "head": false,
                 "face": false,
                 "body": false
@@ -64,12 +64,10 @@
             "facing": "right",
             "roamRadius": false,
             "dialogue": [
-				"Psst. Type /emote dance",
-				"Psst. Type /emote wave",
-				"Psst. Type /emote sit",
-				"Psst. Type /hat tophat",
-				"Psst. Type /accessory scarf",
-				"Psst. Press the '/' key to open the chat.",
+				"Psst. Press the emote button in the chat HUD.",
+				"Psst. Type /head tophat",
+				"Psst. Type /body scarf",
+				"Psst. Press the '/' key to type in the chat.",
 				"Psst. Change your name with /name YOURNAME"
 			]
         }

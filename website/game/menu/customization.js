@@ -31,9 +31,9 @@ MENUS["customization"] = new class extends Menu {
 
         // Color
 		this.buttons["color"] = new Button("Random", ()=>{
-            PROFILE.color = [Math.floor(100 + Math.random()*155),
+            PROFILE.color = RGBtoHEX(Math.floor(100 + Math.random()*155),
                 Math.floor(100 + Math.random()*155),
-                Math.floor(100 + Math.random()*155)];
+                Math.floor(100 + Math.random()*155));
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 348,365, 100,32)
 
@@ -52,12 +52,14 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["inventory"] = new ItemGrid(
 			(itemId,itemType)=>{
 				// Set clothing item
-				if (PROFILE[itemType] && PROFILE[itemType] == itemId) {
-					PROFILE[itemType] = false;
-				} else {
-					PROFILE[itemType] = itemId;
+				if (PROFILE.hasOwnProperty(itemType)) {
+					if (PROFILE[itemType] == itemId) {
+						PROFILE[itemType] = false;
+					} else {
+						PROFILE[itemType] = itemId;
+					}
+					PLAYER.updateProfile(PROFILE, "sendToServer");
 				}
-				PLAYER.updateProfile(PROFILE, "sendToServer");
 			},
 			this.inventory, 
 			(itemId,itemType)=>{
@@ -66,6 +68,7 @@ MENUS["customization"] = new class extends Menu {
 					return true
 				}
 			}, 476,184, 56,56, 5,3)
+		this.buttons["inventory"].showCount = true // How how many of each item the player owns
 
 		// this.buttons["bodyRight"] = new Button(">", ()=>{
 		// 	let keys = Object.keys(SAVEDATA.items.body);

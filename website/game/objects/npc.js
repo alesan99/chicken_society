@@ -22,8 +22,13 @@ class NPC {
         this.walkTimer = this.walkTime
         this.dir = [1, 0] // Walking direction vector
 
+
         // Behavior
         this.shop = shop // Open up shopping menu to prompt player to buy stuff
+
+        // Replies
+        this.awaitingReply = false
+        this.replyButtons = []
 
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
@@ -32,7 +37,10 @@ class NPC {
             this.speak()
             // Open shop if specified
             if (this.shop) {
-                openMenu("shop", this.shop)
+                this.requestReply(
+                    [["Buy", () => {openMenu("shop", this.shop); this.closeReply()}]]
+                    )
+                // openMenu("shop", this.shop)
             }
         }
         let rangeShape = range // Where does player have to stand to interact?
@@ -90,10 +98,39 @@ class NPC {
         if (char.bubbleText == false && this.trigger.activated) {
             this.trigger.reset()
         }
+        if (!char.bubbleText && this.awaitingReply) {
+            this.closeReply()
+        }
 	}
+
+    draw() {
+        // Responses
+        if (this.replyButtons.length > 0) {
+            for (const replyButton of this.replyButtons) {
+                replyButton.draw()
+            }
+        }
+    }
 
     speak() {
         let i = Math.floor(Math.random() * this.dialogue.length)
         this.obj.chatBubble(this.dialogue[i])
+    }
+
+    requestReply(options){
+        this.awaitingReply = true
+        let replies = options.length
+        for (let i = 0; i < replies; i++) {
+            let label = options[i][0]
+            let func = options[i][1]
+            let button = new Button(label, func, {image: IMG.replyBubble, frames:[SPRITE.replyBubble.getFrame(0),SPRITE.replyBubble.getFrame(0),SPRITE.replyBubble.getFrame(1)]}, this.obj.x+66*i-(replies*66/2), this.obj.y-275, 64,32)
+            this.replyButtons.push(button)
+        }
+    }
+
+    closeReply(){
+        this.awaitingReply = false
+        this.replyButtons = []
+        this.obj.bubbleText = false
     }
 }

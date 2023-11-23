@@ -228,6 +228,12 @@ class World {
 			obj.draw()
 		}
 
+		// NPC how dialogue responses
+		for (const [id, obj] of Object.entries(NPCS)) {
+			obj.draw()
+		}
+
+
 		// Show action bubble above clickable elements like NPCs
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 			obj.draw()
@@ -283,6 +289,17 @@ class World {
 			return true
 		}
 		
+		// NPC dialogue responses
+		for (const [id, obj] of Object.entries(NPCS)) {
+			if (obj.replyButtons.length > 0) {
+				for (const replyButton of obj.replyButtons) {
+					if (replyButton.click()) {
+						return true
+					}
+				}
+			}
+		}
+		
 		// Click on click triggers
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 			if (obj.click && obj.click(button, x, y)) {
@@ -296,6 +313,14 @@ class World {
 
 	mouseRelease(button, x, y) {
 		CHAT.mouseRelease(button, x, y)
+		// NPC dialogue responses
+		for (const [id, obj] of Object.entries(NPCS)) {
+			if (obj.replyButtons.length > 0) {
+				for (const replyButton of obj.replyButtons) {
+					replyButton.clickRelease()
+				}
+			}
+		}
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
 	}
 }

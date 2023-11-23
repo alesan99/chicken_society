@@ -109,9 +109,9 @@ class ItemGrid {
 					let cellY = this.y + cy * this.ch;
 
 					// Set the color based on whether the cell is being hovered over
-					let selected = this.selectedFunc(this.list[i],itemType)
-					let holding = (this.holding && this.overx === cx && this.overy === cy)
 					let hover = (this.hover && this.overx === cx && this.overy === cy)
+					let selected = this.selectedFunc(this.list[i],itemType,hover)
+					let holding = (this.holding && this.overx === cx && this.overy === cy)
 					if (hover || holding || selected) {
 						if (holding) {
 							DRAW.setColor(218, 165, 32, 1); // Dark color for selected cell (while holding
@@ -136,29 +136,33 @@ class ItemGrid {
 					if (this.list[i]) {
 						let image = ITEMS[itemType][this.list[i]].image
 						let sprite = ITEMS[itemType][this.list[i]].sprite
+						let scale = 0.4*(this.cw/42)
 
 						if (image) {
-							DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, 0.4, 0.4, 0.5, 0.5)
+							DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5)
 						}
 
 						// Count of item owned
-						//DRAW.setColor(0, 0, 0, 1)
-						//DRAW.text(this.list[i], cellX, cellY+this.ch/2, "left")
+						if (this.showCount && SAVEDATA.items[itemType][this.list[i]] > 1) {
+							DRAW.setColor(0, 0, 0, 1)
+							DRAW.text(SAVEDATA.items[itemType][this.list[i]], cellX+this.cw-2, cellY+this.ch-2, "right")
+						}
 					}
 				}
 			}
 		}
 
 		// Tooltip
-		// if (this.hover) {
-		// 	let cx = this.overx
-		// 	let cy = this.overy
-		// 	let i = cx + (cy+this.scroll)*this.gw // Index of cell
-		// 	if (this.list[i]) {
-		// 		DRAW.setColor(0, 0, 0, 1)
-		// 		DRAW.text(this.list[i], mouseX+20, mouseY+20, "left")
-		// 	}
-		// }
+		if (this.hover) {
+			let cx = this.overx
+			let cy = this.overy
+			let i = cx + (cy+this.scroll)*this.gw // Index of cell
+			if (this.list[i]) {
+				let itemType = getItemCategory(this.list[i])
+				DRAW.setColor(0, 0, 0, 1)
+				DRAW.text(ITEMS[itemType][this.list[i]].name, mouseX+20, mouseY+20, "left")
+			}
+		}
     }
 }
 
