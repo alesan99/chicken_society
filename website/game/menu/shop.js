@@ -10,7 +10,7 @@ MENUS["shop"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons[0] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
+		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		this.name = config.name || ""
 		this.items = config.items || {} // {category: {itemId: price}}
@@ -19,11 +19,27 @@ MENUS["shop"] = new class extends Menu {
 		this.tab = "allTab"
 		this.inventory = []
 		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all"); this.buttons[this.tab].selected=false; this.tab = "allTab"; this.buttons[this.tab].selected=true}, null, 265,150, 46,34)
-		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head"); this.buttons[this.tab].selected=false; this.tab = "headTab"; this.buttons[this.tab].selected=true}, null, 311,150, 34,34)
-		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face"); this.buttons[this.tab].selected=false; this.tab = "faceTab"; this.buttons[this.tab].selected=true}, null, 311+34*1,150, 34,34)
-		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body"); this.buttons[this.tab].selected=false; this.tab = "bodyTab"; this.buttons[this.tab].selected=true}, null, 311+34*2,150, 34,34)
-		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, null, 311+34*3,150, 34,34)
-		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, null, 311+34*4,150, 34,34)
+		let i = 0
+		if (this.items["head"]) { // Only enable tab if selling items in this category
+			this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head"); this.buttons[this.tab].selected=false; this.tab = "headTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(0)}, 311+34*i,150, 34,34)
+			i++
+		}
+		if (this.items["face"]) { // Only enable tab if selling items in this category
+			this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face"); this.buttons[this.tab].selected=false; this.tab = "faceTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(1)}, 311+34*i,150, 34,34)
+			i++
+		}
+		if (this.items["body"]) { // Only enable tab if selling items in this category
+			this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body"); this.buttons[this.tab].selected=false; this.tab = "bodyTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(2)}, 311+34*i,150, 34,34)
+			i++
+		}
+		if (this.items["furniture"]) { // Only enable tab if selling items in this category
+			this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(3)}, 311+34*i,150, 34,34)
+			i++
+		}
+		if (this.items["item"]) { // Only enable tab if selling items in this category
+			this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(4)}, 311+34*i,150, 34,34)
+			i++
+		}
 		this.filterInventory("all")
 		this.buttons["allTab"].selected = true
 
@@ -131,6 +147,8 @@ MENUS["shop"] = new class extends Menu {
 					DRAW.text(this.selectedItemDescription[i], 553, 242 + i * 20, "left")
 				}
 			}
+		} else {
+			DRAW.text("Select an item.", 553, 210, "left")
 		}
 
 		// Render all buttons

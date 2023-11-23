@@ -4,8 +4,14 @@ class Button {
         this.label = label;
         if (graphic) {
             // If specified, render image for button with frames
-            this.image = graphic.image;
-            this.frames = graphic.frames;
+            if (graphic.image) {
+                this.image = graphic.image;
+                this.frames = graphic.frames;
+            }
+            if (graphic.icon) {
+                this.icon = graphic.icon;
+                this.iconFrame = graphic.iconFrame;
+            }
             if (graphic.visible != null) {
                 this.visible = graphic.visible;
             }
@@ -83,8 +89,12 @@ class Button {
             DRAW.rectangle(this.x, this.y, this.w, this.h, "line");
         }
 
-        // Label
-        if (this.label) {
+        if (this.icon) {
+            // Icon
+            DRAW.setColor(255,255,255,1)
+            DRAW.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
+        } else if (this.label) {
+            // Label
             DRAW.setFont(FONT.guiLabel)
             DRAW.setColor(112, 50, 16,1)
             DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, "center")

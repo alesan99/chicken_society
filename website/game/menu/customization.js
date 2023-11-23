@@ -10,7 +10,7 @@ MENUS["customization"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons["confirm"] = new Button("Confirm", ()=>{closeMenu()}, null, 665,399, 100,32)
+		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		// Profile loading from local browser storage (NOT from server)
 		this.buttons["load"] = new Button("Load", ()=>{
@@ -41,11 +41,11 @@ MENUS["customization"] = new class extends Menu {
 		this.tab = "allTab"
 		this.inventory = []
 		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all"); this.buttons[this.tab].selected=false; this.tab = "allTab"; this.buttons[this.tab].selected=true}, null, 476,150, 46,34)
-		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head"); this.buttons[this.tab].selected=false; this.tab = "headTab"; this.buttons[this.tab].selected=true}, null, 522,150, 34,34)
-		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face"); this.buttons[this.tab].selected=false; this.tab = "faceTab"; this.buttons[this.tab].selected=true}, null, 522+34*1,150, 34,34)
-		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body"); this.buttons[this.tab].selected=false; this.tab = "bodyTab"; this.buttons[this.tab].selected=true}, null, 522+34*2,150, 34,34)
-		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, null, 522+34*3,150, 34,34)
-		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, null, 522+34*4,150, 34,34)
+		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head"); this.buttons[this.tab].selected=false; this.tab = "headTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(0)}, 522,150, 34,34)
+		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face"); this.buttons[this.tab].selected=false; this.tab = "faceTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(1)}, 522+34*1,150, 34,34)
+		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body"); this.buttons[this.tab].selected=false; this.tab = "bodyTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(2)}, 522+34*2,150, 34,34)
+		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(3)}, 522+34*3,150, 34,34)
+		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(4)}, 522+34*4,150, 34,34)
 		this.filterInventory("all")
 		this.buttons["allTab"].selected = true
 

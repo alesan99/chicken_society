@@ -45,6 +45,8 @@ function loadGameAssets() {
 
 	// MENUS
 	IMG.menu = new RenderImage("assets/gui/menu.png")
+	IMG.items = new RenderImage("assets/gui/items.png")
+	SPRITE.items = new Sprite(IMG.items, 6,1, 30,30, 0,0, 1,1)
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed
