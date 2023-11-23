@@ -27,6 +27,10 @@ MINIGAMES["claw"] = new class {
 		this.img.background = new RenderImage("game/minigames/claw/background.png")
 		this.img.claw = new RenderImage("game/minigames/claw/claw.png")
 		this.sprite.claw = new Sprite(this.img.claw, 2,1, 150,465)
+		this.img.prize = new RenderImage("game/minigames/claw/prizes.png")
+		this.sprite.prizeSmall = new Sprite(this.img.prize, 4,1, 90,90, 0,0, 1,1)
+		this.sprite.prizeMedium = new Sprite(this.img.prize, 3,1, 130,130, 0,91, 1,1)
+		this.sprite.prizeLarge = new Sprite(this.img.prize, 2,1, 210,210, 0,222, 1,1)
 
 		// Animation variables
 		this.blinkAnim = 0
@@ -37,17 +41,43 @@ MINIGAMES["claw"] = new class {
 			Ground: {}
 		}
 		this.world = new SpatialHash(canvasWidth,canvasHeight, 100)
-		this.objects["Claw"][0] = new Claw(this.world, canvasWidth-160, -200)
+		this.objects["Claw"][0] = new Claw(this.world, canvasWidth-180, -270)
 		this.claw = this.objects["Claw"][0]
 		this.objects["Ground"][0] = new Ground(this.world, 56, canvasHeight-100, 690, 100)
 		this.objects["Ground"][1] = new Ground(this.world, 0, 0, 60, 576)
 		this.objects["Ground"][2] = new Ground(this.world, canvasWidth-60, 0, 60, 576)
-		this.objects["Ground"][3] = new Ground(this.world, 720, 300, 26, 180)
+		this.objects["Ground"][3] = new Ground(this.world, 720, 344, 26, 136)
 
-		
-		this.objects["Prize"][0] = new Prize(this.world, 164,395)
-		this.objects["Prize"][1] = new Prize(this.world, 366,359)
-		this.objects["Prize"][2] = new Prize(this.world, 393,286)
+		// Bottom Row
+		for (let i = 0; i < 4; i++) {
+			let x = 150+Math.random()*500
+			let size = 1
+			let sizeRoll = Math.random()*10
+			if (sizeRoll > 9) {
+				size = 3
+			} else if (sizeRoll > 5) {
+				size = 2
+			}
+			this.spawnObject("Prize", new Prize(this.world, x,340, size))
+		}
+
+		// Middle Row
+		for (let i = 0; i < 3; i++) {
+			let x = 150+Math.random()*500
+			let size = 1
+			let sizeRoll = Math.random()*10
+			if (sizeRoll > 8) {
+				size = 2
+			}
+			this.spawnObject("Prize", new Prize(this.world, x,250, size))
+		}
+
+		// Top Row
+		for (let i = 0; i < 2; i++) {
+			let x = 150+Math.random()*500
+			let size = 1
+			this.spawnObject("Prize", new Prize(this.world, x,100, size))
+		}
 	}
 
 	start() {
@@ -66,12 +96,30 @@ MINIGAMES["claw"] = new class {
 		}
 
 		updatePhysics(this.objects, this.world, dt)
+
+		
+		// Delete unused prizes
+		let keysToDelete = []
+		let objList = this.objects["Prize"]
+		for (const [id, obj] of Object.entries(objList)) {
+			if (obj.DELETED) {
+				keysToDelete.push(id);
+			}
+		}
+		keysToDelete.forEach(key => {
+			delete objList[key];
+		});
 	}
   
 	draw() {
 		// Background
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(this.img.background, null, 0,0)
+
+		// Instructions
+		DRAW.setColor(0,0,0,1.0)
+		DRAW.setFont(FONT.caption)
+		DRAW.text("1 Nugget per play.", 100, 80)
 
 		// Prizes		
 		for (const [id, obj] of Object.entries(this.objects["Prize"])) {
@@ -140,6 +188,7 @@ Claw = class extends PhysicsObject {
 		super(spatialHash,x,y)
 		this.x = x
 		this.y = y
+
 		this.w = 40
 		this.h = 400
 
@@ -166,6 +215,7 @@ Claw = class extends PhysicsObject {
 		this.grabbed = false // object grabbed
 		this.grabTimer = 0
 		this.grabX = 0 // where was object grabbed?
+		this.dropTimer = 0
 
 		this.targetsx = 0
 		this.targetsy = 0
@@ -174,7 +224,7 @@ Claw = class extends PhysicsObject {
 	}
 	startMoving() {
 		if (this.movable && !this.moving) {
-			if (spendNuggets(5)) {
+			if (spendNuggets(1)) {
 				this.targetsx = -300
 				this.moving = true
 			}
@@ -223,6 +273,8 @@ Claw = class extends PhysicsObject {
 			if (this.grabTimer > 10) {
 				this.movable = true
 				this.grabbed = false
+				this.grabTimer = 0
+				this.dropTimer = 0
 			} else if (this.grabTimer > 6.5 && this.x > this.spawnX-30) {
 				this.targetsx = 0
 			} else if (this.grabTimer > 6.5) {
@@ -237,6 +289,21 @@ Claw = class extends PhysicsObject {
 			} else if (this.grabTimer > 1) {
 				this.targetsy = 150
 			}
+
+			// Will it drop the item?
+			if (this.grabbed) {
+				if (this.grabTimer > 4) {
+					this.dropTimer += dt
+				}
+				if (this.dropTimer > 0.5) {
+					let roll = Math.random()*50
+					if (roll < Math.abs(this.grabX)*1.4) { // The more centered the object is, the less likely it is to drop
+						this.grabbed = false
+						this.grabbing = false
+					}
+					this.dropTimer -= 0.5
+				}
+			}
 		}
 	}
 	collide(name,obj,nx,ny) {
@@ -244,10 +311,13 @@ Claw = class extends PhysicsObject {
 			this.sy = 0
 		}
 		if (this.grabbing && name == "Prize") {
-			this.grabbed = obj
-			this.grabbing = false
-			this.grabX = obj.x-this.x
-			return true
+			let upFacing = (ny == -1)
+			if (upFacing) {
+				this.grabbed = obj
+				this.grabbing = false
+				this.grabX = obj.x-this.x
+				return true
+			}
 		}
 		return true
 	}
@@ -258,17 +328,40 @@ Claw = class extends PhysicsObject {
 	draw(x) {
 		DRAW.setColor(255,255,255,1.0)
 		let frame = 0
-		if (this.grabbed) {
+		if (this.grabbed || this.grabTimer > 4) {
 			frame = 1
 		}
 		DRAW.image(minigame.img.claw, minigame.sprite.claw.getFrame(frame), this.x, this.y, 0, 1,1, 0.5,0)
 	}
 }
 Prize = class extends PhysicsObject {
-	constructor(spatialHash, x=0, y=0) {
+	constructor(spatialHash, x=0, y=0, size=1) {
 		super(spatialHash,x,y)
-		this.w = 80
-		this.h = 80
+
+		this.sprite = minigame.sprite.prizeSmall.getFrame(0)
+
+		this.size = size
+		this.item = false
+		let dim = 80
+		if (size == 1) {
+			dim = 80
+			let frame = Math.floor(Math.random()*4)
+			this.item = frame
+			this.sprite = minigame.sprite.prizeSmall.getFrame(frame)
+		} else if (size == 2) {
+			dim = 110
+			let frame = Math.floor(Math.random()*3)
+			this.item = frame
+			this.sprite = minigame.sprite.prizeMedium.getFrame(frame)
+		} else if (size == 3) {
+			dim = 180
+			let frame = Math.floor(Math.random()*2)
+			this.item = frame
+			this.sprite = minigame.sprite.prizeLarge.getFrame(frame)
+		}
+
+		this.w = dim
+		this.h = dim
 		this.x = x
 		this.y = y
 
@@ -283,18 +376,38 @@ Prize = class extends PhysicsObject {
 			-this.w/2+bevel, this.h/2,
 			-this.w/2, this.h/2-bevel
 		)
+
+		this.rotation = 0
 		
-		this.gravity = 300
+		this.gravity = 400
+		this.collected = false
 
 		this.active = true
 		this.static = false
 		this.setPosition(null,null)
 	}
 	update(dt) {
+		// Fell
+		if (!this.collected && this.y-this.h/2 > canvasHeight) {
+			this.collect()
+		}
+	}
+	collect() {
+		if (this.size == 1) {
+			addNuggets(5)
+		} else if (this.size == 2) {
+			addNuggets(8)
+		} else if (this.size == 3) {
+			addNuggets(15)
+		}
+		this.collected = true
+		this.destroy()
 	}
 	draw() {
-		DRAW.setColor(200,150,0,1.0)
-		DRAW.circle(this.x,this.y, this.w/2, "fill")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(minigame.img.prize, this.sprite, this.x, this.y, this.rotation, 1,1, 0.5,0.5)
+		//DRAW.setColor(200,150,0,1.0)
+		//DRAW.circle(this.x,this.y, this.w/2, "fill")
 	}
 	collide(name,obj,nx,ny) {
 		if (ny < 0) {
