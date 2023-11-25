@@ -8,16 +8,17 @@ function makeSaveData() {
 		profile: makeProfile(),
 
 		// All owned items
-		hats: ["none"],
-		accessories: ["none"],
-		furniture: [],
-		items: [],
+		items: {
+			head: {},
+			face: {},
+			body: {},
+			furniture: {},
+			item: {}
+		},
+		nuggets: 100,
 		
 		pets: [],
-
-
 		house: [],
-		nuggets: 10,
 
 		highscores: {
 			runner: 0
@@ -62,8 +63,11 @@ function makeProfile() {
 			Math.floor(100 + Math.random()*155),
 			Math.floor(100 + Math.random()*155)
 		],
-		hat: false,
-		accessory: false,
+		head: false,
+		face: false,
+		body: false,
+		item: false,
+
 		pet: false
 	}
 	
@@ -135,31 +139,26 @@ function spendNuggets(cost) {
 
 // Get items like clothing and consumables
 function addItem(type, id) {
-	let category = "items"
-	if (type == "hat") {
-		category = "hats"
-	} else if (type == "accessory") {
-		category = "accessories"
-	} else if (type == "furniture") {
-		category = "furniture"
+	if (!SAVEDATA.items[type][id]) {
+		SAVEDATA.items[type][id] = 0
 	}
-	SAVEDATA[category].push(id)
+	SAVEDATA.items[type][id] += 1
 }
 
 function removeItem(type, id) {
-	let category = "items"
-	if (type == "hat") {
-		category = "hats"
-	} else if (type == "accessory") {
-		category = "accessories"
-	} else if (type == "furniture") {
-		category = "furniture"
+	if (!SAVEDATA.items[type][id]) {
+		SAVEDATA.items[type][id] = 0
 	}
-	const indexToRemove = SAVEDATA[category].indexOf(id)
+	SAVEDATA.items[type][id] -= 1
+}
 
-	if (indexToRemove !== -1) {
-		SAVEDATA[category].splice(indexToRemove, 1);
+function getItemCategory(id) {
+	for (const cat in ITEMS) {
+		if (ITEMS[cat][id]) {
+			return cat
+		}
 	}
+	return "item"
 }
 
 function getItemData(id, type) {
@@ -167,21 +166,8 @@ function getItemData(id, type) {
 	if (type) {
 		category = type
 	} else {
-		for (const cat in ITEMLIST) {
-			if (ITEMLIST[cat].includes(id)) {
-				category = cat
-				break
-			}
-		}
+		category = getItemCategory(id)
 	}
 
-	if (category == "hat") {
-		return HAT[id]
-	} else if (type == "accessory") {
-		return ACCESSORY[id]
-	} else if (type == "furniture") {
-		return FURNITURE[id]
-	} else {
-		return ITEM[id]
-	}
+	return ITEMS[category][id]
 }

@@ -1,14 +1,17 @@
 //NPC object, controls the position of another object along with interactable dialouge
 
 class NPC {
-	//Initialize: object, roam? radius in pixels of area to walk around
-	constructor (obj, dialogue, facing="down", roamRadius, clickRegion, shop) {
+	//Initialize: object, roam? radius in pixels of area to walk around, interactable range, clickable region, shop menu?
+	constructor (obj, dialogue, facing="down", roamRadius=false, range=50, clickRegion=[-40,-100,80,120], shop) {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
 
         // Adjust object
         this.obj.dir = facing
+        if (facing == "left") {
+            this.obj.flip = -1
+        }
 
         // Walk around
         this.originX = this.obj.x
@@ -24,8 +27,6 @@ class NPC {
 
         // Dialogue Trigger
         this.dialogue = dialogue || [""]
-        let range = 50
-        let defaultClickRegion = [-40,-100,80,120]
         let func = () => {
             // Speak when clicked or near
             this.speak()
@@ -34,7 +35,11 @@ class NPC {
                 openMenu("shop", this.shop)
             }
         }
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, [-range,-range, range,-range, range,range, -range,range], {frame:0,x:0,y:-120}, clickRegion || defaultClickRegion))
+        let rangeShape = range // Where does player have to stand to interact?
+        if (!Array.isArray(range)) {
+            rangeShape = [-range,-range, range,-range, range,range, -range,range]
+        }
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, rangeShape, {frame:0,x:0,y:-120}, clickRegion))
 	}
 
 	// Update

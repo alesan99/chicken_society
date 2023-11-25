@@ -20,42 +20,110 @@ MENUS["customization"] = new class extends Menu {
 				PROFILE = SAVEDATA.profile;
 				PLAYER.updateProfile(PROFILE, "sendToServer");
 			}
-		}, null, 445,399, 100,32)
+		}, null, 263,404, 100,32)
 		this.buttons["save"] = new Button("Save", ()=>{
 			saveSaveData(SAVEDATA);
 			PROFILE = SAVEDATA.profile;
-		}, null, 555,399, 100,32)
+		}, null, 373,404, 100,32)
 
         // Name
-		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 665,162, 100,32)
+		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 292,129, 140,32)
+
         // Color
 		this.buttons["color"] = new Button("Random", ()=>{
             PROFILE.color = [Math.floor(100 + Math.random()*155),
                 Math.floor(100 + Math.random()*155),
                 Math.floor(100 + Math.random()*155)];
             PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 665,202, 100,32)
-        // Hat
-		this.buttons["hatLeft"] = new Button("<", ()=>{
-            PROFILE.hat = SAVEDATA.hats[Math.floor(Math.random()*SAVEDATA.hats.length)];
-            PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 605,242, 32,32)
-		this.buttons["hatRight"] = new Button(">", ()=>{
-            PROFILE.hat = SAVEDATA.hats[Math.floor(Math.random()*SAVEDATA.hats.length)];
-            PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 733,242, 32,32)
-        // Accessory
-		this.buttons["accessoryLeft"] = new Button("<", ()=>{
-            PROFILE.accessory = SAVEDATA.accessories[Math.floor(Math.random()*SAVEDATA.accessories.length)];
-			PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 605,282, 32,32)
-		this.buttons["accessoryRight"] = new Button(">", ()=>{
-            PROFILE.accessory = SAVEDATA.accessories[Math.floor(Math.random()*SAVEDATA.accessories.length)];
-			PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 733,282, 32,32)
+        }, null, 348,365, 100,32)
+
+        // Inventorty
+		this.inventory = []
+		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all")}, null, 476,150, 46,34)
+		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head")}, null, 522,150, 34,34)
+		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face")}, null, 522+34*1,150, 34,34)
+		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body")}, null, 522+34*2,150, 34,34)
+		this.buttons["furitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture")}, null, 522+34*3,150, 34,34)
+		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item")}, null, 522+34*4,150, 34,34)
+		this.filterInventory("all")
+
+		this.buttons["inventory"] = new GridSelector(
+			(itemId)=>{
+				// Set clothing item
+				if (PROFILE[getItemCategory(itemId)] && PROFILE[getItemCategory(itemId)] == itemId) {
+					PROFILE[getItemCategory(itemId)] = false;
+				} else {
+					PROFILE[getItemCategory(itemId)] = itemId;
+				}
+				PLAYER.updateProfile(PROFILE, "sendToServer");
+			}, this.inventory, 
+			(i,itemId)=>{
+				// Is selected?
+				let category = getItemCategory(itemId)
+				if (PROFILE[category] && PROFILE[category] == itemId) {
+					return true
+				}
+			},
+			(i,itemId)=>{
+				return [ITEMS[getItemCategory(itemId)][itemId].image, ITEMS[getItemCategory(itemId)][itemId].sprite]
+			}, 476,184, 56,56, 5,3)
+
+		// this.buttons["bodyRight"] = new Button(">", ()=>{
+		// 	let keys = Object.keys(SAVEDATA.items.body);
+		// 	if (keys.length == 0) {
+		// 		PROFILE.body = false
+		// 	} else {
+		// 		PROFILE.body = keys[Math.floor(Math.random() * keys.length)];
+		// 	}
+		// 	PLAYER.updateProfile(PROFILE, "sendToServer");
+        // }, null, 733,322, 32,32)
         // Pet
-		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,322, 100,32)
+		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
     }
+
+	filterInventory(category) {
+		this.inventory.length = 0
+		if (category == "all") {
+			for (let category in SAVEDATA.items) {
+				for (let itemId in SAVEDATA.items[category]) {
+					this.inventory.push(itemId)
+				}
+			}
+		} else {
+			for (let itemId in SAVEDATA.items[category]) {
+				this.inventory.push(itemId)
+			}
+		}
+	}
+	
+	draw() {
+        // Window
+		let scale = 1
+		if (this.openTimer < 1) {
+			scale = easing("easeOutBack", this.openTimer)
+		}
+        DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
+
+        // Text
+        DRAW.setColor(112, 50, 16, scale)
+        DRAW.setFont(FONT.caption)
+        DRAW.text("Inventory", 620, 142, "center")
+
+        DRAW.text("Color", 285, 388, "left")
+
+        DRAW.text("Pet", 613, 384, "left")
+
+        PLAYER.draw(360,340)
+
+		// Render all buttons
+		this.drawButtons()
+	}
+
+	update(dt) {
+		this.openTimer = Math.min(1, this.openTimer + 4*dt)
+
+		this.updateButtons(dt)
+	}
 
 	keyPress(key) {
 
@@ -71,38 +139,5 @@ MENUS["customization"] = new class extends Menu {
 
 	mouseRelease(button, x, y) {
 		return super.mouseRelease(button, x, y)
-	}
-	
-	draw() {
-        // Window
-		let scale = 1
-		if (this.openTimer < 1) {
-			scale = easing("easeOutBack", this.openTimer)
-		}
-        DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
-
-        // Text
-        DRAW.setColor(112, 50, 16, scale)
-        DRAW.setFont(FONT.caption)
-        DRAW.text("Chicken Profile", 512, 142, "center")
-
-        DRAW.text("Display Name", 460, 184, "left")
-        DRAW.text("Color", 460, 224, "left")
-        DRAW.text("Hat", 460, 264, "left")
-        DRAW.text(PROFILE.hat, 686, 264, "center")
-        DRAW.text("Accessory", 460, 304, "left")
-        DRAW.text(PROFILE.accessory, 686, 304, "center")
-        DRAW.text("Pet", 460, 344, "left")
-
-        PLAYER.draw(342,340)
-
-		// Render all buttons
-		this.drawButtons()
-	}
-
-	update(dt) {
-		this.openTimer = Math.min(1, this.openTimer + 4*dt)
-
-		this.updateButtons(dt)
 	}
 }()

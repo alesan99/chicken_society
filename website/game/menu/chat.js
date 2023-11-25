@@ -30,7 +30,13 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34) 
 		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34) 
 
-		this.buttons[5] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0}, {visible: false}, 255,534, 406,36) 
+		this.textField = document.getElementById('gameTextInput');
+		this.textField.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter' || event.code === 'Enter') {
+				this.enter()
+			}
+		});
+		this.buttons[5] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0; this.textField.focus()}, {visible: false}, 255,534, 406,36) 
 	}
 
 	enter() {
@@ -49,16 +55,30 @@ MENUS["chatMenu"] = new class extends Menu {
 					PROFILE.color = [Number(arg), Number(arg2), Number(arg3)]
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
-				case "/hat":
-					PROFILE.hat = arg
+				case "/head":
+					PROFILE.head = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
-				case "/accessory":
-					PROFILE.accessory = arg
+				case "/face":
+					PROFILE.face = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")
+					break
+				case "/body":
+					PROFILE.body = arg
+					PLAYER.updateProfile(PROFILE, "sendToServer")
+					break
+				case "/scale": // Chicken size
+					PROFILE.scale = arg
+					PLAYER.updateProfile(PROFILE, "sendToServer")
+					break
+				case "/speed": // Chicken speed
+					PLAYER.speed = arg
 					break
 				case "/area": // Warp to a different area
 					WORLD.loadArea(arg, "chatWarp")
+					break
+				case "/minigame": // Start minigame
+					setState(MINIGAME, arg)
 					break
 				case "/emote": // Play emote animation
 					PLAYER.emote(arg)
@@ -69,7 +89,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					// PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/debug": // Debug physics
-					DEBUGPHYSICS = true
+					DEBUGPHYSICS = !DEBUGPHYSICS
 					break
 			}
 		} else if (this.value.length > 0) {
@@ -82,6 +102,8 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.value = ""
 		this.open = false
 		this.typing = false
+		this.textField.value = ""
+		this.textField.blur()
 	}
 
 	// Display chat message and add to chat log.
@@ -101,6 +123,8 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.messageLogTimer = Math.max(0, this.messageLogTimer - dt)
 
 		this.timer = (this.timer + dt)%1 // Blinking cursor
+
+		this.value = this.textField.value
 
 		// Update nugget animation
 		if (this.nuggetTimer > 0) {
@@ -129,22 +153,6 @@ MENUS["chatMenu"] = new class extends Menu {
 		// Placeholder graphic
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.chat, SPRITE.chat.getFrame(0,0), 202, 525)
-
-		// Nugget display
-		let displayString = `✖ ${Math.floor(this.nuggets).toLocaleString()}`
-		DRAW.image(IMG.nugget, null, 12, 526)
-		DRAW.setFont(FONT.hud)
-		DRAW.setColor(0,0,0,1.0)
-		DRAW.text(displayString, 60, 556+4, "left")
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.text(displayString, 60, 556, "left")
-		// Nugget animation when nuggets change
-		if (this.nuggetDiff) {
-			DRAW.setColor(255,255,255,this.nuggetTimer)
-			DRAW.text(`${this.nuggetDiff.toLocaleString()}`, 90, 556-20-10*(1-this.nuggetTimer), "left")
-		}
-
-		DRAW.image(IMG.ammo, null, 904, 526)
 
 		// Render all buttons
 		this.drawButtons()
@@ -175,6 +183,27 @@ MENUS["chatMenu"] = new class extends Menu {
 		if (this.emoteMenuOpen) {
 			this.emoteMenu.draw()
 		}
+
+		// Nugget HUD display
+		let displayString = `✖ ${Math.floor(this.nuggets).toLocaleString()}`
+		DRAW.image(IMG.nugget, null, 12, 526)
+		DRAW.setFont(FONT.hud)
+		DRAW.setColor(0,0,0,1.0)
+		DRAW.text(displayString, 60, 556+4, "left")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.text(displayString, 60, 556, "left")
+		// Nugget animation when nuggets change
+		if (this.nuggetDiff) {
+			let diffText = `${this.nuggetDiff.toLocaleString()}` // Show difference. Either in the form -10 or +10
+			if (this.nuggetDiff >= 0) {
+				diffText = "+" + diffText
+			}
+			DRAW.setColor(255,255,255,this.nuggetTimer)
+			DRAW.text(diffText , 90, 556-20-10*(1-this.nuggetTimer), "left")
+		}
+
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.ammo, null, 904, 526)
 	}
 
 	keyPress(key) {
@@ -182,6 +211,10 @@ MENUS["chatMenu"] = new class extends Menu {
 			// Start Typing
 			this.typing = !this.typing
 			this.open = !this.open
+			if (this.typing) {
+				this.timer = 0
+				this.textField.focus()
+			}
 		} else if (this.typing) {
 			// Add character to input bar
 			if (key.length == 1) {

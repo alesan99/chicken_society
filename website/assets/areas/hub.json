@@ -7,6 +7,7 @@
 
         [0,353, 200,353, 147,401, 0,401],
         [0,353, 73,353, 73,468, 0,535, 0,468],
+        [-20,535, 0,535, 0,570, -20,570],
 
         [801,353, 1024,353, 1024,375, 821,375],
         [877,375, 1024,375, 1024,431, 1024,570, 877,431],
@@ -33,11 +34,29 @@
             "w": 50,
             "h": 40
         },
+        "seedDispensaryEntrance": {
+            "to": "seeddispensary",
+            "fromWarp": "seedDispensaryExit",
+            "facing": "down",
+            "x": 710,
+            "y": 235,
+            "w": 40,
+            "h": 40
+        },
         "alleywayEntrance": {
             "to": "alleyway",
             "fromWarp": "alleywayExit",
             "facing": "left",
             "x": 859,
+            "y": 301,
+            "w": 40,
+            "h": 70
+        },
+        "oldtownEntrance": {
+            "to": "oldtown",
+            "fromWarp": "oldtownExit",
+            "facing": "right",
+            "x": 150,
             "y": 301,
             "w": 40,
             "h": 70

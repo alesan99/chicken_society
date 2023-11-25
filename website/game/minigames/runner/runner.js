@@ -16,7 +16,7 @@ MINIGAMES["runner"] = new class {
 		minigame = this
 
 		// Netplays data
-		this.data = {x:0, y:0, sx:0, sy:0, dead:false} // Your data
+		this.data = {x:0, y:0, sx:0, sy:0, duck:false, dead:false, score:SAVEDATA.highscores.runner} // Your data
 		this.playerData = {} // Other clients' data
 
 		this.started = false
@@ -24,7 +24,7 @@ MINIGAMES["runner"] = new class {
 
 		this.score = 0
 		this.highscore = SAVEDATA.highscores.runner
-		this.worldHighscore = SAVEDATA.highscores.runner
+		this.highscores = [[0,"---"],[0,"---"],[0,"---"]]
 
 		this.timer = 1
 		this.backgroundScroll = 0
@@ -34,10 +34,10 @@ MINIGAMES["runner"] = new class {
 		this.img = {}
 		this.sprite = {}
 		this.img.chicken = new RenderImage("game/minigames/runner/rubberchicken.png")
-		this.sprite.chicken = new Sprite(this.img.chicken, 5,1, 96,128)
+		this.sprite.chicken = new Sprite(this.img.chicken, 8,1, 128,128)
 		this.img.arcadeCabinet = new RenderImage("game/minigames/runner/arcade_cabinet.png")
 		this.img.fence = new RenderImage("game/minigames/runner/fence.png")
-		this.sprite.fence = new Sprite(this.img.fence, 3,1, 50,92)
+		this.sprite.fence = new Sprite(this.img.fence, 4,1, 64,160)
 		this.img.background = new RenderImage("game/minigames/runner/background.png")
 
 		// Animation variables
@@ -51,7 +51,7 @@ MINIGAMES["runner"] = new class {
 			ground: {}
 		}
 		this.world = new SpatialHash(canvasWidth, canvasHeight, canvasWidth)
-		this.objects["chicken"][0] = new RubberChicken(this.world, 0, canvasHeight-200-80, "player")
+		this.objects["chicken"][0] = new RubberChicken(this.world, 0, canvasHeight-200-60, "player")
 		this.chicken = this.objects["chicken"][0]
 		this.objects["ground"][0] = new Ground(this.world, 0, canvasHeight-200)
 	}
@@ -64,8 +64,9 @@ MINIGAMES["runner"] = new class {
 		this.score = 0
 
 		// Reset player
+		this.chicken.dead = false
 		this.chicken.x = 0
-		this.chicken.y = canvasHeight-200-80
+		this.chicken.y = canvasHeight-200-60
 		this.chicken.startRunning()
 
 		// delete all fences
@@ -90,7 +91,7 @@ MINIGAMES["runner"] = new class {
 		for (const [id, data] of Object.entries(this.playerData)) {
 			let obj = this.objects.chicken[id]
 			if (obj) {
-				if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy)) {
+				if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy) || (data.duck != obj.duck)) {
 					obj.x = data.x
 					obj.y = data.y
 					obj.sx = data.sx
@@ -99,8 +100,13 @@ MINIGAMES["runner"] = new class {
 					obj.oldy = obj.y
 					obj.oldsx = obj.sx
 					obj.oldsy = obj.sy
+					if (data.duck) {
+						obj.duck()
+					} else if (!data.duck) {
+						obj.unduck()
+					}
 					if (data.dead && (!obj.dead)) {
-						obj.anim.stopAnimation(4,0)
+						obj.anim.stopAnimation(7,0)
 					} else if ((!data.dead) && (obj.dead)) {
 						obj.startRunning()
 					}
@@ -119,6 +125,15 @@ MINIGAMES["runner"] = new class {
 			this.timer -= this.speed*dt
 			if (this.timer < 0) {
 				let type = "normal"
+				if (this.score > 30) {
+					if (Math.random() > 0.7) {
+						type = "sign"
+					}
+				} else if (this.score > 10) {
+					if (Math.random() > 0.8) {
+						type = "sign"
+					}
+				}
 				if (this.score > 40) {
 					if (Math.random() > 0.95) {
 						type = "fly"
@@ -141,10 +156,11 @@ MINIGAMES["runner"] = new class {
 		updatePhysics(this.objects, this.world, dt)
 
 		// Update netplay data
-		this.data.x = this.chicken.x
-		this.data.y = this.chicken.y
-		this.data.sx = this.chicken.sx
-		this.data.sy = this.chicken.sy
+		this.data.x = Math.floor(this.chicken.x)
+		this.data.y = Math.floor(this.chicken.y)
+		this.data.sx = Math.floor(this.chicken.sx)
+		this.data.sy = Math.floor(this.chicken.sy)
+		this.data.duck = this.chicken.ducking
 
 		// Delete unused fences
 		let keysToDelete = []
@@ -196,49 +212,58 @@ MINIGAMES["runner"] = new class {
 		DRAW.setFont(FONT.pixel)
 		let scale = 1+easing("easeInQuad", this.scoreAnim)*0.1
 		let highScale = 1
-		let worldHighScale = 1
 		if (this.scoreAnim > 1) {
 			scale = 1+easing("easeOutCubic", (2-this.scoreAnim))*0.1
 		}
 		if (this.score == this.highscore) {
 			highScale = scale
 		}
-		if (this.score == this.worldHighscore) {
-			worldHighScale = scale
-		}
-		DRAW.text("World Record: " + this.worldHighscore, 620,80, "left", 0, worldHighScale,worldHighScale)
-		DRAW.text("Highscore: " + this.highscore, 620,80, "left", 0, highScale,highScale)
-		DRAW.text("Score: " + this.score, 620,110, "left", 0, scale,scale)
+		DRAW.text("Highscore: " + this.highscore, 590,95, "left", 0, highScale,highScale)
+		DRAW.text("Score: " + this.score, 590,120, "left", 0, scale,scale)
 
 		// Start?
 		DRAW.setFont(FONT.pixel)
 		if (this.dead) {
 			DRAW.setColor(0,0,0,1.0)
-			DRAW.text("DIED",canvasWidth/2-4,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			DRAW.text("DIED",canvasWidth/2+4,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2-4,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2+4,"center",Math.sin(this.deadAnim)*0.2,2,2)
-			if (this.score == this.highscore) {
-				DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+100,"center",0,2,2)
-			}
+			DRAW.text("DIED",canvasWidth/2-4,240,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2+4,240,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,240-4,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,240+4,"center",Math.sin(this.deadAnim)*0.2,2,2)
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.text("DIED",canvasWidth/2,canvasHeight/2,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			DRAW.text("DIED",canvasWidth/2,240,"center",Math.sin(this.deadAnim)*0.2,2,2)
+			if (this.score == this.highscore) {
+				DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+130,"center",0,2,2)
+			}
 		} else if (this.started != true) {
 			DRAW.setColor(0,0,0,1.0)
-			DRAW.text("CHICKEN RUN",canvasWidth/2-4,canvasHeight/2-50,"center",0,3,3)
-			DRAW.text("CHICKEN RUN",canvasWidth/2+4,canvasHeight/2-50,"center",0,3,3)
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50-4,"center",0,3,3)
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50+4,"center",0,3,3)
-			if (this.blinkAnim > 0.5) {
-				DRAW.text("Press anything to start!",canvasWidth/2,canvasHeight/2+100,"center",0,1,1)
-			}
+			DRAW.text("CHICKEN RUN",canvasWidth/2-4,240,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2+4,240,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,240-4,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,240+4,"center",0,3,3)
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.text("CHICKEN RUN",canvasWidth/2,canvasHeight/2-50,"center",0,3,3)
+			DRAW.text("CHICKEN RUN",canvasWidth/2,240,"center",0,3,3)
+			if (this.blinkAnim > 0.5) {
+				DRAW.text("Press anything to start!",canvasWidth/2,420,"center",0,1,1)
+			}
+
+			
+			DRAW.text("Jump: Space or left click",200,480,"left",0,1,1)
+			DRAW.text("Duck: Shift or right click",200,500,"left",0,1,1)
 		}
-		
+		// Leaderboard
+		if (this.started != true) {
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.text("Leaderboard", canvasWidth/2-140, 295, "left")
+			for (let i = 0; i < this.highscores.length; i++) {
+				let highscore = this.highscores[i][0]
+				let name = this.highscores[i][1]
+				DRAW.text(name + " - " + highscore, canvasWidth/2-140, 320 + i * 25, "left")
+			}
+		}
+
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
-			drawPhysics(this.objects, this.world)
+			drawPhysics(this.objects, this.world, cameraX, 0)
 		}
 	}
 
@@ -262,11 +287,11 @@ MINIGAMES["runner"] = new class {
 		}
 
 		this.highscore = Math.max(this.highscore, this.score)
-		this.worldHighscore = Math.max(this.highscore, this.worldHighscore)
 	}
 
 	die() {
 		this.dead = true
+		this.data.score = this.highscore
 		this.started = false
 		this.data.dead = true
 	}
@@ -292,8 +317,11 @@ MINIGAMES["runner"] = new class {
 			minigame.start()
 			return true
 		}
-		if ((key == " " || key == "Space")) {
-			this.objects["chicken"][0].jump()
+
+		if (key == " " || key == "Space" || key == "ArrowUp") {
+			this.chicken.jump()
+		} else if (key == "Shift" || key == "ShiftLeft" || key == "ArrowDown") {
+			this.chicken.duck()
 		}
 	}
 
@@ -306,8 +334,10 @@ MINIGAMES["runner"] = new class {
 			minigame.start()
 			return true
 		}
-		if ((button == 0)) {
-			this.objects["chicken"][0].jump()
+		if (button == 0) {
+			this.chicken.jump()
+		} else if (button == 2) {
+			this.chicken.duck()
 		}
 	}
 
@@ -324,12 +354,19 @@ RubberChicken = class extends PhysicsObject {
 		this.w = 60
 		this.h = 100
 
-		this.shape = new Shape(
+		this.runShape = new Shape(
 			-this.w/2,-this.h/2,
 			this.w/2,-this.h/2,
 			this.w/2,this.h/2,
 			-this.w/2,this.h/2
 		)
+		this.duckShape = new Shape(
+			-this.w/2,-this.h/4,
+			this.w/2,-this.h/4,
+			this.w/2,this.h/4,
+			-this.w/2,this.h/4
+		)
+		this.shape = this.runShape
 
 		this.active = true
 		this.static = false
@@ -342,6 +379,9 @@ RubberChicken = class extends PhysicsObject {
 		this.dead = false
 
 		this.anim = new Animation(minigame.sprite.chicken)
+
+		this.ducking = false
+		this.duckTimer = 0
 
 		this.falling = true
 		this.spin = false
@@ -361,6 +401,27 @@ RubberChicken = class extends PhysicsObject {
 				this.spin = true
 			}
 			this.sy = -1000
+			this.unduck()
+		}
+	}
+	duck() {
+		// Slam onto the ground and get small
+		if (!this.ducking) {
+			this.ducking = true
+			this.shape = this.duckShape
+			this.anim.playAnimation([4,5,6,5,6,5,6,5], 0.1, 5)
+			this.duckTimer = 0.8
+
+			if (this.falling) {
+				this.sy = 1000
+			}
+		}
+	}
+	unduck() {
+		if (this.ducking) {
+			this.shape = this.runShape
+			this.anim.playAnimation([0,1,2,3], 0.05)
+			this.ducking = false
 		}
 	}
 	die() {
@@ -369,7 +430,8 @@ RubberChicken = class extends PhysicsObject {
 		this.sx = 0
 		this.sy = 0
 		this.gravity = false
-		this.anim.stopAnimation(4,0)
+		this.unduck()
+		this.anim.stopAnimation(7,0)
 		if (this == minigame.chicken) {
 			minigame.die()
 		}
@@ -377,6 +439,16 @@ RubberChicken = class extends PhysicsObject {
 	update(dt) {
 		if (this.sx != 0) {
 			this.anim.update(dt)
+		}
+
+		if (this.ducking) {
+			this.duckTimer -= dt
+			if (this.duckTimer < 0.1) {
+				this.anim.stopAnimation(4,0)
+			}
+			if (this.duckTimer < 0) {
+				this.unduck()
+			}
 		}
 
 		if (this.dead) {
@@ -478,7 +550,7 @@ Fence = class extends PhysicsObject {
 		)
 
 		this.active = true
-		this.static = false
+		this.static = true
 		this.sx = 0
 		this.sy = 0
 
@@ -492,9 +564,15 @@ Fence = class extends PhysicsObject {
 			} else if (choice == 5) {
 				this.frame = 2
 			}
+		} else if (this.type == "sign") {
+			this.y -= 80
+			this.frame = 3
+		} else if (this.type == "fly") {
+			this.static = false
 		}
 
 		this.passed = false
+		this.setPosition(this.x, this.y)
 	}
 	update(dt) {
 		if (this.x < minigame.chicken.x-100) {
@@ -515,7 +593,11 @@ Fence = class extends PhysicsObject {
 	draw(x) {
 		DRAW.setColor(255,255,255,1.0)
 
-		DRAW.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.5,0.5)
+		if (this.type == "sign") {
+			DRAW.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.7,0.45)
+		} else {
+			DRAW.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.5,0.70)
+		}
 	}
 	collide(name) {
 		if (name == "Ground") {
