@@ -1,6 +1,5 @@
 // CHICKEN RUN
 // Control a chicken running to the right, jump over obstacles while the chicken slowly speeds up.
-// TODO: Improve this code and comment it
 
 if (true) {
 let RubberChicken

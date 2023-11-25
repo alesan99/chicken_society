@@ -123,7 +123,7 @@ function loadSaveData(saveData) {
 }
 
 // Functions for modifying save data:
-// Remove nugget currency. TODO: Fancy animations
+// Remove nugget currency.
 function removeNuggets(nuggets) {
 	SAVEDATA.nuggets -= nuggets
 

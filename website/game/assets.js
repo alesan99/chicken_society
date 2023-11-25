@@ -141,8 +141,6 @@ function loadJSON(filePath, callBack) {
 	})
 }
 
-	// TODO: Clean up this horrible code
-
 	// DIRECTORYTREE = fetch('/getDirectoryTree')
 	// 	.then(response => {
 	// 		if (!response.ok) { throw new Error('Failed to fetch directory tree'); };

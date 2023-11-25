@@ -64,8 +64,13 @@ Netplay = class {
 
 	// Connect to server for the first time and send information about yourself
 	connect () {
-		socket.timeout(this.timeOut).emitWithAck("profile", PROFILE, (err, val) => {
-			console.log("could not connect to server :(")
+		console.log(PROFILE)
+		socket.timeout(this.timeOut).emit("profile", PROFILE, (err, response) => {
+			if (err) {
+				// the other side did not acknowledge the event in the given delay
+			} else {
+				console.log(response);
+			}
 		});
 	}
 
@@ -198,13 +203,21 @@ Netplay = class {
 		if (this.minigame) {
 			// Connecting to minigame
 			this.minigamePlayerList = {}
-			socket.timeout(this.timeOut).emitWithAck("minigame", minigameName, (err, val) => {
-				console.log("could not connect to server :(")
+			socket.timeout(this.timeOut).emit("minigame", minigameName, (err, response) => {
+				if (err) {
+					// the other side did not acknowledge the event in the given delay
+				} else {
+					console.log(response);
+				}
 			});
 		} else {
 			// Disconnecting from minigame
-			socket.timeout(this.timeOut).emitWithAck("minigame", false, (err, val) => {
-				console.log("could not connect to server :(")
+			socket.timeout(this.timeOut).emit("minigame", false, (err, response) => {
+				if (err) {
+					// the other side did not acknowledge the event in the given delay
+				} else {
+					console.log(response);
+				}
 			});
 		}
 	}

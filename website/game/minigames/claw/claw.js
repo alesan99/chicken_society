@@ -297,11 +297,11 @@ Claw = class extends PhysicsObject {
 				}
 				if (this.dropTimer > 0.5) {
 					let roll = Math.random()*50
-					if (roll < Math.abs(this.grabX)*1.4) { // The more centered the object is, the less likely it is to drop
+					if (roll < Math.abs(this.grabX)) { // The more centered the object is, the less likely it is to drop
 						this.grabbed = false
 						this.grabbing = false
 					}
-					this.dropTimer -= 0.5
+					this.dropTimer -= (0.4+0.2*Math.random())
 				}
 			}
 		}
@@ -410,8 +410,15 @@ Prize = class extends PhysicsObject {
 		//DRAW.circle(this.x,this.y, this.w/2, "fill")
 	}
 	collide(name,obj,nx,ny) {
-		if (ny < 0) {
-			this.sy = 0
+		if (ny < 0 && this.sy > 0) {
+			// Decelerate when hitting a slope surface below
+			if (nx === 0) {
+				// Set sy to 0 when the normal is 0,-1 (vertical surface)
+				this.sy = 0;
+			} else {
+				// Adjust sy accordingly with slope physics when the normal is not horizontal
+				this.sy = Math.min(this.sy, this.gravity*Math.abs(nx));
+			}
 		}
 		return true
 	}
