@@ -31,8 +31,8 @@ app.use(express.static(path.join(__dirname, "website"))); //serve static files f
 app.get("/", (req, res) => {
 	res.sendFile(path.join(__dirname, "website/index.html"));
 });
-db.initializeDB;
-db.query("SHOW TABLES like 'user'", (err, result, fields) => {
+const con = db.initializeDB();
+con.query("SHOW TABLES like 'user'", (err, result, fields) => {
 	// if (err) throw err;
 	// console.log(result);
 	if (result.length == 0) {
@@ -44,7 +44,7 @@ db.query("SHOW TABLES like 'user'", (err, result, fields) => {
           password VARCHAR(255) NOT NULL,
 		  email VARCHAR(255) NOT NULL
         )`;
-		db.query(createTableQuery, (createError) => {
+		con.query(createTableQuery, (createError) => {
 			if (createError) {
 			}
 			console.log('User table created');
@@ -54,6 +54,7 @@ db.query("SHOW TABLES like 'user'", (err, result, fields) => {
 		  		console.log('User table already exists');
 			}
 	});
+db.createPlayerTable(con, 1);
 // Handle logins
 require("./server/login.js")
 
