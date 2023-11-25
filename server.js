@@ -27,7 +27,7 @@ module.exports = {
 
 // Send HTML file when user connects to server
 const path = require("path"); // Import the "path" module.
-app.use(express.static(path.join(__dirname, "lib"))); //serve msgpack socket.io separately so it doesn't get loaded when running website locally.
+app.use(express.static(path.join(__dirname, "server/lib"))); //serve msgpack socket.io separately so it doesn't get loaded when running website locally.
 app.use(express.static(path.join(__dirname, "website"))); //serve static files from the "website" directory.
 app.get("/", (req, res) => {
 	res.sendFile(path.join(__dirname, "website/index.html"));
