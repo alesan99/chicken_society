@@ -1,6 +1,6 @@
 body{
 	/* Background color */
-	background-color: rgb(148, 110, 71); 
+	background-color: rgb(166, 136, 106); 
 	margin: 0;
 	padding: 0;
 	width: 100%;
@@ -96,7 +96,7 @@ form {
 	height: calc(100vh - 45px);
 
 	max-width: 95%;
-	background-color: rgb(250, 225, 191);
+	background-color: rgb(255, 235, 208);
 	display: flex; /* Change this line */
     justify-content: center; 
     align-items: center; 
