@@ -24,14 +24,17 @@
 </nav>
 
 <body>
-	<!-- Canvas to render Game -->
-	<div id="canvasContainer">
-		<canvas id="gameCanvas" width="1024" height="576" oncontextmenu="return false;"></canvas>
+	<div class="game-container">
+		<div class="color-underlay">
+			<!-- Canvas to render Game -->
+			<div id="canvasContainer">
+				<canvas id="gameCanvas" width="1024" height="576" oncontextmenu="return false;"></canvas>
+			</div>
+			<!-- User login stuff action="https://yourdomain.com/login" method="post"-->
+			<!-- Invisible text input used to force mobile devices to open keyboard -->
+			<input id="gameTextInput" type="text" maxlength="47" style="position:fixed;top:0;left:-200px" ;>
+		</div>
 	</div>
-	<!-- User login stuff action="https://yourdomain.com/login" method="post"-->
-	<!-- Invisible text input used to force mobile devices to open keyboard -->
-	<input id="gameTextInput" type="text" maxlength="47" style="position:fixed;top:0;left:-200px" ;>
-
 	<!-- Socket.IO v4.7.2 with Msgpack parser -->
 	<!-- May need to be updated whenever server's socket.io version is updated. -->
 	<script src="socket.io.msgpack.min.js"></script>
