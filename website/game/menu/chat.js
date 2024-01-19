@@ -88,6 +88,12 @@ MENUS["chatMenu"] = new class extends Menu {
 					addNuggets(Number(arg))
 					// PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
+				case "/quests": // Print out all active quests
+					QuestSystem.debug()
+					break
+				case "/quest": // Force progress in quest
+					QuestSystem.progress(arg, Number(arg2) || 0, Number(arg3) || 1)
+					break
 				case "/debug": // Debug physics
 					DEBUGPHYSICS = !DEBUGPHYSICS
 					break
