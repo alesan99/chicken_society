@@ -24,9 +24,10 @@ function makeSaveData() {
 			// Quest progress
 			// Each quest progress is a list of numbers Ex: [0, 0, 1]
 			// They will be marked as complete once the list matches or exceeds the predefined quest requirements
+			// NOTE: the quests listed below are just examples. Quests will be added to the saveData list automatically, not typed in manually.
 			active: {
-				tutorial: [],
-				runner_highscore: []
+				// tutorial: [],
+				// runner_highscore: []
 			},
 			// Completed quests will save the finished quest progress to compare with possible future updates
 			completed: {
@@ -117,6 +118,8 @@ function loadSaveData(saveData) {
 	const retrievedObject = JSON.parse(storedJsonString);
 	// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
 
+	QuestSystem.initialize() // Reload quests
+
 	console.log("loaded SaveData from localStorage at 'guestSaveData'")
 	console.log(retrievedObject)
 	return retrievedObject
@@ -153,6 +156,10 @@ function spendNuggets(cost) {
 
 // Get items like clothing and consumables
 function addItem(type, id) {
+	if (!type) {
+		// Item category not specified, look for it
+		type = getItemCategory(id)
+	}
 	if (!SAVEDATA.items[type][id]) {
 		SAVEDATA.items[type][id] = 0
 	}

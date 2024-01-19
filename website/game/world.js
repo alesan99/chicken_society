@@ -19,6 +19,10 @@ class World {
 		// Initialize Physics world
 		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
 
+		// Load Quests
+		QuestSystem.initialize()
+		QuestSystem.start("tutorial")
+
 		// Physics objects
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
