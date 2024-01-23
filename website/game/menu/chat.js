@@ -97,6 +97,9 @@ MENUS["chatMenu"] = new class extends Menu {
 				case "/debug": // Debug physics
 					DEBUGPHYSICS = !DEBUGPHYSICS
 					break
+				case "/notify": // Create notification
+					Notify.new(arg)
+					break
 			}
 		} else if (this.value.length > 0) {
 			// Send chat message

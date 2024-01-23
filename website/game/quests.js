@@ -12,12 +12,12 @@ const QuestSystem = (function() {
 			activeQuests = {}; // Clear any quests from old saveData
 
 			for (let questName in SAVEDATA.quests.active) {
-				this.start(questName)
+				this.start(questName, "initial")
 			}
 		},
 
 		// Start quest if it isn't active and hasn't been completed yet.
-		start(questName) {
+		start(questName, initial) {
 			let quest = this.getQuest(questName)
 			if (!quest && !SAVEDATA.quests.completed[questName]) {
 				// Load quest properties from json file in the assets folder
@@ -40,6 +40,10 @@ const QuestSystem = (function() {
 						// TODO: There should be a SaveData function for this, saving progress will be more complicated when the database is implemented
 						SAVEDATA.quests.active[questName] = activeQuests[questName].progress
 					}
+
+						
+					Notify.new("You started the quest: " + data.name)
+					Notify.new(data.description)
 				})
 			}
 		},
