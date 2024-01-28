@@ -1,17 +1,31 @@
 {
-	"walls": [
-        [0,576, 1024,576, 1024,600, 0,600]
-    ],
+  "walls": [
+    [0, 576, 1024, 576, 1024, 600, 0, 600],
+    [0, 209, 330, 209, 330, 306, 0, 397],
+    [492, 209, 786, 209, 786, 261, 492, 261],
+    [1024, 229, 1070, 229, 1070, 576, 1024, 576],
+    [-18, 419, 0, 419, 0, 576, -18, 576]
+  ],
 
-    "warps": {
-        "oldtownExit": {
-            "to": "hub",
-            "fromWarp": "oldtownEntrance",
-            "facing": "left",
-            "x": 1000,
-            "y": 408,
-            "w": 30,
-            "h": 300
-        }
+  "warps": {
+    "neighborhoodEntrance": {
+      "to": "hub",
+      "fromWarp": "oldtownEntrance",
+      "facing": "down",
+      "x": 409,
+      "y": 205,
+      "w": 160,
+      "h": 10
+    },
+
+    "oldtownExit": {
+      "to": "hub",
+      "fromWarp": "oldtownEntrance",
+      "facing": "down",
+      "x": 909,
+      "y": 189,
+      "w": 240,
+      "h": 10
     }
+  }
 }
