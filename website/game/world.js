@@ -22,6 +22,7 @@ class World {
 		// Load Quests
 		QuestSystem.initialize()
 		QuestSystem.start("tutorial") // Temporary.. needs a better home
+		QuestSystem.start("easteregghunt") // And this ones just for testing
 
 		// Physics objects
 		OBJECTS = {}
@@ -85,16 +86,27 @@ class World {
 			if (data.sprites) {
 				for (const [name, s] of Object.entries(data.sprites)) {
 					let img = s.image
-					if (!BACKGROUNDIMG[this.area][img]) {
-						BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
-					}
-					let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
-					BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
-					// If defined, play animation
-					if (s.anim) {
-						BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
-						BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
-						BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
+					if (!(s.quest && !QuestSystem.getQuest(s.quest))) { // If it belongs to a quest, make sure its active
+						if (!BACKGROUNDIMG[this.area][img]) {
+							BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
+						}
+						let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
+						BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
+						// Conditional visiblity
+						if (s.trigger) {
+							BACKGROUNDSPRITE[this.area][name].trigger = s.trigger
+						}
+						if (s.quest) {
+							BACKGROUNDSPRITE[this.area][name].quest = s.quest
+							BACKGROUNDSPRITE[this.area][name].questSlot = s.questSlot
+							BACKGROUNDSPRITE[this.area][name].questSlotValue = s.questSlotValue
+						}
+						// If defined, play animation
+						if (s.anim) {
+							BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
+							BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
+							BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
+						}
 					}
 				}
 			}
@@ -133,32 +145,57 @@ class World {
 			// Load triggers
 			if (data.triggers) {
 				for (const [name, trig] of Object.entries(data.triggers)) {
-					let func = false
-					// trig.action is a string describing what the trigger should do, create a function based on that
-					let action = trig.action
-					if (trig.cost && trig.icon) {
-						trig.icon.text = trig.cost
-					}
-					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, null, trig.shape, trig.icon, trig.clickRegion)
-					
-					if (action == "minigame") {
-						// Start minigame
-						func = function() {
-							// Does this trigger cost something?
-							if (trig.cost) {
-								removeNuggets(trig.cost)
-							}
-
-							PLAYER.static = true // Don't let player move
-							Transition.start("wipeLeft", "out", 0.8, null, () => {
-								OBJECTS["Trigger"][name].reset()
-								setState(MINIGAME, trig.minigameName) // Start minigame after transition
-								Transition.start("wipeRight", "in", 0.8, null, null)
-							})
+					let isActive = true // If it belongs to a quest, make sure its active
+					if (trig.quest) {
+						let quest = QuestSystem.getQuest(trig.quest)
+						if (!quest) {
+							isActive = false
+						} else if (quest.progress[trig.questSlot] != trig.questSlotValue) {
+							isActive = false
 						}
 					}
 
-					OBJECTS["Trigger"][name].action = func
+					if (isActive) {
+						let func = false
+						// trig.action is a string describing what the trigger should do, create a function based on that
+						let action = trig.action
+						if (trig.cost && trig.icon) {
+							trig.icon.text = trig.cost
+						}
+						OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, null, trig.shape, trig.icon, trig.clickRegion)
+						
+						// TODO: Put this code somewhere else (area.js?)
+						if (action == "minigame") {
+							// Start minigame
+							func = function() {
+								// Does this trigger cost something?
+								if (trig.cost) {
+									removeNuggets(trig.cost)
+								}
+
+								PLAYER.static = true // Don't let player move
+								Transition.start("wipeLeft", "out", 0.8, null, () => {
+									OBJECTS["Trigger"][name].reset()
+									setState(MINIGAME, trig.minigameName) // Start minigame after transition
+									Transition.start("wipeRight", "in", 0.8, null, null)
+								})
+							}
+						} else if (action == "quest") {
+							// Progress quest
+							func = function() {
+								QuestSystem.progress(trig.quest, trig.questSlot, trig.questSlotAdd)
+								
+								// Disable trigger if conditions aren't met
+								// TODO: Use a method so it doesn't crash when quest is complete, and it instead references the list of "completed" quests
+								let quest = QuestSystem.getQuest(trig.quest)
+								if (!quest || quest.progress[trig.questSlot] != trig.questSlotValue) {
+									OBJECTS["Trigger"][name].active = false
+								}
+							}
+						}
+
+						OBJECTS["Trigger"][name].action = func
+					}
 				}
 			}
 
@@ -217,7 +254,32 @@ class World {
 
 		// Background elements
 		for (const [i, sprite] of Object.entries(BACKGROUNDSPRITE[this.area])) {
-			drawQueue.push(sprite)
+			if (sprite.visible) {
+				let isActive = true // Is it disabled
+				if (sprite.trigger) {
+					 // If its linked to a trigger, check if its active
+					let trigger = OBJECTS["Trigger"][sprite.trigger]
+					if (!trigger) {
+						isActive = false
+					} else if (!trigger.active) {
+						isActive = false
+					}
+				}
+				if (sprite.quest) {
+					// If it belongs to a quest, make sure its active, and that the quest slot matches
+					// It is easier to link the sprite to a trigger, but this allows you to have multiple sprites without multiple triggers
+					let quest = QuestSystem.getQuest(sprite.quest)
+					if (!quest) {
+						isActive = false
+					} else if (quest.progress[sprite.questSlot] != sprite.questSlotValue) {
+						isActive = false
+					}
+				}
+
+				if (isActive) {
+					drawQueue.push(sprite)
+				}
+			}
 		}
 
 		// Draw objects

@@ -38,6 +38,9 @@ class Trigger extends PhysicsObject {
 	}
 
 	update(dt) {
+		if (!this.active) {
+			return
+		}
 		// Is mouse inside clickable region?
 		if (this.clickRegion) {
 			if ((this.activated == false) && this.checkMouseOver()) {
@@ -56,6 +59,9 @@ class Trigger extends PhysicsObject {
 	}
 
 	draw() {
+		if (!this.active) {
+			return
+		}
 		// Show an icon if trigger is ready to be activated
 		if ((this.actionReady || this.mouseOver) && this.activated == false) {
 			DRAW.setColor(255,255,255,1.0)

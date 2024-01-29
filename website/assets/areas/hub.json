@@ -91,6 +91,71 @@
             "x": 0,
             "y": 0,
             "worldy": 356
+        },
+
+        "egg1": {
+            "image": "egg.png",
+            "qw": 30,
+            "qh": 40,
+
+            "x": 160,
+            "y": 458,
+            "worldy": 356,
+
+            "quest": "easteregghunt",
+            "trigger": "egg1"
+        },
+        "egg2": {
+            "image": "egg.png",
+            "qw": 30,
+            "qh": 40,
+
+            "x": 260,
+            "y": 458,
+            "worldy": 356,
+
+            "quest": "easteregghunt",
+            "trigger": "egg2"
+        }
+    },
+
+    "triggers": {
+        "egg1": {
+            "x": 160,
+            "y": 458,
+            "shape": [0,0, 40,0, 40,40, 0,40],
+
+            "clickRegion": [0,0, 40,40],
+            "icon": {
+                "frame": 1,
+                "x": 15,
+                "y": -10
+            },
+
+            "action": "quest",
+            "quest": "easteregghunt",
+            "questSlot": 0,
+            "questSlotValue": 0,
+            "questSlotAdd": 1
+        },
+        
+        "egg2": {
+            "x": 260,
+            "y": 458,
+            "shape": [0,0, 40,0, 40,40, 0,40],
+
+            "clickRegion": [0,0, 40,40],
+            "icon": {
+                "frame": 1,
+                "x": 15,
+                "y": -10
+            },
+
+            "action": "quest",
+            "quest": "easteregghunt",
+            "questSlot": 1,
+            "questSlotValue": 0,
+            "questSlotAdd": 1
         }
     }
 }
