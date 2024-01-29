@@ -70,7 +70,7 @@ const QuestSystem = (function() {
 		},
 
 		// Increment quest progress slot by value.
-		progress(questName, progressSlot, value) {
+		progress(questName, progressSlot, value=1) {
 			let quest = this.getQuest(questName)
 			if (quest) {
 				let currentValue = quest.progress[progressSlot]
@@ -97,6 +97,9 @@ const QuestSystem = (function() {
 				SAVEDATA.quests.completed[questName] = quest.progress
 				delete activeQuests[questName]
 				delete SAVEDATA.quests.active[questName]
+
+				// Notify
+				Notify.new("You completed the quest: " + quest.name)
 			}
 		},
 

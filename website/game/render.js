@@ -131,6 +131,7 @@ class Render {
 		return this.c.measureText(text).width
 	}
 
+	// Wrap text so it fits within a rectangle
 	wrapText(text, width) {
 		let wrappedText = [];
 		let words = text.split(' ');
