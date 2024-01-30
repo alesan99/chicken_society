@@ -210,10 +210,10 @@ class Character extends PhysicsObject {
 			let flip = 1-Math.floor((this.bubbleTimer%1)*2)*2
 			
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1)
+			DRAW.image(IMG.speechBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1)
 
 			// Render wrapped text so it fits into the bubble
-			DRAW.setFont(FONT.chatBubble)
+			DRAW.setFont(FONT.speechBubble)
 			DRAW.setColor(0,0,0,scale**2)
 
 			let verticalSpacing = 18
@@ -241,7 +241,7 @@ class Character extends PhysicsObject {
 	}
 
 	// Display speech bubble
-	chatBubble(text, time) {
+	speechBubble(text, time) {
 		this.bubbleText = text
 		this.bubbleTime = time || 4
 		this.bubbleTimer = 0

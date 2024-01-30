@@ -26,7 +26,7 @@ function loadGameAssets() {
 	ANIM.tbag = [[0,3,0,3,0,3,0,3,0,3], 0.15]
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
-	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
+	IMG.speechBubble = new RenderImage("assets/chat_bubble.png")
 	IMG.replyBubble = new RenderImage("assets/reply_bubble.png")
 	SPRITE.replyBubble = new Sprite(IMG.replyBubble, 2,1, 64,32)
 	SPRITE.replyTrail = new Sprite(IMG.replyBubble, 2,1, 64,32, 0,32)
@@ -120,7 +120,7 @@ function loadGameAssets() {
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.nametag = new RenderFont("Arial", 16)
 	FONT.description = new RenderFont("Arial", 18)
-	FONT.chatBubble = new RenderFont("Courier New", 18)
+	FONT.speechBubble = new RenderFont("Courier New", 18)
 	FONT.guiLabel = new RenderFont("Times New Roman", 20)
 }
 

@@ -157,7 +157,7 @@ Netplay = class {
 				display = true
 			}
 			CHAT.message(text, this.playerList[id].name, display)
-			CHARACTER[id].chatBubble(text)
+			CHARACTER[id].speechBubble(text)
 		}
 	}
 

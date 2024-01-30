@@ -1,8 +1,8 @@
 //NPC object, controls the position of another object along with interactable dialouge
 
 class NPC {
-	//Initialize: object, roam? radius in pixels of area to walk around, interactable range, clickable region, shop menu?
-	constructor (obj, dialogue, facing="down", roamRadius=false, range=50, clickRegion=[-40,-100,80,120], shop) {
+	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
+	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, clickRegion=[-40,-100,80,120], replies) {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
@@ -24,30 +24,41 @@ class NPC {
 
 
         // Behavior
-        this.shop = shop // Open up shopping menu to prompt player to buy stuff
+        this.replies = replies || {}
+        this.shop = this.replies.shop // Open up shopping menu to prompt player to buy stuff
+        this.dialogue = this.replies.dialogue // Start dialogue, for quest purposes
 
         // Replies
         this.awaitingReply = false
         this.replyButtons = []
 
-        // Dialogue Trigger
-        this.dialogue = dialogue || [""]
+        // speechBubble Trigger
+        this.speechBubble = speechBubble || [""]
         let func = () => {
             // Speak when clicked or near
             this.speak()
+
+            // Dialouge reply options
+            let replyOptions = []
             // Open shop if specified
             if (this.shop) {
-                this.requestReply(
-                    [["Buy", () => {openMenu("shop", this.shop); this.closeReply()}]]
-                    )
-                // openMenu("shop", this.shop)
+                replyOptions.push(["Buy", () => {openMenu("shop", this.shop); this.closeReply()}])
             }
+            // Talk
+            if (this.dialogue) {
+                replyOptions.push(["Talk", () => {this.closeReply()}])
+            }
+            // Start Quest directly (For testing)
+            if (this.replies.quest) {
+                replyOptions.push(["Quest", () => {QuestSystem.start(this.replies.quest); this.closeReply()}])
+            }
+            this.requestReply(replyOptions)
         }
-        let rangeShape = range // Where does player have to stand to interact?
-        if (!Array.isArray(range)) {
-            rangeShape = [-range,-range, range,-range, range,range, -range,range]
+        let interactRangeShape = interactRange // Where does player have to stand to interact?
+        if (!Array.isArray(interactRange)) {
+            interactRangeShape = [-interactRange,-interactRange, interactRange,-interactRange, interactRange,interactRange, -interactRange,interactRange]
         }
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, rangeShape, {frame:0,x:0,y:-120}, clickRegion))
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, interactRangeShape, {frame:0,x:0,y:-120}, clickRegion))
 	}
 
 	// Update
@@ -113,8 +124,8 @@ class NPC {
     }
 
     speak() {
-        let i = Math.floor(Math.random() * this.dialogue.length)
-        this.obj.chatBubble(this.dialogue[i])
+        let i = Math.floor(Math.random() * this.speechBubble.length)
+        this.obj.speechBubble(this.speechBubble[i])
     }
 
     requestReply(options){

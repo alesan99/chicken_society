@@ -39,8 +39,8 @@
             "y": 360,
             "facing": "left",
             "roamRadius": 1,
-            "range": [-180,-50, 50,-50, 50,50, -160, 50],
-            "dialogue": [
+            "interactRange": [-180,-50, 50,-50, 50,50, -160, 50],
+            "speechBubble": [
                 "We love seed!",
                 "We've got free samples!",
                 "Everything here is legal. Trust me."

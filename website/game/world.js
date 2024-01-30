@@ -22,7 +22,6 @@ class World {
 		// Load Quests
 		QuestSystem.initialize()
 		QuestSystem.start("tutorial") // Temporary.. needs a better home
-		QuestSystem.start("easteregghunt") // And this ones just for testing
 
 		// Physics objects
 		OBJECTS = {}
@@ -138,7 +137,7 @@ class World {
 			if (data.NPCs) {
 				for (const [name, npc] of Object.entries(data.NPCs)) {
 					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
-					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius, npc.range, npc.clickRegion, npc.shop)
+					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, npc.clickRegion, {shop: npc.shop, dialogue: npc.dialogue})
 				}
 			}
 			
@@ -186,9 +185,8 @@ class World {
 								QuestSystem.progress(trig.quest, trig.questSlot, trig.questSlotAdd)
 								
 								// Disable trigger if conditions aren't met
-								// TODO: Use a method so it doesn't crash when quest is complete, and it instead references the list of "completed" quests
 								let quest = QuestSystem.getQuest(trig.quest)
-								if (!quest || quest.progress[trig.questSlot] != trig.questSlotValue) {
+								if (!quest || QuestSystem.getProgress(trig.quest, trig.questSlot) != trig.questSlotValue) {
 									OBJECTS["Trigger"][name].active = false
 								}
 							}
@@ -259,9 +257,7 @@ class World {
 				if (sprite.trigger) {
 					 // If its linked to a trigger, check if its active
 					let trigger = OBJECTS["Trigger"][sprite.trigger]
-					if (!trigger) {
-						isActive = false
-					} else if (!trigger.active) {
+					if (!trigger || !trigger.active) {
 						isActive = false
 					}
 				}
@@ -269,9 +265,7 @@ class World {
 					// If it belongs to a quest, make sure its active, and that the quest slot matches
 					// It is easier to link the sprite to a trigger, but this allows you to have multiple sprites without multiple triggers
 					let quest = QuestSystem.getQuest(sprite.quest)
-					if (!quest) {
-						isActive = false
-					} else if (quest.progress[sprite.questSlot] != sprite.questSlotValue) {
+					if (!quest || QuestSystem.getProgress(sprite.quest, sprite.questSlot) != sprite.questSlotValue) {
 						isActive = false
 					}
 				}
@@ -294,7 +288,7 @@ class World {
 			obj.draw()
 		}
 
-		// NPC how dialogue responses
+		// NPC how speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			obj.draw()
 		}
@@ -355,7 +349,7 @@ class World {
 			return true
 		}
 		
-		// NPC dialogue responses
+		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.replyButtons.length > 0) {
 				for (const replyButton of obj.replyButtons) {
@@ -379,7 +373,7 @@ class World {
 
 	mouseRelease(button, x, y) {
 		CHAT.mouseRelease(button, x, y)
-		// NPC dialogue responses
+		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.replyButtons.length > 0) {
 				for (const replyButton of obj.replyButtons) {

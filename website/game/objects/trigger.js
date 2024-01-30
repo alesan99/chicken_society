@@ -1,4 +1,4 @@
-//Trigger; Whenever the player is over this area, it can activate an action like a dialogue or a quest progression
+//Trigger; Whenever the player is over this area, it can activate an action like a speechBubble or a quest progression
 
 class Trigger extends PhysicsObject {
 	//Initialize: x pos, y pos, shape in points
