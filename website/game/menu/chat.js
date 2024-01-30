@@ -104,7 +104,7 @@ MENUS["chatMenu"] = new class extends Menu {
 		} else if (this.value.length > 0) {
 			// Send chat message
 			let message = this.value.substring(0, 15*3+2) // Max chat length
-			PLAYER.chatBubble(message)
+			PLAYER.speechBubble(message)
 			NETPLAY.sendChat(message)
 		}
 

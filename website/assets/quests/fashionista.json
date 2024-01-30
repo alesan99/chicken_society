@@ -1,0 +1,17 @@
+{
+	"name": "Chictoria's Fashionista",
+	"description": "Wear an outfit worth 500 nuggets or more to earn Beefcake's respect.",
+
+	"progressDescription": [
+		"Wear an outfit worth at least 500 nuggets.",
+		"Talk to Beefcake"
+	],
+
+	"progressStart": [0, 0],
+
+	"progressFinish": [1, 1],
+
+	"reward": {
+		"item": "beefcakeaccessories"
+	}
+}

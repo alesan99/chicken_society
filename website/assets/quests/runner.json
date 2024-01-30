@@ -1,10 +1,15 @@
 {
 	"name": "Chicken Run Highscore",
 	"description": "Beat Pro Gamer's highscore of 99 in Chicken Run.",
-	
-	"progressStart": [0],
 
-	"progressFinish": [99],
+	"progressDescription": [
+		"Beat the highscore",
+		"Talk to Pro Gamer"
+	],
+
+	"progressStart": [0, 0],
+
+	"progressFinish": [99, 1],
 
 	"reward": {
 		"nuggets": 100,

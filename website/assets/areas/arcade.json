@@ -40,8 +40,8 @@
             "y": 290,
             "facing": "down",
             "roamRadius": 1,
-            "range": 70,
-            "dialogue": [
+            "interactRange": 70,
+            "speechBubble": [
 				"Hey, dude! Check out some of our retro machines.",
 				"We have lots of gnarly games to try.",
 				"How high can you get?",
@@ -63,7 +63,7 @@
             "y": 500,
             "facing": "right",
             "roamRadius": false,
-            "dialogue": [
+            "speechBubble": [
 				"Psst. Press the emote button in the chat HUD.",
 				"Psst. Type /head tophat",
 				"Psst. Type /body scarf",

@@ -48,6 +48,25 @@ const QuestSystem = (function() {
 			}
 		},
 
+		// Call anytime something happens that could possibly progress a quest.
+		event(type, ...args) {
+			for (let questName in activeQuests) {
+				// Check all quests to see if any are affected by this event
+				let quest = activeQuests[questName]
+				switch (type) {
+					case "highscore":
+						// args: minigame, score
+						break
+					case "talk":
+						// args: npc
+						break
+					case "outfit":
+						// args: head, face, body
+						break
+				}
+			}
+		},
+
 		// Set quest progress slot to a value.
 		setProgress(questName, progressSlot, value) {
 			let quest = this.getQuest(questName)
@@ -106,6 +125,18 @@ const QuestSystem = (function() {
 		// Return quest progress, if it is active.
 		getQuest(questName) {
 			return activeQuests[questName]
+		},
+
+		// Return quest progress slot
+		getProgress(questName, slot) {
+			let quest = this.getQuest(questName)
+			if (quest) {
+				// If quest is active, return current progress
+				return quest.progress[slot]
+			} else if (SAVEDATA.quests.completed[questName]) {
+				// If quest is complete, return saved progress
+				return SAVEDATA.quests.completed[questName][slot]
+			}
 		},
 
 		// Print all active quest for testing purposes myes
