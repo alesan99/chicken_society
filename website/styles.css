@@ -14,7 +14,7 @@ nav {
     display: flex;
     padding: 10px;
     margin: 0;
-    height: 45px;
+    height: 40px;
     align-items: center; 
     box-shadow: 0 4px 9px 0 rgba(37, 27, 27, 0.2); 
     position: sticky; /* Add this line */
@@ -81,9 +81,8 @@ form {
 
 /* canvas styles */
 .game-container{
-	height: calc(100vh - 45px);
+	height: 100%;
 	width: 100%;
-	margin: 0;
 	padding: 0;
 	display: flex; /* Change this line */
     justify-content: center; 
@@ -93,9 +92,9 @@ form {
 
 .color-underlay{
 	z-index: 998;
-	height: calc(100vh - 45px);
+	height: calc(100vh - 45px); /* -45px for nav bar*/
 
-	max-width: 95%;
+	max-width: 99%;
 	background-color: rgb(255, 235, 208);
 	display: flex; /* Change this line */
     justify-content: center; 
@@ -105,18 +104,22 @@ form {
 
 /* Center game canvas */
 #canvasContainer {
-	margin-top: -45px;
-	z-index: 10000;
-	max-width: 95%; /* Ensure the canvas never exceeds the width of the window */
-	overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
+    margin-top: 0vh;
+    z-index: 10000;
+	height: 100%;
+    max-width: 100%; /* Ensure the canvas never exceeds the width of the window */
+    overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 1920px; /* Do not change, it gets redefined in canvas.js */
-	border: 3px solid rgb(221, 205, 57);
-	padding: 10px;
+	/* Center the canvas */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 1920px; /* Do not change, it gets redefined in canvas.js */
+    border: 3px solid rgb(221, 205, 57);
+    padding: 10px;
 }
+
 
 /* Load fonts */
 @font-face {
