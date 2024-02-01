@@ -232,6 +232,9 @@ class World {
 		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
 
 		NETPLAY.update(dt)
+		
+		// Dialogue box
+		DialogueSystem.update(dt)
 
 		// Background element animations
 		for (const [i, anim] of Object.entries(BACKGROUNDANIM[this.area])) {
@@ -307,6 +310,9 @@ class World {
 			}
 		}
 
+		// Dialogue box
+		DialogueSystem.draw()
+
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
 			drawPhysics(OBJECTS, PHYSICSWORLD)
@@ -333,6 +339,11 @@ class World {
 
 	// Received keyboard input
 	keyPress(key, code) {
+		// Dialogue
+		if (DialogueSystem.keyPress(key)) {
+			return true
+		}
+
 		// Control Player
 		PLAYER_CONTROLLER.keyPress(key)
 		
@@ -346,6 +357,11 @@ class World {
 	// Recieved mouse input
 	mouseClick(button, x, y) {
 		if (CHAT.mouseClick(button, x, y)) {
+			return true
+		}
+
+		// Dialogue
+		if (DialogueSystem.mouseClick(button, x, y)) {
 			return true
 		}
 		
