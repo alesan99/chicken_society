@@ -1,128 +1,178 @@
 {
 	"walls": [
-        [0,576, 209,346, 209,399, 83,576],
-        [180,379, 180,207, 315,197, 315,237],
-        [315,237, 315,180, 705,180, 705,237],
-        [705,237, 705,192, 908,356, 908,397],
-        [949,576, 860,455, 860,395, 995,576],
-         
-        [241,312, 241,287, 507,287, 507,312],
+		[0,576, 209,346, 209,399, 83,576],
+		[180,379, 180,207, 315,197, 315,237],
+		[315,237, 315,180, 705,180, 705,237],
+		[705,237, 705,192, 908,356, 908,397],
+		[949,576, 860,455, 860,395, 995,576],
+		 
+		[241,312, 241,287, 507,287, 507,312],
 
-        [560,279, 549,239, 704,239, 739, 279],
+		[560,279, 549,239, 704,239, 739, 279],
 
-        [780,312, 780,274, 840,274, 840,312],
+		[780,312, 780,274, 840,274, 840,312],
 
-        [0,576, 1024,576, 1024,600, 0,600]
-    ],
+		[0,576, 1024,576, 1024,600, 0,600]
+	],
 
-    "warps": {
-        "arcadeExit": {
-            "to": "hub",
-            "fromWarp": "arcadeEntrance",
-            "facing": "left",
-            "x": 826,
-            "y": 327,
-            "w": 30,
-            "h": 50
-        }
-    },
+	"warps": {
+		"arcadeExit": {
+			"to": "hub",
+			"fromWarp": "arcadeEntrance",
+			"facing": "left",
+			"x": 826,
+			"y": 327,
+			"w": 30,
+			"h": 50
+		}
+	},
 
 	"NPCs": {
-        "gamer": {
-            "profile": {
-                "name": "Bud",
-                "color": "#c8d2ff",
-                "head": false,
-                "face": "visors",
-                "body": "alesanaccessories"
-            },
-            "x": 406,
-            "y": 290,
-            "facing": "down",
-            "roamRadius": 1,
-            "interactRange": 70,
-            "speechBubble": [
+		"gamer": {
+			"profile": {
+				"name": "Bud",
+				"color": "#c8d2ff",
+				"head": false,
+				"face": "visors",
+				"body": "alesanaccessories"
+			},
+			"x": 406,
+			"y": 290,
+			"facing": "down",
+			"roamRadius": 1,
+			"interactRange": 70,
+			"speechBubble": [
 				"Hey, dude! Check out some of our retro machines.",
 				"We have lots of gnarly games to try.",
 				"How high can you get?",
-                "Totally tubular, right?",
+				"Totally tubular, right?",
 				"Radical!",
 				"Cowabunga",
 				"Bodacious!"
-            ]
-        },
+			]
+		},
 		"expert": {
-            "profile": {
-                "name": "Pro Gamer",
-                "color": "#282828",
-                "head": false,
-                "face": false,
-                "body": false
-            },
-            "x": 820,
-            "y": 500,
-            "facing": "right",
-            "roamRadius": false,
-            "speechBubble": [
+			"profile": {
+				"name": "Pro Gamer",
+				"color": "#282828",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 820,
+			"y": 500,
+			"facing": "right",
+			"roamRadius": false,
+			"speechBubble": [
 				"Psst. Press the emote button in the chat HUD.",
 				"Psst. Type /head tophat",
 				"Psst. Type /body scarf",
 				"Psst. Press the '/' key to type in the chat.",
 				"Psst. Change your name with /name YOURNAME"
+			],
+
+			"dialogue": [
+				{
+					"id": "runnerFail",
+					"text": [
+						"I am unbeatable. It feels good to be a god."
+					],
+					"condition": {
+						"quest": "runner",
+						"questSlot": 0,
+						"questSlotValue": 0
+					}
+				},
+				{
+					"id": "runnerSuccess",
+					"text": [
+						"What the hell? What happened to my Chicken Run score?",
+						"Do you have any idea how long it'll take me to get the highscore again?",
+						"Whatever. I'm more of a Turkey Run guy anyway..."
+					],
+					"condition": {
+						"quest": "runner",
+						"questSlot": 0,
+						"questSlotValue": 1
+					},
+					"quest": "runner",
+					"questSlot": 1,
+					"questSlotAdd": 1
+				},
+				{
+					"id": "runnerComplete",
+					"text": [
+						"Unbelievable. You actually beat me."
+					],
+					"randomDialogue": true,
+					"condition": {
+						"quest": "runner",
+						"completed": true
+					}
+				},
+				{
+					"id": "runnerStart",
+					"text": [
+						"What nerd? You think you're hot stuff, huh?",
+						"I have the highscore on Chicken Run. 99 points.",
+						"You think you can beat me? I didn't think so."
+					],
+					"startQuest": "runner"
+				}
 			]
-        }
-    },
+		}
+	},
 
-    "triggers": {
-        "runnerMinigame": {
-            "x": 160,
-            "y": 458,
-            "shape": [-40,-40, 40,-40, 40,40, -40,40],
+	"triggers": {
+		"runnerMinigame": {
+			"x": 160,
+			"y": 458,
+			"shape": [-40,-40, 40,-40, 40,40, -40,40],
 
-            "clickRegion": [-70,-100, 80,140],
-            "icon": {
-                "frame": 2,
-                "x": -20,
-                "y": -100
-            },
+			"clickRegion": [-70,-100, 80,140],
+			"icon": {
+				"frame": 2,
+				"x": -20,
+				"y": -100
+			},
 
-            "action": "minigame",
-            "minigameName": "runner",
-            "cost": 1
-        },
-        
-        "clawMachine": {
-            "x": 700,
-            "y": 279,
-            "shape": [-40,-40, 40,-40, 40,20, -40,20],
+			"action": "minigame",
+			"minigameName": "runner",
+			"cost": 1
+		},
+		
+		"clawMachine": {
+			"x": 700,
+			"y": 279,
+			"shape": [-40,-40, 40,-40, 40,20, -40,20],
 
-            "clickRegion": [-50,-120, 80,120],
-            "icon": {
-                "frame": 2,
-                "x": -20,
-                "y": -100
-            },
+			"clickRegion": [-50,-120, 80,120],
+			"icon": {
+				"frame": 2,
+				"x": -20,
+				"y": -100
+			},
 
-            "action": "minigame",
-            "minigameName": "claw",
-            "cost": 5
-        }
-    },
+			"action": "minigame",
+			"minigameName": "claw",
+			"cost": 5
+		}
+	},
 
-    
-    "sprites": {
-        "alley2": {
-            "image": "arcade-layers.png",
-            "framesx": 1,
-            "framesy": 1,
-            "ox": 0,
-            "oy": 0,
-            "qw": 265,
-            "qh": 72,
+	
+	"sprites": {
+		"alley2": {
+			"image": "arcade-layers.png",
+			"framesx": 1,
+			"framesy": 1,
+			"ox": 0,
+			"oy": 0,
+			"qw": 265,
+			"qh": 72,
 
-            "x": 244,
-            "y": 244,
-            "worldy": 292
-        }
-    }
+			"x": 244,
+			"y": 244,
+			"worldy": 292
+		}
+	}
 }

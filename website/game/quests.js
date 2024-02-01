@@ -42,8 +42,8 @@ const QuestSystem = (function() {
 					}
 
 						
-					Notify.new("You started the quest: " + data.name)
-					Notify.new(data.description)
+					Notify.new("You started the quest: " + data.name, 8)
+					Notify.new(data.description, 8)
 				})
 			}
 		},

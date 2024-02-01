@@ -46,7 +46,7 @@ class NPC {
             }
             // Talk
             if (this.dialogue) {
-                replyOptions.push(["Talk", () => {this.closeReply()}])
+                replyOptions.push(["Talk", () => {DialogueSystem.start(this.dialogue); this.closeReply()}])
             }
             // Start Quest directly (For testing)
             if (this.replies.quest) {
