@@ -126,6 +126,8 @@ class NPC {
     speak() {
         let i = Math.floor(Math.random() * this.speechBubble.length)
         this.obj.speechBubble(this.speechBubble[i])
+
+        QuestSystem.event("talk", this.obj.name) // Progress quests
     }
 
     requestReply(options){

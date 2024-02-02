@@ -120,10 +120,21 @@ const DialogueSystem = (function() {
 		finish() {
 			open = false
 
+			d = dialogueData
+
 			// Do any actions defined for the end of the dialogue
-			if (dialogueData.startQuest) {
+			if (d.startQuest) {
 				// Start a quest
-				QuestSystem.start(dialogueData.startQuest)
+				QuestSystem.start(d.startQuest)
+			}
+
+			if (d.quest) {
+				// Quest progress from talking
+				if (d.questSlotAdd) {
+					QuestSystem.progress(d.quest, d.questSlot, d.questSlotAdd)
+				} else if (d,questSlotSet) {
+					QuestSystem.setProgress(d.quest, d.questSlot, d.questSlotSet)
+				}
 			}
 		}
 	};

@@ -182,9 +182,14 @@ class World {
 						} else if (action == "quest") {
 							// Progress quest
 							func = function() {
-								QuestSystem.progress(trig.quest, trig.questSlot, trig.questSlotAdd)
+								if (trig.questSlotAdd) {
+									QuestSystem.progress(trig.quest, trig.questSlot, trig.questSlotAdd)
+								} else if (trig.questSlotSet) {
+									QuestSystem.setProgress(trig.quest, trig.questSlot, trig.questSlotSet)
+								}
 								
 								// Disable trigger if conditions aren't met
+								// TODO: Move this to the progress function in QuestSystem so it gets updated when progressed in other ways
 								let quest = QuestSystem.getQuest(trig.quest)
 								if (!quest || QuestSystem.getProgress(trig.quest, trig.questSlot) != trig.questSlotValue) {
 									OBJECTS["Trigger"][name].active = false

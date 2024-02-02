@@ -66,11 +66,9 @@
 					"condition": {
 						"quest": "easteregghunt",
 						"questSlot": [0, 1],
-						"questSlotValue": [1, 0]
+						"questSlotValue": [1, 1]
 					},
-					"quest": "easteregghunt",
-					"questSlot": 1,
-					"questSlotAdd": 1
+					"quest": "easteregghunt"
 				},
 				{
 					"id": "easteregghuntComplete",
@@ -80,8 +78,7 @@
 					"randomDialogue": true,
 					"condition": {
 						"quest": "easteregghunt",
-						"questSlot": 1,
-						"questSlotValue": 1
+						"questComplete": true
 					}
 				},
 				{

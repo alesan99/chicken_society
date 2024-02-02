@@ -107,7 +107,7 @@
 					"randomDialogue": true,
 					"condition": {
 						"quest": "runner",
-						"completed": true
+						"questComplete": true
 					}
 				},
 				{

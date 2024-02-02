@@ -31,6 +31,8 @@ const QuestSystem = (function() {
 						progress: SAVEDATA.quests.active[questName] || data.progressStart,
 						progressFinish: data.progressFinish,
 
+						progressEvents: data.progressEvents,
+
 						reward: data.reward,
 
 						complete: false,
@@ -53,16 +55,70 @@ const QuestSystem = (function() {
 			for (let questName in activeQuests) {
 				// Check all quests to see if any are affected by this event
 				let quest = activeQuests[questName]
-				switch (type) {
-					case "highscore":
-						// args: minigame, score
-						break
-					case "talk":
-						// args: npc
-						break
-					case "outfit":
-						// args: head, face, body
-						break
+				if (quest.progressEvents) {
+					for (let slot=0; slot < quest.progressEvents.length; slot++) {
+						let event = quest.progressEvents[slot]
+						if (event != false && event.type == type) {
+							// Quest is accepting event!
+							doProgress = false
+							if (type == "minigameHighscore") {
+								// args: minigame, score
+								let minigame = args[0]
+								let score = args[1]
+								if (event.minigame == minigame && score >= event.score) {
+									doProgress = true
+								}
+							} else if (type == "talk") {
+								// args: npc name
+								let npcName = args[0]
+								if (event.name == npcName) {
+									doProgress = true
+								}
+							} else if (type == "clothes") {
+								// args: head, face, body, item
+								let head = args[0]
+								let face = args[1]
+								let body = args[2]
+								let item = args[3]
+								if (event.costGreater) {
+									// Is outfit greater/less than defined cost?
+									let cost = 0
+									if (head) {
+										cost += ITEMS.head[head].cost
+									} else if (face) {
+										cost += ITEMS.face[face].cost
+									} else if (body) {
+										cost += ITEMS.body[body].cost
+									} else if (item) {
+										cost += ITEMS.item[item].cost
+									}
+									console.log(cost, event.costGreater)
+									if (cost >= event.costGreater) {
+										doProgress = true
+									}
+								}
+							} else {
+								// Not a predefined event
+								doProgress = true
+							}
+	
+							// Progress quest
+							if (doProgress) {
+								if (event.questSlotAdd) {
+									console.log("Works")
+									this.progress(questName, slot, event.questSlotAdd)
+								} else if (event.questSlotSet) {
+									console.log("Works?")
+									this.setProgress(questName, slot, event.questSlotSet)
+								}
+							} else {
+								// Quest event may have a property to undo progress if event isn't accepted
+								if (event.questSlotDefault) {
+									this.setProgress(questName, slot, event.questSlotDefault)
+								}
+							}
+						}
+					}
 				}
 			}
 		},
@@ -148,6 +204,7 @@ const QuestSystem = (function() {
 					progressString += `${quest.progress[i]}/${quest.progressFinish[i]} `
 				}
 				console.log(`${questName}: ${progressString}`)
+				Notify.new(`${questName}: ${progressString}`)
 			}
 		}
 	};
