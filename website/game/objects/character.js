@@ -233,6 +233,11 @@ class Character extends PhysicsObject {
 		this.body = profile.body || false
 		this.item = profile.item || false
 
+		// Progress Quests
+		if (this.controller == PLAYER_CONTROLLER) {
+			QuestSystem.event("clothes", this.head, this.face, this.body, this.item)
+		}
+
 		this.scale = profile.scale || 1
 		//Send profile to server if this is the player
 		if (sendToServer && this.controller == PLAYER_CONTROLLER) {

@@ -308,7 +308,11 @@ MINIGAMES["runner"] = new class {
 			addNuggets(1)
 		}
 
-		this.highscore = Math.max(this.highscore, this.score)
+		// Update highscore
+		if (this.score > this.highscore) {
+			this.highscore = this.score
+			MINIGAME.newHighscore(this.score)
+		}
 	}
 
 	die() {

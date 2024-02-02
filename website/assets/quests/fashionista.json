@@ -1,10 +1,21 @@
 {
 	"name": "Chictoria's Fashionista",
-	"description": "Wear an outfit worth 500 nuggets or more to earn Beefcake's respect.",
+	"description": "Wear an outfit worth 100 nuggets or more to earn Beefcake's respect.",
 
 	"progressDescription": [
-		"Wear an outfit worth at least 500 nuggets.",
+		"Wear an outfit worth at least 100 nuggets.",
 		"Talk to Beefcake"
+	],
+
+	"progressEvents": [
+		{
+			"type": "clothes",
+			"costGreater": 100,
+			"questSlotSet": 1,
+
+			"questSlotDefault": 0
+		},
+		false
 	],
 
 	"progressStart": [0, 0],
