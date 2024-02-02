@@ -28,6 +28,8 @@ const QuestSystem = (function() {
 						name: data.name,
 						description: data.description,
 
+						progressDescription: data.progressDescription,
+
 						progress: SAVEDATA.quests.active[questName] || data.progressStart,
 						progressFinish: data.progressFinish,
 
@@ -85,14 +87,16 @@ const QuestSystem = (function() {
 									let cost = 0
 									if (head) {
 										cost += ITEMS.head[head].cost
-									} else if (face) {
+									}
+									if (face) {
 										cost += ITEMS.face[face].cost
-									} else if (body) {
+									}
+									if (body) {
 										cost += ITEMS.body[body].cost
-									} else if (item) {
+									}
+									if (item) {
 										cost += ITEMS.item[item].cost
 									}
-									console.log(cost, event.costGreater)
 									if (cost >= event.costGreater) {
 										doProgress = true
 									}
@@ -105,10 +109,8 @@ const QuestSystem = (function() {
 							// Progress quest
 							if (doProgress) {
 								if (event.questSlotAdd) {
-									console.log("Works")
 									this.progress(questName, slot, event.questSlotAdd)
 								} else if (event.questSlotSet) {
-									console.log("Works?")
 									this.setProgress(questName, slot, event.questSlotSet)
 								}
 							} else {
@@ -193,6 +195,10 @@ const QuestSystem = (function() {
 				// If quest is complete, return saved progress
 				return SAVEDATA.quests.completed[questName][slot]
 			}
+		},
+
+		getAllActiveQuests() {
+			return activeQuests
 		},
 
 		// Print all active quest for testing purposes myes

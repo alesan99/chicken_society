@@ -30,6 +30,7 @@ function loadGameAssets() {
 	IMG.replyBubble = new RenderImage("assets/reply_bubble.png")
 	SPRITE.replyBubble = new Sprite(IMG.replyBubble, 2,1, 64,32)
 	SPRITE.replyTrail = new Sprite(IMG.replyBubble, 2,1, 64,32, 0,32)
+	IMG.dialogue = new RenderImage("assets/dialogue.png")
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
 

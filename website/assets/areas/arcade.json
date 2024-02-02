@@ -122,6 +122,35 @@
 			]
 		}
 	},
+	
+	"sprites": {
+		"alley2": {
+			"image": "arcade-layers.png",
+			"framesx": 1,
+			"framesy": 1,
+			"ox": 0,
+			"oy": 0,
+			"qw": 265,
+			"qh": 72,
+
+			"x": 244,
+			"y": 244,
+			"worldy": 292
+		},
+		
+		"egg4": {
+			"image": "egg.png",
+			"qw": 30,
+			"qh": 40,
+
+			"x": 236,
+			"y": 117,
+			"worldy": 157,
+
+			"quest": "easteregghunt",
+			"trigger": "egg4"
+		}
+	},
 
 	"triggers": {
 		"runnerMinigame": {
@@ -156,23 +185,19 @@
 			"action": "minigame",
 			"minigameName": "claw",
 			"cost": 5
-		}
-	},
-
-	
-	"sprites": {
-		"alley2": {
-			"image": "arcade-layers.png",
-			"framesx": 1,
-			"framesy": 1,
-			"ox": 0,
-			"oy": 0,
-			"qw": 265,
-			"qh": 72,
-
-			"x": 244,
-			"y": 244,
-			"worldy": 292
+		},
+		
+		"egg4": {
+			"x": 236,
+			"y": 117,
+			"shape": [0,0, 40,0, 40,40, 0,40],
+			"clickRegion": [0,0, 40,40],
+			"icon": {"frame": 1, "x": 15, "y": -10},
+			"action": "quest",
+			"quest": "easteregghunt",
+			"questSlot": 3,
+			"questSlotValue": 0,
+			"questSlotAdd": 1
 		}
 	}
 }
