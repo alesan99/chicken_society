@@ -13,6 +13,7 @@ const DialogueSystem = (function() {
 	let dialogueProgress = 0
 	let dialogueTimer = 0
 	let currentText = ""
+	let currentTextWrap = []
 	let speaker = ""
 
 	const functions = {
@@ -46,19 +47,36 @@ const DialogueSystem = (function() {
 
 		draw() {
 			if (open) {
+				let x = 240
+				let y = 340
+
 				// Darken surrounds
 				DRAW.setColor(0,0,0,0.2)
 				DRAW.rectangle(0, 0, 1024, 576, "fill")
 				// Dialogue box
 				DRAW.setColor(255,255,255,1)
-				DRAW.rectangle(300, 350, 600, 140, "fill")
+				DRAW.image(IMG.dialogue, null, x, y)
 				DRAW.setColor(0,0,0,1)
 				DRAW.setFont(FONT.caption)
-				DRAW.text(currentText.substring(0, dialogueProgress), 300 + 10, 350 + 30)
+
+				let charStart = 0 // Character index from line break
+				for (let i=0; i < currentTextWrap.length; i++) {
+					let s = currentTextWrap[i]
+					if (dialogueProgress < charStart + s.length) {
+						s = s.substring(0, dialogueProgress - charStart)
+					}
+					DRAW.text(s, x + 30, y + 40 + i*30)
+
+					if (s.length != currentTextWrap[i].length) {
+						// line has been cut, don't continue to the next one
+						break
+					}
+					charStart += s.length
+				}
 
 				if (dialogueProgress >= currentText.length) {
 					// Draw continue prompt
-					DRAW.text(">", 850 + promptTimer*10 + 10, 470)
+					DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134)
 				}
 			}
 		},
@@ -83,7 +101,7 @@ const DialogueSystem = (function() {
 				this.next()
 				return true
 			}
-			return false
+			return true
 		},
 	
 		mouseClick(button, x, y) {
@@ -113,6 +131,8 @@ const DialogueSystem = (function() {
 
 		startText(i) {
 			currentText = dialogueData.text[i]
+			DRAW.setFont(FONT.caption)
+			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2)
 			dialogueProgress = 0
 			dialogueTimer = 0
 		},
