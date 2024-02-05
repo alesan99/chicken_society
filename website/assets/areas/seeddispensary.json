@@ -29,8 +29,8 @@
     "NPCs": {
         "cashier": {
             "profile": {
-                "name": "Bazooka Benny",
-                "color": "#84d34a",
+                "name": "Seedtender",
+                "color": [132, 211, 74],
                 "head": "snapback",
                 "face": false,
                 "body": "silverchains"
@@ -39,20 +39,12 @@
             "y": 360,
             "facing": "left",
             "roamRadius": 1,
-            "interactRange": [-180,-50, 50,-50, 50,50, -160, 50],
-            "speechBubble": [
+            "range": [-180,-50, 50,-50, 50,50, -160, 50],
+            "dialogue": [
                 "We love seed!",
                 "We've got free samples!",
                 "Everything here is legal. Trust me."
-            ],
-            "shop": {
-                "name": "Seed Dispensary",
-                "items": {
-                    "item": {
-                        "seeds": true
-                    }
-                }
-            }
+            ]
         }
     }
 }

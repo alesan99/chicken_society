@@ -20,21 +20,6 @@ function makeSaveData() {
 		pets: [],
 		house: [],
 
-		quests: {
-			// Quest progress
-			// Each quest progress is a list of numbers Ex: [0, 0, 1]
-			// They will be marked as complete once the list matches or exceeds the predefined quest requirements
-			// NOTE: the quests listed below are just examples. Quests will be added to the saveData list automatically, not typed in manually.
-			active: {
-				// tutorial: [],
-				// runner_highscore: []
-			},
-			// Completed quests will save the finished quest progress to compare with possible future updates
-			completed: {
-
-			}
-		},
-
 		highscores: {
 			runner: 0
 		}
@@ -73,11 +58,11 @@ function makeProfile() {
 
 	let profile = {
 		name: defaultNames[Math.floor(Math.random()*defaultNames.length)],
-		color: RGBtoHEX(
+		color: [
 			Math.floor(100 + Math.random()*155),
 			Math.floor(100 + Math.random()*155),
 			Math.floor(100 + Math.random()*155)
-		),
+		],
 		head: false,
 		face: false,
 		body: false,
@@ -118,15 +103,13 @@ function loadSaveData(saveData) {
 	const retrievedObject = JSON.parse(storedJsonString);
 	// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
 
-	QuestSystem.initialize() // Reload quests
-
 	console.log("loaded SaveData from localStorage at 'guestSaveData'")
 	console.log(retrievedObject)
 	return retrievedObject
 }
 
 // Functions for modifying save data:
-// Remove nugget currency.
+// Remove nugget currency. TODO: Fancy animations
 function removeNuggets(nuggets) {
 	SAVEDATA.nuggets -= nuggets
 
@@ -156,10 +139,6 @@ function spendNuggets(cost) {
 
 // Get items like clothing and consumables
 function addItem(type, id) {
-	if (!type) {
-		// Item category not specified, look for it
-		type = getItemCategory(id)
-	}
 	if (!SAVEDATA.items[type][id]) {
 		SAVEDATA.items[type][id] = 0
 	}
@@ -191,30 +170,4 @@ function getItemData(id, type) {
 	}
 
 	return ITEMS[category][id]
-}
-
-// Color storage methods
-function RGBtoHEX(r, g, b) {
-	// Convert each RGB component to a two-digit hexadecimal value
-	const hexR = r.toString(16).padStart(2, '0');
-	const hexG = g.toString(16).padStart(2, '0');
-	const hexB = b.toString(16).padStart(2, '0');
-
-	// Combine the hexadecimal values to form the final color code
-	const hexColor = `#${hexR}${hexG}${hexB}`;
-
-	return hexColor;
-}
-
-function HEXtoRGB(hex) {
-	// Remove the '#' symbol
-	hex = hex.substring(1, 7);
-
-	// Split the hex string into three parts: red, green, and blue
-	const red = parseInt(hex.substring(0, 2), 16);
-	const green = parseInt(hex.substring(2, 4), 16);
-	const blue = parseInt(hex.substring(4, 6), 16);
-
-	// Return the RGB values as an object
-	return [red, green, blue];
 }

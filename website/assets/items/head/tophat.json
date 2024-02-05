@@ -1,11 +1,9 @@
 {
     "name": "Top Hat",
-    "description": "Watch for doorways.",
-    "cost": 10,
-
     "center": [
-        [38,44],
+        [38,47],
         [38,47],
         [38,47]
-    ]
+    ],
+    "cost": 10
 }

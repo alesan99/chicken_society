@@ -24,9 +24,7 @@ function resizeCanvas() {
 	// Get the current window dimensions & determine the scaling factor to fit the canvas within the window
 	const windowWidth = window.innerWidth
 	const windowHeight = window.innerHeight
-
-	// Scale the canvas to fit within the window - "-60" accounts for navigation bar height
-	canvasScale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), (windowHeight-65) / (canvasHeight+canvasPadding)))
+	canvasScale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), windowHeight / (canvasHeight+canvasPadding)))
 
 	// Set the canvas dimensions to fit within the window (using CSS)
 	canvas.style.width = `${canvasWidth * canvasScale}px`

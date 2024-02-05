@@ -1,11 +1,9 @@
 {
     "name": "Silver Chains",
-    "description": "Elegantly crafted with premium silver. Or so I'm told.",
-    "cost": 50,
-
     "center": [
         [63,58],
         [88,46],
         [62,55]
-    ]
+    ],
+    "cost": 50
 }

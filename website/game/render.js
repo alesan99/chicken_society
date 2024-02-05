@@ -131,29 +131,6 @@ class Render {
 		return this.c.measureText(text).width
 	}
 
-	// Wrap text so it fits within a rectangle
-	wrapText(text, width) {
-		let wrappedText = [];
-		let words = text.split(' ');
-		let currentLine = '';
-
-		for (let i = 0; i < words.length; i++) {
-			let word = words[i];
-			let testLine = currentLine + word + ' ';
-			let testWidth = this.getTextWidth(testLine);
-
-			if (testWidth > width) {
-				wrappedText.push(currentLine.trim());
-				currentLine = word + ' ';
-			} else {
-				currentLine = testLine;
-			}
-		}
-
-		wrappedText.push(currentLine.trim());
-		return wrappedText;
-	}
-
 	// Render Text with optional transformations
 	text(string, x, y, align="left", r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
 		this.c.textAlign = align // left, right, center

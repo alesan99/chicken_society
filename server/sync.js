@@ -20,7 +20,7 @@ function listenToClient(socket) {
 	console.log("A user connected");
 
 	// Recieve information about players; Send out info to everyone
-	socket.on("profile", (profile, callback) => {
+	socket.on("profile", (profile) => {
 		// TODO: Restructure this
 		playerList[socket.id] = {
 			id: socket.id,
@@ -43,10 +43,6 @@ function listenToClient(socket) {
 
 		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
 		console.log(profile);
-
-		callback({
-			status: "ok"
-		});
 	});
 
 	// Recieved chicken data (position, velocity); Send out to everyone
@@ -128,7 +124,7 @@ function listenToClient(socket) {
 
 	// Minigames
 	// Player joined minigame
-	socket.on("minigame", (minigameName, callback) => {
+	socket.on("minigame", (minigameName) => {
 		if (!playerList[socket.id]) {
 			return false
 		}
@@ -179,9 +175,6 @@ function listenToClient(socket) {
 			}
 			playerList[socket.id].minigame = false
 		}
-		callback({
-			status: "ok"
-		});
 	});
 	// Relay minigame data
 	socket.on("minigameData", (minigameName, newData) => {
