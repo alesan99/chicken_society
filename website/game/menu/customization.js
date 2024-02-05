@@ -10,7 +10,7 @@ MENUS["customization"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
+		this.buttons["confirm"] = new Button("Confirm", ()=>{closeMenu()}, null, 665,399, 100,32)
 
 		// Profile loading from local browser storage (NOT from server)
 		this.buttons["load"] = new Button("Load", ()=>{
@@ -31,44 +31,42 @@ MENUS["customization"] = new class extends Menu {
 
         // Color
 		this.buttons["color"] = new Button("Random", ()=>{
-            PROFILE.color = RGBtoHEX(Math.floor(100 + Math.random()*155),
+            PROFILE.color = [Math.floor(100 + Math.random()*155),
                 Math.floor(100 + Math.random()*155),
-                Math.floor(100 + Math.random()*155));
+                Math.floor(100 + Math.random()*155)];
             PLAYER.updateProfile(PROFILE, "sendToServer");
         }, null, 348,365, 100,32)
 
-		// Inventory
-		this.tab = "allTab"
+        // Inventorty
 		this.inventory = []
-		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all"); this.buttons[this.tab].selected=false; this.tab = "allTab"; this.buttons[this.tab].selected=true}, null, 476,150, 46,34)
-		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head"); this.buttons[this.tab].selected=false; this.tab = "headTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(0)}, 522,150, 34,34)
-		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face"); this.buttons[this.tab].selected=false; this.tab = "faceTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(1)}, 522+34*1,150, 34,34)
-		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body"); this.buttons[this.tab].selected=false; this.tab = "bodyTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(2)}, 522+34*2,150, 34,34)
-		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(3)}, 522+34*3,150, 34,34)
-		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(4)}, 522+34*4,150, 34,34)
+		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all")}, null, 476,150, 46,34)
+		this.buttons["headTab"] = new Button("H", ()=>{this.filterInventory("head")}, null, 522,150, 34,34)
+		this.buttons["faceTab"] = new Button("F", ()=>{this.filterInventory("face")}, null, 522+34*1,150, 34,34)
+		this.buttons["bodyTab"] = new Button("B", ()=>{this.filterInventory("body")}, null, 522+34*2,150, 34,34)
+		this.buttons["furitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture")}, null, 522+34*3,150, 34,34)
+		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item")}, null, 522+34*4,150, 34,34)
 		this.filterInventory("all")
-		this.buttons["allTab"].selected = true
 
-		this.buttons["inventory"] = new ItemGrid(
-			(itemId,itemType)=>{
+		this.buttons["inventory"] = new GridSelector(
+			(itemId)=>{
 				// Set clothing item
-				if (PROFILE.hasOwnProperty(itemType)) {
-					if (PROFILE[itemType] == itemId) {
-						PROFILE[itemType] = false;
-					} else {
-						PROFILE[itemType] = itemId;
-					}
-					PLAYER.updateProfile(PROFILE, "sendToServer");
+				if (PROFILE[getItemCategory(itemId)] && PROFILE[getItemCategory(itemId)] == itemId) {
+					PROFILE[getItemCategory(itemId)] = false;
+				} else {
+					PROFILE[getItemCategory(itemId)] = itemId;
 				}
-			},
-			this.inventory, 
-			(itemId,itemType)=>{
+				PLAYER.updateProfile(PROFILE, "sendToServer");
+			}, this.inventory, 
+			(i,itemId)=>{
 				// Is selected?
-				if (PROFILE[itemType] && PROFILE[itemType] == itemId) {
+				let category = getItemCategory(itemId)
+				if (PROFILE[category] && PROFILE[category] == itemId) {
 					return true
 				}
+			},
+			(i,itemId)=>{
+				return [ITEMS[getItemCategory(itemId)][itemId].image, ITEMS[getItemCategory(itemId)][itemId].sprite]
 			}, 476,184, 56,56, 5,3)
-		this.buttons["inventory"].showCount = true // How how many of each item the player owns
 
 		// this.buttons["bodyRight"] = new Button(">", ()=>{
 		// 	let keys = Object.keys(SAVEDATA.items.body);

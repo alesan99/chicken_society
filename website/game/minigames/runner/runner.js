@@ -1,7 +1,7 @@
 // CHICKEN RUN
 // Control a chicken running to the right, jump over obstacles while the chicken slowly speeds up.
+// TODO: Improve this code and comment it
 
-if (true) {
 let RubberChicken
 let Fence
 let Ground
@@ -91,16 +91,15 @@ MINIGAMES["runner"] = new class {
 		for (const [id, data] of Object.entries(this.playerData)) {
 			let obj = this.objects.chicken[id]
 			if (obj) {
-				if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy) || (data.duck != obj.oldduck)) {
+				if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy) || (data.duck != obj.duck)) {
 					obj.x = data.x
 					obj.y = data.y
 					obj.sx = data.sx
 					obj.sy = data.sy
-					obj.oldx = data.x
-					obj.oldy = data.y
-					obj.oldsx = data.sx
-					obj.oldsy = data.sy
-					obj.oldduck = data.duck
+					obj.oldx = obj.x
+					obj.oldy = obj.y
+					obj.oldsx = obj.sx
+					obj.oldsy = obj.sy
 					if (data.duck) {
 						obj.duck()
 					} else if (!data.duck) {
@@ -192,33 +191,12 @@ MINIGAMES["runner"] = new class {
 		// Render all chickens
 		DRAW.setColor(255,255,255,0.5)
 		DRAW.setFont(FONT.pixel)
-		let offscreenRight = 0
-		let offscreenLeft = 0
 		for (const [id, obj] of Object.entries(this.objects["chicken"])) {
 			if (obj != this.chicken) { // Except player, they should be drawn last
 				// Chicken
 				obj.draw(cameraX)
 				// Nametag
-				let textWidth = DRAW.getTextWidth(NETPLAY.playerList[id].name)*0.75
-				let chickenX = obj.x-cameraX
-				let nameTagX = Math.max(172+textWidth/2, Math.min(852-textWidth/2, chickenX))
-				if (chickenX != nameTagX) { // Show distance if off-screen
-					let dist = Math.floor((obj.x-this.chicken.x)/100)
-					let nameTagY = obj.y-57
-					if (obj.y > canvasHeight-200-60) {
-						if (dist < 0) {
-							nameTagY += offscreenLeft*23
-							offscreenLeft += 1
-						} else {
-							nameTagY += offscreenRight*23
-							offscreenRight += 1
-						}
-					}
-					DRAW.text(NETPLAY.playerList[id].name, nameTagX, nameTagY, "center", 0, 0.75,0.75)
-					DRAW.text(`${dist}m`, nameTagX, nameTagY+12, "center", 0, 0.75,0.75)
-				} else {
-					DRAW.text(NETPLAY.playerList[id].name, nameTagX, obj.y-70, "center", 0, 0.75,0.75)
-				}
+				DRAW.text(NETPLAY.playerList[id].name, obj.x-cameraX, obj.y-80, "center")
 			}
 		}
 		
@@ -308,11 +286,7 @@ MINIGAMES["runner"] = new class {
 			addNuggets(1)
 		}
 
-		// Update highscore
-		if (this.score > this.highscore) {
-			this.highscore = this.score
-			MINIGAME.newHighscore(this.score)
-		}
+		this.highscore = Math.max(this.highscore, this.score)
 	}
 
 	die() {
@@ -631,5 +605,4 @@ Fence = class extends PhysicsObject {
 		}
 		return true
 	}
-}
 }

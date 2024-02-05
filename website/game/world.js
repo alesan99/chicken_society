@@ -19,10 +19,6 @@ class World {
 		// Initialize Physics world
 		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
 
-		// Load Quests
-		QuestSystem.initialize()
-		QuestSystem.start("tutorial") // Temporary.. needs a better home
-
 		// Physics objects
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
@@ -85,27 +81,16 @@ class World {
 			if (data.sprites) {
 				for (const [name, s] of Object.entries(data.sprites)) {
 					let img = s.image
-					if (!(s.quest && !QuestSystem.getQuest(s.quest))) { // If it belongs to a quest, make sure its active
-						if (!BACKGROUNDIMG[this.area][img]) {
-							BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
-						}
-						let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
-						BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
-						// Conditional visiblity
-						if (s.trigger) {
-							BACKGROUNDSPRITE[this.area][name].trigger = s.trigger
-						}
-						if (s.quest) {
-							BACKGROUNDSPRITE[this.area][name].quest = s.quest
-							BACKGROUNDSPRITE[this.area][name].questSlot = s.questSlot
-							BACKGROUNDSPRITE[this.area][name].questSlotValue = s.questSlotValue
-						}
-						// If defined, play animation
-						if (s.anim) {
-							BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
-							BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
-							BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
-						}
+					if (!BACKGROUNDIMG[this.area][img]) {
+						BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
+					}
+					let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
+					BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
+					// If defined, play animation
+					if (s.anim) {
+						BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
+						BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
+						BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
 					}
 				}
 			}
@@ -137,68 +122,39 @@ class World {
 			if (data.NPCs) {
 				for (const [name, npc] of Object.entries(data.NPCs)) {
 					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
-					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, npc.clickRegion, {shop: npc.shop, dialogue: npc.dialogue})
+					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.dialogue, npc.facing, npc.roamRadius, npc.range, npc.clickRegion, npc.shop)
 				}
 			}
 			
 			// Load triggers
 			if (data.triggers) {
 				for (const [name, trig] of Object.entries(data.triggers)) {
-					let isActive = true // If it belongs to a quest, make sure its active
-					if (trig.quest) {
-						let quest = QuestSystem.getQuest(trig.quest)
-						if (!quest) {
-							isActive = false
-						} else if (quest.progress[trig.questSlot] != trig.questSlotValue) {
-							isActive = false
+					let func = false
+					// trig.action is a string describing what the trigger should do, create a function based on that
+					let action = trig.action
+					if (trig.cost && trig.icon) {
+						trig.icon.text = trig.cost
+					}
+					OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, null, trig.shape, trig.icon, trig.clickRegion)
+					
+					if (action == "minigame") {
+						// Start minigame
+						func = function() {
+							// Does this trigger cost something?
+							if (trig.cost) {
+								removeNuggets(trig.cost)
+							}
+
+							PLAYER.static = true // Don't let player move
+							Transition.start("wipeLeft", "out", 0.8, null, () => {
+								OBJECTS["Trigger"][name].reset()
+								setState(MINIGAME, trig.minigameName) // Start minigame after transition
+								Transition.start("wipeRight", "in", 0.8, null, null)
+							})
 						}
 					}
 
-					if (isActive) {
-						let func = false
-						// trig.action is a string describing what the trigger should do, create a function based on that
-						let action = trig.action
-						if (trig.cost && trig.icon) {
-							trig.icon.text = trig.cost
-						}
-						OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, null, trig.shape, trig.icon, trig.clickRegion)
-						
-						// TODO: Put this code somewhere else (area.js?)
-						if (action == "minigame") {
-							// Start minigame
-							func = function() {
-								// Does this trigger cost something?
-								if (trig.cost) {
-									removeNuggets(trig.cost)
-								}
-
-								PLAYER.static = true // Don't let player move
-								Transition.start("wipeLeft", "out", 0.8, null, () => {
-									OBJECTS["Trigger"][name].reset()
-									setState(MINIGAME, trig.minigameName) // Start minigame after transition
-									Transition.start("wipeRight", "in", 0.8, null, null)
-								})
-							}
-						} else if (action == "quest") {
-							// Progress quest
-							func = function() {
-								if (trig.questSlotAdd) {
-									QuestSystem.progress(trig.quest, trig.questSlot, trig.questSlotAdd)
-								} else if (trig.questSlotSet) {
-									QuestSystem.setProgress(trig.quest, trig.questSlot, trig.questSlotSet)
-								}
-								
-								// Disable trigger if conditions aren't met
-								// TODO: Move this to the progress function in QuestSystem so it gets updated when progressed in other ways
-								let quest = QuestSystem.getQuest(trig.quest)
-								if (!quest || QuestSystem.getProgress(trig.quest, trig.questSlot) != trig.questSlotValue) {
-									OBJECTS["Trigger"][name].active = false
-								}
-							}
-						}
-
-						OBJECTS["Trigger"][name].action = func
-					}
+					OBJECTS["Trigger"][name].action = func
 				}
 			}
 
@@ -237,9 +193,6 @@ class World {
 		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
 
 		NETPLAY.update(dt)
-		
-		// Dialogue box
-		DialogueSystem.update(dt)
 
 		// Background element animations
 		for (const [i, anim] of Object.entries(BACKGROUNDANIM[this.area])) {
@@ -260,28 +213,7 @@ class World {
 
 		// Background elements
 		for (const [i, sprite] of Object.entries(BACKGROUNDSPRITE[this.area])) {
-			if (sprite.visible) {
-				let isActive = true // Is it disabled
-				if (sprite.trigger) {
-					 // If its linked to a trigger, check if its active
-					let trigger = OBJECTS["Trigger"][sprite.trigger]
-					if (!trigger || !trigger.active) {
-						isActive = false
-					}
-				}
-				if (sprite.quest) {
-					// If it belongs to a quest, make sure its active, and that the quest slot matches
-					// It is easier to link the sprite to a trigger, but this allows you to have multiple sprites without multiple triggers
-					let quest = QuestSystem.getQuest(sprite.quest)
-					if (!quest || QuestSystem.getProgress(sprite.quest, sprite.questSlot) != sprite.questSlotValue) {
-						isActive = false
-					}
-				}
-
-				if (isActive) {
-					drawQueue.push(sprite)
-				}
-			}
+			drawQueue.push(sprite)
 		}
 
 		// Draw objects
@@ -296,12 +228,6 @@ class World {
 			obj.draw()
 		}
 
-		// NPC how speechBubble responses
-		for (const [id, obj] of Object.entries(NPCS)) {
-			obj.draw()
-		}
-
-
 		// Show action bubble above clickable elements like NPCs
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 			obj.draw()
@@ -314,9 +240,6 @@ class World {
 				obj.drawOver()
 			}
 		}
-
-		// Dialogue box
-		DialogueSystem.draw()
 
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
@@ -344,11 +267,6 @@ class World {
 
 	// Received keyboard input
 	keyPress(key, code) {
-		// Dialogue
-		if (DialogueSystem.keyPress(key)) {
-			return true
-		}
-
 		// Control Player
 		PLAYER_CONTROLLER.keyPress(key)
 		
@@ -364,22 +282,6 @@ class World {
 		if (CHAT.mouseClick(button, x, y)) {
 			return true
 		}
-
-		// Dialogue
-		if (DialogueSystem.mouseClick(button, x, y)) {
-			return true
-		}
-		
-		// NPC speechBubble responses
-		for (const [id, obj] of Object.entries(NPCS)) {
-			if (obj.replyButtons.length > 0) {
-				for (const replyButton of obj.replyButtons) {
-					if (replyButton.click()) {
-						return true
-					}
-				}
-			}
-		}
 		
 		// Click on click triggers
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
@@ -394,14 +296,6 @@ class World {
 
 	mouseRelease(button, x, y) {
 		CHAT.mouseRelease(button, x, y)
-		// NPC speechBubble responses
-		for (const [id, obj] of Object.entries(NPCS)) {
-			if (obj.replyButtons.length > 0) {
-				for (const replyButton of obj.replyButtons) {
-					replyButton.clickRelease()
-				}
-			}
-		}
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
 	}
 }

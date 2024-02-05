@@ -52,7 +52,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/color":
-					PROFILE.color = RGBtoHEX(Number(arg), Number(arg2), Number(arg3))
+					PROFILE.color = [Number(arg), Number(arg2), Number(arg3)]
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/head":
@@ -88,23 +88,14 @@ MENUS["chatMenu"] = new class extends Menu {
 					addNuggets(Number(arg))
 					// PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
-				case "/quests": // Print out all active quests
-					QuestSystem.debug()
-					break
-				case "/quest": // Force progress in quest
-					QuestSystem.progress(arg, Number(arg2) || 0, Number(arg3) || 1)
-					break
 				case "/debug": // Debug physics
 					DEBUGPHYSICS = !DEBUGPHYSICS
-					break
-				case "/notify": // Create notification
-					Notify.new(arg)
 					break
 			}
 		} else if (this.value.length > 0) {
 			// Send chat message
 			let message = this.value.substring(0, 15*3+2) // Max chat length
-			PLAYER.speechBubble(message)
+			PLAYER.chatBubble(message)
 			NETPLAY.sendChat(message)
 		}
 

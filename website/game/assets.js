@@ -26,11 +26,7 @@ function loadGameAssets() {
 	ANIM.tbag = [[0,3,0,3,0,3,0,3,0,3], 0.15]
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
-	IMG.speechBubble = new RenderImage("assets/chat_bubble.png")
-	IMG.replyBubble = new RenderImage("assets/reply_bubble.png")
-	SPRITE.replyBubble = new Sprite(IMG.replyBubble, 2,1, 64,32)
-	SPRITE.replyTrail = new Sprite(IMG.replyBubble, 2,1, 64,32, 0,32)
-	IMG.dialogue = new RenderImage("assets/dialogue.png")
+	IMG.chatBubble = new RenderImage("assets/chat_bubble.png")
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
 
@@ -46,8 +42,6 @@ function loadGameAssets() {
 
 	// MENUS
 	IMG.menu = new RenderImage("assets/gui/menu.png")
-	IMG.items = new RenderImage("assets/gui/items.png")
-	SPRITE.items = new Sprite(IMG.items, 6,1, 30,30, 0,0, 1,1)
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed
@@ -91,27 +85,21 @@ function loadGameAssets() {
 	ITEMS.body["beefcakeaccessories"] = {}
 	ITEMS.body["alesanaccessories"] = {}
 
-	ITEMS.item["seeds"] = {}
-
 	for (const [category, list] of Object.entries(ITEMS)) {
 		for (const [itemId, item] of Object.entries(list)) {
 			// Load image, create sprite frames when image is loaded, and load hat centers from JSON
-			item.name = ""
-			item.description = ""
-			item.cost = 0
-			item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
-			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
-				item.name = data.name
-				item.description = data.description
-				item.cost = data.cost
-				if (data.center) {
-					item.center = data.center
-				}
-			})
 			let async = function() {
 				item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)
 			}
 			item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, async)
+			item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+			item.cost = 0
+			item.name = ""
+			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
+				item.name = data.name
+				item.center = data.center
+				item.cost = data.cost
+			})
 		}
 	}
 
@@ -120,8 +108,7 @@ function loadGameAssets() {
 	FONT.hud = new RenderFont("Arial", 28)
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.nametag = new RenderFont("Arial", 16)
-	FONT.description = new RenderFont("Arial", 18)
-	FONT.speechBubble = new RenderFont("Courier New", 18)
+	FONT.chatBubble = new RenderFont("Courier New", 18)
 	FONT.guiLabel = new RenderFont("Times New Roman", 20)
 }
 
@@ -141,6 +128,8 @@ function loadJSON(filePath, callBack) {
 		console.log("There was a problem loading the JSON file:", error)
 	})
 }
+
+	// TODO: Clean up this horrible code
 
 	// DIRECTORYTREE = fetch('/getDirectoryTree')
 	// 	.then(response => {

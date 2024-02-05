@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +7,6 @@
 	<link rel="icon" type="image/x-icon" href="assets/favicon.png">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-<nav>
-	<li id="home"><a href="#"><img src="/website/assets/logo.png"></a></li>
-	<li id="login-li">
-		<div class="loginContainer">
-			<form id="loginForm">
-				<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username"
-					maxlength="16" autocomplete="off" required />
-				<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password"
-					maxlength="16" autocomplete="off" required />
-				<button id="login" class="login-stuff" type="button">Login</button>
-			</form>
-		</div>
-	</li>
-</nav>
 
 <body>
 	<!-- Canvas to render Game -->
@@ -32,14 +17,22 @@
 	<div>
 		<form id="loginForm">
 			<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username" maxlength="16" autocomplete="off" required />
-			<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
+			<input id="password-field" class="login-stuff" type="password" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
 			<button id="login" class="login-stuff" type="button">Login</button>
 		</form>
+		<form id="registerForm">
+			<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
+			<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
+			<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
+			<button id="register" class="register-stuff" type="button">Register</button>
+		  </form>
 	</div>
-	<!-- Socket.IO v4.7.2 with Msgpack parser -->
-	<!-- May need to be updated whenever server's socket.io version is updated. -->
-	<script src="socket.io.msgpack.min.js"></script>
-	<!-- <script src="/socket.io/socket.io.js"></script> -->
+	<!-- Invisible text input used to force mobile devices to open keyboard -->
+	<input id="gameTextInput" type="text" maxlength="47" style="position:fixed;top:0;left:-200px";>
+
+	<!-- TODO: Use local version of socket (file downloaded at node_modules/socket.io/client-dist/socket.io.js) -->
+	<!-- For production, please use the socket.io.min.js bundle, which is an optimized build excluding the debug package. -->
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="game/netplay/client.js"></script>
 
 	<!-- Libraries -->
@@ -64,24 +57,19 @@
 	<script src="game/minigames/minigame.js"></script>
 	<script src="game/minigames/test/test.js"></script>
 	<script src="game/minigames/slots/slots.js"></script>
-	<script src="game/minigames/claw/claw.js"></script>
 	<script src="game/minigames/runner/runner.js"></script>
 
 	<script src="game/transition.js"></script>
-	<script src="game/menu/notification.js"></script>
 	<script src="game/state.js"></script>
 	<script src="game/physics.js"></script>
 	<script src="game/world.js"></script>
-	<script src="game/dialogue.js"></script>
-	<script src="game/area.js"></script>
 	<script src="game/input.js"></script>
 	<script src="game/assets.js"></script>
 	<script src="game/sprite.js"></script>
-	<script src="game/quests.js"></script>
 	<script src="game/savedata.js"></script>
 
 	<script src="game/menu/gui.js"></script>
-	<script src="game/menu/itemgrid.js"></script>
+	<script src="game/menu/grid.js"></script>
 	<script src="game/menu.js"></script>
 	<script src="game/menu/customization.js"></script>
 	<script src="game/menu/map.js"></script>

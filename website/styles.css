@@ -1,125 +1,29 @@
-body{
+body, html {
 	/* Background color */
-	background-color: rgb(166, 136, 106); 
+	background-color: #000000;
 	margin: 0;
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	/* overflow: hidden; /* Prevent scrollbars */
 }
-
-nav {
-    background-color: #fffcf0;
-    list-style-type: none;
-    display: flex;
-    padding: 10px;
-    margin: 0;
-    height: 40px;
-    align-items: center; 
-    box-shadow: 0 4px 9px 0 rgba(37, 27, 27, 0.2); 
-    position: sticky; /* Add this line */
-    top: 0; /* Add this line */
-    z-index: 9999; /* Increase this value */
-}
-
-nav img {
-	height: 55px;
-	padding-left: 5px;
-}
-#login-li{
-    margin-left: auto;
-    margin-right: 0;
-    justify-content: flex-end; /* Change this line */
-}
-
-form {
-	display: block;
-	flex-direction: column;
-	gap: 20px;
-	padding-right: 10px;
-}
-
-#username-field, #password-field{
-	width: auto;
-	margin-right: 5px;
-	height: 30px;
-	padding: 0 0 0 16px;
-	border-radius: 4px;
-	outline: none;
-	background-color: rgb(251, 236, 211);
-	border: 1px solid #e5e5e500;
-	transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
-} 
-
-/* login button */
-#login{
-	text-transform: uppercase;
-	font-size: 11px;
-	letter-spacing: 1px;
-	color: rgb(62, 47, 32);
-	background-color: rgb(224, 197, 172);
-	box-shadow: 0 0 0 2px rgb(191, 163, 136);
-	height: 29px;
-	width: 99px;
-	padding: 0;
-	border-radius: 4px;
-	border: 1px solid #eeeeee;
-	font-weight: 700;
-	border: none;
-	transition: .3s;
-	cursor: pointer;
-
-}
-
-#login:hover {
-	background-color: rgb(249, 206, 167);
-	box-shadow: 0 0 0 3px rgb(238, 184, 133);
-	color: black;
-
-
-}
-
-/* canvas styles */
-.game-container{
-	height: 100%;
-	width: 100%;
-	padding: 0;
-	display: flex; /* Change this line */
-    justify-content: center; 
-    align-items: center; 
-	
-}
-
-.color-underlay{
-	z-index: 998;
-	height: calc(100vh - 45px); /* -45px for nav bar*/
-
-	max-width: 99%;
-	background-color: rgb(255, 235, 208);
-	display: flex; /* Change this line */
-    justify-content: center; 
-    align-items: center; 
-}
-
 
 /* Center game canvas */
 #canvasContainer {
-    margin-top: 0vh;
-    z-index: 10000;
-	height: 100%;
-    max-width: 100%; /* Ensure the canvas never exceeds the width of the window */
-    overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
+	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
+	
+	max-width: 95%; /* Ensure the canvas never exceeds the width of the window */
+	overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
 
-	/* Center the canvas */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 1920px; /* Do not change, it gets redefined in canvas.js */
-    border: 3px solid rgb(221, 205, 57);
-    padding: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 1920px; /* Do not change, it gets redefined in canvas.js */
+	border: 3px solid rgb(221, 205, 57);
+	padding: 10px;
 }
-
 
 /* Load fonts */
 @font-face {

@@ -1,11 +1,9 @@
 {
     "name": "Visors",
-    "desciption": "Essential for skiing or looking futuristic.",
-    "cost": 5,
-
     "center": [
         [65,1],
         [89,3],
         [63,2]
-    ]
+    ],
+    "cost": 5
 }
