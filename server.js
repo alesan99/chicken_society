@@ -54,7 +54,7 @@ con.query("SHOW TABLES like 'user'", (err, result, fields) => {
 		  		console.log('User table already exists');
 			}
 	});
-db.createPlayerTable(con, 1);
+db.createPlayerTable(con);
 // Handle logins
 require("./server/login.js")
 
