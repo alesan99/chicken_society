@@ -1,8 +1,8 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 function initializeDB(){
   const con = mysql.createConnection({
-    host: "0.0.0.0",
+    host: "127.0.0.1",
     user: "root",
     password: "root",
     database: "chicken_society"
@@ -37,6 +37,7 @@ function createPlayerTable(con, player_id) {
         inv_id INT,
         quest_id INT,
         minigame_id INT,
+        gprofile_id INT,
         FOREIGN KEY (player_id) REFERENCES user(id),
         FOREIGN KEY (inv_id) REFERENCES inventory(inv_id),
         FOREIGN KEY (quest_id) REFERENCES quest(quest_id),
@@ -99,7 +100,7 @@ con.query(createTableQuery, (err, results) => {
                     console.log(`Minigame ID ${minigame_id} inserted successfully`);
 
                     // Insert into the Global Profile table
-                    con.query('INSERT INTO global_profiles () VALUES ()', (gprofileErr, gprofileResults) => {
+                    con.query('INSERT INTO global () VALUES ()', (gprofileErr, gprofileResults) => {
                       if (gprofileErr) {
                         console.error('Error inserting into Global Profile table:', gprofileErr.message);
                         // Handle the error
