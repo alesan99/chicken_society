@@ -1,3 +1,5 @@
+if (true) { // Set local scope
+
 MINIGAMES["slots"] = new class {
 	constructor() {
 		
@@ -42,3 +44,4 @@ MINIGAMES["slots"] = new class {
 
 	}
 }()
+}

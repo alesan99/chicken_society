@@ -4,8 +4,14 @@ class Button {
         this.label = label;
         if (graphic) {
             // If specified, render image for button with frames
-            this.image = graphic.image;
-            this.frames = graphic.frames;
+            if (graphic.image) {
+                this.image = graphic.image;
+                this.frames = graphic.frames;
+            }
+            if (graphic.icon) {
+                this.icon = graphic.icon;
+                this.iconFrame = graphic.iconFrame;
+            }
             if (graphic.visible != null) {
                 this.visible = graphic.visible;
             }
@@ -19,6 +25,7 @@ class Button {
 
         this.hover = false;
         this.holding = false;
+        this.selected = false;
     }
 
     checkMouseInside(){
@@ -52,7 +59,10 @@ class Button {
     draw(){
         if (!this.visible) {
             // Don't render if button was specified to be not visible
-        } else if (this.image) {
+            return false
+        }
+
+        if (this.image) {
             // Render image for button
             let frame = 0
             if (this.holding == true){
@@ -68,6 +78,8 @@ class Button {
                 DRAW.setColor(216,175,121,1); //dark
             } else if (this.hover == true){
                 DRAW.setColor(248,222,187,1); //medium
+            } else if (this.selected == true){
+                DRAW.setColor(216,175,121,1); //dark
             } else {
                 DRAW.setColor(242,199,140,1); //light
             }
@@ -75,11 +87,18 @@ class Button {
             DRAW.rectangle(this.x, this.y, this.w, this.h);
             DRAW.setColor(168, 85, 38, 1)
             DRAW.rectangle(this.x, this.y, this.w, this.h, "line");
+        }
+
+        if (this.icon) {
+            // Icon
+            DRAW.setColor(255,255,255,1)
+            DRAW.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
+        } else if (this.label) {
+            // Label
             DRAW.setFont(FONT.guiLabel)
             DRAW.setColor(112, 50, 16,1)
             DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, "center")
         }
-
     }
 }
 

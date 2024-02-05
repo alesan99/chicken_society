@@ -9,6 +9,7 @@ class MinigameState {
 
 	load(minigameName) {
 		// Load minigame and let server know you're playing
+		this.minigameName = minigameName
 		this.minigame = MINIGAMES[minigameName]
         this.minigame.load()
 
@@ -59,6 +60,10 @@ class MinigameState {
             setState(WORLD) // Go back to world
             Transition.start("wipeRight", "in", 0.8, null, null)
         })
+	}
+
+	newHighscore(score) {
+        QuestSystem.event("minigameHighscore", this.minigameName, score) // Progress quests
 	}
 
 	keyPress(key) {

@@ -1,8 +1,8 @@
 //NPC object, controls the position of another object along with interactable dialouge
 
 class NPC {
-	//Initialize: object, roam? radius in pixels of area to walk around, interactable range, clickable region, shop menu?
-	constructor (obj, dialogue, facing="down", roamRadius=false, range=50, clickRegion=[-40,-100,80,120], shop) {
+	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
+	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, clickRegion=[-40,-100,80,120], replies) {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
@@ -22,24 +22,43 @@ class NPC {
         this.walkTimer = this.walkTime
         this.dir = [1, 0] // Walking direction vector
 
-        // Behavior
-        this.shop = shop // Open up shopping menu to prompt player to buy stuff
 
-        // Dialogue Trigger
-        this.dialogue = dialogue || [""]
+        // Behavior
+        this.replies = replies || {}
+        this.shop = this.replies.shop // Open up shopping menu to prompt player to buy stuff
+        this.dialogue = this.replies.dialogue // Start dialogue, for quest purposes
+
+        // Replies
+        this.awaitingReply = false
+        this.replyButtons = []
+
+        // speechBubble Trigger
+        this.speechBubble = speechBubble || [""]
         let func = () => {
             // Speak when clicked or near
             this.speak()
+
+            // Dialouge reply options
+            let replyOptions = []
             // Open shop if specified
             if (this.shop) {
-                openMenu("shop", this.shop)
+                replyOptions.push(["Buy", () => {openMenu("shop", this.shop); this.closeReply()}])
             }
+            // Talk
+            if (this.dialogue) {
+                replyOptions.push(["Talk", () => {DialogueSystem.start(this.dialogue); this.closeReply()}])
+            }
+            // Start Quest directly (For testing)
+            if (this.replies.quest) {
+                replyOptions.push(["Quest", () => {QuestSystem.start(this.replies.quest); this.closeReply()}])
+            }
+            this.requestReply(replyOptions)
         }
-        let rangeShape = range // Where does player have to stand to interact?
-        if (!Array.isArray(range)) {
-            rangeShape = [-range,-range, range,-range, range,range, -range,range]
+        let interactRangeShape = interactRange // Where does player have to stand to interact?
+        if (!Array.isArray(interactRange)) {
+            interactRangeShape = [-interactRange,-interactRange, interactRange,-interactRange, interactRange,interactRange, -interactRange,interactRange]
         }
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, rangeShape, {frame:0,x:0,y:-120}, clickRegion))
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, interactRangeShape, {frame:0,x:0,y:-120}, clickRegion))
 	}
 
 	// Update
@@ -90,10 +109,41 @@ class NPC {
         if (char.bubbleText == false && this.trigger.activated) {
             this.trigger.reset()
         }
+        if (!char.bubbleText && this.awaitingReply) {
+            this.closeReply()
+        }
 	}
 
+    draw() {
+        // Responses
+        if (this.replyButtons.length > 0) {
+            for (const replyButton of this.replyButtons) {
+                replyButton.draw()
+            }
+        }
+    }
+
     speak() {
-        let i = Math.floor(Math.random() * this.dialogue.length)
-        this.obj.chatBubble(this.dialogue[i])
+        let i = Math.floor(Math.random() * this.speechBubble.length)
+        this.obj.speechBubble(this.speechBubble[i])
+
+        QuestSystem.event("talk", this.obj.name) // Progress quests
+    }
+
+    requestReply(options){
+        this.awaitingReply = true
+        let replies = options.length
+        for (let i = 0; i < replies; i++) {
+            let label = options[i][0]
+            let func = options[i][1]
+            let button = new Button(label, func, {image: IMG.replyBubble, frames:[SPRITE.replyBubble.getFrame(0),SPRITE.replyBubble.getFrame(0),SPRITE.replyBubble.getFrame(1)]}, this.obj.x+66*i-(replies*66/2), this.obj.y-275, 64,32)
+            this.replyButtons.push(button)
+        }
+    }
+
+    closeReply(){
+        this.awaitingReply = false
+        this.replyButtons = []
+        this.obj.bubbleText = false
     }
 }

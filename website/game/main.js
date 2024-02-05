@@ -26,6 +26,7 @@ function gameUpdate(dt) {
 
 	stateUpdate(dt)
 
+	Notify.update(dt)
 	Transition.update(dt)
 
 	// Set cursor at last
@@ -48,6 +49,7 @@ function gameDraw() {
 
 	stateDraw()
 
+	Notify.draw()
 	Transition.draw()
 
 	// Display FPS

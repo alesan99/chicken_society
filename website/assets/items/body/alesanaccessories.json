@@ -1,9 +1,11 @@
 {
     "name": "Bud's Accessories",
+    "description": "Radical. - Bud",
+    "cost": 40,
+
     "center": [
         [64,55],
         [92,49],
         [63,56]
-    ],
-    "cost": 40
+    ]
 }

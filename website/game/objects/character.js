@@ -44,6 +44,7 @@ class Character extends PhysicsObject {
 		this.walking = false
 		this.oldwalking = this.walking
 		this.dir = "down"
+		this.visibleDir = this.dir //direction last time the animation was updated
 		this.flip = 1
 		this.imageOffsety = 4
 		this.scale = profile.scale || 1
@@ -59,6 +60,13 @@ class Character extends PhysicsObject {
 
 	// Move: direction normal x, direction normal y
 	move(nx, ny) {
+		if (this.static) {
+			this.sx = 0
+			this.sy = 0
+			this.walking = false
+			return false
+		}
+
 		this.sx = nx*this.speed
 		this.sy = ny*this.speed
 
@@ -105,12 +113,11 @@ class Character extends PhysicsObject {
 				this.anim.stopAnimation(0, null)
 			}
 		}
-		if (!this.static) { // Don't update animation if not movable
-			// Face in the current direction
-			this.anim.setFrame(null, dir_lookup[this.dir])
-			// Update walking or emote animation
-			this.anim.update(dt)
-		}
+
+		// Face in the current direction
+		this.anim.setFrame(null, dir_lookup[this.dir])
+		// Update walking or emote animation
+		this.anim.update(dt)
 
 		// Dissapear chat bubble after few seconds
 		if (this.bubbleText != false) {
@@ -127,6 +134,8 @@ class Character extends PhysicsObject {
 
 	// Render chicken with accessories with optional different position
 	draw(drawX=this.x, drawY=this.y) {
+		let dir = this.dir
+
 		// Shadow
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1)
@@ -139,11 +148,11 @@ class Character extends PhysicsObject {
 		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
 			// Figure out the center of the body item to place it on the center of the chicken's 'neck'
 			let item = ITEMS.body[this.body]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (BODYOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + BODYOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[this.dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[this.dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (BODYOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + BODYOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 
 		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
@@ -151,21 +160,21 @@ class Character extends PhysicsObject {
 		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
 			// Figure out the center of the face item to place it on the center of the chicken's face
 			let item = ITEMS.face[this.face]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (FACEOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + FACEOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[this.dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[this.dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (FACEOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + FACEOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 
 		if ((this.head != false) && (ITEMS.head[this.head] != null) && (ITEMS.head[this.head].sprite != null)) { // Head item
 			// Figure out the center of the head item to place it on the center of the chicken's head
 			let item = ITEMS.head[this.head]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (HEADOFFSET[dir_lookup[this.dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + HEADOFFSET[dir_lookup[this.dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[this.dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[this.dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[this.dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (HEADOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + HEADOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 	}
 
@@ -201,10 +210,10 @@ class Character extends PhysicsObject {
 			let flip = 1-Math.floor((this.bubbleTimer%1)*2)*2
 			
 			DRAW.setColor(255,255,255,1.0)
-			DRAW.image(IMG.chatBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1)
+			DRAW.image(IMG.speechBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1)
 
 			// Render wrapped text so it fits into the bubble
-			DRAW.setFont(FONT.chatBubble)
+			DRAW.setFont(FONT.speechBubble)
 			DRAW.setColor(0,0,0,scale**2)
 
 			let verticalSpacing = 18
@@ -218,11 +227,16 @@ class Character extends PhysicsObject {
 	// Update appearance based on given profile
 	updateProfile(profile, sendToServer) {
 		this.name = profile.name || "" //name
-		this.color = profile.color || [255,255,255]
+		this.color = HEXtoRGB(profile.color) || [255,255,255]
 		this.head = profile.head || false
 		this.face = profile.face || false
 		this.body = profile.body || false
 		this.item = profile.item || false
+
+		// Progress Quests
+		if (this.controller == PLAYER_CONTROLLER) {
+			QuestSystem.event("clothes", this.head, this.face, this.body, this.item)
+		}
 
 		this.scale = profile.scale || 1
 		//Send profile to server if this is the player
@@ -232,7 +246,7 @@ class Character extends PhysicsObject {
 	}
 
 	// Display speech bubble
-	chatBubble(text, time) {
+	speechBubble(text, time) {
 		this.bubbleText = text
 		this.bubbleTime = time || 4
 		this.bubbleTimer = 0

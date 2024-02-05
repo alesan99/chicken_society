@@ -1,9 +1,11 @@
 {
     "name": "Snapback",
+    "description": "Adjustable to the size of your head. Technology is amazing.",
+    "cost": 5,
+
     "center": [
         [62,5],
         [92,3],
         [63,3]
-    ],
-    "cost": 10
+    ]
 }

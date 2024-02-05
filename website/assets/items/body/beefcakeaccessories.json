@@ -1,9 +1,11 @@
 {
     "name": "Beefcake's Accessories",
+    "description": "As worn by Beefcake. Pushes the boundaries of what can be considered fashion.",
+    "cost": 1000,
+
     "center": [
         [83,81],
         [101,74],
         [82,92]
-    ],
-    "cost": 100
+    ]
 }

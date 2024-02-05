@@ -1,9 +1,11 @@
 {
     "name": "Chains",
+    "description": "The dollar sign is made out of 14k solid gold.",
+    "cost": 80,
+
     "center": [
         [63,58],
         [88,46],
         [62,55]
-    ],
-    "cost": 50
+    ]
 }

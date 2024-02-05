@@ -1,9 +1,11 @@
 {
     "name": "Hoodie",
+    "description": "Comfortable and practical.",
+    "cost": 15,
+
     "center": [
         [62,5],
         [92,3],
         [63,3]
-    ],
-    "cost": 10
+    ]
 }

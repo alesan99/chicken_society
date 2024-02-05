@@ -23,7 +23,7 @@
 		"dealer": {
             "profile": {
                 "name": "???",
-                "color": [40, 80, 50],
+                "color": "#285032",
                 "head": "hoodie",
                 "face": false,
                 "body": false
@@ -32,7 +32,7 @@
             "y": 300,
             "facing": "up",
             "roamRadius": 30,
-            "dialogue": [
+            "speechBubble": [
                 "I got the good stuff.",
 				"Money upfront.",
                 "How much do ya want?"

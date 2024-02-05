@@ -50,8 +50,19 @@ function updatePhysics(objs, spatialHash, dt) {
 											a.DEBUGCOLLIDED = true
 											collided = true
 											// Push object A by changing its new position
-											nx += moveAxisX*dist
-											ny += moveAxisY*dist
+											if (b.static) {
+												nx += moveAxisX*dist
+												ny += moveAxisY*dist
+											} else {
+												// Temporary fix, objects should both push eachother so looping order doesn't do weird things
+												// TODO: Add mass so certain objects are more resistant to movement
+												nx += moveAxisX*dist*0.5
+												ny += moveAxisY*dist*0.5
+												let bnx = b.x - moveAxisX*dist*0.5
+												let bny = b.y - moveAxisY*dist*0.5
+												b.setPosition(bnx, bny)
+											}
+											
 										}
 										// note down the collision to tell if its colliding for the first or last time
 										if (a.collisions) {

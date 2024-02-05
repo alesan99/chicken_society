@@ -116,7 +116,8 @@ class DrawableSprite {
 		this.anim = anim
 		this.drawx = drawx // Position on screen
 		this.drawy = drawy
-		this.y = worldy // Position in world
+		this.y = worldy || this.drawx // Position in world
+		this.visible = true
 	}
 
 	draw () {
