@@ -9,11 +9,13 @@ MINIGAMES["test"] = new class {
 	}
 
 	update(dt) {
+		// Called every frame
 		this.timer += this.speed*dt
 		this.speed = Math.max(1, this.speed - 2*dt)
 	}
   
 	draw() {
+		// Called every
 		// Test
 		DRAW.clear(0,100,255)
 		DRAW.setColor(0,100,255,1.0)

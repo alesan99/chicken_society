@@ -65,8 +65,8 @@
 					],
 					"condition": {
 						"quest": "easteregghunt",
-						"questSlot": [0, 1],
-						"questSlotValue": [1, 1]
+						"questSlot": [0,1,2,3,4],
+						"questSlotValue": [1,1,1,1,1]
 					},
 					"quest": "easteregghunt"
 				},

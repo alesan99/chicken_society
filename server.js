@@ -40,31 +40,37 @@ require("./server/login.js")
 const {listenToClient} = require("./server/sync.js");
 
 io.on("connection", (socket) => {listenToClient(socket)});
-const db = require("./server/db/create_db.js");
-const con = db.initializeDB();
-con.query("SHOW TABLES like 'user'", (err, result, fields) => {
-	// if (err) throw err;
-	// console.log(result);
-	if (result.length == 0) {
-		console.log("No user found");
-		const createTableQuery = `
-        CREATE TABLE user (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          username VARCHAR(255) NOT NULL,
-          password VARCHAR(255) NOT NULL,
-		  email VARCHAR(255) NOT NULL
-        )`;
-		con.query(createTableQuery, (createError) => {
-			if (createError) {
-			}
-			console.log('User table created');
-			});
-			}
-			else {
-		  		console.log('User table already exists');
-			}
-	});
-db.createPlayerTable(con);
+
+// User data database
+useDB = false;
+if (useDB) {
+	const db = require("./server/db/create_db.js");
+	const con = db.initializeDB();
+	con.query("SHOW TABLES like 'user'", (err, result, fields) => {
+		// if (err) throw err;
+		// console.log(result);
+		if (result.length == 0) {
+			console.log("No user found");
+			const createTableQuery = `
+			CREATE TABLE user (
+			id INT AUTO_INCREMENT PRIMARY KEY,
+			username VARCHAR(255) NOT NULL,
+			password VARCHAR(255) NOT NULL,
+			email VARCHAR(255) NOT NULL
+			)`;
+			con.query(createTableQuery, (createError) => {
+				if (createError) {
+				}
+				console.log('User table created');
+				});
+				}
+				else {
+					console.log('User table already exists');
+				}
+		});
+	db.createPlayerTable(con);
+}
+
 // Handle GET Requests
 const {} = require("./server/requests.js");
 

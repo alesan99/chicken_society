@@ -2,7 +2,7 @@
 const {app} = require("../server.js");
 const express = require("express");
 const db = require("./db/create_db.js");
-const con = db.initializeDB();
+const con = db.initializeDB(false);
 // TODO: use bcrypt to salt and hash passwords before storage in database
 const bcrypt = require('bcrypt');
 const saltRounds = 5;

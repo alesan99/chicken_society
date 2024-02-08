@@ -1,6 +1,7 @@
 const mysql = require("mysql2");
 
-function initializeDB(){
+function initializeDB(strict = true){
+  // params: strict - if true, throw an error if the connection fails
   const con = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
@@ -10,7 +11,10 @@ function initializeDB(){
     con.connect(function(err) {
         if (err) {
             console.log("Database connect failed")
-            throw err;}
+            if (strict) {
+              throw err;
+            }
+        }
         console.log("Connected!");
     });
     con.on('error', (err) => {
@@ -19,7 +23,9 @@ function initializeDB(){
           // Reconnect if the connection is lost
           initializeDB();
         } else {
-          throw err;
+          if (strict) {
+            throw err;
+          }
         }
       });
     
