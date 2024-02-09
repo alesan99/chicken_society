@@ -109,6 +109,16 @@ class World {
 					}
 				}
 			}
+			// Load music
+			if (data.music) {
+				if (MUSIC[data.music]) {
+					AudioSystem.playMusic(MUSIC[data.music])
+				} else {
+					console.log("Music not found: " + data.music)
+				}
+			} else {
+				AudioSystem.stopMusic()
+			}
 			// Load area walls
 			// Go through each polygon & make wall
 			if (data.walls) {

@@ -26,6 +26,7 @@ function gameUpdate(dt) {
 
 	stateUpdate(dt)
 
+	AudioSystem.update(dt)
 	Notify.update(dt)
 	Transition.update(dt)
 

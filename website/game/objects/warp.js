@@ -52,6 +52,8 @@ class Warp extends PhysicsObject {
 
 	// Warp Player to area given to Warp
 	doWarp (character) {
+		AudioSystem.playSound(SFX.door)
+		AudioSystem.fadeOutMusic(1)
 		PLAYER.static = true // Don't let player move when in the process of warping
 		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
 			// Display black screen while area is loading...

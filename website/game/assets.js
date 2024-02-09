@@ -4,6 +4,8 @@ IMG = []
 SPRITE = []
 ANIM = []
 FONT = []
+MUSIC = []
+SFX = []
 
 BACKGROUND = []
 BACKGROUNDIMG = []
@@ -33,6 +35,10 @@ function loadGameAssets() {
 	IMG.dialogue = new RenderImage("assets/dialogue.png")
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
+
+	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a")
+
+	SFX.door = AudioSystem.newSound("assets/sfx/door.wav")
 
 	// CHAT MENU & HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")
