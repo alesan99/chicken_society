@@ -183,6 +183,7 @@ class World {
 							// Start dialogue
 							func = function() {
 								DialogueSystem.start(trig.dialogue)
+								OBJECTS["Trigger"][name].reset()
 							}
 						}
 

@@ -79,8 +79,8 @@ class Trigger extends PhysicsObject {
 	// Do action function if trigger hasn't been activated yet
     doAction() {
 		if (!this.activated) {
-			this.action()
 			this.activated = true
+			this.action()
 		}
     }
 
