@@ -139,6 +139,7 @@ function listenToClient(socket) {
 				minigameData[minigameName] = {
 					players: {},
 					data: {},
+					lastUpdate: {},
 					host: false,
 					highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
 				};

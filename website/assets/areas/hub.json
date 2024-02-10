@@ -91,46 +91,35 @@
 			"x": 0,
 			"y": 0,
 			"worldy": 356
-		},
-
-		"egg1": {
-			"image": "egg.png",
-			"qw": 30,
-			"qh": 40,
-
-			"x": 793,
-			"y": 298,
-			"worldy": 318,
-
-			"quest": "easteregghunt",
-			"trigger": "egg1"
-		},
-		"egg2": {
-			"image": "egg.png",
-			"qw": 30,
-			"qh": 40,
-
-			"x": 76,
-			"y": 479,
-			"worldy": 499,
-
-			"quest": "easteregghunt",
-			"trigger": "egg2"
 		}
 	},
 
 	"triggers": {
-		"egg1": {
+		"egg1": { 
 			"x": 793,
 			"y": 298,
 			"shape": [0,0, 40,0, 40,40, 0,40],
 			"clickRegion": [0,0, 40,40],
 			"icon": {"frame": 1, "x": 15, "y": -10},
+
 			"action": "quest",
 			"quest": "easteregghunt",
 			"questSlot": 0,
-			"questSlotValue": 0,
-			"questSlotAdd": 1
+			"questSlotAdd": 1,
+
+			"condition": {
+				"quest": "easteregghunt",
+				"questSlot": 0,
+				"questSlotValue": 0
+			},
+
+			"sprite": {
+				"image": "egg.png",
+				"qw": 30,
+				"qh": 40,
+
+				"worldy": 318
+			}
 		},
 		
 		"egg2": {
@@ -139,11 +128,25 @@
 			"shape": [0,0, 40,0, 40,40, 0,40],
 			"clickRegion": [0,0, 40,40],
 			"icon": {"frame": 1, "x": 15, "y": -10},
+
 			"action": "quest",
 			"quest": "easteregghunt",
 			"questSlot": 1,
-			"questSlotValue": 0,
-			"questSlotAdd": 1
+			"questSlotAdd": 1,
+			
+			"condition": {
+				"quest": "easteregghunt",
+				"questSlot": 1,
+				"questSlotValue": 0
+			},
+
+			"sprite": {
+				"image": "egg.png",
+				"qw": 30,
+				"qh": 40,
+
+				"worldy": 499
+			}
 		}
 	}
 }

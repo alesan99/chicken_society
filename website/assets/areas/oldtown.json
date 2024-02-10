@@ -95,21 +95,6 @@
 		}
 	},
 
-	"sprites": {
-		"egg3": {
-			"image": "egg.png",
-			"qw": 30,
-			"qh": 40,
-
-			"x": 623,
-			"y": 96,
-			"worldy": 116,
-
-			"quest": "easteregghunt",
-			"trigger": "egg3"
-		}
-	},
-
 	"triggers": {
 		"egg3": {
 			"x": 623,
@@ -117,11 +102,25 @@
 			"shape": [0,0, 40,0, 40,40, 0,40],
 			"clickRegion": [0,0, 40,40],
 			"icon": {"frame": 1, "x": 15, "y": -10},
+
 			"action": "quest",
 			"quest": "easteregghunt",
 			"questSlot": 2,
-			"questSlotValue": 0,
-			"questSlotAdd": 1
+			"questSlotAdd": 1,
+
+			"condition": {
+				"quest": "easteregghunt",
+				"questSlot": 2,
+				"questSlotValue": 0
+			},
+			
+			"sprite": {
+				"image": "egg.png",
+				"qw": 30,
+				"qh": 40,
+
+				"worldy": 116
+			}
 		}
 	}
 }

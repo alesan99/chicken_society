@@ -81,34 +81,6 @@ class World {
 		// Load Area data
 		// TODO: move this elsewhere because its messy
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {
-			// Load additional Sprites & Animations
-			if (data.sprites) {
-				for (const [name, s] of Object.entries(data.sprites)) {
-					let img = s.image
-					if (!(s.quest && !QuestSystem.getQuest(s.quest))) { // If it belongs to a quest, make sure its active
-						if (!BACKGROUNDIMG[this.area][img]) {
-							BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
-						}
-						let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
-						BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
-						// Conditional visiblity
-						if (s.trigger) {
-							BACKGROUNDSPRITE[this.area][name].trigger = s.trigger
-						}
-						if (s.quest) {
-							BACKGROUNDSPRITE[this.area][name].quest = s.quest
-							BACKGROUNDSPRITE[this.area][name].questSlot = s.questSlot
-							BACKGROUNDSPRITE[this.area][name].questSlotValue = s.questSlotValue
-						}
-						// If defined, play animation
-						if (s.anim) {
-							BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
-							BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
-							BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
-						}
-					}
-				}
-			}
 			// Load music
 			if (data.music) {
 				if (MUSIC[data.music]) {
@@ -146,8 +118,14 @@ class World {
 			// Load NPCS
 			if (data.NPCs) {
 				for (const [name, npc] of Object.entries(data.NPCs)) {
-					OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
-					NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, npc.clickRegion, {shop: npc.shop, dialogue: npc.dialogue})
+					let isActive = true // If it belongs to a quest, make sure its active
+					if (npc.condition) {
+						isActive = checkCondition(npc.condition)
+					}
+					if (isActive) {
+						OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, this.area)
+						NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, npc.clickRegion, {shop: npc.shop, dialogue: npc.dialogue})
+					}
 				}
 			}
 			
@@ -155,13 +133,8 @@ class World {
 			if (data.triggers) {
 				for (const [name, trig] of Object.entries(data.triggers)) {
 					let isActive = true // If it belongs to a quest, make sure its active
-					if (trig.quest) {
-						let quest = QuestSystem.getQuest(trig.quest)
-						if (!quest) {
-							isActive = false
-						} else if (quest.progress[trig.questSlot] != trig.questSlotValue) {
-							isActive = false
-						}
+					if (trig.condition) {
+						isActive = checkCondition(trig.condition)
 					}
 
 					if (isActive) {
@@ -200,14 +173,57 @@ class World {
 								
 								// Disable trigger if conditions aren't met
 								// TODO: Move this to the progress function in QuestSystem so it gets updated when progressed in other ways
-								let quest = QuestSystem.getQuest(trig.quest)
-								if (!quest || QuestSystem.getProgress(trig.quest, trig.questSlot) != trig.questSlotValue) {
-									OBJECTS["Trigger"][name].active = false
+								let isActive = true // If it belongs to a qsuest, make sure its active
+								if (trig.condition) {
+									isActive = checkCondition(trig.condition)
 								}
+								OBJECTS["Trigger"][name].active = isActive
+							}
+						} else if (action == "dialogue") {
+							// Start dialogue
+							func = function() {
+								DialogueSystem.start(trig.dialogue)
 							}
 						}
 
 						OBJECTS["Trigger"][name].action = func
+						
+						// inject sprite into sprites list
+						if (trig.sprite) {
+							let sprite = trig.sprite
+							// inherit trigger properties
+							if (!sprite.x) {
+								sprite.x = trig.x
+								sprite.y = trig.y
+							}
+							sprite.condition = trig.condition
+							if (!data.sprites) { data.sprites = {} }
+							data.sprites[name] = sprite
+						}
+					}
+				}
+			}
+			
+			// Load additional Sprites & Animations
+			if (data.sprites) {
+				for (const [name, s] of Object.entries(data.sprites)) {
+					let img = s.image
+					if (!(s.quest && !QuestSystem.getQuest(s.quest))) { // If it belongs to a quest, make sure its active
+						if (!BACKGROUNDIMG[this.area][img]) {
+							BACKGROUNDIMG[this.area][img] = new RenderImage(`assets/areas/${img}`)
+						}
+						let sprite = new Sprite(BACKGROUNDIMG[this.area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
+						BACKGROUNDSPRITE[this.area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
+						// Conditional visiblity
+						if (s.condition) {
+							BACKGROUNDSPRITE[this.area][name].condition = s.condition
+						}
+						// If defined, play animation
+						if (s.anim) {
+							BACKGROUNDANIM[this.area][name] = new Animation(sprite, 0, 0)
+							BACKGROUNDANIM[this.area][name].playAnimation(s.anim.frames, s.anim.delay, null)
+							BACKGROUNDSPRITE[this.area][name].anim = BACKGROUNDANIM[this.area][name]
+						}
 					}
 				}
 			}
@@ -272,20 +288,8 @@ class World {
 		for (const [i, sprite] of Object.entries(BACKGROUNDSPRITE[this.area])) {
 			if (sprite.visible) {
 				let isActive = true // Is it disabled
-				if (sprite.trigger) {
-					 // If its linked to a trigger, check if its active
-					let trigger = OBJECTS["Trigger"][sprite.trigger]
-					if (!trigger || !trigger.active) {
-						isActive = false
-					}
-				}
-				if (sprite.quest) {
-					// If it belongs to a quest, make sure its active, and that the quest slot matches
-					// It is easier to link the sprite to a trigger, but this allows you to have multiple sprites without multiple triggers
-					let quest = QuestSystem.getQuest(sprite.quest)
-					if (!quest || QuestSystem.getProgress(sprite.quest, sprite.questSlot) != sprite.questSlotValue) {
-						isActive = false
-					}
+				if (sprite.condition) {
+					isActive = checkCondition(sprite.condition)
 				}
 
 				if (isActive) {
