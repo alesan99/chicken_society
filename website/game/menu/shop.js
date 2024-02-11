@@ -54,7 +54,8 @@ MENUS["shop"] = new class extends Menu {
 					this.selectedItem = itemId
 					this.selectedItemType = itemType
 					if (ITEMS[itemType][itemId].description) {
-						this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 110)
+						DRAW.setFont(FONT.description)
+						this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 200)
 					} else {
 						this.selectedItemDescription = false
 					}
@@ -115,6 +116,10 @@ MENUS["shop"] = new class extends Menu {
 	mouseRelease(button, x, y) {
 		return super.mouseRelease(button, x, y)
 	}
+
+	mouseScroll(dy) {
+		return super.mouseScroll(dy)
+	}
 	
 	draw() {
 		// Window
@@ -132,7 +137,7 @@ MENUS["shop"] = new class extends Menu {
 		// Item information
 		if (this.selectedItem) {
 			let item = ITEMS[this.selectedItemType][this.selectedItem]
-			DRAW.text(item.name, 553, 210, "left")
+			DRAW.text(item.name, 563, 210, "left")
 
 			if (SAVEDATA.items[this.selectedItemType][this.selectedItem]) {
 				DRAW.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, 360, "right")
@@ -144,11 +149,11 @@ MENUS["shop"] = new class extends Menu {
 			DRAW.setFont(FONT.description)
 			if (this.selectedItemDescription) {
 				for (let i = 0; i < this.selectedItemDescription.length; i++) {
-					DRAW.text(this.selectedItemDescription[i], 553, 242 + i * 20, "left")
+					DRAW.text(this.selectedItemDescription[i], 563, 242 + i * 20, "left")
 				}
 			}
 		} else {
-			DRAW.text("Select an item.", 553, 210, "left")
+			DRAW.text("Select an item.", 563, 210, "left")
 		}
 
 		// Render all buttons

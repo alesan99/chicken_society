@@ -70,8 +70,8 @@ function mouseReleased(event) {
 }
 
 function mouseScroll(event) {
-	const delta = event.deltaY
-	return delta
+	const dy = event.deltaY
+	stateScroll(dy)
 }
 
 function checkMouseInside(x, y, w, h) {

@@ -59,6 +59,15 @@ class Menu {
 		}
 		return false
 	}
+
+	mouseScroll(dy) {
+		for (const [name, button] of Object.entries(this.buttons)) {
+			if (button.mouseScroll && button.mouseScroll(dy)) {
+				return true
+			}
+		}
+		return false
+	}
 }
 
 var MENUS = {}

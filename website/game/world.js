@@ -387,12 +387,8 @@ class World {
 		
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
-			if (obj.replyButtons.length > 0) {
-				for (const replyButton of obj.replyButtons) {
-					if (replyButton.click()) {
-						return true
-					}
-				}
+			if (obj.click(button, x, y)) {
+				return true
 			}
 		}
 		
@@ -411,10 +407,8 @@ class World {
 		CHAT.mouseRelease(button, x, y)
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
-			if (obj.replyButtons.length > 0) {
-				for (const replyButton of obj.replyButtons) {
-					replyButton.clickRelease()
-				}
+			if (obj.clickRelease(button, x, y)) {
+				return true
 			}
 		}
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)

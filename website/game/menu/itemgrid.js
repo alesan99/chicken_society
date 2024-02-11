@@ -31,6 +31,9 @@ class ItemGrid {
 
 		// Vertical scroll
 		this.scroll = 0
+		this.buttons = []
+		this.buttons["scrollUp"] = new Button("", ()=>{this.scrollUp()}, null, this.x+this.w, this.y, 20, 20)
+		this.buttons["scrollDown"] = new Button("", ()=>{this.scrollDown()}, null, this.x+this.w, this.y+this.h-20, 20, 20)
 
         this.hover = false;
         this.holding = false;
@@ -58,13 +61,21 @@ class ItemGrid {
 			}
 
 			this.hover = true
-            CURSOR.on = true;
+			let i = this.getCellIndex(cx, cy) // Index of cell
+			if (this.list[i]) { 
+          		CURSOR.on = true;
+			}
 		} else {
 			this.hover = false
 		}
+
+		// Scroll bar
+		for (const button in this.buttons) {
+			this.buttons[button].update(dt)
+		}
     }
 
-    click(){
+    click(button, x, y){
         let [cx, cy] = this.checkMouseInside();
         if (cx !== false && cy !== false) {
 			this.overx = cx
@@ -72,13 +83,39 @@ class ItemGrid {
             this.holding = true
             return true
         }
+
+		// Scroll bar
+		for (const button in this.buttons) {
+			this.buttons[button].click(button, x, y)
+		}
     }
-    clickRelease(){
+    clickRelease(button, x, y){
         if (this.holding == true){
-            this.holding = false;
 			this.gridAction(this.overx, this.overy)
         }
+
+		// Scroll bar
+		for (const button in this.buttons) {
+			this.buttons[button].clickRelease(button, x, y)
+		}
     }
+	mouseScroll(dy){
+		if (this.hover) {
+			if (dy < 0) {
+				this.scrollUp()
+			} else {
+				this.scrollDown()
+			}
+		}
+	}
+	scrollUp(){
+		this.scroll -= 1
+		this.scroll = Math.max(0, Math.min(this.scroll, this.list.length/this.gw-this.gh))
+	}
+	scrollDown(){
+		this.scroll += 1
+		this.scroll = Math.max(0, Math.min(this.scroll, this.list.length/this.gw-this.gh))
+	}
 
 	getCellIndex(cx, cy) {
 		return cx + (cy+this.scroll)*this.gw // Index of cell
@@ -163,8 +200,12 @@ class ItemGrid {
 				DRAW.text(ITEMS[itemType][this.list[i]].name, mouseX+20, mouseY+20, "left")
 			}
 		}
+
+		// Scroll bar
+		DRAW.setColor(168, 85, 38, 1);
+		DRAW.rectangle(this.x+this.w, this.y, 20, this.h, "fill");
+		for (const button in this.buttons) {
+			this.buttons[button].draw()
+		}
     }
 }
-
-//need to add states
-//need callbacks, click, clickRelease

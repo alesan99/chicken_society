@@ -1,6 +1,7 @@
-// Users menu; Displays all connected users
+// Quests Menu
+// Lists out all active quests and their steps
 
-MENUS["usersMenu"] = new class extends Menu {
+MENUS["questsMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {
 		super(234,104, 560,350)
@@ -11,14 +12,7 @@ MENUS["usersMenu"] = new class extends Menu {
 
 		this.buttons = {}
 
-		// Get list of connected player names
-		this.connectedPlayers = [PROFILE.name]
-		if (NETPLAY.playerList) {
-			console.log(NETPLAY.playerList)
-			for (const [id, data] of Object.entries(NETPLAY.playerList)) {
-				this.connectedPlayers.push(data.profile.name)
-			}
-		}
+		this.quests = QuestSystem.getAllActiveQuests()
     }
 
 	keyPress(key) {
@@ -46,10 +40,20 @@ MENUS["usersMenu"] = new class extends Menu {
         // Text
         DRAW.setColor(112, 50, 16, scale)
         DRAW.setFont(FONT.caption)
-        DRAW.text("Connected Players", 512, 142, "center")
+        //DRAW.text("Connected Players", 512, 142, "center")
+		DRAW.text("Quests", 512, this.y+38, "center")
 
-		for (let i=0; i<this.connectedPlayers.length; i++) {
-			DRAW.text(this.connectedPlayers[i], this.x+20, this.y+80+25*i, "left")
+		let y = 170
+		for (let questName in this.quests) {
+			let quest = QuestSystem.getQuest(questName)
+			DRAW.text(quest.name, this.x+20, y, "left")
+			for (let i=0; i<quest.progress.length; i++) {
+				DRAW.text(quest.progressDescription[i], this.x+40, y+20, "left")
+				DRAW.text(quest.progress[i] + "/" + quest.progressFinish[i], this.x+470, y+20, "left")
+				y += 20
+			}
+
+			y += 20
 		}
 
 		// Render all buttons

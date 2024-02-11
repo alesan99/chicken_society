@@ -66,8 +66,14 @@ function stateMouseRelease(button, x, y) {
 }
 
 function stateScroll(dy) {
-	if (game_state.scroll) {
-		game_state.scroll(dy)
+	// Is menu open?
+	if (open_menu) {
+		if (MENUS[open_menu].mouseScroll(dy)) {
+			return true
+		}
+	}
+	if (game_state.mouseScroll) {
+		game_state.mouseScroll(dy)
 	}
 }
 

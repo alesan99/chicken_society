@@ -112,6 +112,13 @@ class NPC {
         if (!char.bubbleText && this.awaitingReply) {
             this.closeReply()
         }
+
+        // Responses
+        if (this.replyButtons.length > 0) {
+            for (const replyButton of this.replyButtons) {
+                replyButton.update(dt)
+            }
+        }
 	}
 
     draw() {
@@ -119,6 +126,24 @@ class NPC {
         if (this.replyButtons.length > 0) {
             for (const replyButton of this.replyButtons) {
                 replyButton.draw()
+            }
+        }
+    }
+
+    click(button, x, y) {
+        if (this.replyButtons.length > 0) {
+            for (const replyButton of this.replyButtons) {
+                if (replyButton.click()) {
+                    return true
+                }
+            }
+        }
+    }
+
+    clickRelease(button, x, y) {
+        if (this.replyButtons.length > 0) {
+            for (const replyButton of this.replyButtons) {
+                replyButton.clickRelease()
             }
         }
     }
