@@ -38,7 +38,6 @@ const Notify = (function() {
 				let speed = 8*Math.max(0.05, (notifTotalLines - notifY) / 2);
 				notifY = Math.min(notifTotalLines, notifY + speed*dt)
 			}
-			console.log(notifY, notifTotalLines)
 		},
 
 		// Render all notifications

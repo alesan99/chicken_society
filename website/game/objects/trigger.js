@@ -2,7 +2,7 @@
 
 class Trigger extends PhysicsObject {
 	//Initialize: x pos, y pos, shape in points
-	constructor (spatialHash, x, y, action, points, icon={frame:1,x:0,y:0}, clickRegion) {
+	constructor (spatialHash, x, y, action, points, icon=false, clickRegion) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x || 0
@@ -15,9 +15,13 @@ class Trigger extends PhysicsObject {
 		this.actionReady = false // is the trigger ready to be activated (Ex: player is near trigger)
 		this.activated = false
 
-		this.actionIconFrame = icon.frame
-		this.actionIconX = icon.x
-		this.actionIconY = icon.y
+		this.actionIconFrame = false
+		if (icon) {
+			console.log(icon)
+			this.actionIconFrame = icon.frame
+			this.actionIconX = icon.x
+			this.actionIconY = icon.y
+		}
 		this.actionIconText = icon.text || ""
 		this.displayIcon = false
 
@@ -63,7 +67,7 @@ class Trigger extends PhysicsObject {
 			return
 		}
 		// Show an icon if trigger is ready to be activated
-		if ((this.actionReady || this.mouseOver) && this.activated == false) {
+		if ((this.actionIconFrame !== false) && ((this.actionReady || this.mouseOver) && this.activated == false)) {
 			DRAW.setColor(255,255,255,1.0)
 			DRAW.image(IMG.action, SPRITE.action.getFrame(0,this.actionIconFrame), this.x+this.actionIconX, this.y+this.actionIconY, 0, 1,1, 0.5,1)
 			// Frame #2 is for spending nuggets, so display nugget cost
