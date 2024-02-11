@@ -115,7 +115,7 @@ MENUS["customization"] = new class extends Menu {
 
         DRAW.text("Pet", 613, 384, "left")
 
-        PLAYER.draw(360,340)
+        PLAYER.draw(360,340,"down")
 
 		// Render all buttons
 		this.drawButtons()

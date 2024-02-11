@@ -2,10 +2,15 @@
 
 class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
-	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, clickRegion=[-40,-100,80,120], replies) {
+	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, clickRegion=[-40,-100,80,120], replies, imageName="chicken") {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
+
+        // Custom image
+        if (imageName) {
+            obj.image = IMG[imageName]
+        }
 
         // Adjust object
         this.obj.dir = facing
@@ -21,7 +26,6 @@ class NPC {
         this.walkTime = 1
         this.walkTimer = this.walkTime
         this.dir = [1, 0] // Walking direction vector
-
 
         // Behavior
         this.replies = replies || {}

@@ -29,6 +29,7 @@ class Character extends PhysicsObject {
 		this.setPosition(null,null)
 
 		// Properties
+		this.image = IMG.chicken
 		this.updateProfile(profile)
 		this.speed = 200 //Speed (px/sec)
 		this.controller = false //Is it being controlled?
@@ -114,8 +115,6 @@ class Character extends PhysicsObject {
 			}
 		}
 
-		// Face in the current direction
-		this.anim.setFrame(null, dir_lookup[this.dir])
 		// Update walking or emote animation
 		this.anim.update(dt)
 
@@ -133,8 +132,9 @@ class Character extends PhysicsObject {
 	}
 
 	// Render chicken with accessories with optional different position
-	draw(drawX=this.x, drawY=this.y) {
-		let dir = this.dir
+	draw(drawX=this.x, drawY=this.y, dir=this.dir) {
+		// Face in the current direction
+		this.anim.setFrame(null, dir_lookup[dir])
 
 		// Shadow
 		DRAW.setColor(255,255,255,1.0)
@@ -142,7 +142,7 @@ class Character extends PhysicsObject {
 
 		// Chicken and accessories
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(IMG.chicken, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1)
+		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
 		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
@@ -155,7 +155,7 @@ class Character extends PhysicsObject {
 			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 
-		DRAW.image(IMG.chicken, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
+		DRAW.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
 		
 		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
 			// Figure out the center of the face item to place it on the center of the chicken's face
