@@ -52,7 +52,7 @@ const DialogueSystem = (function() {
 
 				// Darken surrounds
 				DRAW.setColor(0,0,0,0.2)
-				DRAW.rectangle(0, 0, 1024, 576, "fill")
+				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
 				// Dialogue box
 				DRAW.setColor(255,255,255,1)
 				DRAW.image(IMG.dialogue, null, x, y)

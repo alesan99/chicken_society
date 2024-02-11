@@ -186,7 +186,7 @@ class Character extends PhysicsObject {
 		} else {
 			DRAW.setColor(255,255,255,1)
 		}
-		DRAW.text(this.name, Math.floor(this.x), Math.floor(this.y)-128*this.scale, "center")
+		DRAW.text(this.name, Math.floor(this.x), Math.min(canvasHeight-54, Math.floor(this.y)+20), "center")
 
 		// Chat bubble
 		if (this.bubbleText != false) {
