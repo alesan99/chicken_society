@@ -14,14 +14,17 @@ const DialogueSystem = (function() {
 	let dialogueTimer = 0
 	let currentText = ""
 	let currentTextWrap = []
-	let speaker = ""
+	let speaker = false
+	let speakerNPC = false
 
 	const functions = {
 		// Start new dialogue conversation
-		start(dialogueTree, speaker) {
+		start(dialogueTree, speakerName=false, npc=false) {
 			open = true
 			stage = 0
 			dialogueTree = dialogueTree
+			speaker = speakerName
+			speakerNPC = npc
 
 			for (let i = 0; i < dialogueTree.length; i++) {
 				if (dialogueTree[i].condition) {
@@ -53,9 +56,32 @@ const DialogueSystem = (function() {
 				// Darken surrounds
 				DRAW.setColor(0,0,0,0.2)
 				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
+
+				if (speaker) {
+					// Draw speaker name
+					x = x + 65
+					DRAW.setColor(120,250,120,1)
+					DRAW.rectangle(x-140 +16, y+16, 100,100, "fill")
+					if (speakerNPC) {
+						DRAW.setColor(255,255,255,1)
+						if (speakerNPC.icon) {
+							DRAW.image(icon, 0, x-140, y)
+						} else {
+							speakerNPC.draw(x-140 +65, y +150, "down")
+						}
+					}
+
+					DRAW.setColor(255,255,255,1)
+					DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y)
+					
+					DRAW.setFont(FONT.caption)
+					DRAW.setColor(0,0,0,1)
+					DRAW.text(speaker, x-140 + 65, y+153, "center")
+				}
+
 				// Dialogue box
 				DRAW.setColor(255,255,255,1)
-				DRAW.image(IMG.dialogue, null, x, y)
+				DRAW.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y)
 				DRAW.setColor(0,0,0,1)
 				DRAW.setFont(FONT.caption)
 

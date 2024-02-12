@@ -17,7 +17,6 @@ class Trigger extends PhysicsObject {
 
 		this.actionIconFrame = false
 		if (icon) {
-			console.log(icon)
 			this.actionIconFrame = icon.frame
 			this.actionIconX = icon.x
 			this.actionIconY = icon.y
