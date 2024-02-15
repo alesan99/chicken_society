@@ -10,9 +10,19 @@
 // Note about storing player IDs: Please use a regular session ID (either sent in a cookie, or stored in the localStorage and sent in the auth payload).
 
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const http = require("http"); // Used to start server
 const server = http.createServer(app);
+
+const sessionMiddleware = session({
+	secret: Math.random().toString(36).substring(2), // TODO: Use a library for this
+	resave: true,
+	saveUninitialized: true,
+	account: null,
+});
+  
+app.use(sessionMiddleware);
 
 const { Server } = require("socket.io");
 const msgpack = require("socket.io-msgpack-parser"); // Import the socket.io-msgpack-parser module. If this crashes run "npm ci" again
@@ -37,6 +47,7 @@ app.get("/", (req, res) => {
 require("./server/login.js")
 
 // Set up client syncing
+io.engine.use(sessionMiddleware);
 const {listenToClient} = require("./server/sync.js");
 
 io.on("connection", (socket) => {listenToClient(socket)});

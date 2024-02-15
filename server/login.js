@@ -1,5 +1,6 @@
 // Handles POST requests to log in
-const {app} = require("../server.js");
+const {app, io, playerList} = require("../server.js");
+const {getPlayerFromSession, loginPlayer} = require("./sync.js");
 const express = require("express");
 const db = require("./db/create_db.js");
 const con = db.initializeDB(false);
@@ -9,6 +10,18 @@ const saltRounds = 5;
 app.use(express.json());       // Parse JSON bodies
 
 app.post('/login-endpoint', (req, res) => {
+	const session = req.session;
+	const sessionId = session.id;
+
+	console.log(`Login request from session ID ${session.id}`);
+	const player = getPlayerFromSession(sessionId);
+	if (player) {
+		console.log(`Session belongs to ${player.name}.`);
+	} else {
+		console.log("Session does not belong to a player.");
+		return false
+	}
+
 	const receivedUsername = req.body.username;
 	const receivedPassword = req.body.password;
 	// UNCOMMENT THIS SECTION TO USE HARDCODED TEST ACCOUNT

@@ -12,7 +12,7 @@ class Menu {
     }
 
     close() {
-        
+        closeMenu()
     }
 
     updateButtons(dt) {
@@ -47,7 +47,7 @@ class Menu {
         // Don't click on anything below if mouse is in menu
         if (checkMouseInside(this.x, this.y, this.w, this.h)) {
             return true
-        }
+		}
 		return false
 	}
 

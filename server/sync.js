@@ -19,11 +19,19 @@ function listenToClient(socket) {
 	// This function is only called ONCE per client connection, the listeners are just callback functions
 	console.log("A user connected");
 
+	// Link socket.io session to express session (to know if this socket client is logged in)
+	// the session ID is used as a room
+	const session = socket.request.session;
+
 	// Recieve information about players; Send out info to everyone
 	socket.on("profile", (profile, callback) => {
 		// TODO: Restructure this
 		playerList[socket.id] = {
-			id: socket.id,
+			id: socket.id, // Socket ID; Different for each browser tab
+
+			loggedIn: false,
+			sessionId: session.id, // Session ID; Stored in a cookie, shared across browser tabs
+			accountId: false, // Account ID; ID created for the account data after registration, also the database ID
 
 			state: "world",
 			minigame: false,
@@ -248,6 +256,34 @@ function listenToClient(socket) {
 	// });
 }
 
+// Get current player data (from playerList) from session ID
+// Remember: session ID is stored in a cookie in the player's browser. It won't be the same forever and it is shared between all tabs.
+function getPlayerFromSession(sessionId) {
+	for (const [id, player] of Object.entries(playerList)) {
+		if (player.sessionId == sessionId) {
+			return player
+		}
+	}
+	console.log(`No player with session ID ${sessionId}`)
+	return false
+}
+
+// Log in player
+// Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
+function loginPlayer(sessionId) {
+	const player = getPlayerFromSession(sessionId);
+	if (player) {
+		player.loggedIn = true;
+		player.accountId = 1; // TODO: Get account ID from database
+		console.log(`Session belongs to ${player.name}.`);
+	} else {
+		console.log("Session does not belong to a player.");
+		return false
+	}
+}
+
 module.exports = {
-	listenToClient
+	listenToClient,
+	getPlayerFromSession,
+	loginPlayer
 };
