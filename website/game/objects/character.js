@@ -245,7 +245,7 @@ class Character extends PhysicsObject {
 			}
 			if (this.pet) {
 				let i = Math.random()
-				OBJECTS["Pet"][i] = new Pet(this.spatialHash, this.x, this.y, profile.pet)
+				OBJECTS["Pet"][i] = new Pet(this.spatialHash, profile.pet, this.x, this.y, this)
 				this.petObj = OBJECTS["Pet"][i]
 			}
 		}

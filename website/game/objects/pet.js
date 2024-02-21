@@ -1,8 +1,8 @@
 // Pet object; Follows player.
 
 class Pet extends PhysicsObject {
-	//Initialize: x pos, y pos, width, height
-	constructor (spatialHash, x, y, id) {
+	//Initialize: pet id (item id), x pos, y pos, 'owner' object to follow
+	constructor (spatialHash, id, x, y, owner) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x
@@ -17,6 +17,13 @@ class Pet extends PhysicsObject {
 			-this.w/2, this.h/2
 		)
 
+		this.sx = 0
+		this.sy = 0
+
+		// Pet data
+		this.id = id
+		this.owner = owner
+
 		// Graphics
         this.image = ITEMS.pet[id].image
 		this.sprite = ITEMS.pet[id].sprite
@@ -29,6 +36,25 @@ class Pet extends PhysicsObject {
 		this.active = false
 		this.static = false
 		this.setPosition(null,null)
+	}
+
+	update(dt) {
+		// Follow behind owner
+		if (this.owner != null) {
+			// Target
+			let tx = this.owner.x
+			let ty = this.owner.y
+
+			let dist = (tx-this.x)*(tx-this.x) + (ty-this.y)*(ty-this.y)
+			if (dist > 4000) {
+				let angle = Math.atan2(ty-this.y, tx-this.x)
+				this.sx = Math.cos(angle)*200
+				this.sy = Math.sin(angle)*200
+			} else {
+				this.sx = 0
+				this.sy = 0
+			}
+		}
 	}
 
     draw(drawX=this.x, drawY=this.y, dir=this.dir) {
