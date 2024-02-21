@@ -8,6 +8,7 @@ function makeSaveData() {
 		profile: makeProfile(),
 
 		// All owned items
+		// Format: head: {"name_of_hat": 1, ...}
 		items: {
 			head: {},
 			face: {},
@@ -15,7 +16,7 @@ function makeSaveData() {
 			item: {},
 
 			furniture: {},
-			pet: {}
+			pet: {"pillbug": 1}
 		},
 		nuggets: 100,
 		

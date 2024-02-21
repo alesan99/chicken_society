@@ -176,6 +176,11 @@ class Character extends PhysicsObject {
 			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
 			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
+
+		// Pet
+		// if (this.petObj) {
+		// 	this.petObj.draw()
+		// }
 	}
 
 	drawOver() {
@@ -233,7 +238,17 @@ class Character extends PhysicsObject {
 		this.body = profile.body || false
 		this.item = profile.item || false
 
-		this.pet = profile.pet || false
+		if (this.pet != profile.pet) {
+			this.pet = profile.pet || false
+			if (this.petObj) {
+				this.petObj.destroy()
+			}
+			if (this.pet) {
+				let i = Math.random()
+				OBJECTS["Pet"][i] = new Pet(this.spatialHash, this.x, this.y, profile.pet)
+				this.petObj = OBJECTS["Pet"][i]
+			}
+		}
 
 		// Progress Quests
 		if (this.controller == PLAYER_CONTROLLER) {

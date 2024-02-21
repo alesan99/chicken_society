@@ -40,6 +40,10 @@ MENUS["shop"] = new class extends Menu {
 			this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(4)}, 311+34*i,150, 34,34)
 			i++
 		}
+		if (this.items["pet"]) { // Only enable tab if selling items in this category
+			this.buttons["petTab"] = new Button("I", ()=>{this.filterInventory("pet"); this.buttons[this.tab].selected=false; this.tab = "petTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(5)}, 311+34*i,150, 34,34)
+			i++
+		}
 		this.filterInventory("all")
 		this.buttons["allTab"].selected = true
 

@@ -26,6 +26,7 @@ class World {
 		// Physics objects
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
+		OBJECTS["Pet"] = {}
 
 		// Initialize all characters
 		NPCS = {}
@@ -255,10 +256,21 @@ class World {
 			obj.update(dt)
 		}
 		for (const [name, objList] of Object.entries(OBJECTS)) {
+			let keysToDelete
 			for (const [id, obj] of Object.entries(objList)) {
 				if (obj.update) {
 					obj.update(dt)
 				}
+				// Remove deleted objects
+				if (obj.DELETED) {
+					if (!keysToDelete) { keysToDelete = [] }
+					keysToDelete.push(id);
+				}
+			}
+			if (keysToDelete) {
+				keysToDelete.forEach(key => {
+					delete objList[key];
+				});
 			}
 		}
 		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
@@ -304,6 +316,9 @@ class World {
 			if (obj.area == PLAYER.area) {
 				drawQueue.push(obj)
 			}
+		}
+		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
+			drawQueue.push(obj)
 		}
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {

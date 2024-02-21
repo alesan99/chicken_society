@@ -103,25 +103,11 @@ function loadGameAssets() {
 
 	ITEMS.item["seeds"] = {}
 
+	ITEMS.pet["pillbug"] = {}
+
 	for (const [category, list] of Object.entries(ITEMS)) {
 		for (const [itemId, item] of Object.entries(list)) {
-			// Load image, create sprite frames when image is loaded, and load hat centers from JSON
-			item.name = ""
-			item.description = ""
-			item.cost = 0
-			item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
-			loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
-				item.name = data.name
-				item.description = data.description
-				item.cost = data.cost
-				if (data.center) {
-					item.center = data.center
-				}
-			})
-			let async = function() {
-				item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)
-			}
-			item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, async)
+			loadItem(category, itemId)
 		}
 	}
 
@@ -133,6 +119,33 @@ function loadGameAssets() {
 	FONT.description = new RenderFont("Arial", 18)
 	FONT.speechBubble = new RenderFont("Courier New", 18)
 	FONT.guiLabel = new RenderFont("Times New Roman", 20)
+}
+
+function loadItem(category, itemId) {
+	// Load image, create sprite frames when image is loaded, and load hat centers from JSON
+	let item = ITEMS[category][itemId]
+	item.name = ""
+	item.description = ""
+	item.cost = 0
+	item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+	loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
+		item.name = data.name
+		item.description = data.description
+		item.cost = data.cost
+		if (data.center) {
+			item.center = data.center
+		}
+	})
+	let async = function() {
+		if (category == "pet") {
+			// Pet with animations and emotions
+			item.sprite = new Sprite(item.image, 2, 3, (item.image.w-1)/2,(item.image.h-2)/3, 0,0, 1,1)
+		} else {
+			// Clothing / equipables
+			item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)
+		}
+	}
+	item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, async)
 }
 
 // Load array with JSON data; filePath, callBack function called after file is finished loading

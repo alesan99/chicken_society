@@ -60,8 +60,8 @@ const DialogueSystem = (function() {
 				if (speaker) {
 					// Draw speaker name
 					x = x + 65
-					DRAW.setColor(120,250,120,1)
-					DRAW.rectangle(x-140 +16, y+16, 100,100, "fill")
+					// DRAW.setColor(120,250,120,1)
+					// DRAW.rectangle(x-140 +16, y+16, 100,100, "fill")
 					if (speakerNPC) {
 						DRAW.setColor(255,255,255,1)
 						if (speakerNPC.icon) {
