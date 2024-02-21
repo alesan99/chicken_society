@@ -12,13 +12,23 @@ function makeSaveData() {
 			head: {},
 			face: {},
 			body: {},
+			item: {},
+
 			furniture: {},
-			item: {}
+			pet: {}
 		},
 		nuggets: 100,
 		
-		pets: [],
 		house: [],
+
+		// Equipped pet status
+		// Persists between play sessions, but only stored for 1 pet at a time
+		pet: {
+			name: "",
+			health: 100,
+			happiness: 100,
+			hunger: 100
+		},
 
 		quests: {
 			// Quest progress

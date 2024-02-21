@@ -233,6 +233,8 @@ class Character extends PhysicsObject {
 		this.body = profile.body || false
 		this.item = profile.item || false
 
+		this.pet = profile.pet || false
+
 		// Progress Quests
 		if (this.controller == PLAYER_CONTROLLER) {
 			QuestSystem.event("clothes", this.head, this.face, this.body, this.item)

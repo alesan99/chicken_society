@@ -83,8 +83,10 @@ function loadGameAssets() {
 		head: {},
 		face: {},
 		body: {},
+		item: {},
+
 		furniture: {},
-		item: {}
+		pet: {}
 	}
 	// List of all items to load
 	ITEMS.head["tophat"] = {}
