@@ -300,7 +300,10 @@ class Character extends PhysicsObject {
 	// Play emote animation; will stop when player moves
 	emote(i) {
 		if (ANIM[i] != null) {
+			// Reset player animation state
 			this.dir = "down"
+			this.flip = 1
+			// Play emote animation
 			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
 
 			if (this == PLAYER) {

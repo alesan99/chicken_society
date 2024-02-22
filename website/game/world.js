@@ -59,7 +59,9 @@ class World {
 		this.oldArea = this.area
 		this.area = area
 
+		// Transport player to new area
 		PLAYER.area = this.area
+		PLAYER_CONTROLLER.reset(canvasWidth/2, canvasHeight/2, "down")
 		
 		// Clear any uneeded objects
 		for (const [name, npc] of Object.entries(NPCS)) {
@@ -111,8 +113,7 @@ class World {
 				// Get spawn location
 				for (const [i, obj] of Object.entries(OBJECTS["Warp"])) {
 					if ((obj.fromWarp && obj.fromWarp == fromWarp) || (obj.fromArea && obj.fromArea == this.fromArea)) {
-						PLAYER.setPosition(obj.frontx, obj.fronty+PLAYER.shape.h/2)
-						PLAYER.dir = obj.facing
+						PLAYER_CONTROLLER.reset(obj.frontx, obj.fronty+PLAYER.shape.h/2, obj.facing)
 					}
 				}
 			}
@@ -402,6 +403,13 @@ class World {
 		
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
+			if (obj.click(button, x, y)) {
+				return true
+			}
+		}
+
+		// Pet interaction
+		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
 			if (obj.click(button, x, y)) {
 				return true
 			}

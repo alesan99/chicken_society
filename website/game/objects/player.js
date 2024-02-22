@@ -15,6 +15,10 @@ class Player {
 		}
 		this.mouseHold = false
 
+		this.target = false
+		this.targetX = 0
+		this.targetY = 0
+
 		// Which triggers is the player currently inside of?
 		this.triggers = new Map()
 	}
@@ -25,19 +29,30 @@ class Player {
 
 		// Handle movement inputs
 		// If mouse button is being held, the player should be controlled by the mouse
-		// Otherwise, use arrow key inputs
 		if (this.mouseHold) {
 			let [mx, my] = getMousePos()
 
-			let targetX = mx-char.x
-			let targetY = my-char.y + 20
+			this.target = true
+			this.targetX = mx
+			this.targetY = my
+		}
+		if (this.target) {
+			let targetX = this.targetX
+			let targetY = this.targetY + 20
+			let targetDiffX = targetX - char.x
+			let targetDiffY = targetY - char.y
 
-			if ( ((char.x - mx)**2 + (char.y-20 - my)**2) >= char.speed**2*dt ) { // Don't move if already close enough to the target location
-				let [dx, dy] = vec2Unit(targetX, targetY) //convert to direction normal
-				this.obj.move(dx, dy)
+			let [dx, dy] = vec2Unit(targetDiffX, targetDiffY) //convert to direction normal
+			let futureX = char.x + dx*char.speed*dt
+			let futureY = char.y + dy*char.speed*dt
+
+			if ((((targetX-futureX > 0) != (targetX-char.x > 0)) || ((targetY-futureY > 0) != (targetY-char.y > 0)))) { // Don't move anymore if crossing target coordinate
+				this.target = false
+				char.move(0, 0)
 			} else {
-				this.obj.move(0, 0)
+				char.move(dx, dy)
 			}
+		// Otherwise, use arrow key inputs
 		} else {
 			let dx = 0
 			let dy = 0
@@ -82,15 +97,19 @@ class Player {
 			// Movement
 			case "ArrowLeft":
 				this.arrowKeys.left = true
+				this.target = false
 				break
 			case "ArrowUp":
 				this.arrowKeys.up = true
+				this.target = false
 				break
 			case "ArrowRight":
 				this.arrowKeys.right = true
+				this.target = false
 				break
 			case "ArrowDown":
 				this.arrowKeys.down = true
+				this.target = false
 				break
 			case " ":
 				this.interact()
@@ -116,6 +135,23 @@ class Player {
 				this.arrowKeys.down = false
 				break
 		}
+	}
+
+	// Reset state of player and player controller when moving to new area
+	reset(x, y, dir="down") {
+		let char = this.obj
+		// Teleport character
+		char.setPosition(x, y)
+		char.dir = dir
+		char.flip = 1
+
+		// Also teleport pet
+		if (char.pet) {
+			char.petObj.setPosition(x, y)
+		}
+
+		// Stop movement
+		this.target = false
 	}
 
 	mouseClick(button, x, y) {

@@ -42,7 +42,6 @@ MENUS["questsMenu"] = new class extends Menu {
         // Text
         DRAW.setColor(112, 50, 16, scale)
         DRAW.setFont(FONT.caption)
-        //DRAW.text("Connected Players", 512, 142, "center")
 		DRAW.text("Quests", 512, this.y+38, "center")
 
 		let y = this.y+100

@@ -7,14 +7,14 @@ class Pet extends PhysicsObject {
 		super(spatialHash,x,y)
 		this.x = x
 		this.y = y
-		this.w = 20
-		this.h = 20
+		this.w = 40
+		this.h = 30
 
 		this.shape = new Shape(
-			-this.w/2, -this.h/2,
-			this.w/2, -this.h/2,
-			this.w/2, this.h/2,
-			-this.w/2, this.h/2
+			-this.w/2, -this.h,
+			this.w/2, -this.h,
+			this.w/2, 0,
+			-this.w/2, 0
 		)
 
 		this.sx = 0
@@ -23,6 +23,16 @@ class Pet extends PhysicsObject {
 		// Pet data
 		this.id = id
 		this.owner = owner
+
+		// Clickable
+		this.mouseOver = false
+		this.clickRegion = {
+			x: -this.w/2,
+			y: -this.h,
+			w: this.w,
+			h: this.h
+		}
+		this.activated = false
 
 		// Graphics
         this.image = ITEMS.pet[id].image
@@ -50,10 +60,19 @@ class Pet extends PhysicsObject {
 				let angle = Math.atan2(ty-this.y, tx-this.x)
 				this.sx = Math.cos(angle)*200
 				this.sy = Math.sin(angle)*200
+				this.activated = false // Temporary, moving will let you click on pet again
 			} else {
 				this.sx = 0
 				this.sy = 0
 			}
+		}
+
+		// Click
+		if ((this.activated == false) && this.checkMouseOver()) {
+			this.mouseOver = true
+			CURSOR.on = true
+		} else {
+			this.mouseOver = false
 		}
 	}
 
@@ -65,6 +84,22 @@ class Pet extends PhysicsObject {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY, 0, this.flip*this.scale, this.scale, 0.5, 1)
     }
+
+	checkMouseOver() {
+		let [mouseX, mouseY] = getMousePos()
+		let cr = this.clickRegion
+		return (mouseX-this.x > cr.x && mouseY-this.y > cr.y && mouseX-this.x < cr.x+cr.w && mouseY-this.y < cr.y+cr.h)
+	}
+
+	click(button, x, y) {
+		if (button == 0 && this.mouseOver) {
+			// Open pet menu
+			openMenu("petMenu")
+			this.activated = true
+			return true
+		}
+		return false
+	}
 
 	collide (name, obj, nx, ny) {
 		return false

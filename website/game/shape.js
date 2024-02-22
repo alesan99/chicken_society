@@ -37,4 +37,21 @@ class Shape {
 		this.w = this.x2-this.x1
 		this.h = this.y2-this.y1
 	}
+
+	// Check if point is inside shape
+	checkInside(x, y) {
+		if (!(x >= this.x1 && x <= this.x2 && y >= this.y1 && y <= this.y2)) {
+			return false // Not inside bounding box; don't bother checking actual shape
+		}
+		for (let i = 0; i < this.v.length; i+= 2) {
+			let [vx, vy] = [this.v[i], this.v[i+1]]
+			let [vx2, vy2] = [this.v[(i+2)%this.v.length], this.v[(i+3)%this.v.length]]
+			let [nx, ny] = vec2Norm(vx2-vx, vy2-vy)
+			let [px, py] = [x-vx, y-vy]
+			if (vec2Dot(nx, ny, px, py) > 0) {
+				return false
+			}
+		}
+		return true
+	}
 }
