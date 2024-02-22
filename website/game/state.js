@@ -84,6 +84,12 @@ function openMenu(name, args) {
 	}
 	open_menu = name
 	MENUS[name].load(args)
+
+	// Stop world events
+	if (PLAYER_CONTROLLER) {
+		// Stop moving player
+		PLAYER_CONTROLLER.stop()
+	}
 }
 
 function closeMenu() {

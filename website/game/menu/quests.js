@@ -7,13 +7,14 @@ MENUS["questsMenu"] = new class extends Menu {
 		super(234,104, 560,350)
 	}
 
-    load (config) {
+	load (config) {
 		this.openTimer = 0
 
 		this.buttons = {}
+		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		this.quests = QuestSystem.getAllActiveQuests()
-    }
+	}
 
 	keyPress(key) {
 	}
@@ -30,18 +31,18 @@ MENUS["questsMenu"] = new class extends Menu {
 	}
 	
 	draw() {
-        // Window
+		// Window
 		let scale = 1
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer)
 		}
-        DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
+		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.rectangle(this.x+20, this.y+80, this.w-40, this.h-100, 1.0, 0, 0, 0, 0.5)
 
-        // Text
-        DRAW.setColor(112, 50, 16, scale)
-        DRAW.setFont(FONT.caption)
+		// Text
+		DRAW.setColor(112, 50, 16, scale)
+		DRAW.setFont(FONT.caption)
 		DRAW.text("Quests", 512, this.y+38, "center")
 
 		let y = this.y+100

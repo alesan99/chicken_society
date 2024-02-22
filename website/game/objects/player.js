@@ -47,8 +47,7 @@ class Player {
 			let futureY = char.y + dy*char.speed*dt
 
 			if ((((targetX-futureX > 0) != (targetX-char.x > 0)) || ((targetY-futureY > 0) != (targetY-char.y > 0)))) { // Don't move anymore if crossing target coordinate
-				this.target = false
-				char.move(0, 0)
+				this.stop()
 			} else {
 				char.move(dx, dy)
 			}
@@ -152,6 +151,13 @@ class Player {
 
 		// Stop movement
 		this.target = false
+	}
+
+	stop() {
+		let char = this.obj
+		// Stop movement
+		this.target = false
+		char.move(0, 0)
 	}
 
 	mouseClick(button, x, y) {

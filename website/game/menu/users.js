@@ -10,6 +10,7 @@ MENUS["usersMenu"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
+		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		// Get list of connected player names
 		this.connectedPlayers = [PROFILE.name]

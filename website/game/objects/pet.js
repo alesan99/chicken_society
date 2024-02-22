@@ -22,7 +22,13 @@ class Pet extends PhysicsObject {
 
 		// Pet data
 		this.id = id
+		this.name = SAVEDATA.pet.name
 		this.owner = owner
+
+		// Status
+		this.happiness = SAVEDATA.pet.health || 50
+		this.health = SAVEDATA.pet.health || 100
+		this.hunger = SAVEDATA.pet.hunger || 100
 
 		// Clickable
 		this.mouseOver = false
@@ -35,13 +41,13 @@ class Pet extends PhysicsObject {
 		this.activated = false
 
 		// Graphics
-        this.image = ITEMS.pet[id].image
+		this.image = ITEMS.pet[id].image
 		this.sprite = ITEMS.pet[id].sprite
 		this.anim = new Animation(this.sprite, 0)
 		this.anim.setFrame(0,0)
 
-        this.flip = 1
-        this.scale = 1
+		this.flip = 1
+		this.scale = 1
 
 		this.active = false
 		this.static = false
@@ -76,14 +82,14 @@ class Pet extends PhysicsObject {
 		}
 	}
 
-    draw(drawX=this.x, drawY=this.y, dir=this.dir) {
+	draw(drawX=this.x, drawY=this.y, dir=this.dir) {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.shadow, null, drawX, drawY, 0, this.scale, this.scale, 0.5, 1)
 
 		// Chicken and accessories
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY, 0, this.flip*this.scale, this.scale, 0.5, 1)
-    }
+	}
 
 	checkMouseOver() {
 		let [mouseX, mouseY] = getMousePos()
@@ -106,5 +112,22 @@ class Pet extends PhysicsObject {
 	}
 
 	startCollide (name, obj, nx, ny) {
+	}
+
+	// Pet behavior
+	getMood() {
+		let moods = [
+			"jolly",
+			"happy",
+			"groovy",
+			"bored",
+			"so-so",
+			"meh",
+			"emo",
+			"sad",
+			"dorceless",
+		]
+		let word = moods[((1-this.happiness/100)*(moods.length-1))|0]
+		return word
 	}
 }

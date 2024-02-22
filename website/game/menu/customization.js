@@ -6,7 +6,7 @@ MENUS["customization"] = new class extends Menu {
 		super(234,104, 560,350)
 	}
 
-    load () {
+	load () {
 		this.openTimer = 0
 
 		this.buttons = {}
@@ -26,16 +26,16 @@ MENUS["customization"] = new class extends Menu {
 			PROFILE = SAVEDATA.profile;
 		}, null, 373,404, 100,32)
 
-        // Name
+		// Name
 		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 292,129, 140,32)
 
-        // Color
+		// Color
 		this.buttons["color"] = new Button("Random", ()=>{
-            PROFILE.color = RGBtoHEX(Math.floor(100 + Math.random()*155),
-                Math.floor(100 + Math.random()*155),
-                Math.floor(100 + Math.random()*155));
-            PLAYER.updateProfile(PROFILE, "sendToServer");
-        }, null, 348,365, 100,32)
+			PROFILE.color = RGBtoHEX(Math.floor(100 + Math.random()*155),
+				Math.floor(100 + Math.random()*155),
+				Math.floor(100 + Math.random()*155));
+			PLAYER.updateProfile(PROFILE, "sendToServer");
+		}, null, 348,365, 100,32)
 
 		// Inventory
 		this.tab = "allTab"
@@ -79,10 +79,10 @@ MENUS["customization"] = new class extends Menu {
 		// 		PROFILE.body = keys[Math.floor(Math.random() * keys.length)];
 		// 	}
 		// 	PLAYER.updateProfile(PROFILE, "sendToServer");
-        // }, null, 733,322, 32,32)
-        // Pet
+		// }, null, 733,322, 32,32)
+		// Pet
 		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
-    }
+	}
 
 	filterInventory(category) {
 		this.inventory.length = 0
@@ -100,23 +100,23 @@ MENUS["customization"] = new class extends Menu {
 	}
 	
 	draw() {
-        // Window
+		// Window
 		let scale = 1
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer)
 		}
-        DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
+		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
 
-        // Text
-        DRAW.setColor(112, 50, 16, scale)
-        DRAW.setFont(FONT.caption)
-        DRAW.text("Inventory", 620, 142, "center")
+		// Text
+		DRAW.setColor(112, 50, 16, scale)
+		DRAW.setFont(FONT.caption)
+		DRAW.text("Inventory", 620, 142, "center")
 
-        DRAW.text("Color", 285, 388, "left")
+		DRAW.text("Color", 285, 388, "left")
 
-        DRAW.text("Pet", 613, 384, "left")
+		DRAW.text("Pet", 613, 384, "left")
 
-        PLAYER.draw(360,340,"down")
+		PLAYER.draw(360,340,"down")
 
 		// Render all buttons
 		this.drawButtons()
