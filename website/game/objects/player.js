@@ -92,6 +92,9 @@ class Player {
 
 	// Inputs
 	keyPress(key) {
+		if (getOpenMenu()) {
+			return
+		}
 		switch (key) {
 			// Movement
 			case "ArrowLeft":

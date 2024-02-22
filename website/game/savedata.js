@@ -15,7 +15,7 @@ function makeSaveData() {
 			head: {},
 			face: {},
 			body: {},
-			item: {},
+			item: {"black_coffee": 1},
 
 			furniture: {},
 			pet: {"pillbug": 1}
@@ -182,10 +182,17 @@ function addItem(type, id) {
 }
 
 function removeItem(type, id) {
+	if (!type) {
+		// Item category not specified, look for it
+		type = getItemCategory(id)
+	}
 	if (!SAVEDATA.items[type][id]) {
-		SAVEDATA.items[type][id] = 0
+		return false
 	}
 	SAVEDATA.items[type][id] -= 1
+	if (SAVEDATA.items[type][id] === 0) {
+		delete SAVEDATA.items[type][id]
+	}
 }
 
 function getItemCategory(id) {

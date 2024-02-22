@@ -47,6 +47,7 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(3)}, 522+34*3,150, 34,34)
 		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(4)}, 522+34*4,150, 34,34)
 		this.buttons["petTab"] = new Button("P", ()=>{this.filterInventory("pet"); this.buttons[this.tab].selected=false; this.tab = "petTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(5)}, 522+34*5,150, 34,34)
+		this.filter = "all"
 		this.filterInventory("all")
 		this.buttons["allTab"].selected = true
 
@@ -60,6 +61,11 @@ MENUS["customization"] = new class extends Menu {
 						PROFILE[itemType] = itemId;
 					}
 					PLAYER.updateProfile(PROFILE, "sendToServer");
+					let item = ITEMS[itemType][itemId]
+					if (itemType == "item" && item.consumable) {
+						removeItem(itemType, itemId)
+						this.filterInventory(this.filter) // Refresh item list
+					}
 				}
 			},
 			this.inventory, 
@@ -85,6 +91,7 @@ MENUS["customization"] = new class extends Menu {
 	}
 
 	filterInventory(category) {
+		this.filter = category
 		this.inventory.length = 0
 		if (category == "all") {
 			for (let category in SAVEDATA.items) {

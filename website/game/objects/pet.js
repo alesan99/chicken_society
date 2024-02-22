@@ -24,6 +24,7 @@ class Pet extends PhysicsObject {
 		this.id = id
 		this.name = SAVEDATA.pet.name
 		this.owner = owner
+		this.speed = 180
 
 		// Status
 		this.happiness = SAVEDATA.pet.happiness || 0.8
@@ -32,6 +33,9 @@ class Pet extends PhysicsObject {
 		this.disease = false
 
 		this.dead = false
+
+		// Movement
+		this.walking = false
 
 		// Clickable
 		this.mouseOver = false
@@ -67,12 +71,31 @@ class Pet extends PhysicsObject {
 			let dist = (tx-this.x)*(tx-this.x) + (ty-this.y)*(ty-this.y)
 			if (dist > 4000) {
 				let angle = Math.atan2(ty-this.y, tx-this.x)
-				this.sx = Math.cos(angle)*200
-				this.sy = Math.sin(angle)*200
+				this.sx = Math.cos(angle)*this.speed
+				this.sy = Math.sin(angle)*this.speed
+
+				// Animation
+				if (this.sx > 0) {
+					this.flip = 1
+				} else {
+					this.flip = -1
+				}
+
+				if (!this.walking) {
+					this.anim.playAnimation([1,2], 0.15)
+					this.walking = true
+				}
+
 				this.activated = false // Temporary, moving will let you click on pet again
 			} else {
 				this.sx = 0
 				this.sy = 0
+
+				// Animation
+				if (this.walking) {
+					this.anim.stopAnimation(0, null)
+					this.walking = false
+				}
 			}
 		}
 
@@ -105,17 +128,25 @@ class Pet extends PhysicsObject {
 				this.happiness = Math.min(1, this.happiness + 0.002*dt)
 			}
 
+			if (this.happiness < 0.5) {
+				this.anim.setFrame(null, 1)
+			}
+
 			if (this.health <= 0) {
+				this.anim.setFrame(3,0)
 				this.dead = true
 			}
 		}
+
+		// Update Animation
+		this.anim.update(dt)
 	}
 
 	draw(drawX=this.x, drawY=this.y, dir=this.dir) {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.shadow, null, drawX, drawY, 0, this.scale, this.scale, 0.5, 1)
 
-		// Chicken and accessories
+		// Pet graphic
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY, 0, this.flip*this.scale, this.scale, 0.5, 1)
 	}

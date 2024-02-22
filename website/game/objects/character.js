@@ -177,10 +177,15 @@ class Character extends PhysicsObject {
 			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 		}
 
-		// Pet
-		// if (this.petObj) {
-		// 	this.petObj.draw()
-		// }
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null)) { // Head item
+			// Figure out where to place held item
+			let item = ITEMS.item[this.item]
+			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (ITEMOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
+			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + ITEMOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
+			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
+			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
+			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+		}
 	}
 
 	drawOver() {
@@ -238,7 +243,6 @@ class Character extends PhysicsObject {
 		this.body = profile.body || false
 		this.item = profile.item || false
 
-		console.log(profile.pet, this.pet)
 		if (this.pet != profile.pet) {
 			this.pet = profile.pet || false
 			if (this.petObj) {

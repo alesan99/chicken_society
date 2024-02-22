@@ -59,19 +59,24 @@ function loadGameAssets() {
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed
-		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]],
-		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[4,62],[64,1]],
-		[[63,2],[63,2],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]]
+		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]], // Front frames
+		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[4,62],[64,1]], // Right frames
+		[[63,2],[63,2],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]] // Back frames
 	]
 	FACEOFFSET = [ // Center of chicken face where glasses should be placed
-		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]],
-		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[4,62],[64,1]],
-		[[63,2],[63,2],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]]
+		[[64,1],[64,1],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]], // Front frames
+		[[89,3],[89,3],[86,10],[66,9],[64,2],[64,2],[4,62],[64,1]], // Right frames
+		[[63,2],[63,2],[66,2] ,[66,9],[64,2],[64,2],[4,62],[64,1]] // Back frames
 	]
 	BODYOFFSET = [ // Center of chicken chin where accessory should be placed
-		[[64,55],[64,55],[66,56],[66,63],[64,55],[64,55],[59,62],[64,55]],
-		[[89,49],[89,49],[86,52],[66,63],[64,55],[64,55],[59,62],[64,55]],
-		[[63,56],[63,56],[68,57],[66,63],[64,55],[64,55],[59,62],[64,55]]
+		[[64,55],[64,55],[66,56],[66,63],[64,55],[64,55],[59,62],[64,55]], // Front frames
+		[[89,49],[89,49],[86,52],[66,63],[64,55],[64,55],[59,62],[64,55]], // Right frames
+		[[63,56],[63,56],[68,57],[66,63],[64,55],[64,55],[59,62],[64,55]] // Back frames
+	]
+	ITEMOFFSET = [ // Center of chicken left wing where item should be held
+		[[94,75],[94,75],[96,76],[96,83],[94,75],[94,75],[89,82],[94,75]], // Front frames
+		[[79,69],[79,69],[76,78],[56,83],[54,75],[54,75],[49,82],[54,75]], // Right frames
+		[[33,76],[33,76],[38,77],[36,83],[34,75],[34,75],[29,82],[34,75]] // Back frames
 	]
 	CHICKENROTATION = [ // Rotation of chicken hat & accessory for each frame
 		0,0,0,0,0,0,-Math.PI*0.5,0
@@ -102,6 +107,7 @@ function loadGameAssets() {
 	ITEMS.body["alesanaccessories"] = {}
 
 	ITEMS.item["seeds"] = {}
+	ITEMS.item["black_coffee"] = {}
 
 	ITEMS.pet["pillbug"] = {}
 
@@ -129,17 +135,19 @@ function loadItem(category, itemId) {
 	item.cost = 0
 	item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
 	loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
+		// Get item properties
 		item.name = data.name
 		item.description = data.description
 		item.cost = data.cost
-		if (data.center) {
+		item.consumable = data.consumable // Can item only be used once?
+		if (data.center) { // Center of frames
 			item.center = data.center
 		}
 	})
 	let async = function() {
 		if (category == "pet") {
 			// Pet with animations and emotions
-			item.sprite = new Sprite(item.image, 2, 3, (item.image.w-1)/2,(item.image.h-2)/3, 0,0, 1,1)
+			item.sprite = new Sprite(item.image, 4, 2, (item.image.w-3)/4,(item.image.h-1)/2, 0,0, 1,1)
 		} else {
 			// Clothing / equipables
 			item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1)
