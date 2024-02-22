@@ -7,6 +7,8 @@ function makeSaveData() {
 		// Chicken customization
 		profile: makeProfile(),
 
+		lastPlayed: Date.now(),
+
 		// All owned items
 		// Format: head: {"name_of_hat": 1, ...}
 		items: {
@@ -26,9 +28,11 @@ function makeSaveData() {
 		// Persists between play sessions, but only stored for 1 pet at a time
 		pet: {
 			name: "",
-			health: 100,
-			happiness: 100,
-			hunger: 100
+			happiness: 0.8, // 0-1
+			health: 1, // 0-1
+			hunger: 1, // 0-1
+			age: 0, // in days
+			disease: false
 		},
 
 		quests: {

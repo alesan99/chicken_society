@@ -238,6 +238,7 @@ class Character extends PhysicsObject {
 		this.body = profile.body || false
 		this.item = profile.item || false
 
+		console.log(profile.pet, this.pet)
 		if (this.pet != profile.pet) {
 			this.pet = profile.pet || false
 			if (this.petObj) {

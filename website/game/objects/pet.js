@@ -26,9 +26,12 @@ class Pet extends PhysicsObject {
 		this.owner = owner
 
 		// Status
-		this.happiness = SAVEDATA.pet.health || 50
-		this.health = SAVEDATA.pet.health || 100
-		this.hunger = SAVEDATA.pet.hunger || 100
+		this.happiness = SAVEDATA.pet.happiness || 0.8
+		this.health = SAVEDATA.pet.health || 1
+		this.hunger = SAVEDATA.pet.hunger || 1
+		this.disease = false
+
+		this.dead = false
 
 		// Clickable
 		this.mouseOver = false
@@ -56,7 +59,7 @@ class Pet extends PhysicsObject {
 
 	update(dt) {
 		// Follow behind owner
-		if (this.owner != null) {
+		if (this.owner != null && !this.dead) {
 			// Target
 			let tx = this.owner.x
 			let ty = this.owner.y
@@ -79,6 +82,32 @@ class Pet extends PhysicsObject {
 			CURSOR.on = true
 		} else {
 			this.mouseOver = false
+		}
+
+		// Update mood and life cycles
+		if (this.dead) {
+			
+		} else {
+			this.hunger = Math.max(0, this.hunger - 0.0004*dt)
+			let starvingThreshold = 0.2
+			if (this.hunger <= starvingThreshold) {
+				let speed = 0.005*((starvingThreshold-this.hunger)/starvingThreshold)
+				this.health = Math.max(0, this.health - speed*dt)
+			}
+
+			if (this.hunger < 0.75) {
+				this.happiness = Math.max(0, this.happiness - 0.003*dt)
+			}
+			if (this.health < 0.5) {
+				this.happiness = Math.max(0, this.happiness - 0.002*dt)
+			}
+			if (this.health > 0.85) {
+				this.happiness = Math.min(1, this.happiness + 0.002*dt)
+			}
+
+			if (this.health <= 0) {
+				this.dead = true
+			}
 		}
 	}
 
@@ -117,17 +146,34 @@ class Pet extends PhysicsObject {
 	// Pet behavior
 	getMood() {
 		let moods = [
+			"heavenly",
 			"jolly",
 			"happy",
+			"coy",
 			"groovy",
+			"just alright",
 			"bored",
 			"so-so",
 			"meh",
 			"emo",
 			"sad",
+			"depressed",
 			"dorceless",
+			"miserable"
 		]
-		let word = moods[((1-this.happiness/100)*(moods.length-1))|0]
+		let hungry_moods = [
+			"hungry",
+			"hangry",
+			"absolutely famished",
+		]
+		let word = "mysterious"
+
+		if (this.dead) {
+			word = "dead"
+		} else {
+			// Feeling whatever happiness is
+			word = moods[((1-this.happiness)*(moods.length-1))|0]
+		}
 		return word
 	}
 }

@@ -15,6 +15,8 @@ MENUS["petMenu"] = new class extends Menu {
 		// Get Pet information
 		this.pet = PLAYER.petObj
 
+		this.petMood = this.pet.getMood()
+
 		// Name
 		this.buttons["name"] = new Button(SAVEDATA.pet.name, ()=>{}, null, 292,129, 140,32)
 	}
@@ -53,7 +55,7 @@ MENUS["petMenu"] = new class extends Menu {
 
 		// Pet Status
 		DRAW.setColor(112, 50, 16, scale)
-		DRAW.text(`Feeling ${this.pet.getMood()}.`, 476, 184, "left")
+		DRAW.text(`Feeling ${this.petMood}.`, 476, 184, "left")
 		DRAW.text("Health", 476, 224, "left")
 		DRAW.text("Hunger", 476, 284, "left")
 
@@ -61,8 +63,8 @@ MENUS["petMenu"] = new class extends Menu {
 		DRAW.rectangle(476, 238, 200, 20)
 		DRAW.rectangle(476, 298, 200, 20)
 		DRAW.setColor(20, 200, 20, scale)
-		DRAW.rectangle(476, 238, 200*(this.pet.health/100), 20)
-		DRAW.rectangle(476, 298, 200*(this.pet.hunger/100), 20)
+		DRAW.rectangle(476, 238+1, 200*(this.pet.health), 18)
+		DRAW.rectangle(476, 298+1, 200*(this.pet.hunger), 18)
 
 		// Render all buttons
 		this.drawButtons()

@@ -92,6 +92,7 @@ class ItemGrid {
     clickRelease(button, x, y){
         if (this.holding == true){
 			this.gridAction(this.overx, this.overy)
+			this.holding = false
         }
 
 		// Scroll bar
