@@ -15,7 +15,7 @@ function makeSaveData() {
 			head: {},
 			face: {},
 			body: {},
-			item: {"black_coffee": 1},
+			item: {},
 
 			furniture: {},
 			pet: {"pillbug": 1}

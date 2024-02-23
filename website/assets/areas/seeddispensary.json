@@ -51,7 +51,8 @@
                 "name": "Seed Dispensary",
                 "items": {
                     "item": {
-                        "seeds": true
+                        "seeds": true,
+                        "black_coffee": true
                     }
                 }
             }

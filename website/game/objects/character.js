@@ -141,51 +141,45 @@ class Character extends PhysicsObject {
 		DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1)
 
 		// Chicken and accessories
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "right")) { // Head item
+			// Render item under chicken if facing up
+			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir)
+		}
+
+		// Character image
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
 		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
 		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
 			// Figure out the center of the body item to place it on the center of the chicken's 'neck'
-			let item = ITEMS.body[this.body]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (BODYOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + BODYOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+			this.drawItem(ITEMS.body[this.body], BODYOFFSET, drawX, drawY, dir)
 		}
 
 		DRAW.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
 		
 		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
 			// Figure out the center of the face item to place it on the center of the chicken's face
-			let item = ITEMS.face[this.face]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (FACEOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + FACEOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+			this.drawItem(ITEMS.face[this.face], FACEOFFSET, drawX, drawY, dir)
 		}
 
 		if ((this.head != false) && (ITEMS.head[this.head] != null) && (ITEMS.head[this.head].sprite != null)) { // Head item
 			// Figure out the center of the head item to place it on the center of the chicken's head
-			let item = ITEMS.head[this.head]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (HEADOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + HEADOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+			this.drawItem(ITEMS.head[this.head], HEADOFFSET, drawX, drawY, dir)
 		}
 
-		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null)) { // Head item
-			// Figure out where to place held item
-			let item = ITEMS.item[this.item]
-			let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (ITEMOFFSET[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
-			let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + ITEMOFFSET[dir_lookup[dir]][this.anim.framex][1]*this.scale
-			let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
-			let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
-			DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir != "up" && dir != "right")) { // Head item
+			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir)
 		}
+	}
+
+	drawItem(item, offsets, drawX=this.x, drawY=this.y, dir=this.dir) {
+		// Figure out the center of the item to place it on the location defined on character
+		let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (offsets[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
+		let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + offsets[dir_lookup[dir]][this.anim.framex][1]*this.scale
+		let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
+		let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
+		DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 	}
 
 	drawOver() {

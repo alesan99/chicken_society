@@ -75,7 +75,7 @@ function loadGameAssets() {
 	]
 	ITEMOFFSET = [ // Center of chicken left wing where item should be held
 		[[94,75],[94,75],[96,76],[96,83],[94,75],[94,75],[89,82],[94,75]], // Front frames
-		[[79,69],[79,69],[76,78],[56,83],[54,75],[54,75],[49,82],[54,75]], // Right frames
+		[[89,69],[89,69],[86,78],[66,83],[64,75],[64,75],[59,82],[64,75]], // Right frames
 		[[33,76],[33,76],[38,77],[36,83],[34,75],[34,75],[29,82],[34,75]] // Back frames
 	]
 	CHICKENROTATION = [ // Rotation of chicken hat & accessory for each frame
