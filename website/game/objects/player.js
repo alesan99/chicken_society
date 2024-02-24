@@ -18,6 +18,7 @@ class Player {
 		this.target = false
 		this.targetX = 0
 		this.targetY = 0
+		this.targetTimer = 0
 
 		// Which triggers is the player currently inside of?
 		this.triggers = new Map()
@@ -35,6 +36,7 @@ class Player {
 			this.target = true
 			this.targetX = mx
 			this.targetY = my
+			this.targetTimer = 4.0
 		}
 		if (this.target) {
 			let targetX = this.targetX
@@ -46,7 +48,10 @@ class Player {
 			let futureX = char.x + dx*char.speed*dt
 			let futureY = char.y + dy*char.speed*dt
 
-			if ((((targetX-futureX > 0) != (targetX-char.x > 0)) || ((targetY-futureY > 0) != (targetY-char.y > 0)))) { // Don't move anymore if crossing target coordinate
+			this.targetTimer -= dt
+
+			if ((((targetX-futureX > 0) != (targetX-char.x > 0)) || ((targetY-futureY > 0) != (targetY-char.y > 0))) // Don't move anymore if crossing target coordinate
+				|| (this.targetTimer < 0) ) { // Or don't move if target hasn't been reached in a while
 				this.stop()
 			} else {
 				char.move(dx, dy)
@@ -67,6 +72,20 @@ class Player {
 			}
 			[dx, dy] = vec2Unit(dx, dy) //convert to direction normal
 			char.move(dx, dy)
+		}
+	}
+
+	// Draw movement cursor
+	draw() {
+		if (this.target) {
+			DRAW.setColor(255, 255, 255, 1.0)
+			let x = this.targetX
+			let y = this.targetY
+			let scale = 0.8
+			if (this.mouseHold) {
+				scale = 1.0
+			}
+			DRAW.image(IMG.moveCursor, null, x, y, 0, scale, scale, 0.5, 0.5)
 		}
 	}
 

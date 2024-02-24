@@ -25,6 +25,7 @@ class Pet extends PhysicsObject {
 		this.name = SAVEDATA.pet.name
 		this.owner = owner
 		this.speed = 180
+		this.area = owner.area
 
 		// Status
 		this.happiness = SAVEDATA.pet.happiness || 0.8
@@ -97,14 +98,18 @@ class Pet extends PhysicsObject {
 					this.walking = false
 				}
 			}
+
+			this.area = this.owner.area
 		}
 
 		// Click
-		if ((this.activated == false) && this.checkMouseOver()) {
-			this.mouseOver = true
-			CURSOR.on = true
-		} else {
-			this.mouseOver = false
+		if (this.owner == PLAYER) {
+			if ((this.activated == false) && this.checkMouseOver()) {
+				this.mouseOver = true
+				CURSOR.on = true
+			} else {
+				this.mouseOver = false
+			}
 		}
 
 		// Update mood and life cycles

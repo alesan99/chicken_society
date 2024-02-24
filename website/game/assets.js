@@ -28,6 +28,7 @@ function loadGameAssets() {
 	ANIM.tbag = [[0,3,0,3,0,3,0,3,0,3], 0.15]
 
 	IMG.shadow = new RenderImage("assets/shadow.png")
+	IMG.moveCursor = new RenderImage("assets/move_cursor.png")
 	IMG.speechBubble = new RenderImage("assets/chat_bubble.png")
 	IMG.replyBubble = new RenderImage("assets/reply_bubble.png")
 	SPRITE.replyBubble = new Sprite(IMG.replyBubble, 2,1, 64,32)
@@ -111,6 +112,7 @@ function loadGameAssets() {
 
 	ITEMS.pet["pillbug"] = {}
 
+	SPRITE.placeholder = new Sprite(IMG.shadow)
 	for (const [category, list] of Object.entries(ITEMS)) {
 		for (const [itemId, item] of Object.entries(list)) {
 			loadItem(category, itemId)
@@ -134,6 +136,7 @@ function loadItem(category, itemId) {
 	item.description = ""
 	item.cost = 0
 	item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]]
+	item.sprite = SPRITE.placeholder
 	loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
 		// Get item properties
 		item.name = data.name
