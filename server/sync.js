@@ -49,9 +49,12 @@ function listenToClient(socket) {
 			},
 		};
 
-		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
-		console.log(profile);
+		socket.join(`area:${playerList[socket.id].area}`) // Listen for events in area
 
+		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
+		console.log(`Player "${profile.name}" joined.`);
+
+		// Confirm a successful connection to client
 		callback({
 			status: "ok"
 		});
@@ -59,24 +62,28 @@ function listenToClient(socket) {
 
 	// Recieved chicken data (position, velocity); Send out to everyone
 	socket.on("chicken", (position, velocity) => {
-		if (playerList[socket.id]) {
-			playerList[socket.id].chicken.x = position[0];
-			playerList[socket.id].chicken.y = position[1];
-			playerList[socket.id].chicken.sx = position[2];
-			playerList[socket.id].chicken.sy = position[3];
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			playerData.chicken.x = position[0];
+			playerData.chicken.y = position[1];
+			playerData.chicken.sx = position[2];
+			playerData.chicken.sy = position[3];
 
-			socket.broadcast.emit("chicken", socket.id, position); // Use this to exlude the sender
+			// Let every player in the area know this information (excluding sender)
+			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, position);
 		};
 	});
 
 	socket.on("chickenAction", (position, velocity) => {
-		if (playerList[socket.id]) {
-			playerList[socket.id].chicken.x = position[0];
-			playerList[socket.id].chicken.y = position[1];
-			playerList[socket.id].chicken.sx = position[2];
-			playerList[socket.id].chicken.sy = position[3];
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			playerData.chicken.x = position[0];
+			playerData.chicken.y = position[1];
+			playerData.chicken.sx = position[2];
+			playerData.chicken.sy = position[3];
 
-			socket.broadcast.emit("chicken", socket.id, position); // Use this to exlude the sender
+			// Let every player in the area know this information (excluding sender)
+			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, position);
 		};
 	});
 
@@ -90,25 +97,42 @@ function listenToClient(socket) {
 
 	// Player changed their own profile, update
 	socket.on("updateProfile", (profile) =>{
-		if (playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			playerData.profile = profile;
+			playerData.name = profile.name;
 			socket.broadcast.emit("updateProfile", socket.id, profile);
-			playerList[socket.id].profile = profile;
-			playerList[socket.id].name = profile.name;
 		}
 	});
 	
 	// Player emoted
 	socket.on("emote", (emote) =>{
-		if (playerList[socket.id]) {
-			socket.broadcast.emit("emote", socket.id, emote);
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			// Send emote to only those in the area
+			socket.to(`area:${playerData.area}`).emit("emote", socket.id, emote);
 		}
 	});
 	
 	// Player moved area
 	socket.on("area", (area) =>{
-		if (playerList[socket.id]) {
-			playerList[socket.id].area = area;
-			socket.broadcast.emit("area", socket.id, area);
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			// Leave old area
+			socket.leave(`area:${playerData.area}`)
+			// Join new area
+			socket.join(`area:${area}`)
+
+			playerData.area = area;
+			socket.broadcast.emit("area", socket.id, area); // Let everyone know
+
+			// Players in target area have not been updating this player about their position/state
+			// Tell the player where everyone is at
+			for (const [id, data] of Object.entries(playerList)) {
+				if (id != socket.id && data.area == area) {
+					io.to(socket.id).emit("chicken", id, [data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy]);
+				}
+			}
 		}
 	});
 
@@ -132,7 +156,7 @@ function listenToClient(socket) {
 			}
 		}
 		delete playerList[socket.id];
-		io.emit("removePlayer", socket.id); // Use this to exlude the sender
+		io.emit("removePlayer", socket.id);
 	});
 
 	// Minigames
