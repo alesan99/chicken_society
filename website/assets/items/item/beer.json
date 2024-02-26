@@ -1,5 +1,8 @@
 {
     "name": "Beer",
-    "description": "",
-    "cost": 4
+    "description": "This'll get you drunk instantly.",
+    "cost": 4,
+    "consumable": true,
+
+    "food": 0.05
 }

@@ -22,7 +22,17 @@ class Pet extends PhysicsObject {
 
 		// Pet data
 		this.id = id
-		this.name = SAVEDATA.pet.name
+		let names = [
+			"Bugathan",
+			"Barnham",
+			"T.J. Cream",
+			"Gubgub",
+			"Mr. Dubstep",
+			"Keyboard Jen",
+			"Diesel",
+			"Ulysses"
+		]
+		this.name = SAVEDATA.pet.name || names[(Math.random()*(names.length-1))|0]
 		this.owner = owner
 		this.speed = 180
 		this.area = owner.area
@@ -211,5 +221,18 @@ class Pet extends PhysicsObject {
 			word = moods[((1-this.happiness)*(moods.length-1))|0]
 		}
 		return word
+	}
+
+	eat(item) {
+		// Eat item, reduce hunger
+		if (item.food != null) {
+			// Pet is already full!
+			if (this.hunger >= 0.99) {
+				this.health -= 0.03
+			}
+
+			// Satisfy hunger
+			this.hunger = Math.min(1.0, this.hunger + item.food)
+		}
 	}
 }

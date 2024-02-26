@@ -143,6 +143,8 @@ function loadItem(category, itemId) {
 		item.description = data.description
 		item.cost = data.cost
 		item.consumable = data.consumable // Can item only be used once?
+		item.food = data.food
+		item.disease = data.disease
 		if (data.center) { // Center of frames
 			item.center = data.center
 		}

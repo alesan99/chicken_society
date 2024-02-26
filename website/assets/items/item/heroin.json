@@ -1,5 +1,9 @@
 {
     "name": "Heroin",
     "description": "Black Tar Heroin fresh off the street.",
-    "cost": 10
+    "cost": 10,
+    "consumable": true,
+
+    "food": -0.1,
+    "disease": "addiction"
 }

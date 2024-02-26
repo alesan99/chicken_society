@@ -18,7 +18,46 @@ MENUS["petMenu"] = new class extends Menu {
 		this.petMood = this.pet.getMood()
 
 		// Name
-		this.buttons["name"] = new Button(SAVEDATA.pet.name, ()=>{}, null, 292,129, 140,32)
+		this.buttons["name"] = new Button(this.pet.name, ()=>{}, null, 292,129, 140,32)
+
+		// Inventory (just items; for feeding)
+		this.inventory = []
+		this.filter = "item"
+		this.filterInventory(this.filter)
+		this.buttons["inventory"] = new ItemGrid(
+			(itemId,itemType)=>{
+				// Set clothing item
+				let item = ITEMS[itemType][itemId]
+				if (itemType == "item" && item.consumable) {
+					this.pet.eat(item)
+					removeItem(itemType, itemId)
+					this.filterInventory(this.filter) // Refresh item list
+				}
+			},
+			this.inventory, 
+			(itemId,itemType)=>{
+				// Is selected?
+				if (PROFILE[itemType] && PROFILE[itemType] == itemId) {
+					return true
+				}
+			}, 476,314, 56,56, 5,2)
+		this.buttons["inventory"].showCount = true // How how many of each item the player owns
+	}
+
+	filterInventory(category) {
+		this.filter = category
+		this.inventory.length = 0
+		if (category == "all") {
+			for (let category in SAVEDATA.items) {
+				for (let itemId in SAVEDATA.items[category]) {
+					this.inventory.push(itemId)
+				}
+			}
+		} else {
+			for (let itemId in SAVEDATA.items[category]) {
+				this.inventory.push(itemId)
+			}
+		}
 	}
 
 	keyPress(key) {
@@ -56,15 +95,16 @@ MENUS["petMenu"] = new class extends Menu {
 		// Pet Status
 		DRAW.setColor(112, 50, 16, scale)
 		DRAW.text(`Feeling ${this.petMood}.`, 476, 184, "left")
-		DRAW.text("Health", 476, 224, "left")
-		DRAW.text("Hunger", 476, 284, "left")
+		DRAW.text("Health:", 476, 224, "left")
+		DRAW.text("Food:", 476, 254, "left")
+		DRAW.text("Feed: ", 476, 304, "left")
 
 		DRAW.setColor(240, 240, 240, scale)
-		DRAW.rectangle(476, 238, 200, 20)
-		DRAW.rectangle(476, 298, 200, 20)
+		DRAW.rectangle(566, 228-20, 200, 20)
+		DRAW.rectangle(566, 258-20, 200, 20)
 		DRAW.setColor(20, 200, 20, scale)
-		DRAW.rectangle(476, 238+1, 200*(this.pet.health), 18)
-		DRAW.rectangle(476, 298+1, 200*(this.pet.hunger), 18)
+		DRAW.rectangle(566, 228-20+1, 200*(this.pet.health), 18)
+		DRAW.rectangle(566, 258-20+1, 200*(this.pet.hunger), 18)
 
 		// Render all buttons
 		this.drawButtons()
