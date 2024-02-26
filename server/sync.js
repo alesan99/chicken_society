@@ -93,6 +93,7 @@ function listenToClient(socket) {
 		if (playerList[socket.id]) {
 			socket.broadcast.emit("updateProfile", socket.id, profile);
 			playerList[socket.id].profile = profile;
+			playerList[socket.id].name = profile.name;
 		}
 	});
 	
