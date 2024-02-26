@@ -295,6 +295,9 @@ class World {
 	findPlayersInArea(area) {
 		// Find all players that are in an area and add an object for them
 		let players = []
+		if (!NETPLAY.playerList) {
+			return []
+		}
 		for (const [id, playerData] of Object.entries(NETPLAY.playerList)) {
 			if (playerData.area == area) {
 				this.addPlayerToArea(id, playerData)
