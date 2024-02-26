@@ -107,18 +107,15 @@ Netplay = class {
 	addPlayer (id, playerData) {
 		if ((id != socket.id) && (this.playerList[id] == null)) {
 			this.playerList[id] = playerData
-			// TODO: move this code to world.js?
-			let chicken = playerData.chicken
-			CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
-			//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
+			// Add player to area (in world.js)
+			WORLD.addPlayerToArea(id, this.playerList[id])
 			this.newPlayerJoined = true // New player! Let them know your information
 		}
 	}
 
 	removePlayer (id) {
 		if (id != socket.id) {
-			CHARACTER[id].destroy()
-			delete CHARACTER[id]
+			WORLD.removePlayerFromArea(id)
 			delete this.playerList[id]
 		}
 	}
@@ -136,10 +133,20 @@ Netplay = class {
 
 	// Recive player data from server and reflect changes
 	recievePosition (id, position) {
-		if (CHARACTER[id]) {
-			// Position and speed
-			CHARACTER[id].setPosition(position[0], position[1])
-			CHARACTER[id].move(position[2]/CHARACTER[id].speed, position[3]/CHARACTER[id].speed)
+		if (this.playerList[id] != null) {
+			let chicken = this.playerList[id].chicken
+			chicken.x = position[0]
+			chicken.y = position[1]
+			// TODO: Change server code to not send this information if player isn't in your same area
+			// BUT, also send everyone's (who is in this area) information all at once you enter a new area
+			// This is needed because if those players don't move, they will appear in the last x,y position the player saw them at.
+
+			// Update player's character object
+			if (CHARACTER[id]) {
+				// Position and speed
+				CHARACTER[id].setPosition(position[0], position[1])
+				CHARACTER[id].move(position[2]/CHARACTER[id].speed, position[3]/CHARACTER[id].speed)
+			}
 		}
 	}
 
@@ -191,7 +198,9 @@ Netplay = class {
 		console.log("recieved area", id, area)
 		if (this.playerList[id] != null) {
 			this.playerList[id].area = area
-			CHARACTER[id].area = area
+
+			// Add player to area (in world.js)
+			WORLD.addPlayerToArea(id, this.playerList[id])
 		}
 	}
 

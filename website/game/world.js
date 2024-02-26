@@ -75,6 +75,8 @@ class World {
 		OBJECTS["Wall"].dontUpdate = true
 		PHYSICSWORLD.clear()
 
+		this.findPlayersInArea(this.area)
+
 		// Area graphics
 		BACKGROUND[this.area] = new RenderImage(`assets/areas/${this.area}.png`)
 		BACKGROUNDIMG[this.area] = {}
@@ -162,14 +164,14 @@ class World {
 
 		// Draw objects
 		for (const [id, obj] of Object.entries(CHARACTER)) {
-			if (obj.area == PLAYER.area) {
+			// if (obj.area == PLAYER.area) {
 				drawQueue.push(obj)
-			}
+			// }
 		}
 		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
-			if (obj.area == PLAYER.area) {
+			// if (obj.area == PLAYER.area) {
 				drawQueue.push(obj)
-			}
+			// }
 		}
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {
@@ -209,7 +211,7 @@ class World {
 			// Display click triggers
 			DRAW.setColor(120,0,80,1.0)
 			for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
-				if (obj.clickRegion) {
+				if (obj.clickShape) {
 					let r = obj.clickRegion // region
 					DRAW.rectangle(obj.x+r.x, obj.y+r.y, r.w, r.h, "line")
 				}
@@ -288,6 +290,45 @@ class World {
 			}
 		}
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
+	}
+
+	findPlayersInArea(area) {
+		// Find all players that are in an area and add an object for them
+		let players = []
+		for (const [id, playerData] of Object.entries(NETPLAY.playerList)) {
+			if (playerData.area == area) {
+				this.addPlayerToArea(id, playerData)
+				players.push(playerData)
+			} else {
+				this.removePlayerFromArea(id)
+			}
+		}
+		return players
+	}
+
+	addPlayerToArea(id, playerData) {
+		// When a player join an area, create a character object for them
+		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
+		let chicken = playerData.chicken
+		console.log(playerData.area, PLAYER.area)
+		if (playerData.area == PLAYER.area) { // Player is in your area
+			if (!CHARACTER[id]) {
+				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
+				CHARACTER[id].area = playerData.area
+				console.log("Created!")
+				//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
+			}
+		} else { // Player is not in your area
+			this.removePlayerFromArea(id)
+		}
+	}
+
+	removePlayerFromArea(id) {
+		// Remove player object
+		if (CHARACTER[id]) {
+			CHARACTER[id].destroy()
+			delete CHARACTER[id]
+		}
 	}
 }
 
