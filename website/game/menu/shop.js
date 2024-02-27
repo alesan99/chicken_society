@@ -57,11 +57,13 @@ MENUS["shop"] = new class extends Menu {
 				if (itemId) {
 					this.selectedItem = itemId
 					this.selectedItemType = itemType
-					if (ITEMS[itemType][itemId].description) {
-						DRAW.setFont(FONT.description)
-						this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 200)
-					} else {
-						this.selectedItemDescription = false
+					if (ITEMS[itemType][itemId]) { // Make sure item has been loaded
+						if (ITEMS[itemType][itemId].description) {
+							DRAW.setFont(FONT.description)
+							this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 200)
+						} else {
+							this.selectedItemDescription = false
+						}
 					}
 				}
 			},
@@ -100,8 +102,10 @@ MENUS["shop"] = new class extends Menu {
 	// TODO: maybe this should be in a different file so items can also be earned in other ways?
 	buyItem(itemType, itemId) {
 		let item = ITEMS[itemType][itemId]
-		if (spendNuggets(item.cost)) {
-			addItem(itemType, itemId)
+		if (item) { // Make sure item has been loaded
+			if (spendNuggets(item.cost)) {
+				addItem(itemType, itemId)
+			}
 		}
 	}
 
@@ -141,19 +145,21 @@ MENUS["shop"] = new class extends Menu {
 		// Item information
 		if (this.selectedItem) {
 			let item = ITEMS[this.selectedItemType][this.selectedItem]
-			DRAW.text(item.name, 563, 210, "left")
+			if (item) { // Make sure item has been loaded
+				DRAW.text(item.name, 563, 210, "left")
 
-			if (SAVEDATA.items[this.selectedItemType][this.selectedItem]) {
-				DRAW.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, 360, "right")
-			}
-
-			DRAW.text(`${item.cost} Nuggets`, 764, 388, "right")
-
-			DRAW.setColor(152, 80, 46, scale)
-			DRAW.setFont(FONT.description)
-			if (this.selectedItemDescription) {
-				for (let i = 0; i < this.selectedItemDescription.length; i++) {
-					DRAW.text(this.selectedItemDescription[i], 563, 242 + i * 20, "left")
+				if (SAVEDATA.items[this.selectedItemType][this.selectedItem]) {
+					DRAW.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, 360, "right")
+				}
+	
+				DRAW.text(`${item.cost} Nuggets`, 764, 388, "right")
+	
+				DRAW.setColor(152, 80, 46, scale)
+				DRAW.setFont(FONT.description)
+				if (this.selectedItemDescription) {
+					for (let i = 0; i < this.selectedItemDescription.length; i++) {
+						DRAW.text(this.selectedItemDescription[i], 563, 242 + i * 20, "left")
+					}
 				}
 			}
 		} else {

@@ -62,9 +62,11 @@ MENUS["customization"] = new class extends Menu {
 					}
 					PLAYER.updateProfile(PROFILE, "sendToServer");
 					let item = ITEMS[itemType][itemId]
-					if (itemType == "item" && item.consumable) {
-						removeItem(itemType, itemId)
-						this.filterInventory(this.filter) // Refresh item list
+					if (item) { // Make sure item has been loaded
+						if (itemType == "item" && item.consumable) { // TODO: Figure out a better place for this
+							removeItem(itemType, itemId)
+							this.filterInventory(this.filter) // Refresh item list
+						}
 					}
 				}
 			},

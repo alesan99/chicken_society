@@ -172,12 +172,14 @@ class ItemGrid {
 
 					// Draw item in this cell
 					if (this.list[i]) {
-						let image = ITEMS[itemType][this.list[i]].image
-						let sprite = ITEMS[itemType][this.list[i]].sprite
-						let scale = 0.4*(this.cw/42)
+						if (ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
+							let image = ITEMS[itemType][this.list[i]].image
+							let sprite = ITEMS[itemType][this.list[i]].sprite
+							let scale = 0.4*(this.cw/42)
 
-						if (image) {
-							DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5)
+							if (image) {
+								DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5)
+							}
 						}
 
 						// Count of item owned
@@ -197,8 +199,10 @@ class ItemGrid {
 			let i = cx + (cy+this.scroll)*this.gw // Index of cell
 			if (this.list[i]) {
 				let itemType = getItemCategory(this.list[i])
-				DRAW.setColor(0, 0, 0, 1)
-				DRAW.text(ITEMS[itemType][this.list[i]].name, mouseX+20, mouseY+20, "left")
+				if (itemType && ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
+					DRAW.setColor(0, 0, 0, 1)
+					DRAW.text(ITEMS[itemType][this.list[i]].name, mouseX+20, mouseY+20, "left")
+				}
 			}
 		}
 

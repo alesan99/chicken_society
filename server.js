@@ -37,6 +37,8 @@ module.exports = {
 
 // Send HTML file when user connects to server
 const path = require("path"); // Import the "path" module.
+const { buildGame } = require("./server/build.js");
+buildGame();
 app.use(express.static(path.join(__dirname, "server/lib"))); //serve msgpack socket.io separately so it doesn't get loaded when running website locally.
 app.use(express.static(path.join(__dirname, "website"))); //serve static files from the "website" directory.
 app.get("/", (req, res) => {
@@ -84,6 +86,7 @@ if (useDB) {
 
 // Handle GET Requests
 const {} = require("./server/requests.js");
+const { create } = require("domain");
 
 // Start server on port
 const localIPAddress = "localhost" // ipv4 //"10.104.58.91" // IPv4 or localhost
