@@ -84,6 +84,9 @@ function loadGameAssets() {
 	]
 
 	// Load all items
+	IMG.placeholder = IMG.shadow
+	SPRITE.placeholder = new Sprite(IMG.shadow)
+
 	ITEMS = {
 		// Categories
 		head: {},
@@ -102,7 +105,6 @@ function loadGameAssets() {
 			}
 		}
 
-		SPRITE.placeholder = new Sprite(IMG.shadow)
 		for (const [category, list] of Object.entries(ITEMS)) {
 			for (const [itemId, item] of Object.entries(list)) {
 				loadItem(category, itemId)

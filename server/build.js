@@ -23,7 +23,6 @@ function generateItemFileList() {
 					let list = [];
 					for (let item of v[category]) {
 						let itemName = item.split(".")[0];
-						console.log(itemName);
 						if (!list.includes(itemName)) {
 							list.push(itemName);
 						}

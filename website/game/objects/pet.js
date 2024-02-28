@@ -59,8 +59,13 @@ class Pet extends PhysicsObject {
 		this.activated = false
 
 		// Graphics
-		this.image = ITEMS.pet[id].image
-		this.sprite = ITEMS.pet[id].sprite
+		if (ITEMS.pet[id]) {
+			this.image = ITEMS.pet[id].image
+			this.sprite = ITEMS.pet[id].sprite
+		} else {
+			this.image = IMG.placeholder
+			this.sprite = SPRITE.placeholder
+		}
 		this.anim = new Animation(this.sprite, 0)
 		this.anim.setFrame(0,0)
 
