@@ -295,11 +295,10 @@ function getPlayerFromSession(sessionId) {
 
 // Log in player
 // Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
-function loginPlayer(sessionId) {
-	const player = getPlayerFromSession(sessionId);
+function loginPlayer(player, db_Id) {
 	if (player) {
 		player.loggedIn = true;
-		player.accountId = 1; // TODO: Get account ID from database
+		player.accountId = db_Id ; // TODO: Get account ID from database
 		console.log(`Session belongs to ${player.name}.`);
 	} else {
 		console.log("Session does not belong to a player.");
