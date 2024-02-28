@@ -99,7 +99,7 @@
 			"x": 793,
 			"y": 298,
 			"shape": [0,0, 40,0, 40,40, 0,40],
-			"clickRegion": [0,0, 40,40],
+			"clickable": true,
 			"icon": {"frame": 1, "x": 15, "y": -10},
 
 			"action": "quest",
@@ -126,7 +126,7 @@
 			"x": 76,
 			"y": 479,
 			"shape": [0,0, 40,0, 40,40, 0,40],
-			"clickRegion": [0,0, 40,40],
+			"clickable": true,
 			"icon": {"frame": 1, "x": 15, "y": -10},
 
 			"action": "quest",

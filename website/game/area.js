@@ -45,7 +45,7 @@ function loadAreaFile(data, area, fromArea, fromWarp, endFunc) {
 			}
 			if (isActive) {
 				OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area)
-				NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, npc.clickRegion, {shop: npc.shop, dialogue: npc.dialogue}, npc.image)
+				NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, {shop: npc.shop, dialogue: npc.dialogue}, npc.image)
 			}
 		}
 	}
@@ -65,7 +65,7 @@ function loadAreaFile(data, area, fromArea, fromWarp, endFunc) {
 				if (trig.cost && trig.icon) {
 					trig.icon.text = trig.cost
 				}
-				OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, null, trig.shape, trig.icon, trig.clickRegion)
+				OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon)
 				
 				// TODO: Put this code somewhere else (area.js?)
 				if (action == "minigame") {

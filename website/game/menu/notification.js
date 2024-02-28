@@ -73,6 +73,7 @@ const Notify = (function() {
 				// Border
 				DRAW.setColor(255,255,255,0.8*a)
 				DRAW.rectangle(x, y, 300, notifHeight*notification.lines, "fill")
+				DRAW.setLineWidth(1.5)
 				DRAW.setColor(0,0,0,1.0*a)
 				DRAW.rectangle(x, y, 300, notifHeight*notification.lines, "line")
 
