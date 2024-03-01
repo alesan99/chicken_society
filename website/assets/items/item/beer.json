@@ -4,5 +4,9 @@
     "cost": 4,
     "consumable": true,
 
+    "statusEffect": "drunk",
+    "statusEffectChance": 0.5,
+    "statusEffectDuration": 30.0,
+
     "food": 0.05
 }

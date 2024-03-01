@@ -38,6 +38,9 @@ class Character extends PhysicsObject {
 		this.sx = 0 // Speed x
 		this.sy = 0 // Speed y
 
+		this.health = 1.0
+		this.statusEffects = [] // List of status effect objects
+
 		// Graphics
 		this.sprite = SPRITE.chicken
 		this.anim = new Animation(this.sprite, 0)
@@ -115,6 +118,9 @@ class Character extends PhysicsObject {
 			}
 		}
 
+		// Update status effects
+		this.updateStatusEffects(dt)
+
 		// Update walking or emote animation
 		this.anim.update(dt)
 
@@ -191,6 +197,13 @@ class Character extends PhysicsObject {
 			DRAW.setColor(255,255,255,1)
 		}
 		DRAW.text(this.name, Math.floor(this.x), Math.min(canvasHeight-54, Math.floor(this.y)+20), "center")
+
+		// Status Effects
+		for (let i = 0; i < this.statusEffects.length; i++) {
+			let effect = this.statusEffects[i]
+			let time = `${Math.floor(effect.timer/60)}:${Math.floor(effect.timer%60).toString().padStart(2, '0')}`
+			DRAW.text(`(${effect.name} ${time})`, Math.floor(this.x), Math.min(canvasHeight-54+(i+1)*20, Math.floor(this.y)+20+(i+1)*20), "center")
+		}
 
 		// Chat bubble
 		if (this.bubbleText != false) {
@@ -307,6 +320,64 @@ class Character extends PhysicsObject {
 
 			if (this == PLAYER) {
 				NETPLAY.sendEmote(i)
+			}
+		}
+	}
+
+	// Status Effects
+	// These affect the character's behavior
+	startStatusEffect(name, duration=1.0) {
+		// Status Effects:
+		// Caffinated (Any coffee)
+		// Drunk (Beer, liquor)
+		// Quirked Up
+		// Lucky (Lucky charms)
+		// Cursed
+		// Drowsy (Heroin)
+		// Sick (Food poisoning)
+		// Injured (Getting shot)
+		// Dead (Getting shot)
+
+		// Possible Effects:
+		// Slow/Fast Speed
+		// Wonky movement direction
+		// Gambling luck
+		// Dead (static and laying down)
+		// Jumping?
+
+		let effect = {
+			name: name,
+			timer: duration
+		}
+
+		// Overwrite any effect of the same type
+		let addEffect = true
+		for (let i = this.statusEffects.length-1; i >= 0; i--) {
+			let effect2 = this.statusEffects[i]
+			if (effect2.name == name) { // Same name?
+				if (effect2.timer < effect.timer) { // Only overwrite if current effect lasts longer
+					this.statusEffects.splice(i, 1)
+				} else { // Otherwise, don't add effect anymore.
+					addEffect = false
+				}
+				break
+			}
+		}
+
+		if (addEffect) {
+			console.log(`Started status effect: ${name} for ${duration} seconds`)
+			this.statusEffects.push(effect)
+			// NETPLAY.sendStatusEffect(name, duration)
+		}
+	}
+
+	updateStatusEffects(dt) {
+		for (let i = this.statusEffects.length-1; i >= 0; i--) {
+			let effect = this.statusEffects[i]
+			effect.timer -= dt
+			if (effect.timer <= 0) {
+				this.statusEffects.splice(i, 1)
+				// NETPLAY.sendStatusEffect(effect.name, 0)
 			}
 		}
 	}

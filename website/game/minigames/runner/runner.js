@@ -305,7 +305,7 @@ MINIGAMES["runner"] = new class {
 		this.score += 1
 		this.scoreAnim = 2
 		if (this.score%10 == 0) {
-			addNuggets(1)
+			addNuggets(2)
 		}
 
 		// Update highscore
