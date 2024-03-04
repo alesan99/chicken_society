@@ -2,7 +2,7 @@
 
 class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
-	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, clickRegion=[-40,-100,80,120], replies, imageName="chicken") {
+	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, replies, imageName="chicken") {
 		this.obj = obj
 		obj.controller = this
         obj.npc = true
@@ -59,10 +59,11 @@ class NPC {
             this.requestReply(replyOptions)
         }
         let interactRangeShape = interactRange // Where does player have to stand to interact?
-        if (!Array.isArray(interactRange)) {
+        if (!Array.isArray(interactRange)) { // Use rectangular range instead of user-defined shape
             interactRangeShape = [-interactRange,-interactRange, interactRange,-interactRange, interactRange,interactRange, -interactRange,interactRange]
         }
-        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, func, interactRangeShape, {frame:0,x:0,y:-120}, clickRegion))
+        let clickShape = [-40,-100, 40,-100, 40,20, -40,20]
+        this.trigger = WORLD.spawnObject("Trigger", new Trigger(PHYSICSWORLD, this.obj.x, this.obj.y-this.obj.shape.h/2, interactRangeShape, func, clickShape, {frame:0,x:0,y:-120}))
 	}
 
 	// Update

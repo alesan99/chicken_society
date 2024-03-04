@@ -50,17 +50,16 @@ class Pet extends PhysicsObject {
 
 		// Clickable
 		this.mouseOver = false
-		this.clickRegion = {
-			x: -this.w/2,
-			y: -this.h,
-			w: this.w,
-			h: this.h
-		}
 		this.activated = false
 
 		// Graphics
-		this.image = ITEMS.pet[id].image
-		this.sprite = ITEMS.pet[id].sprite
+		if (ITEMS.pet[id]) {
+			this.image = ITEMS.pet[id].image
+			this.sprite = ITEMS.pet[id].sprite
+		} else {
+			this.image = IMG.placeholder
+			this.sprite = SPRITE.placeholder
+		}
 		this.anim = new Animation(this.sprite, 0)
 		this.anim.setFrame(0,0)
 
@@ -168,8 +167,7 @@ class Pet extends PhysicsObject {
 
 	checkMouseOver() {
 		let [mouseX, mouseY] = getMousePos()
-		let cr = this.clickRegion
-		return (mouseX-this.x > cr.x && mouseY-this.y > cr.y && mouseX-this.x < cr.x+cr.w && mouseY-this.y < cr.y+cr.h)
+		return this.shape.checkInside(mouseX-this.x, mouseY-this.y)
 	}
 
 	click(button, x, y) {

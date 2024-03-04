@@ -1,0 +1,11 @@
+{
+    "name": "Bullet",
+    "description": "Ammo for a gun. These are pretty cheap, you could probably take a few before actually getting hurt.",
+    "cost": 10,
+
+    "center": [
+        [30,30],
+        [30,30],
+        [30,30]
+    ]
+}

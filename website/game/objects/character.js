@@ -38,6 +38,10 @@ class Character extends PhysicsObject {
 		this.sx = 0 // Speed x
 		this.sy = 0 // Speed y
 
+		this.health = 1.0
+		this.statusEffects = [] // List of status effect objects
+		this.statusEffectsLookup = {} // Quick lookup to see if character has status effect
+
 		// Graphics
 		this.sprite = SPRITE.chicken
 		this.anim = new Animation(this.sprite, 0)
@@ -49,6 +53,7 @@ class Character extends PhysicsObject {
 		this.flip = 1
 		this.imageOffsety = 4
 		this.scale = profile.scale || 1
+		this.rotation = 0
 
 		this.timer = 0
 
@@ -61,15 +66,30 @@ class Character extends PhysicsObject {
 
 	// Move: direction normal x, direction normal y
 	move(nx, ny) {
-		if (this.static) {
+		// Check if player should be currently unable to move
+		if (this.static || this.getStatusEffect("dead")) {
 			this.sx = 0
 			this.sy = 0
 			this.walking = false
 			return false
 		}
 
-		this.sx = nx*this.speed
-		this.sy = ny*this.speed
+		// Speed modifiers
+		let speed = this.speed
+		if (this.getStatusEffect("drowsy")) { // Walk slower
+			speed *= 0.8
+		} else if (this.getStatusEffect("caffinated")) { // Walk faster
+			speed *= 1.75
+		} else if (this.getStatusEffect("drunk")) {  // Can't walk straight
+			let angle = 0.2*Math.sin(this.timer*2.0) // wobbly angle
+			speed *= (1-(Math.cos(this.timer*3.0)+1)/6) // walk at random speeds
+			nx = nx * Math.cos(angle) - ny * Math.sin(angle)
+			ny = nx * Math.sin(angle) + ny * Math.cos(angle)
+		}
+
+		// Move in direction of normal
+		this.sx = nx*speed
+		this.sy = ny*speed
 
 		// Find direction player is facing
 		this.walking = true
@@ -115,6 +135,9 @@ class Character extends PhysicsObject {
 			}
 		}
 
+		// Update status effects
+		this.updateStatusEffects(dt)
+
 		// Update walking or emote animation
 		this.anim.update(dt)
 
@@ -132,54 +155,67 @@ class Character extends PhysicsObject {
 	}
 
 	// Render chicken with accessories with optional different position
-	draw(drawX=this.x, drawY=this.y, dir=this.dir) {
+	draw(drawX=this.x, drawY=this.y, dir=this.dir, rot=this.rotation) {
+		// Is player dead?
+		if (this.getStatusEffect("dead")) {
+			rot = Math.PI/2
+			dir = "right"
+			drawX -= 60; drawY -= 40;
+		}
+
 		// Face in the current direction
 		this.anim.setFrame(null, dir_lookup[dir])
 
 		// Shadow
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1)
+		if (!this.getStatusEffect("dead")) {
+			DRAW.setColor(255,255,255,1.0)
+			DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1)
+		}
 
 		// Chicken and accessories
-		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "right")) { // Head item
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "right")) { // Held item
 			// Render item under chicken if facing up
-			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir)
+			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, rot)
 		}
 
 		// Character image
 		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0)
-		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1)
+		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1)
 
 		DRAW.setColor(255,255,255,1.0)
 		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
 			// Figure out the center of the body item to place it on the center of the chicken's 'neck'
-			this.drawItem(ITEMS.body[this.body], BODYOFFSET, drawX, drawY, dir)
+			this.drawItem(ITEMS.body[this.body], BODYOFFSET, drawX, drawY, dir, rot)
 		}
 
-		DRAW.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, 0, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
+		DRAW.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1) // Uncolored sprite
 		
 		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
 			// Figure out the center of the face item to place it on the center of the chicken's face
-			this.drawItem(ITEMS.face[this.face], FACEOFFSET, drawX, drawY, dir)
+			this.drawItem(ITEMS.face[this.face], FACEOFFSET, drawX, drawY, dir, rot)
 		}
 
 		if ((this.head != false) && (ITEMS.head[this.head] != null) && (ITEMS.head[this.head].sprite != null)) { // Head item
 			// Figure out the center of the head item to place it on the center of the chicken's head
-			this.drawItem(ITEMS.head[this.head], HEADOFFSET, drawX, drawY, dir)
+			this.drawItem(ITEMS.head[this.head], HEADOFFSET, drawX, drawY, dir, rot)
 		}
 
-		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir != "up" && dir != "right")) { // Head item
-			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir)
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir != "up" && dir != "right")) { // Held item
+			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, rot)
 		}
 	}
 
-	drawItem(item, offsets, drawX=this.x, drawY=this.y, dir=this.dir) {
+	drawItem(item, offsets, drawX=this.x, drawY=this.y, dir=this.dir, rot=0) {
 		// Figure out the center of the item to place it on the location defined on character
-		let x = drawX - (SPRITE.chicken.w/2)*this.flip*this.scale + (offsets[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
-		let y = drawY+this.imageOffsety - SPRITE.chicken.h*this.scale + offsets[dir_lookup[dir]][this.anim.framex][1]*this.scale
+		let offsetX = -(SPRITE.chicken.w/2)*this.flip*this.scale + (offsets[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale
+		let offsetY = -SPRITE.chicken.h*this.scale + offsets[dir_lookup[dir]][this.anim.framex][1]*this.scale
+
+		let x = drawX                   + offsetX*Math.cos(rot) - offsetY*Math.sin(rot)
+		let y = drawY+this.imageOffsety + offsetX*Math.sin(rot) + offsetY*Math.cos(rot)
+
 		let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w
 		let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h
-		DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
+		DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, rot+CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY)
 	}
 
 	drawOver() {
@@ -191,6 +227,13 @@ class Character extends PhysicsObject {
 			DRAW.setColor(255,255,255,1)
 		}
 		DRAW.text(this.name, Math.floor(this.x), Math.min(canvasHeight-54, Math.floor(this.y)+20), "center")
+
+		// Status Effects
+		for (let i = 0; i < this.statusEffects.length; i++) {
+			let effect = this.statusEffects[i]
+			let time = `${Math.floor(effect.timer/60)}:${Math.floor(effect.timer%60).toString().padStart(2, '0')}`
+			DRAW.text(`(${effect.name} ${time})`, Math.floor(this.x), Math.min(canvasHeight-54+(i+1)*20, Math.floor(this.y)+20+(i+1)*20), "center")
+		}
 
 		// Chat bubble
 		if (this.bubbleText != false) {
@@ -309,6 +352,75 @@ class Character extends PhysicsObject {
 				NETPLAY.sendEmote(i)
 			}
 		}
+	}
+
+	// Status Effects
+	// These affect the character's behavior
+	startStatusEffect(name, duration=1.0) {
+		// Status Effects:
+		// Caffinated (Any coffee)
+		// Drunk (Beer, liquor)
+		// Quirked Up
+		// Lucky (Lucky charms)
+		// Cursed
+		// Drowsy (Heroin)
+		// Sick (Food poisoning)
+		// Injured (Getting shot)
+		// Dead (Getting shot)
+
+		// Possible Effects:
+		// Slow/Fast Speed
+		// Wonky movement direction
+		// Gambling luck
+		// Dead (static and laying down)
+		// Jumping?
+
+		let effect = {
+			name: name,
+			timer: duration
+		}
+
+		// Overwrite any effect of the same type
+		let addEffect = true
+		for (let i = this.statusEffects.length-1; i >= 0; i--) {
+			let effect2 = this.statusEffects[i]
+			if (effect2.name == name) { // Same name?
+				if (effect2.timer < effect.timer) { // Only overwrite if current effect lasts longer
+					this.statusEffects.splice(i, 1)
+				} else { // Otherwise, don't add effect anymore.
+					addEffect = false
+				}
+				break
+			}
+		}
+
+		if (addEffect) {
+			console.log(`Started status effect: ${name} for ${duration} seconds`)
+			this.statusEffects.push(effect)
+			this.statusEffectsLookup[name] = true
+			// NETPLAY.sendStatusEffect(name, duration)
+		}
+	}
+
+	updateStatusEffects(dt) {
+		// Update status effect timers
+		for (let i = this.statusEffects.length-1; i >= 0; i--) {
+			let effect = this.statusEffects[i]
+			effect.timer -= dt
+			if (effect.timer <= 0) {
+				this.statusEffects.splice(i, 1)
+				delete this.statusEffectsLookup[effect.name]
+				// NETPLAY.sendStatusEffect(effect.name, 0)
+			}
+		}
+	}
+
+	getStatusEffect(name) {
+		// Returns true/false if character has [name] status effect
+		if (this.statusEffectsLookup[name]) {
+			return true
+		}
+		return false
 	}
 
 	// Collision

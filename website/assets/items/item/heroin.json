@@ -4,6 +4,10 @@
     "cost": 10,
     "consumable": true,
 
+    "statusEffect": "drowsy",
+    "statusEffectChance": 1.0,
+    "statusEffectDuration": 30.0,
+
     "food": -0.1,
     "disease": "addiction"
 }

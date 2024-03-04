@@ -1,0 +1,11 @@
+{
+    "name": "Gun",
+    "description": "Highly illegal in Chickensas City.",
+    "cost": 100,
+
+    "center": [
+        [30,30],
+        [30,30],
+        [30,30]
+    ]
+}

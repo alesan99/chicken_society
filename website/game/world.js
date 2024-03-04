@@ -210,10 +210,13 @@ class World {
 
 			// Display click triggers
 			DRAW.setColor(120,0,80,1.0)
+			DRAW.setLineWidth(3)
 			for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
-				if (obj.clickShape) {
-					let r = obj.clickRegion // region
-					DRAW.rectangle(obj.x+r.x, obj.y+r.y, r.w, r.h, "line")
+				if (obj.clickable) {
+					DRAW.push()
+					DRAW.translate(obj.x, obj.y)
+					DRAW.polygon(obj.clickShape.v, "line")
+					DRAW.pop()
 				}
 			}
 

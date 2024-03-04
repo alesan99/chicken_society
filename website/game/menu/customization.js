@@ -55,16 +55,21 @@ MENUS["customization"] = new class extends Menu {
 			(itemId,itemType)=>{
 				// Set clothing item
 				if (PROFILE.hasOwnProperty(itemType)) {
+					let equipped = false
 					if (PROFILE[itemType] == itemId) {
 						PROFILE[itemType] = false;
 					} else {
+						equipped = true
 						PROFILE[itemType] = itemId;
 					}
 					PLAYER.updateProfile(PROFILE, "sendToServer");
 					let item = ITEMS[itemType][itemId]
-					if (item) { // Make sure item has been loaded
+					if (item && equipped) { // Make sure item has been loaded
 						if (itemType == "item" && item.consumable) { // TODO: Figure out a better place for this
 							removeItem(itemType, itemId)
+							if (item.statusEffect) {
+								PLAYER.startStatusEffect(item.statusEffect, item.statusEffectDuration)
+							}
 							this.filterInventory(this.filter) // Refresh item list
 						}
 					}

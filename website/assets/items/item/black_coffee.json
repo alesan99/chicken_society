@@ -10,5 +10,9 @@
         [30,30]
     ],
 
+    "statusEffect": "caffinated",
+    "statusEffectChance": 1.0,
+    "statusEffectDuration": 30.0,
+
     "food": 0.1
 }

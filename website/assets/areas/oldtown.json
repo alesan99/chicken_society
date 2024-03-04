@@ -1,126 +1,133 @@
 {
-	"walls": [
-		[0, 576, 1024, 576, 1024, 600, 0, 600],
-		[0, 209, 330, 209, 330, 306, 0, 397],
-		[492, 209, 786, 209, 786, 261, 492, 261],
-		[1024, 229, 1070, 229, 1070, 576, 1024, 576],
-		[-18, 419, 0, 419, 0, 576, -18, 576]
-	],
+  "walls": [
+    [0, 576, 1024, 576, 1024, 600, 0, 600],
+    [0, 209, 330, 209, 330, 306, 0, 397],
+    [492, 209, 786, 209, 786, 261, 492, 261],
+    [1024, 229, 1070, 229, 1070, 576, 1024, 576],
+    [-18, 419, 0, 419, 0, 576, -18, 576]
+  ],
 
-	"warps": {
-		"neighborhoodEntrance": {
-			"to": "hub",
-			"fromWarp": "oldtownEntrance",
-			"facing": "down",
-			"x": 409,
-			"y": 205,
-			"w": 160,
-			"h": 10
-		},
+  "warps": {
+    "neighborhoodEntrance": {
+      "to": "hub",
+      "fromWarp": "oldtownEntrance",
+      "facing": "down",
+      "x": 409,
+      "y": 205,
+      "w": 160,
+      "h": 10
+    },
 
-		"oldtownExit": {
-			"to": "hub",
-			"fromWarp": "oldtownEntrance",
-			"facing": "down",
-			"x": 909,
-			"y": 189,
-			"w": 240,
-			"h": 10
-		}
-	},
+    "oldtownExit": {
+      "to": "hub",
+      "fromWarp": "oldtownEntrance",
+      "facing": "down",
+      "x": 909,
+      "y": 189,
+      "w": 240,
+      "h": 10
+    }
+  },
 
-	"NPCs": {
-		"gamer": {
-			"profile": {
-				"name": "Eggery",
-				"color": "#ff5252",
-				"head": false,
-				"face": false,
-				"body": false
-			},
-			"x": 815,
-			"y": 469,
-			"facing": "down",
-			"roamRadius": 1,
-			"interactRange": 20,
-			"speechBubble": [
-				"Sighhhhhh"
-			],
-			"dialogue": [
-				{
-					"id": "easteregghuntFail",
-					"text": [
-						"Where could my eggs be?"
-					],
-					"condition": {
-						"quest": "easteregghunt",
-						"questSlot": 0,
-						"questSlotValue": 0
-					}
-				},
-				{
-					"id": "easteregghuntSuccess",
-					"text": [
-						"You found my eggs!"
-					],
-					"condition": {
-						"quest": "easteregghunt",
-						"questSlot": [0,1,2,3,4],
-						"questSlotValue": [1,1,1,1,1]
-					},
-					"quest": "easteregghunt"
-				},
-				{
-					"id": "easteregghuntComplete",
-					"text": [
-						"Those were all of my eggs... I think."
-					],
-					"randomDialogue": true,
-					"condition": {
-						"quest": "easteregghunt",
-						"questComplete": true
-					}
-				},
-				{
-					"id": "easteregghuntStart",
-					"text": [
-						"Oh dear, I seem to have lost my eggs.",
-						"They just won't stop popping out, its hard to keep track nowadays.",
-						"If only some good samaritan could help me...",
-						"You're a good person right? right?"
-					],
-					"startQuest": "easteregghunt"
-				}
-			]
-		}
-	},
+  "NPCs": {
+    "gamer": {
+      "profile": {
+        "name": "Eggery",
+        "color": "#ff5252",
+        "head": false,
+        "face": false,
+        "body": false
+      },
+      "x": 815,
+      "y": 469,
+      "facing": "down",
+      "roamRadius": 1,
+      "interactRange": 20,
+      "speechBubble": ["Sighhhhhh"],
+      "dialogue": [
+        {
+          "id": "easteregghuntFail",
+          "text": ["Where could my eggs be?"],
+          "condition": {
+            "quest": "easteregghunt",
+            "questSlot": 0,
+            "questSlotValue": 0
+          }
+        },
+        {
+          "id": "easteregghuntSuccess",
+          "text": ["You found my eggs!"],
+          "condition": {
+            "quest": "easteregghunt",
+            "questSlot": [0, 1, 2, 3, 4],
+            "questSlotValue": [1, 1, 1, 1, 1]
+          },
+          "quest": "easteregghunt"
+        },
+        {
+          "id": "easteregghuntComplete",
+          "text": ["Those were all of my eggs... I think."],
+          "randomDialogue": true,
+          "condition": {
+            "quest": "easteregghunt",
+            "questComplete": true
+          }
+        },
+        {
+          "id": "easteregghuntStart",
+          "text": [
+            "Oh dear, I seem to have lost my eggs.",
+            "They just won't stop popping out, its hard to keep track nowadays.",
+            "If only some good samaritan could help me...",
+            "You're a good person right? right?"
+          ],
+          "startQuest": "easteregghunt"
+        }
+      ]
+    }
+  },
 
-	"triggers": {
-		"egg3": {
-			"x": 623,
-			"y": 96,
-			"shape": [0,0, 40,0, 40,40, 0,40],
-			"clickRegion": [0,0, 40,40],
-			"icon": {"frame": 1, "x": 15, "y": -10},
+  "triggers": {
+    "egg3": {
+      "x": 623,
+      "y": 96,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
 
-			"action": "quest",
-			"quest": "easteregghunt",
-			"questSlot": 2,
-			"questSlotAdd": 1,
+      "action": "quest",
+      "quest": "easteregghunt",
+      "questSlot": 2,
+      "questSlotAdd": 1,
 
-			"condition": {
-				"quest": "easteregghunt",
-				"questSlot": 2,
-				"questSlotValue": 0
-			},
-			
-			"sprite": {
-				"image": "egg.png",
-				"qw": 30,
-				"qh": 40,
+      "condition": {
+        "quest": "easteregghunt",
+        "questSlot": 2,
+        "questSlotValue": 0
+      },
 
-				"worldy": 116
-			}
-		}
-	}
+      "sprite": {
+        "image": "egg.png",
+        "qw": 30,
+        "qh": 40,
+
+        "worldy": 116
+      }
+    },
+    "loretest": {
+      "x": 337,
+      "y": 64,
+      "shape": [0, 0, 50, 0, 50, 50, 0, 50],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
+      "action": "dialogue",
+      "dialogue": [
+        {
+          "text": [
+            "The key is found in the form three-by-three: multiply columns one-through-three and four-through-six by my name."
+          ]
+        }
+      ]
+    }
+  }
 }

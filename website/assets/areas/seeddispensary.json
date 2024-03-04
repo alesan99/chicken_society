@@ -64,7 +64,7 @@
             "x": 362,
             "y": 220,
             "shape": [0,0, 160,0, 160,100, 0,100],
-            "clickRegion": [0,0, 160,25],
+            "clickable": [0,0, 160,0, 160,25, 0,25],
             "action": "dialogue",
             "dialogue": [
                 {"text": ["(It's a wide variety of seed samples.)"]}
