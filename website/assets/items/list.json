@@ -1,7 +1,4 @@
 {
-  "furniture": [
-    "table"
-  ],
   "face": [
     "visors"
   ],
@@ -9,21 +6,24 @@
     "alesanaccessories",
     "beefcakeaccessories",
     "chains",
-    "scarf",
-    "silverchains"
+    "silverchains",
+    "scarf"
   ],
   "head": [
-    "hoodie",
     "snapback",
+    "hoodie",
     "tophat"
+  ],
+  "furniture": [
+    "table"
   ],
   "pet": [
     "pillbug"
   ],
   "item": [
     "beer",
-    "black_coffee",
     "heroin",
+    "black_coffee",
     "seeds"
   ]
 }
