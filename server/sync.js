@@ -45,6 +45,7 @@ function listenToClient(socket) {
 				y: 0,
 				sx: 0,
 				sy: 0,
+				statusEffects: [],
 				static: false
 			},
 		};
@@ -137,6 +138,16 @@ function listenToClient(socket) {
 		}
 	});
 
+	// Player status effect
+	socket.on("statusEffect", (name, effect) => {
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			playerData.chicken.statusEffects.push(effect)
+			// Send statuseffect to only those in the area
+			socket.to(`area:${playerData.area}`).emit("statusEffect", socket.id, name);
+		}
+	})
+
 	// Player disconnected; Tell all players that someone disconnected
 	socket.on("disconnect", () => {
 		if (!playerList[socket.id]) {
@@ -175,7 +186,7 @@ function listenToClient(socket) {
 					data: {},
 					lastUpdate: {},
 					host: false,
-					highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
+					highscores: [[100, "Pro Gamer"],[0,"---"],[0,"---"]]
 				};
 			}
 
