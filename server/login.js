@@ -1,6 +1,7 @@
 // Handles POST requests to log in
 const {app, io, playerList} = require("../server.js");
-const {getPlayerFromSession, loginPlayer} = require("./sync.js");
+const {getPlayerFromSession} = require("./sync.js");
+const {loginPlayer} = require("./savedata/saveDataRequests.js");
 const express = require("express");
 const db = require("./db/create_db.js");
 const con = db.initializeDB(true);
