@@ -74,22 +74,23 @@ function listenToClient(socket) {
 		};
 	});
 
-	socket.on("chickenAction", (position, velocity) => {
+	socket.on("action", (name, args) => {
 		let playerData = playerList[socket.id];
 		if (playerData) {
-			playerData.chicken.x = position[0];
-			playerData.chicken.y = position[1];
-			playerData.chicken.sx = position[2];
-			playerData.chicken.sy = position[3];
-
-			// Let every player in the area know this information (excluding sender)
-			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, position);
+			switch(name) {
+				case "shoot":
+					let chicken = playerData.chicken
+					let nx = 1
+					let ny = 0
+					break;
+			}
 		};
 	});
 
 	// Recieve chat message and send out to everyone
 	socket.on("chat", (text) => {
-		if (playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+		if (playerData) {
 			// TODO: Word filter
 			socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
 		};
