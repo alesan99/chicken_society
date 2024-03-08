@@ -97,7 +97,11 @@ function listenToClient(socket) {
 					// Player got a status effect
 					case "statusEffect":
 						actionsToSend.push(action)
-						let effect = args[0]
+						// args = [name, timer]
+						let effect = {
+							name: args[0],
+							timer: args[1]
+						}
 						playerData.chicken.statusEffects.push(effect)
 						break
 					case "shoot":
@@ -134,21 +138,49 @@ function listenToClient(socket) {
 	socket.on("area", (area) =>{
 		let playerData = playerList[socket.id];
 		if (playerData) {
+			let oldArea = playerData.area;
+			playerData.area = area;
+
 			// Leave old area
-			socket.leave(`area:${playerData.area}`)
+			socket.leave(`area:${oldArea}`)
 			// Join new area
 			socket.join(`area:${area}`)
 
-			playerData.area = area;
 			socket.broadcast.emit("area", socket.id, area); // Let everyone know
 
-			// Players in target area have not been updating this player about their position/state
-			// Tell the player where everyone is at
+			// Players in target area have not been updating -this- player about their position/state
+			// Tell this player where everyone is at
 			for (const [id, data] of Object.entries(playerList)) {
 				if (id != socket.id && data.area == area) {
+					// Send other player position
 					io.to(socket.id).emit("chicken", id, data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy);
+					// Send misc. other player state info.
+					let actions = []
+					// status effects
+					if (data.chicken.statusEffects.length > 0) {
+						for (const effect of data.chicken.statusEffects) {
+							actions.push(["statusEffect", [effect.name, effect.timer]])
+						}
+					}
+					io.to(socket.id).emit("action", id, actions);
 				}
 			}
+
+			// TODO: Don't copy paste code
+			// This player has not been updating others on their position/state
+			let data = playerData
+			let id = socket.id
+			// Send other player position
+			socket.broadcast.emit("chicken", id, data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy);
+			// Send misc. other player state info.
+			let actions = []
+			// status effects
+			if (data.chicken.statusEffects.length > 0) {
+				for (const effect of data.chicken.statusEffects) {
+					actions.push(["statusEffect", [effect.name, effect.timer]])
+				}
+			}
+			socket.broadcast.emit("action", id, actions);
 		}
 	});
 
@@ -327,7 +359,26 @@ function getPlayerFromSession(sessionId) {
 // 	}
 // }
 
+// Continuously update game logic
+// Used for:
+// to predict player states
+// server-wide events
+function serverLoop(dt) {
+	for (const [id, playerData] of Object.entries(playerList)) {
+		// Update status effect timer predictions
+		let statusEffects = playerData.chicken.statusEffects
+		for (let i = statusEffects.length-1; i >= 0; i--) {
+			let effect = statusEffects[i]
+			effect.timer -= dt
+			if (effect.timer <= 0) {
+				statusEffects.splice(i, 1)
+			}
+		}
+	}
+}
+
 module.exports = {
 	listenToClient,
+	serverLoop,
 	getPlayerFromSession
 };

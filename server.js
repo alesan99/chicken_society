@@ -51,7 +51,7 @@ require("./server/login.js")
 
 // Set up client syncing
 io.engine.use(sessionMiddleware);
-const {listenToClient, gameLoop} = require("./server/sync.js");
+const {listenToClient, serverLoop} = require("./server/sync.js");
 
 io.on("connection", (socket) => {listenToClient(socket)});
 
@@ -95,3 +95,14 @@ const port = 3000
 server.listen(port, localIPAddress, () => {
 	console.log(`Server is running on http://${localIPAddress}:${port}`)
 })
+
+// Start game loop
+let lastUpdateTime = Date.now();
+setInterval(() => {
+	// get delta time
+	const now = Date.now();
+	const dt = (now - lastUpdateTime) / 1000; // Convert milliseconds to seconds
+	lastUpdateTime = now;
+
+	serverLoop(dt);
+}, 1000 / 60);  // Run the loop 60 times per second

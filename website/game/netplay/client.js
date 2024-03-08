@@ -103,7 +103,6 @@ Netplay = class {
 		this.actionTimer += dt
 		if (this.actionTimer > this.actionInterval) {
 			if (this.actionQueue.length > 0) {
-				console.log("Sending action queue")
 				socket.emit("action", this.actionQueue)
 				this.actionQueue.length = 0 // Clear action queue
 				this.actionTimer = this.actionTimer%this.actionInterval
@@ -235,6 +234,8 @@ Netplay = class {
 							break;
 						// Player got a status effect
 						case "statusEffect":
+							// args = [name, timer]
+							console.log("Recieved status effect:", args)
 							chicken.startStatusEffect(args[0], args[1])
 							break;
 					}
