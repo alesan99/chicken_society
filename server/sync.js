@@ -52,7 +52,11 @@ function listenToClient(socket) {
 
 		socket.join(`area:${playerList[socket.id].area}`) // Listen for events in area
 
-		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
+		// Send -this- client a list of all players
+		socket.emit("playerList", cleanPlayerList(playerList))
+		// Send everyone else just a new entry to their player list
+		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerList[socket.id]))
+
 		console.log(`Player "${profile.name}" joined.`);
 
 		// Confirm a successful connection to client
@@ -271,6 +275,31 @@ function listenToClient(socket) {
 			}
 		}
 	});
+}
+
+// All the playerData in playerList gets sent to clients.
+// This function compiles only the necessary data to send to clients.
+function cleanPlayerList(playerList) {
+	let cleanedPlayerList = {}
+	for (const [id, playerData] of Object.entries(playerList)) {
+		cleanedPlayerList[id] = cleanPlayerData(playerData)
+	}
+	return cleanedPlayerList
+}
+
+function cleanPlayerData(playerData) {
+	return {
+		id: playerData.id,
+
+		state: playerData.state,
+		minigame: playerData.minigame,
+		area: playerData.area,
+
+		profile: playerData.profile,
+		name: playerData.name,
+
+		chicken: playerData.chicken
+	}
 }
 
 // Get current player data (from playerList) from session ID

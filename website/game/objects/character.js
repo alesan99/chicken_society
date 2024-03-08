@@ -126,12 +126,6 @@ class Character extends PhysicsObject {
 			}
 		}
 
-		// TODO: REMOVE THIS!! THIS IS JUST FOR TESTING
-		if (this.area == "oldtown") {
-			// SPAM!!!! (stress test)
-			this.emote("wave")
-		}
-
 		// Update Animation
 		if (this.walking != this.oldwalking) {
 			if (this.walking) { // Walk if moving

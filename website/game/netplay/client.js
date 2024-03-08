@@ -43,8 +43,8 @@ Netplay = class {
 
 		// Events
 		socket.on("playerList", (playerList) => {this.recievePlayerList(playerList)})
-		socket.on("addPlayer", (id, player) => {this.addPlayer(id, player)}) // currently unused
-		socket.on("removePlayer", (id) => {this.removePlayer(id)}) // currently unused
+		socket.on("addPlayer", (id, playerData) => {this.addPlayer(id, playerData)})
+		socket.on("removePlayer", (id) => {this.removePlayer(id)})
 
 		socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 		socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
@@ -62,12 +62,12 @@ Netplay = class {
 
 	// Connect to server for the first time and send information about yourself
 	connect () {
-		console.log(PROFILE)
+		// Send profile (Chicken's appearance)
 		socket.timeout(this.timeOut).emit("profile", PROFILE, (err, response) => {
 			if (err) {
 				// the other side did not acknowledge the event in the given delay
 			} else {
-				console.log(response);
+				console.log(`Successfully connected to server! Status: ${response.status}`);
 			}
 		});
 	}
@@ -112,15 +112,18 @@ Netplay = class {
 
 	}
 
+	// Add new playerData entry to playerList
 	addPlayer (id, playerData) {
 		if ((id != socket.id) && (this.playerList[id] == null)) {
 			this.playerList[id] = playerData
+
 			// Add player to area (in world.js)
 			WORLD.addPlayerToArea(id, this.playerList[id])
 			this.newPlayerJoined = true // New player! Let them know your information
 		}
 	}
 
+	// Remove playerData entry from playerList
 	removePlayer (id) {
 		if (id != socket.id) {
 			WORLD.removePlayerFromArea(id)
@@ -130,9 +133,9 @@ Netplay = class {
 
 	// Recieve entire list of players when connecting for the first time
 	recievePlayerList (playerList) {
-		console.log("recieved playerList")
+		console.log("Recieved Player List:")
+		console.log(playerList)
 		for (const [id, playerData] of Object.entries(playerList)) {
-			console.log(id, playerData.profile.name)
 			if ((id != socket.id) && (this.playerList[id] == null)) {
 				this.addPlayer(id, playerData)
 			}
