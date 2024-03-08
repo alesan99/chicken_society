@@ -316,12 +316,10 @@ class World {
 		// When a player join an area, create a character object for them
 		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
 		let chicken = playerData.chicken
-		console.log(playerData.area, PLAYER.area)
 		if (playerData.area == PLAYER.area) { // Player is in your area
 			if (!CHARACTER[id]) {
 				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
 				CHARACTER[id].area = playerData.area
-				console.log("Created!")
 				//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
 			}
 		} else { // Player is not in your area

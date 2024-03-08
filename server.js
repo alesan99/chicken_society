@@ -14,6 +14,7 @@ const session = require("express-session");
 const app = express();
 const http = require("http"); // Used to start server
 const server = http.createServer(app);
+const { Worker } = require('worker_threads'); // Allow multi-threading
 
 const sessionMiddleware = session({
 	secret: Math.random().toString(36).substring(2), // TODO: Use a library for this
@@ -50,7 +51,7 @@ require("./server/login.js")
 
 // Set up client syncing
 io.engine.use(sessionMiddleware);
-const {listenToClient} = require("./server/sync.js");
+const {listenToClient, gameLoop} = require("./server/sync.js");
 
 io.on("connection", (socket) => {listenToClient(socket)});
 

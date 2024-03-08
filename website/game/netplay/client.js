@@ -5,21 +5,19 @@ var socket = io(); // No URL because it defaults to trying to connect to host th
 
 Netplay = class {
 	constructor () {
-		// Communication timings
-		/* Three types of communication:
-		Update: This is information consistently sent on an interval to the server. May appear laggy and may not be recieved by the server.
-		Action: This is information is sent instantly to the server if possible, and otherwise will be bundled together then sent. This WILL be recieved by the server.
-		Urgent: This is information is sent instantly to the server. This can only be done once within a time frame and it may not be recieved by the server.
+		// Timing for chicken position or minigame data
+		this.updateTimer = 0
+		this.updateInterval = 5/60 //Time inbetween sending data to server
+
+		// Action timings
+		/* Two types of actions:
+		1. Normal: This will be recieved by the server as soon as possible only when theres little client activity, otherwise it will be added to a queue.
+		2. New: This new action will overwrite any old actions in queue.
 		TODO: This system is not implemented yet
 		*/
 		this.actionQueue = []
-		this.updateTimer = 0
-		this.updateInterval = 5/60 //Time inbetween sending data to server
-		this.updateTimestamp = 0 // When was the last time there was an update?
-
-		this.urgentQueue = []
-		this.urgentTimer = 0
-		this.urgentTime = 5/60 // Information can also be sent instantly so long as a message wasn't previously sent within this time.
+		this.actionTimer = 0
+		this.actionInterval = 5/60 // Minimum time inbetween sending actions to server
 
 		this.timeOut = 10000 // Give up sending an important message after this amount of time (sec.)
 
@@ -51,8 +49,8 @@ Netplay = class {
 		socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 		socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
 
-		socket.on("chicken", (id, position) => {this.recievePosition(id, position)})
-		socket.on("emote", (id, emote) => {this.recieveEmote(id, emote)})
+		socket.on("chicken", (id, x, y, sx, sy) => {this.recievePosition(id, x, y, sx, sy)})
+		socket.on("action", (id, actions) => {this.recieveAction(id, actions)})
 		socket.on("area", (id, area) => {this.recieveArea(id, area)})
 
 		socket.on("minigameRole", (id, role, playerList) => {this.recieveMinigameRole(id, role, playerList)})
@@ -75,9 +73,8 @@ Netplay = class {
 	}
 
 	update (dt) {
-		this.updateTimestamp += dt
 		this.updateTimer += dt
-		// Continually let server know what's happening
+		// Continually let server know where this client's chicken is, or what their minigame is doing
 		if (this.updateTimer > this.updateInterval) {
 			if (getState() == "world") { // World
 				// Send chicken position to server
@@ -87,7 +84,7 @@ Netplay = class {
 				// Check if position has changed since last time position was sent to the server (or if there is a new player that needs this info.)
 				let [x, y, ox, oy] = [Math.floor(PLAYER.x), Math.floor(PLAYER.y), Math.floor(this.oldx), Math.floor(this.oldy)]
 				if ((x != ox) || (y != oy) || (sx != this.oldsx) || (sy != this.oldsy) || (this.newPlayerJoined == true)) {
-					socket.volatile.emit("chicken", [x, y, sx, sy])
+					socket.volatile.emit("chicken", x, y, sx, sy)
 					this.newPlayerJoined = false // TODO: This should be handled by the server
 				}
 				this.oldx = x
@@ -99,9 +96,20 @@ Netplay = class {
 				this.sendMinigameData(this.minigame.data)
 			}
 
-			this.updateTimestamp = 0
 			this.updateTimer = this.updateTimer%this.updateInterval
 		}
+
+		// Continually send actions. Unlike the information above, actions can be sent instantly so long as this client hasn't sent any action in the last X seconds
+		this.actionTimer += dt
+		if (this.actionTimer > this.actionInterval) {
+			if (this.actionQueue.length > 0) {
+				console.log("Sending action queue")
+				socket.emit("action", this.actionQueue)
+				this.actionQueue.length = 0 // Clear action queue
+				this.actionTimer = this.actionTimer%this.actionInterval
+			}
+		}
+
 	}
 
 	addPlayer (id, playerData) {
@@ -132,20 +140,17 @@ Netplay = class {
 	}
 
 	// Recive player data from server and reflect changes
-	recievePosition (id, position) {
+	recievePosition (id, x, y, sx, sy) {
 		if (this.playerList[id] != null) {
 			let chicken = this.playerList[id].chicken
-			chicken.x = position[0]
-			chicken.y = position[1]
-			// TODO: Change server code to not send this information if player isn't in your same area
-			// BUT, also send everyone's (who is in this area) information all at once you enter a new area
-			// This is needed because if those players don't move, they will appear in the last x,y position the player saw them at.
+			chicken.x = x
+			chicken.y = y
 
 			// Update player's character object
 			if (CHARACTER[id]) {
 				// Position and speed
-				CHARACTER[id].setPosition(position[0], position[1])
-				CHARACTER[id].move(position[2]/CHARACTER[id].speed, position[3]/CHARACTER[id].speed)
+				CHARACTER[id].setPosition(chicken.x, chicken.y)
+				CHARACTER[id].move(sx/CHARACTER[id].speed, sy/CHARACTER[id].speed)
 			}
 		}
 	}
@@ -173,20 +178,66 @@ Netplay = class {
 		socket.emit("updateProfile", profile)
 	}
 	recieveProfile(id, profile) {
-		console.log("received profile", profile)
-		if (CHARACTER[id] != null) {
-			CHARACTER[id].updateProfile(profile)
+		let playerData = this.playerList[id]
+		if (playerData != null) {
+			playerData.profile = profile
+			// Update player's character object
+			if (CHARACTER[id] != null) {
+				CHARACTER[id].updateProfile(profile)
+			}
 		}
 	}
 
-	//Emote
-	sendEmote(emote) {
-		socket.emit("emote", emote)
+	// Enqueue action
+	// Sent to the server as soon as possible if this client hasn't been sent any action in the last X seconds
+	// If it has, enqueue action and it will be sent next time this client has an update cycle.
+	sendAction(name, ...args) {
+		console.log(name, args)
+		if (this.actionTimer > this.actionInterval) {
+			console.log(`Sent action: ${name}`)
+			socket.emit("action", [[name, args]])
+			this.actionTimer = 0
+		} else {
+			console.log(`Enqueued action: ${name}. ${this.actionTimer}, ${this.actionInterval}`)
+			this.actionQueue.push([name, args])
+		}
 	}
-	recieveEmote(id, emote) {
-		console.log("recieved emote", emote)
-		if (CHARACTER[id] != null) {
-			CHARACTER[id].emote(emote)
+	sendNewAction(name, ...args) {
+		// erase the last update action with same name, if there is one
+		if (this.actionQueue.length > 0) {
+			for (let i = this.actionQueue.length - 1; i >= 0; i--) {
+				if (this.actionQueue[i][0] == name) {
+					this.actionQueue.splice(i, 1)
+				}
+			}
+		}
+		this.sendAction(name, ...args)
+	}
+
+	// Recieve action for another player in same area
+	recieveAction(id, actions) {
+		let playerData = this.playerList[id]
+		if (playerData != null) {
+			console.log(`Recieved actions from ${playerData.name}`)
+			let chicken = CHARACTER[id]
+			if (chicken != null) {
+				for (let i in actions) {
+					// Handle individual actions
+					let action = actions[i]
+					let name = action[0]
+					let args = action[1]
+					switch (name) {
+						// Player emoted
+						case "emote":
+							chicken.emote(args[0])
+							break;
+						// Player got a status effect
+						case "statusEffect":
+							chicken.startStatusEffect(args[0], args[1])
+							break;
+					}
+				}
+			}
 		}
 	}
 
@@ -195,7 +246,6 @@ Netplay = class {
 		socket.emit("area", area)
 	}
 	recieveArea(id, area) {
-		console.log("recieved area", id, area)
 		if (this.playerList[id] != null) {
 			this.playerList[id].area = area
 
@@ -212,22 +262,10 @@ Netplay = class {
 		if (this.minigame) {
 			// Connecting to minigame
 			this.minigamePlayerList = {}
-			socket.timeout(this.timeOut).emit("minigame", minigameName, (err, response) => {
-				if (err) {
-					// the other side did not acknowledge the event in the given delay
-				} else {
-					console.log(response);
-				}
-			});
+			socket.timeout(this.timeOut).emit("minigame", minigameName, (err, response) => { if (err) { } else { console.log(response); } });
 		} else {
 			// Disconnecting from minigame
-			socket.timeout(this.timeOut).emit("minigame", false, (err, response) => {
-				if (err) {
-					// the other side did not acknowledge the event in the given delay
-				} else {
-					console.log(response);
-				}
-			});
+			socket.timeout(this.timeOut).emit("minigame", false, (err, response) => { if (err) {} else { console.log(response); } });
 		}
 	}
 	// Server will assign you a role in a minigame.
@@ -342,6 +380,9 @@ Netplay = class {
 		removePlayer (id) {}
 		getPlayerList (playerList) {}
 		recievePosition (id, position) {}
+		sendAction() {}
+		sendNewAction() {}
+		recieveAction() {}
 		sendChat (text) {}
 		recieveChat (id, text) {}
 		sendProfile(profile) {}

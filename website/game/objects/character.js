@@ -126,6 +126,12 @@ class Character extends PhysicsObject {
 			}
 		}
 
+		// TODO: REMOVE THIS!! THIS IS JUST FOR TESTING
+		if (this.area == "oldtown") {
+			// SPAM!!!! (stress test)
+			this.emote("wave")
+		}
+
 		// Update Animation
 		if (this.walking != this.oldwalking) {
 			if (this.walking) { // Walk if moving
@@ -343,13 +349,19 @@ class Character extends PhysicsObject {
 	emote(i) {
 		if (ANIM[i] != null) {
 			// Reset player animation state
+			if (this.controller && this.controller.stop) {
+				this.controller.stop()
+			}
+			this.move(0, 0)
+			this.walking = false
+			this.oldwalking = false // Hack, stops code in update(dt) from attempting to stop walking anim, which isn't playing
 			this.dir = "down"
 			this.flip = 1
 			// Play emote animation
 			this.anim.playAnimation(ANIM[i][0], ANIM[i][1], 0)
 
 			if (this == PLAYER) {
-				NETPLAY.sendEmote(i)
+				NETPLAY.sendNewAction("emote", i)
 			}
 		}
 	}
@@ -398,7 +410,9 @@ class Character extends PhysicsObject {
 			console.log(`Started status effect: ${name} for ${duration} seconds`)
 			this.statusEffects.push(effect)
 			this.statusEffectsLookup[name] = true
-			// NETPLAY.sendStatusEffect(name, duration)
+			if (this == PLAYER) {
+				NETPLAY.sendNewAction("statusEffect", effect.name, duration)
+			}
 		}
 	}
 
@@ -410,7 +424,9 @@ class Character extends PhysicsObject {
 			if (effect.timer <= 0) {
 				this.statusEffects.splice(i, 1)
 				delete this.statusEffectsLookup[effect.name]
-				// NETPLAY.sendStatusEffect(effect.name, 0)
+				if (this == PLAYER) {
+					NETPLAY.sendNewAction("statusEffect", effect.name, 0)
+				}
 			}
 		}
 	}
