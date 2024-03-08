@@ -165,7 +165,6 @@ Netplay = class {
 	}
 
 	recieveChat (id, text) {
-		console.log("recieved chat", text)
 		if (this.playerList[id] != null) {
 			let display = false
 			if ((PLAYER.area != this.playerList[id].area) || (this.minigame)) { // Display chat message in chat log if chicken is not visible
@@ -278,25 +277,16 @@ Netplay = class {
 	// TODO: If the host leaves, either kick everyone out or assign a new host
 	recieveMinigameRole(role, minigamePlayerList) {
 		console.log("Recieved minigame role:", role)
-		this.minigamePlayerList = minigamePlayerList
 		this.role = role
+		this.minigamePlayerList = {}
 
 		// Add each player listed in the minigame player list
 		for (const [id, playerData] of Object.entries(minigamePlayerList)) {
-			if (id != socket.id) {
-				// TODO: don't copypaste code
-				console.log("Player joined minigame:", id)
-				// Initialize minigame data
-				this.minigamePlayerList[id] = {}
-				this.minigame.playerData[id] = {}
-	
-				// Let minigame know a player joined
-				if (this.minigame.addPlayer) {
-					this.minigame.addPlayer(id)
-				}
-				// this.addMinigamePlayer(id)
-			}
+			this.addMinigamePlayer(id)
 		}
+
+		// The function above creates the minigamePlayerList, but this will fill it in with data from the server
+		this.minigamePlayerList = minigamePlayerList
 	}
 	getMinigameRole() {
 		return this.role
@@ -305,8 +295,9 @@ Netplay = class {
 		return this.minigamePlayerList
 	}
 	addMinigamePlayer (id) {
-		if ((id != socket.id) && (this.minigamePlayerList[id] == null)) {
-			console.log("Player joined minigame:", id)
+		let playerData = this.playerList[id]
+		if ((id != socket.id) && (playerData) && (this.minigamePlayerList[id] == null)) {
+			console.log("Player joined minigame:", playerData.name)
 			// Initialize minigame data
 			this.minigamePlayerList[id] = {}
 			this.minigame.playerData[id] = {}
@@ -318,8 +309,9 @@ Netplay = class {
 		}
 	}
 	removeMinigamePlayer (id) {
-		if (id != socket.id) {
-			console.log("Attempting to remove player from minigame", id)
+		let playerData = this.playerList[id]
+		if (playerData && (id != socket.id)) {
+			console.log("Attempting to remove player from minigame", playerData.name)
 			// Let minigame know a player left
 			if (this.minigame.removePlayer) {
 				this.minigame.removePlayer(id)
@@ -348,7 +340,7 @@ Netplay = class {
 		}
 
 		if (dataChanged) {
-			this.oldMinigameData = Object.assign({}, data);
+			this.oldMinigameData = Object.assign({}, data); // Create shallow copy to compare with next time
 			socket.volatile.emit("minigameData", this.minigameName, dataToSend);
 		}
 	}

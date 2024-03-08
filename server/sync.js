@@ -2,14 +2,14 @@
 const {io, playerList} = require("../server.js");
 
 // Minigame data
-var minigameData = {
+var minigameList = {
 	runner: {
 		// Temporary syncing data; can be discarded after players leave minigame
 		players: {},
 		data: {},
 		host: false,
 		// Should be stored by the server
-		highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
+		highscores: [[100, "Pro Gamer"],[0,"---"],[0,"---"]]
 	}
 };
 
@@ -160,13 +160,11 @@ function listenToClient(socket) {
 		if (playerList[socket.id].minigame) {
 			// Remove from minigame
 			let minigameName = playerList[socket.id].minigame
-			if (minigameName && minigameData[minigameName]) {
-				delete minigameData[minigameName].players[socket.id]
-				for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-					if (id != socket.id) {
-						io.to(id).emit("minigameRemovePlayer", socket.id);
-					}
-				}
+			let minigameData = minigameList[minigameName]
+			if (minigameName && minigameData) {
+				socket.leave(`minigame:${minigameName}`)
+				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
+				delete minigameData.players[socket.id]
 			} else {
 				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
 			}
@@ -178,52 +176,58 @@ function listenToClient(socket) {
 	// Minigames
 	// Player joined minigame
 	socket.on("minigame", (minigameName, callback) => {
-		if (!playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+
+		if (!playerData) {
 			return false
 		}
 
 		if (minigameName) {
 			// Joined minigame
-			if (!minigameData[minigameName]) {
-				minigameData[minigameName] = {
+			if (!minigameList[minigameName]) {
+				minigameList[minigameName] = {
 					players: {},
 					data: {},
-					lastUpdate: {},
+					upToDate: {},
 					host: false,
-					highscores: [[100, "Pro Gamer"],[0,"---"],[0,"---"]]
+					highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
 				};
 			}
+			let minigameData = minigameList[minigameName]
 
 			playerList[socket.id].minigame = minigameName
 
-			minigameData[minigameName].players[socket.id] = true; // connected
-			minigameData[minigameName].data[socket.id] = {}; // what is their minigame like?
+			minigameData.players[socket.id] = true; // connected
+			minigameData.data[socket.id] = {}; // what is their minigame like?
 
-			let role = "host";
-			if (Object.keys(minigameData[minigameName].players).length > 1) {
+			let role;
+			if (Object.keys(minigameData.players).length > 1) {
 				role = "player";
 			} else {
-				minigameData[minigameName].host = socket.id
+				role = "host";
+				minigameData.host = socket.id
 			}
-			socket.emit("minigameRole", role, minigameData[minigameName].players);
-			socket.emit("minigameHighscores", minigameData[minigameName].highscores);
+			socket.join(`minigame:${minigameName}`)
+			socket.emit("minigameRole", role, minigameData.players);
+			socket.emit("minigameHighscores", minigameData.highscores);
 
-			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+			socket.to(`minigame:${minigameName}`).emit("minigameAddPlayer", socket.id);
+
+			// Send it all the data that has happened so far
+			for (const [id, data] of Object.entries(minigameData.data)) {
 				if (id != socket.id) {
-					io.to(id).emit("minigameAddPlayer", socket.id);
+					io.to(socket.id).emit("minigame", id, data);
 				}
 			}
 		} else {
 			// Left minigame
 			// Remove from minigame
 			let minigameName = playerList[socket.id].minigame
-			if (minigameName && minigameData[minigameName]) {
-				delete minigameData[minigameName].players[socket.id]
-				for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-					if (id != socket.id) {
-						io.to(id).emit("minigameRemovePlayer", socket.id);
-					}
-				}
+			let minigameData = minigameList[minigameName]
+			if (minigameName && minigameData) {
+				socket.leave(`minigame:${minigameName}`)
+				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
+				delete minigameData.players[socket.id]
 			} else {
 				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
 			}
@@ -236,41 +240,37 @@ function listenToClient(socket) {
 	// Relay minigame data
 	socket.on("minigameData", (minigameName, newData) => {
 		// Recieving only CHANGED minigame data
-		if (!playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+		if (!playerData) {
 			return false
 		}
-
+		
 		if (!minigameName) {
-			console.log(`Error: ${playerList[socket.id].name}'s minigame doesn't exist`)
+			console.log(`Error: ${playerData.name}'s minigame doesn't exist`)
 			return false
 		}
 
-		if (minigameData[minigameName] && minigameData[minigameName].data) { // Check if minigame has been loaded by server
+		let minigameData = minigameList[minigameName]
+
+		if (minigameData && minigameData.data) { // Check if minigame has been loaded by server
 			// Find changes & store new data
-			let data = minigameData[minigameName].data[socket.id]
+			let data = minigameData.data[socket.id]
 			for (const [key, value] of Object.entries(newData)) {
 				if (data[key] != value) {
 					data[key] = value
 				}
 			}
-			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-				if (id != socket.id) {
-					// TODO: only send changed data
-					// This is will involve checking if each client even has the old data
-					io.to(id).emit("minigame", socket.id, data);
-				}
-			}
+			// Send -changed- data to players
+			socket.to(`minigame:${minigameName}`).emit("minigame", socket.id, newData);
 			// Look for new highscore?
 			if (newData.score) {
-				if ((!minigameData[minigameName].highscores[0]) || (data.score > minigameData[minigameName].highscores[2][0])) {
-					console.log(`New Highscore in ${minigameName}!`, data.score, playerList[socket.id].name)
-					minigameData[minigameName].highscores.push([data.score, playerList[socket.id].name])
-					minigameData[minigameName].highscores.sort((a, b) => b[0] - a[0]);
-					minigameData[minigameName].highscores = minigameData[minigameName].highscores.slice(0, 3); // Limit to 3 highscores
+				if ((!minigameData.highscores[0]) || (data.score > minigameData.highscores[2][0])) {
+					console.log(`New Highscore in ${minigameName}!`, data.score, playerData.name)
+					minigameData.highscores.push([data.score, playerData.name])
+					minigameData.highscores.sort((a, b) => b[0] - a[0]);
+					minigameData.highscores = minigameData.highscores.slice(0, 3); // Limit to 3 highscores
 					// Send new highscore list to everyone
-					for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-						io.to(id).emit("minigameHighscores", minigameData[minigameName].highscores);
-					}
+					io.to(`minigame:${minigameName}`).emit("minigameHighscores", minigameData.highscores);
 				}
 			}
 		}
