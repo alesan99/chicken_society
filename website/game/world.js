@@ -84,7 +84,6 @@ class World {
 		BACKGROUNDANIM[this.area] = {}
 
 		// Load Area data
-		// TODO: move this elsewhere because its messy
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this.area, this.oldArea, fromWarp, endFunc)})
 	}
 

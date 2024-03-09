@@ -52,7 +52,8 @@
                 "items": {
                     "item": {
                         "seeds": true,
-                        "black_coffee": true
+                        "black_coffee": true,
+                        "gun": true
                     }
                 }
             }

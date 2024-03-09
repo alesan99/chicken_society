@@ -173,7 +173,7 @@ class Character extends PhysicsObject {
 		}
 
 		// Chicken and accessories
-		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "right")) { // Held item
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "left")) { // Held item
 			// Render item under chicken if facing up
 			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, rot)
 		}
@@ -200,7 +200,7 @@ class Character extends PhysicsObject {
 			this.drawItem(ITEMS.head[this.head], HEADOFFSET, drawX, drawY, dir, rot)
 		}
 
-		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir != "up" && dir != "right")) { // Held item
+		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir != "up" && dir != "left")) { // Held item
 			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, rot)
 		}
 	}
@@ -360,6 +360,19 @@ class Character extends PhysicsObject {
 		}
 	}
 
+	// Use held item
+	useItem() {
+		if (!this.item) {
+			return false
+		}
+
+		let item = ITEMS.item[this.item]
+
+		if (this.item == "gun") {
+			this.shoot()
+		}
+	}
+
 	// Status Effects
 	// These affect the character's behavior
 	startStatusEffect(name, duration=1.0) {
@@ -431,6 +444,44 @@ class Character extends PhysicsObject {
 			return true
 		}
 		return false
+	}
+
+	// Misc. Actions
+	// Shooting! Guns etc.
+	shoot(nx=0, ny=0) {
+		// You, the player, shot a gun
+		if (this == PLAYER) {
+			// direction normal
+			let [nx, ny] = [1, 0]
+			switch (this.dir) {
+				case "up":
+					[ny, nx] = [-1, 0]
+					break
+				case "down":
+					[ny, nx] = [1, 0]
+					break
+				case "left":
+					[ny, nx] = [0, -1]
+					break
+				case "right":
+					[ny, nx] = [0, 1]
+					break
+			}
+			NETPLAY.sendAction("shoot", nx, ny)
+		// Other player shot a gun, see if you, the player, got hit
+		} else {
+			// Check which chickens are in the line of fire
+			let obj = PLAYER
+			let dx = obj.x - this.x
+			let dy = obj.y - this.y
+			if (Math.abs(dx) < 50 || Math.abs(dy) < 50) {
+				// check if normal is facing in right direction
+				let dot = nx*dx + ny*dy
+				if (dot > 0) {
+					obj.startStatusEffect("dead", 10)
+				}
+			}
+		}	
 	}
 
 	// Collision

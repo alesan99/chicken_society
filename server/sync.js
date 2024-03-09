@@ -105,9 +105,7 @@ function listenToClient(socket) {
 						playerData.chicken.statusEffects.push(effect)
 						break
 					case "shoot":
-						let chicken = playerData.chicken
-						let nx = 1
-						let ny = 0
+						actionsToSend.push(action)
 						break;
 				}
 			}
@@ -364,6 +362,7 @@ function getPlayerFromSession(sessionId) {
 // to predict player states
 // server-wide events
 function serverLoop(dt) {
+	// Update player predictions
 	for (const [id, playerData] of Object.entries(playerList)) {
 		// Update status effect timer predictions
 		let statusEffects = playerData.chicken.statusEffects

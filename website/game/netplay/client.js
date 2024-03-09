@@ -13,7 +13,6 @@ Netplay = class {
 		/* Two types of actions:
 		1. Normal: This will be recieved by the server as soon as possible only when theres little client activity, otherwise it will be added to a queue.
 		2. New: This new action will overwrite any old actions in queue.
-		TODO: This system is not implemented yet
 		*/
 		this.actionQueue = []
 		this.actionTimer = 0
@@ -41,18 +40,21 @@ Netplay = class {
 		this.oldMinigameData = false
 		this.role = "player"
 
-		// Events
+		// Events //
+		// Players joining
 		socket.on("playerList", (playerList) => {this.recievePlayerList(playerList)})
 		socket.on("addPlayer", (id, playerData) => {this.addPlayer(id, playerData)})
 		socket.on("removePlayer", (id) => {this.removePlayer(id)})
-
+		// Global player events
 		socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 		socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
-
+		socket.on("area", (id, area) => {this.recieveArea(id, area)})
+		// Area player events
 		socket.on("chicken", (id, x, y, sx, sy) => {this.recievePosition(id, x, y, sx, sy)})
 		socket.on("action", (id, actions) => {this.recieveAction(id, actions)})
-		socket.on("area", (id, area) => {this.recieveArea(id, area)})
-
+		// Server events
+		socket.on("notify", (text, duration, color) => {this.recieveNotificaton(text, duration, color)})
+		// Minigame events
 		socket.on("minigameRole", (id, role, playerList) => {this.recieveMinigameRole(id, role, playerList)})
 		socket.on("minigame", (id, data) => {this.recieveMinigameData(id, data)})
 		socket.on("minigameAddPlayer", (id) => {this.addMinigamePlayer(id)})
@@ -158,7 +160,6 @@ Netplay = class {
 	}
 
 	// Send chat to everyone
-	// TODO: Word filter
 	sendChat (text) {
 		socket.emit("chat", text)
 	}
@@ -238,6 +239,9 @@ Netplay = class {
 							console.log("Recieved status effect:", args)
 							chicken.startStatusEffect(args[0], args[1])
 							break;
+						case "shoot":
+							chicken.shoot(args[0], args[1])
+							break;
 					}
 				}
 			}
@@ -255,6 +259,11 @@ Netplay = class {
 			// Add player to area (in world.js)
 			WORLD.addPlayerToArea(id, this.playerList[id])
 		}
+	}
+
+	// Server Events
+	recieveNotificaton(text, duration, color) {
+		Notify.new(text, duration, color)
 	}
 
 	// Minigames

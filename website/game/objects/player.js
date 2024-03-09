@@ -138,6 +138,9 @@ class Player {
 			case "Space":
 				this.interact()
 				break
+			case "e":
+				this.obj.useItem()
+				break
 		}
 	}
 	keyRelease(key) {
