@@ -132,20 +132,26 @@ function loadItem(category, itemId) {
 	item.sprite = SPRITE.placeholder
 	loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
 		// Get item properties
+		// General
 		item.name = data.name
 		item.description = data.description
 		item.cost = data.cost
 		item.consumable = data.consumable // Can item only be used once?
 
+		// Consumables
 		item.statusEffect = data.statusEffect
 		item.statusEffectChance = data.statusEffectChance
 		item.statusEffectDuration = data.statusEffectDuration
 
+		// Pets
 		item.food = data.food
 		item.disease = data.disease
 		if (data.center) { // Center of frames
 			item.center = data.center
 		}
+
+		// Furniture
+		item.shape = data.shape
 	})
 	let async = function() {
 		if (category == "pet") {

@@ -17,12 +17,12 @@ function makeSaveData() {
 			body: {},
 			item: {},
 
-			furniture: {},
+			furniture: {"table": 1},
 			pet: {"pillbug": 1}
 		},
 		nuggets: 100,
 		
-		house: [],
+		coopFurniture: [],
 
 		// Equipped pet status
 		// Persists between play sessions, but only stored for 1 pet at a time
@@ -213,6 +213,23 @@ function getItemData(id, type) {
 	}
 
 	return ITEMS[category][id]
+}
+
+// Chicken Coop Furniture
+function placeFurniture(itemId, x, y, dir="down") {
+	// Add to list of furniture in player's coop
+	SAVEDATA.coopFurniture.push({id: itemId, x: x, y: y, dir: dir})
+}
+
+function removeFurniture(itemId, x, y) {
+	// Look for furniture in savedata that matches the given furniture info
+	for (let i=0; i<SAVEDATA.coopFurniture.length; i++) {
+		if (SAVEDATA.coopFurniture[i].id == itemId && SAVEDATA.coopFurniture[i].x == x && SAVEDATA.coopFurniture[i].y == y) {
+			SAVEDATA.coopFurniture.splice(i, 1)
+			return true
+		}
+	}
+	return false
 }
 
 // Color storage methods

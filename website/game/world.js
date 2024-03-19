@@ -51,13 +51,15 @@ class World {
 	}
 
 	// Load Area data; loads background image & objects
-	// (Area name, function to call after loading is successful)
-	loadArea (area="hub", fromWarp, endFunc) {
+	// (Area name, Name of previous area, function to call after loading is successful, playerId of owner of area (for coop))
+	loadArea (area="hub", fromWarp, endFunc, ownerId=false) {
 		// Let server know player is moving
 		NETPLAY.sendArea(area)
 
 		this.oldArea = this.area
 		this.area = area
+
+		this.areaOwner = ownerId
 
 		// Transport player to new area
 		PLAYER.area = this.area
@@ -73,6 +75,7 @@ class World {
 		OBJECTS["Trigger"] = {}
 		OBJECTS["Wall"] = {}
 		OBJECTS["Wall"].dontUpdate = true
+		OBJECTS["Furniture"] = {}
 		PHYSICSWORLD.clear()
 
 		this.findPlayersInArea(this.area)
@@ -82,6 +85,17 @@ class World {
 		BACKGROUNDIMG[this.area] = {}
 		BACKGROUNDSPRITE[this.area] = {}
 		BACKGROUNDANIM[this.area] = {}
+
+		// Load Chicken Coop
+		if (this.area == "coop") {
+			// Furniture
+			if (this.areaOwner == false) {
+				// Load your own furniture
+				Coop.load(SAVEDATA.coopFurniture)
+			} else {
+				// Load other player's furniture
+			}
+		}
 
 		// Load Area data
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this.area, this.oldArea, fromWarp, endFunc)})
@@ -163,14 +177,13 @@ class World {
 
 		// Draw objects
 		for (const [id, obj] of Object.entries(CHARACTER)) {
-			// if (obj.area == PLAYER.area) {
-				drawQueue.push(obj)
-			// }
+			drawQueue.push(obj)
 		}
 		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
-			// if (obj.area == PLAYER.area) {
-				drawQueue.push(obj)
-			// }
+			drawQueue.push(obj)
+		}
+		for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
+			drawQueue.push(obj)
 		}
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {

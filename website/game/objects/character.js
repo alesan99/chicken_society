@@ -379,12 +379,15 @@ class Character extends PhysicsObject {
 		// Status Effects:
 		// Caffinated (Any coffee)
 		// Drunk (Beer, liquor)
-		// Quirked Up
+		// Quirked Up (Heroin)
+
 		// Lucky (Lucky charms)
-		// Cursed
-		// Drowsy (Heroin)
+		// Cursed (Hidden effect!)
+		// Divine Intervention
+
+		// Drowsy (Lean)
 		// Sick (Food poisoning)
-		// Injured (Getting shot)
+		// Injured (Getting shot, Bat)
 		// Dead (Getting shot)
 
 		// Possible Effects:

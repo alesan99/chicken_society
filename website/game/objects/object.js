@@ -34,7 +34,8 @@ class PhysicsObject {
 		this.updateCellLocation()
 	}
 
-	setSize() {
+	setShape(shape) {
+		this.shape = shape
 		this.updateCellLocation()
 	}
 

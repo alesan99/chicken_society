@@ -1,4 +1,7 @@
 {
+  "face": [
+    "visors"
+  ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
@@ -8,9 +11,6 @@
   ],
   "furniture": [
     "table"
-  ],
-  "face": [
-    "visors"
   ],
   "head": [
     "hoodie",
