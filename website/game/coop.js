@@ -1,12 +1,12 @@
-// TODO: Move player furniture code here
 // TODO: Visit other player's coops
-// TODO: Rotate Furniture collision
 // TODO: Wallpapers
 
 const Coop = (function() {
 	// Chicken Coop Furniture
 	const functions = {
 		initialize() {
+			this.owner = false // Is the player the owner of the coop?
+
 			this.furniture = false // is player placing furninture?
 			this.furnitureItemId = false // id string
 			this.furnitureItem = false // item data object
@@ -17,7 +17,9 @@ const Coop = (function() {
 			this.furnitureValidPosition = false // can the furniture be placed?
 		},
 
-		load(coopFurniture) {
+		load(coopFurniture, owner=false) {
+			this.owner = owner
+
 			// Create objects for all saved furniture
 			for (let i = 0; i < coopFurniture.length; i++) {
 				let data = coopFurniture[i]
@@ -39,14 +41,21 @@ const Coop = (function() {
 		},
 
 		draw() {
-
+			// Moving furniture?
+			if (this.furniture) {
+				DRAW.setColor(0,0,0,1.0)
+				DRAW.setFont(FONT.caption)
+				DRAW.text("Rotate Furniture with E", 10, 30)
+				DRAW.text("Place Furniture with Left Click", 10, 50)
+				DRAW.text("Remove Furniture with Right Click", 10, 70)
+			}
 		},
 
 		keyPress(key) {
 			if (key == "e") {
 				if (this.furniture) {
 					let furnitureDirs = ["down", "left", "up", "right"]
-					// Rotate furniture
+					// Rotate furniture clockwise
 					// find index of current dir, then get next dir
 					let dirIndex = furnitureDirs.indexOf(this.furnitureDir)
 					let nextDirIndex = (dirIndex+1) % furnitureDirs.length
