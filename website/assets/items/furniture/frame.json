@@ -1,0 +1,16 @@
+{
+    "name": "Picture Frame",
+    "description": "A picture frame.",
+    "cost": 5,
+
+    "center": [
+        [40,30],
+        [40,30],
+        [40,30]
+    ],
+
+    "walls": true,
+    "tabletops": false,
+
+    "shape": [-40,-30, 40,-30, 40,30, -40,30]
+}

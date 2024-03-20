@@ -152,6 +152,11 @@ function loadItem(category, itemId) {
 
 		// Furniture
 		item.shape = data.shape
+		item.rug = data.rug
+		item.table = data.table
+		item.height = data.height
+		item.walls = data.walls
+		item.tabletops = data.tabletops
 	})
 	let async = function() {
 		if (category == "pet") {

@@ -425,6 +425,10 @@ class Character extends PhysicsObject {
 		}
 	}
 
+	endStatusEffect(name) {
+		
+	}
+
 	updateStatusEffects(dt) {
 		// Update status effect timers
 		for (let i = this.statusEffects.length-1; i >= 0; i--) {

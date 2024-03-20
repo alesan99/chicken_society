@@ -41,11 +41,24 @@ const DialogueSystem = (function() {
 
 			// dialogue data structure:
 
-			// {
-			// 	"text": []
-			// }
+			// [{ // Dialogue block
+			// 	"text": [
+			//		"Line 1",
+			//		"Line 2",
+			//		"Line 3"
+			//	],
+			//  "randomDialogue": false, // Randomly select a line from the text array
+			//	"condition": { // What makes condition activates this block of dialogue
+			//		"quest": "tutorial",
+			//		"questSlot": 0,
+			//		"questSlotValue": 0
+			//	},
+			// },
+			// {...}] // More dialogue blocks
 
 			this.startText(0)
+
+			PLAYER_CONTROLLER.stop() // Stop player from moving
 		},
 
 		draw() {

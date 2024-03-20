@@ -79,6 +79,32 @@ const Coop = (function() {
 			
 		},
 
+		getFurniturePlaceable(itemId) {
+			let obj = this.furnitureObj
+			let item = getItemData(itemId)
+
+			// Can the item be placed at this location?
+			if (item.walls) { // only walls
+				if (!(obj.y < 200)) {
+					return false
+				}
+			} else if (item.rug) { // only floor
+				if (obj.colliding === obj.furnitureColliding) {
+					return true
+				}
+			} else if (item.tabletops) { // tabletops allowed
+				// Collisions are free game so long as its colliding with a table
+				if (!(obj.colliding === 0 || (obj.colliding === 1 && obj.furnitureColliding === 1))) {
+					return false
+				}
+			} else {
+				if (obj.colliding > 0) {
+					return false
+				}
+			}
+			return true
+		},
+
 		moveFurniture(itemId) {
 			this.furniture = true
 			this.furnitureItem = itemId
@@ -92,11 +118,11 @@ const Coop = (function() {
 
 		placeFurniture(itemId) {
 			let obj = this.furnitureObj
-			if (obj.colliding > 0) {
-				return false
-			}
-	
 			let item = getItemData(itemId)
+
+			if (!this.getFurniturePlaceable(itemId)) {
+				return true
+			}
 	
 			this.furniture = false
 			this.furnitureItem = false

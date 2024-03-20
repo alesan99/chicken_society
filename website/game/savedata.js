@@ -17,7 +17,7 @@ function makeSaveData() {
 			body: {},
 			item: {},
 
-			furniture: {"table": 1},
+			furniture: {"table": 2, "lamp": 2, "frame": 2, "rug": 2},
 			pet: {"pillbug": 1}
 		},
 		nuggets: 100,
