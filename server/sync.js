@@ -2,14 +2,14 @@
 const {io, playerList} = require("../server.js");
 
 // Minigame data
-var minigameData = {
+var minigameList = {
 	runner: {
 		// Temporary syncing data; can be discarded after players leave minigame
 		players: {},
 		data: {},
 		host: false,
 		// Should be stored by the server
-		highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
+		highscores: [[100, "Pro Gamer"],[0,"---"],[0,"---"]]
 	}
 };
 
@@ -45,13 +45,18 @@ function listenToClient(socket) {
 				y: 0,
 				sx: 0,
 				sy: 0,
+				statusEffects: [],
 				static: false
 			},
 		};
 
 		socket.join(`area:${playerList[socket.id].area}`) // Listen for events in area
 
-		io.emit("playerList", playerList) // TODO: Send a cleaned up list with less player data
+		// Send -this- client a list of all players
+		socket.emit("playerList", cleanPlayerList(playerList))
+		// Send everyone else just a new entry to their player list
+		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerList[socket.id]))
+
 		console.log(`Player "${profile.name}" joined.`);
 
 		// Confirm a successful connection to client
@@ -61,35 +66,57 @@ function listenToClient(socket) {
 	});
 
 	// Recieved chicken data (position, velocity); Send out to everyone
-	socket.on("chicken", (position, velocity) => {
+	socket.on("chicken", (x, y, sx, sy) => {
 		let playerData = playerList[socket.id];
 		if (playerData) {
-			playerData.chicken.x = position[0];
-			playerData.chicken.y = position[1];
-			playerData.chicken.sx = position[2];
-			playerData.chicken.sy = position[3];
+			playerData.chicken.x = x;
+			playerData.chicken.y = y;
+			playerData.chicken.sx = sx;
+			playerData.chicken.sy = sy;
 
 			// Let every player in the area know this information (excluding sender)
-			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, position);
+			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, x, y, sx, sy);
 		};
 	});
 
-	socket.on("chickenAction", (position, velocity) => {
+	socket.on("action", (actions) => {
+		// Actions: an array of [string, array]
 		let playerData = playerList[socket.id];
 		if (playerData) {
-			playerData.chicken.x = position[0];
-			playerData.chicken.y = position[1];
-			playerData.chicken.sx = position[2];
-			playerData.chicken.sy = position[3];
-
-			// Let every player in the area know this information (excluding sender)
-			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, position);
+			let actionsToSend = []
+			for (i in actions) {
+				// Handle individual actions
+				let action = actions[i]
+				let name = action[0]
+				let args = action[1]
+				switch(name) {
+					// Player emoted
+					case "emote":
+						actionsToSend.push(action)
+						break;
+					// Player got a status effect
+					case "statusEffect":
+						actionsToSend.push(action)
+						// args = [name, timer]
+						let effect = {
+							name: args[0],
+							timer: args[1]
+						}
+						playerData.chicken.statusEffects.push(effect)
+						break
+					case "shoot":
+						actionsToSend.push(action)
+						break;
+				}
+			}
+			socket.to(`area:${playerData.area}`).emit("action", socket.id, actionsToSend);
 		};
 	});
 
 	// Recieve chat message and send out to everyone
 	socket.on("chat", (text) => {
-		if (playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+		if (playerData) {
 			// TODO: Word filter
 			socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
 		};
@@ -105,34 +132,53 @@ function listenToClient(socket) {
 		}
 	});
 	
-	// Player emoted
-	socket.on("emote", (emote) =>{
-		let playerData = playerList[socket.id];
-		if (playerData) {
-			// Send emote to only those in the area
-			socket.to(`area:${playerData.area}`).emit("emote", socket.id, emote);
-		}
-	});
-	
 	// Player moved area
 	socket.on("area", (area) =>{
 		let playerData = playerList[socket.id];
 		if (playerData) {
+			let oldArea = playerData.area;
+			playerData.area = area;
+
 			// Leave old area
-			socket.leave(`area:${playerData.area}`)
+			socket.leave(`area:${oldArea}`)
 			// Join new area
 			socket.join(`area:${area}`)
 
-			playerData.area = area;
 			socket.broadcast.emit("area", socket.id, area); // Let everyone know
 
-			// Players in target area have not been updating this player about their position/state
-			// Tell the player where everyone is at
+			// Players in target area have not been updating -this- player about their position/state
+			// Tell this player where everyone is at
 			for (const [id, data] of Object.entries(playerList)) {
 				if (id != socket.id && data.area == area) {
-					io.to(socket.id).emit("chicken", id, [data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy]);
+					// Send other player position
+					io.to(socket.id).emit("chicken", id, data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy);
+					// Send misc. other player state info.
+					let actions = []
+					// status effects
+					if (data.chicken.statusEffects.length > 0) {
+						for (const effect of data.chicken.statusEffects) {
+							actions.push(["statusEffect", [effect.name, effect.timer]])
+						}
+					}
+					io.to(socket.id).emit("action", id, actions);
 				}
 			}
+
+			// TODO: Don't copy paste code
+			// This player has not been updating others on their position/state
+			let data = playerData
+			let id = socket.id
+			// Send other player position
+			socket.broadcast.emit("chicken", id, data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy);
+			// Send misc. other player state info.
+			let actions = []
+			// status effects
+			if (data.chicken.statusEffects.length > 0) {
+				for (const effect of data.chicken.statusEffects) {
+					actions.push(["statusEffect", [effect.name, effect.timer]])
+				}
+			}
+			socket.broadcast.emit("action", id, actions);
 		}
 	});
 
@@ -144,13 +190,11 @@ function listenToClient(socket) {
 		if (playerList[socket.id].minigame) {
 			// Remove from minigame
 			let minigameName = playerList[socket.id].minigame
-			if (minigameName && minigameData[minigameName]) {
-				delete minigameData[minigameName].players[socket.id]
-				for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-					if (id != socket.id) {
-						io.to(id).emit("minigameRemovePlayer", socket.id);
-					}
-				}
+			let minigameData = minigameList[minigameName]
+			if (minigameName && minigameData) {
+				socket.leave(`minigame:${minigameName}`)
+				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
+				delete minigameData.players[socket.id]
 			} else {
 				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
 			}
@@ -162,52 +206,58 @@ function listenToClient(socket) {
 	// Minigames
 	// Player joined minigame
 	socket.on("minigame", (minigameName, callback) => {
-		if (!playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+
+		if (!playerData) {
 			return false
 		}
 
 		if (minigameName) {
 			// Joined minigame
-			if (!minigameData[minigameName]) {
-				minigameData[minigameName] = {
+			if (!minigameList[minigameName]) {
+				minigameList[minigameName] = {
 					players: {},
 					data: {},
-					lastUpdate: {},
+					upToDate: {},
 					host: false,
 					highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
 				};
 			}
+			let minigameData = minigameList[minigameName]
 
 			playerList[socket.id].minigame = minigameName
 
-			minigameData[minigameName].players[socket.id] = true; // connected
-			minigameData[minigameName].data[socket.id] = {}; // what is their minigame like?
+			minigameData.players[socket.id] = true; // connected
+			minigameData.data[socket.id] = {}; // what is their minigame like?
 
-			let role = "host";
-			if (Object.keys(minigameData[minigameName].players).length > 1) {
+			let role;
+			if (Object.keys(minigameData.players).length > 1) {
 				role = "player";
 			} else {
-				minigameData[minigameName].host = socket.id
+				role = "host";
+				minigameData.host = socket.id
 			}
-			socket.emit("minigameRole", role, minigameData[minigameName].players);
-			socket.emit("minigameHighscores", minigameData[minigameName].highscores);
+			socket.join(`minigame:${minigameName}`)
+			socket.emit("minigameRole", role, minigameData.players);
+			socket.emit("minigameHighscores", minigameData.highscores);
 
-			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
+			socket.to(`minigame:${minigameName}`).emit("minigameAddPlayer", socket.id);
+
+			// Send it all the data that has happened so far
+			for (const [id, data] of Object.entries(minigameData.data)) {
 				if (id != socket.id) {
-					io.to(id).emit("minigameAddPlayer", socket.id);
+					io.to(socket.id).emit("minigame", id, data);
 				}
 			}
 		} else {
 			// Left minigame
 			// Remove from minigame
 			let minigameName = playerList[socket.id].minigame
-			if (minigameName && minigameData[minigameName]) {
-				delete minigameData[minigameName].players[socket.id]
-				for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-					if (id != socket.id) {
-						io.to(id).emit("minigameRemovePlayer", socket.id);
-					}
-				}
+			let minigameData = minigameList[minigameName]
+			if (minigameName && minigameData) {
+				socket.leave(`minigame:${minigameName}`)
+				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
+				delete minigameData.players[socket.id]
 			} else {
 				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
 			}
@@ -220,65 +270,66 @@ function listenToClient(socket) {
 	// Relay minigame data
 	socket.on("minigameData", (minigameName, newData) => {
 		// Recieving only CHANGED minigame data
-		if (!playerList[socket.id]) {
+		let playerData = playerList[socket.id];
+		if (!playerData) {
 			return false
 		}
-
+		
 		if (!minigameName) {
-			console.log(`Error: ${playerList[socket.id].name}'s minigame doesn't exist`)
+			console.log(`Error: ${playerData.name}'s minigame doesn't exist`)
 			return false
 		}
 
-		if (minigameData[minigameName] && minigameData[minigameName].data) { // Check if minigame has been loaded by server
+		let minigameData = minigameList[minigameName]
+
+		if (minigameData && minigameData.data) { // Check if minigame has been loaded by server
 			// Find changes & store new data
-			let data = minigameData[minigameName].data[socket.id]
+			let data = minigameData.data[socket.id]
 			for (const [key, value] of Object.entries(newData)) {
 				if (data[key] != value) {
 					data[key] = value
 				}
 			}
-			for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-				if (id != socket.id) {
-					// TODO: only send changed data
-					// This is will involve checking if each client even has the old data
-					io.to(id).emit("minigame", socket.id, data);
-				}
-			}
+			// Send -changed- data to players
+			socket.to(`minigame:${minigameName}`).emit("minigame", socket.id, newData);
 			// Look for new highscore?
 			if (newData.score) {
-				if ((!minigameData[minigameName].highscores[0]) || (data.score > minigameData[minigameName].highscores[2][0])) {
-					console.log(`New Highscore in ${minigameName}!`, data.score, playerList[socket.id].name)
-					minigameData[minigameName].highscores.push([data.score, playerList[socket.id].name])
-					minigameData[minigameName].highscores.sort((a, b) => b[0] - a[0]);
-					minigameData[minigameName].highscores = minigameData[minigameName].highscores.slice(0, 3); // Limit to 3 highscores
+				if ((!minigameData.highscores[0]) || (data.score > minigameData.highscores[2][0])) {
+					console.log(`New Highscore in ${minigameName}!`, data.score, playerData.name)
+					minigameData.highscores.push([data.score, playerData.name])
+					minigameData.highscores.sort((a, b) => b[0] - a[0]);
+					minigameData.highscores = minigameData.highscores.slice(0, 3); // Limit to 3 highscores
 					// Send new highscore list to everyone
-					for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-						io.to(id).emit("minigameHighscores", minigameData[minigameName].highscores);
-					}
+					io.to(`minigame:${minigameName}`).emit("minigameHighscores", minigameData.highscores);
 				}
 			}
 		}
 	});
-	// socket.on("minigameHighscore", (minigameName, highscore) => {
-	// 	if (!playerList[socket.id]) {
-	// 		return false
-	// 	}
+}
 
-	// 	if (!minigameName) {
-	// 		console.log(`Error: ${playerList[socket.id].name}'s minigame doesn't exist`)
-	// 		return false
-	// 	}
+// All the playerData in playerList gets sent to clients.
+// This function compiles only the necessary data to send to clients.
+function cleanPlayerList(playerList) {
+	let cleanedPlayerList = {}
+	for (const [id, playerData] of Object.entries(playerList)) {
+		cleanedPlayerList[id] = cleanPlayerData(playerData)
+	}
+	return cleanedPlayerList
+}
 
-	// 	if (highscore > minigameData[minigameName].highscores[0]) {
-	// 		minigameData[minigameName].highscores[0] = highscore
-	// 		minigameData[minigameName].highscores.sort((a, b) => b - a);
-	// 		for (const [id, connected] of Object.entries(minigameData[minigameName].players)) {
-	// 			if (id != socket.id) {
-	// 				io.to(id).emit("minigameHighscores", minigameData[minigameName].highscores);
-	// 			}
-	// 		}
-	// 	}
-	// });
+function cleanPlayerData(playerData) {
+	return {
+		id: playerData.id,
+
+		state: playerData.state,
+		minigame: playerData.minigame,
+		area: playerData.area,
+
+		profile: playerData.profile,
+		name: playerData.name,
+
+		chicken: playerData.chicken
+	}
 }
 
 // Get current player data (from playerList) from session ID
@@ -293,22 +344,40 @@ function getPlayerFromSession(sessionId) {
 	return false
 }
 
-// Log in player
-// Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
-function loginPlayer(sessionId) {
-	const player = getPlayerFromSession(sessionId);
-	if (player) {
-		player.loggedIn = true;
-		player.accountId = 1; // TODO: Get account ID from database
-		console.log(`Session belongs to ${player.name}.`);
-	} else {
-		console.log("Session does not belong to a player.");
-		return false
+// // Log in player
+// // Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
+// function loginPlayer(player, db_Id) {
+// 	if (player) {
+// 		player.loggedIn = true;
+// 		player.accountId = db_Id ; // TODO: Get account ID from database
+// 		console.log(`Session belongs to ${player.name}.`);
+// 	} else {
+// 		console.log("Session does not belong to a player.");
+// 		return false
+// 	}
+// }
+
+// Continuously update game logic
+// Used for:
+// to predict player states
+// server-wide events
+function serverLoop(dt) {
+	// Update player predictions
+	for (const [id, playerData] of Object.entries(playerList)) {
+		// Update status effect timer predictions
+		let statusEffects = playerData.chicken.statusEffects
+		for (let i = statusEffects.length-1; i >= 0; i--) {
+			let effect = statusEffects[i]
+			effect.timer -= dt
+			if (effect.timer <= 0) {
+				statusEffects.splice(i, 1)
+			}
+		}
 	}
 }
 
 module.exports = {
 	listenToClient,
-	getPlayerFromSession,
-	loginPlayer
+	serverLoop,
+	getPlayerFromSession
 };

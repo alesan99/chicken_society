@@ -14,6 +14,7 @@ const session = require("express-session");
 const app = express();
 const http = require("http"); // Used to start server
 const server = http.createServer(app);
+const { Worker } = require('worker_threads'); // Allow multi-threading
 
 const sessionMiddleware = session({
 	secret: Math.random().toString(36).substring(2), // TODO: Use a library for this
@@ -50,7 +51,7 @@ require("./server/login.js")
 
 // Set up client syncing
 io.engine.use(sessionMiddleware);
-const {listenToClient} = require("./server/sync.js");
+const {listenToClient, serverLoop} = require("./server/sync.js");
 
 io.on("connection", (socket) => {listenToClient(socket)});
 
@@ -94,3 +95,14 @@ const port = 3000
 server.listen(port, localIPAddress, () => {
 	console.log(`Server is running on http://${localIPAddress}:${port}`)
 })
+
+// Start game loop
+let lastUpdateTime = Date.now();
+setInterval(() => {
+	// get delta time
+	const now = Date.now();
+	const dt = (now - lastUpdateTime) / 1000; // Convert milliseconds to seconds
+	lastUpdateTime = now;
+
+	serverLoop(dt);
+}, 1000 / 60);  // Run the loop 60 times per second

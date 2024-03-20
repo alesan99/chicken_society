@@ -51,13 +51,15 @@ class World {
 	}
 
 	// Load Area data; loads background image & objects
-	// (Area name, function to call after loading is successful)
-	loadArea (area="hub", fromWarp, endFunc) {
+	// (Area name, Name of previous area, function to call after loading is successful, playerId of owner of area (for coop))
+	loadArea (area="hub", fromWarp, endFunc, ownerId=false) {
 		// Let server know player is moving
 		NETPLAY.sendArea(area)
 
 		this.oldArea = this.area
 		this.area = area
+
+		this.areaOwner = ownerId
 
 		// Transport player to new area
 		PLAYER.area = this.area
@@ -73,6 +75,7 @@ class World {
 		OBJECTS["Trigger"] = {}
 		OBJECTS["Wall"] = {}
 		OBJECTS["Wall"].dontUpdate = true
+		OBJECTS["Furniture"] = {}
 		PHYSICSWORLD.clear()
 
 		this.findPlayersInArea(this.area)
@@ -83,8 +86,18 @@ class World {
 		BACKGROUNDSPRITE[this.area] = {}
 		BACKGROUNDANIM[this.area] = {}
 
+		// Load Chicken Coop
+		if (this.area == "coop") {
+			// Furniture
+			if (this.areaOwner == false) {
+				// Load your own furniture
+				Coop.load(SAVEDATA.coopFurniture)
+			} else {
+				// Load other player's furniture
+			}
+		}
+
 		// Load Area data
-		// TODO: move this elsewhere because its messy
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this.area, this.oldArea, fromWarp, endFunc)})
 	}
 
@@ -101,6 +114,11 @@ class World {
 	}
 
 	update (dt) {
+		// Area update
+		if (this.area == "coop") {
+			Coop.update(dt)
+		}
+
 		// Update objects
 		PLAYER_CONTROLLER.update(dt)
 		for (const [id, obj] of Object.entries(NPCS)) {
@@ -164,14 +182,13 @@ class World {
 
 		// Draw objects
 		for (const [id, obj] of Object.entries(CHARACTER)) {
-			// if (obj.area == PLAYER.area) {
-				drawQueue.push(obj)
-			// }
+			drawQueue.push(obj)
 		}
 		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
-			// if (obj.area == PLAYER.area) {
-				drawQueue.push(obj)
-			// }
+			drawQueue.push(obj)
+		}
+		for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
+			drawQueue.push(obj)
 		}
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {
@@ -181,6 +198,11 @@ class World {
 
 		// Draw plyaer movement cursor
 		PLAYER_CONTROLLER.draw()
+
+		// Area Overlay
+		if (this.area == "coop") {
+			Coop.draw()
+		}
 
 		// NPC how speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
@@ -238,12 +260,26 @@ class World {
 			return true
 		}
 
+		// Area
+		if (this.area == "coop") {
+			if (Coop.keyPress(key)) {
+				return true
+			}
+		}
+
 		// Control Player
 		PLAYER_CONTROLLER.keyPress(key)
 		
 		CHAT.keyPress(key)
 	}
 	keyRelease(key, code) {
+		// Area
+		if (this.area == "coop") {
+			if (Coop.keyRelease(key)) {
+				return true
+			}
+		}
+
 		// Control Player
 		PLAYER_CONTROLLER.keyRelease(key)
 	}
@@ -262,6 +298,13 @@ class World {
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.click(button, x, y)) {
+				return true
+			}
+		}
+
+		// Area
+		if (this.area == "coop") {
+			if (Coop.mouseClick(button, x, y)) {
 				return true
 			}
 		}
@@ -292,6 +335,15 @@ class World {
 				return true
 			}
 		}
+		
+		// Area
+		if (this.area == "coop") {
+			if (Coop.mouseRelease(button, x, y)) {
+				return true
+			}
+		}
+
+		// Player
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
 	}
 
@@ -316,12 +368,10 @@ class World {
 		// When a player join an area, create a character object for them
 		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
 		let chicken = playerData.chicken
-		console.log(playerData.area, PLAYER.area)
 		if (playerData.area == PLAYER.area) { // Player is in your area
 			if (!CHARACTER[id]) {
 				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
 				CHARACTER[id].area = playerData.area
-				console.log("Created!")
 				//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
 			}
 		} else { // Player is not in your area

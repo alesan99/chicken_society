@@ -56,6 +56,8 @@ MENUS["chatMenu"] = new class extends Menu {
 					PROFILE.color = RGBtoHEX(Number(arg), Number(arg2), Number(arg3))
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
+				case "/give":
+					addItem(null, arg, arg2 || 1)
 				case "/head":
 					PROFILE.head = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")

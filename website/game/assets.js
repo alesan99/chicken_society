@@ -75,9 +75,9 @@ function loadGameAssets() {
 		[[63,56],[63,56],[68,57],[66,63],[64,55],[64,55],[59,62],[64,55]] // Back frames
 	]
 	ITEMOFFSET = [ // Center of chicken left wing where item should be held
-		[[94,75],[94,75],[96,76],[96,83],[94,75],[94,75],[89,82],[94,75]], // Front frames
+		[[33,75],[33,75],[38,76],[36,83],[34,75],[34,75],[29,82],[34,75]], // Front frames
 		[[89,69],[89,69],[86,78],[66,83],[64,75],[64,75],[59,82],[64,75]], // Right frames
-		[[33,76],[33,76],[38,77],[36,83],[34,75],[34,75],[29,82],[34,75]] // Back frames
+		[[94,76],[94,76],[96,77],[96,83],[94,75],[94,75],[89,82],[94,75]] // Back frames
 	]
 	CHICKENROTATION = [ // Rotation of chicken hat & accessory for each frame
 		0,0,0,0,0,0,-Math.PI*0.5,0
@@ -132,20 +132,26 @@ function loadItem(category, itemId) {
 	item.sprite = SPRITE.placeholder
 	loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
 		// Get item properties
+		// General
 		item.name = data.name
 		item.description = data.description
 		item.cost = data.cost
 		item.consumable = data.consumable // Can item only be used once?
 
+		// Consumables
 		item.statusEffect = data.statusEffect
 		item.statusEffectChance = data.statusEffectChance
 		item.statusEffectDuration = data.statusEffectDuration
 
+		// Pets
 		item.food = data.food
 		item.disease = data.disease
 		if (data.center) { // Center of frames
 			item.center = data.center
 		}
+
+		// Furniture
+		item.shape = data.shape
 	})
 	let async = function() {
 		if (category == "pet") {

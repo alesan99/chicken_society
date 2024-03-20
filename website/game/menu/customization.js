@@ -73,6 +73,14 @@ MENUS["customization"] = new class extends Menu {
 							this.filterInventory(this.filter) // Refresh item list
 						}
 					}
+				} else {
+					let item = ITEMS[itemType][itemId]
+
+					if (item) {
+						if (itemType == "furniture" && PLAYER.area == "coop") { // TODO: Also figure out a better place for this
+							Coop.moveFurniture(itemId, closeMenu())
+						}
+					}
 				}
 			},
 			this.inventory, 

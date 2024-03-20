@@ -1,6 +1,7 @@
 // Handles POST requests to log in
 const {app, io, playerList} = require("../server.js");
-const {getPlayerFromSession, loginPlayer} = require("./sync.js");
+const {getPlayerFromSession} = require("./sync.js");
+const {loginPlayer} = require("./savedata/saveDataRequests.js");
 const express = require("express");
 const db = require("./db/create_db.js");
 const con = db.initializeDB(false);
@@ -37,7 +38,7 @@ app.post('/login-endpoint', (req, res) => {
 	// }
 	if (receivedUsername && receivedPassword) {
 		// Retrieve hashed password from the database based on the provided username
-		const selectQuery = 'SELECT password FROM user WHERE username = ?';
+		const selectQuery = 'SELECT password, id FROM user WHERE username = ?';
 		con.query(selectQuery, [receivedUsername], (selectErr, selectResults) => {
 		  if (selectErr) {
 			console.error('Error querying the database:', selectErr);
@@ -45,8 +46,8 @@ app.post('/login-endpoint', (req, res) => {
 			
 		  } else {
 			if (selectResults.length > 0) {
-			  const hashedPassword = selectResults[0].password;
-	
+			  	const hashedPassword = selectResults[0].password;
+				const db_Id = selectResults[0].id;
 			  // Compare the provided password with the hashed password
 			  bcrypt.compare(receivedPassword, hashedPassword, (compareErr, match) => {
 				if (compareErr) {
@@ -57,6 +58,7 @@ app.post('/login-endpoint', (req, res) => {
 				  if (match) {
 					console.log('Login successful');
 					res.json({ success: true, message: 'Login successful' });
+					loginPlayer(player, db_Id);
 					
 				  } else {
 					console.log('Incorrect password');
