@@ -365,9 +365,12 @@ class Character extends PhysicsObject {
 		}
 
 		if (addEffect) {
-			console.log(`Started status effect: ${name} for ${duration} seconds`)
 			this.statusEffects.push(effect)
 			// NETPLAY.sendStatusEffect(name, duration)
+
+			if (name == "caffinated") {
+				this.speed = 300
+			}
 		}
 	}
 
@@ -376,9 +379,16 @@ class Character extends PhysicsObject {
 			let effect = this.statusEffects[i]
 			effect.timer -= dt
 			if (effect.timer <= 0) {
+				this.endStatusEffect(effect.name)
 				this.statusEffects.splice(i, 1)
 				// NETPLAY.sendStatusEffect(effect.name, 0)
 			}
+		}
+	}
+
+	endStatusEffect(name) {
+		if (name == "caffinated") {
+			this.speed = 200
 		}
 	}
 
