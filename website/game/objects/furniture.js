@@ -3,7 +3,6 @@
 class Furniture extends PhysicsObject {
 	//Initialize: list of points
 	constructor (spatialHash, itemId, x=0, y=0, dir="down") {
-		// Collision
 		super(spatialHash,0,0)
 		this.x = x
 		this.y = y
@@ -12,7 +11,13 @@ class Furniture extends PhysicsObject {
 		let item = getItemData(itemId)
 		this.item = item
 		this.id = itemId
-		this.shape = new Shape(...item.shape)
+		
+		this.dir_lookup = {up: 2, down: 0, left: 1, right: 1}
+		
+		// Collision
+		// Can be a single shape: [x,y, x,y, x,y...]
+		// OR 3 shapes for down, right, up [[x,y, x,y...], [x,y, x,y...], [x,y, x,y...]]
+		this.setDir(dir)
 
 		// Graphics
 		this.center = item.center
@@ -43,13 +48,12 @@ class Furniture extends PhysicsObject {
 
 	draw() {
 		// Furniture itself
-		let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 		let flip = 1
 		if (this.dir == "left") {
 			flip = -1
 		}
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(this.image, this.sprite.getFrame(0,dir_lookup[this.dir]), this.x, this.y-this.tabletopOffset, 0, flip, 1.0, this.center[dir_lookup[this.dir]][0]/this.sprite.w, this.center[dir_lookup[this.dir]][1]/this.sprite.h)
+		DRAW.image(this.image, this.sprite.getFrame(0,this.dir_lookup[this.dir]), this.x, this.y, 0, flip, 1.0, this.center[this.dir_lookup[this.dir]][0]/this.sprite.w, this.center[this.dir_lookup[this.dir]][1]/this.sprite.h)
 
 		// Draw footprint when moving
 		if (!this.static) {
@@ -72,8 +76,21 @@ class Furniture extends PhysicsObject {
 		if (this.dir == "left") {
 			flip = -1
 		}
-		// set Shape if there are multiple shapes for each direction
-		// this.shape = new Shape(...this.item.shape[dir_lookup[dir]])
+		
+		if (Array.isArray(this.item.shape[0])) {
+			// set Shape if there are multiple shapes for each direction
+			let shape = this.item.shape[dir_lookup[dir]]
+			if (dir == "left") {
+				// reverse "right" shape to get "left" shape
+				shape = shape.slice(0)
+				for (let i=0; i<shape.length; i+=2) {
+					shape[i] = -shape[i]
+				}
+			}
+			this.setShape(new Shape(...shape))
+		} else {
+			this.shape = new Shape(...item.shape);
+		}
 	}
 
 	// Collision
