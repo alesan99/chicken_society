@@ -417,7 +417,6 @@ class Character extends PhysicsObject {
 		}
 
 		if (addEffect) {
-			console.log(`Started status effect: ${name} for ${duration} seconds`)
 			this.statusEffects.push(effect)
 			this.statusEffectsLookup[name] = true
 			if (this == PLAYER) {
@@ -432,6 +431,7 @@ class Character extends PhysicsObject {
 			let effect = this.statusEffects[i]
 			effect.timer -= dt
 			if (effect.timer <= 0) {
+				this.endStatusEffect(effect.name)
 				this.statusEffects.splice(i, 1)
 				delete this.statusEffectsLookup[effect.name]
 				if (this == PLAYER) {

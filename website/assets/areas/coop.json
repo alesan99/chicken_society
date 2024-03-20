@@ -6,5 +6,17 @@
         [0,256, 156,256, 113,333, 0,333],
 
         [0,404, 71,404, 0,533]
-    ]
+    ],
+
+    "warps": {
+		"coopExit": {
+			"to": "oldtown",
+			"fromWarp": "neighborhoodEntrance",
+			"facing": "right",
+			"x": 80,
+			"y": 363,
+			"w": 50,
+			"h": 40
+		}
+    }
 }

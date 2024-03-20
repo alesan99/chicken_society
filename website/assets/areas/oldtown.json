@@ -9,7 +9,7 @@
 
   "warps": {
     "neighborhoodEntrance": {
-      "to": "hub",
+      "to": "coop",
       "fromWarp": "oldtownEntrance",
       "facing": "down",
       "x": 409,
