@@ -170,7 +170,7 @@ function spendNuggets(cost) {
 }
 
 // Get items like clothing and consumables
-function addItem(type, id) {
+function addItem(type, id, count=1) {
 	if (!type) {
 		// Item category not specified, look for it
 		type = getItemCategory(id)
@@ -178,10 +178,10 @@ function addItem(type, id) {
 	if (!SAVEDATA.items[type][id]) {
 		SAVEDATA.items[type][id] = 0
 	}
-	SAVEDATA.items[type][id] += 1
+	SAVEDATA.items[type][id] += count
 }
 
-function removeItem(type, id) {
+function removeItem(type, id, count=1) {
 	if (!type) {
 		// Item category not specified, look for it
 		type = getItemCategory(id)
@@ -189,8 +189,8 @@ function removeItem(type, id) {
 	if (!SAVEDATA.items[type][id]) {
 		return false
 	}
-	SAVEDATA.items[type][id] -= 1
-	if (SAVEDATA.items[type][id] === 0) {
+	SAVEDATA.items[type][id] -= count
+	if (SAVEDATA.items[type][id] <= 0) {
 		delete SAVEDATA.items[type][id]
 	}
 }

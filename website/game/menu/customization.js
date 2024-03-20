@@ -78,7 +78,7 @@ MENUS["customization"] = new class extends Menu {
 
 					if (item) {
 						if (itemType == "furniture" && PLAYER.area == "coop") { // TODO: Also figure out a better place for this
-							PLAYER_CONTROLLER.moveFurniture(itemId, closeMenu())
+							Coop.moveFurniture(itemId, closeMenu())
 						}
 					}
 				}

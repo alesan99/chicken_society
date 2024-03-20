@@ -114,6 +114,11 @@ class World {
 	}
 
 	update (dt) {
+		// Area update
+		if (this.area == "coop") {
+			Coop.update(dt)
+		}
+
 		// Update objects
 		PLAYER_CONTROLLER.update(dt)
 		for (const [id, obj] of Object.entries(NPCS)) {
@@ -194,6 +199,11 @@ class World {
 		// Draw plyaer movement cursor
 		PLAYER_CONTROLLER.draw()
 
+		// Area Overlay
+		if (this.area == "coop") {
+			Coop.draw()
+		}
+
 		// NPC how speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			obj.draw()
@@ -250,12 +260,26 @@ class World {
 			return true
 		}
 
+		// Area
+		if (this.area == "coop") {
+			if (Coop.keyPress(key)) {
+				return true
+			}
+		}
+
 		// Control Player
 		PLAYER_CONTROLLER.keyPress(key)
 		
 		CHAT.keyPress(key)
 	}
 	keyRelease(key, code) {
+		// Area
+		if (this.area == "coop") {
+			if (Coop.keyRelease(key)) {
+				return true
+			}
+		}
+
 		// Control Player
 		PLAYER_CONTROLLER.keyRelease(key)
 	}
@@ -274,6 +298,13 @@ class World {
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.click(button, x, y)) {
+				return true
+			}
+		}
+
+		// Area
+		if (this.area == "coop") {
+			if (Coop.mouseClick(button, x, y)) {
 				return true
 			}
 		}
@@ -304,6 +335,15 @@ class World {
 				return true
 			}
 		}
+		
+		// Area
+		if (this.area == "coop") {
+			if (Coop.mouseRelease(button, x, y)) {
+				return true
+			}
+		}
+
+		// Player
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
 	}
 
