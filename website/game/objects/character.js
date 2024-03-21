@@ -496,6 +496,9 @@ class Character extends PhysicsObject {
 		if (name == "Character" || name == "Trigger") {
 			return false
 		}
+		if (name == "Furniture" && obj.rug) {
+			return false
+		}
 		return true
 	}
 

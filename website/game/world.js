@@ -188,7 +188,11 @@ class World {
 			drawQueue.push(obj)
 		}
 		for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
-			drawQueue.push(obj)
+			if (obj.rug) {
+				obj.draw() // Always render rugs first (under everything)
+			} else {
+				drawQueue.push(obj)
+			}
 		}
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {
@@ -208,7 +212,6 @@ class World {
 		for (const [id, obj] of Object.entries(NPCS)) {
 			obj.draw()
 		}
-
 
 		// Show action bubble above clickable elements like NPCs
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {

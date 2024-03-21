@@ -33,6 +33,8 @@ class Furniture extends PhysicsObject {
 		this.table = item.table
 		this.height = item.height || 0
 
+		this.rug = item.rug
+
 		// Where can it be placed?
 		this.walls = item.walls
 		this.tabletops = item.tabletops
@@ -53,7 +55,7 @@ class Furniture extends PhysicsObject {
 			flip = -1
 		}
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(this.image, this.sprite.getFrame(0,this.dir_lookup[this.dir]), this.x, this.y, 0, flip, 1.0, this.center[this.dir_lookup[this.dir]][0]/this.sprite.w, this.center[this.dir_lookup[this.dir]][1]/this.sprite.h)
+		DRAW.image(this.image, this.sprite.getFrame(0,this.dir_lookup[this.dir]), this.x, this.y-this.tabletopOffset, 0, flip, 1.0, this.center[this.dir_lookup[this.dir]][0]/this.sprite.w, this.center[this.dir_lookup[this.dir]][1]/this.sprite.h)
 
 		// Draw footprint when moving
 		if (!this.static) {
@@ -89,7 +91,7 @@ class Furniture extends PhysicsObject {
 			}
 			this.setShape(new Shape(...shape))
 		} else {
-			this.shape = new Shape(...item.shape);
+			this.shape = new Shape(...this.item.shape);
 		}
 	}
 
