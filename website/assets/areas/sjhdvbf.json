@@ -1,0 +1,33 @@
+{
+  "warps": {
+    "wtfExit": {
+      "to": "petstupid",
+      "fromWarp": "wtfEntrance",
+      "facing": "right",
+      "x": 0,
+      "y": 322,
+      "w": 50,
+      "h": 50
+    }
+  },
+
+  "triggers": {
+    "loretest": {
+      "x": 100,
+      "y": 200,
+      "shape": [0, 0, 100, 0, 100, 200, 0, 200],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
+      "action": "dialogue",
+      "dialogue": [
+        {
+          "text": [
+            "Uh-oh! It seems you have stumbled into a non-eggclidian space.",
+            "I wonder what its purpose could be?",
+            "Good luck, wanderer!"
+          ]
+        }
+      ]
+    }
+  }
+}

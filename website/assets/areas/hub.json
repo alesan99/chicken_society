@@ -1,152 +1,161 @@
 {
-	"walls": [
-		[0,0, 1024,0, 1024,200, 0,200],
-		[0,0, 300,0, 300,278, 0,278],
-		[381,0, 670,0, 670,278, 381,278],
-		[750,0, 1024,0, 1024,278, 750,278],
+  "walls": [
+    [0, 0, 1024, 0, 1024, 200, 0, 200],
+    [0, 0, 300, 0, 300, 278, 0, 278],
+    [381, 0, 670, 0, 670, 278, 381, 278],
+    [750, 0, 1024, 0, 1024, 278, 750, 278],
 
-		[0,353, 200,353, 147,401, 0,401],
-		[0,353, 73,353, 73,468, 0,535, 0,468],
-		[-20,535, 0,535, 0,570, -20,570],
+    [0, 353, 200, 353, 147, 401, 0, 401],
+    [0, 353, 73, 353, 73, 468, 0, 535, 0, 468],
+    [-20, 535, 0, 535, 0, 570, -20, 570],
 
-		[801,353, 1024,353, 1024,375, 821,375],
-		[877,375, 1024,375, 1024,431, 1024,570, 877,431],
+    [801, 353, 1024, 353, 1024, 375, 821, 375],
+    [877, 375, 1024, 375, 1024, 431, 1024, 570, 877, 431],
 
-		[0,576, 1024,576, 1024,600, 0,600]
-	],
+    [0, 576, 1024, 576, 1024, 600, 0, 600]
+  ],
 
-	"warps": {
-		"arcadeEntrance": {
-			"to": "arcade",
-			"fromWarp": "arcadeExit",
-			"facing": "right",
-			"x": 83,
-			"y": 410,
-			"w": 50,
-			"h": 40
-		},
-		"chictoriasSecretEntrance": {
-			"to": "chictoriassecret",
-			"fromWarp": "chictoriasSecretExit",
-			"facing": "left",
-			"x": 876,
-			"y": 386,
-			"w": 50,
-			"h": 40
-		},
-		"seedDispensaryEntrance": {
-			"to": "seeddispensary",
-			"fromWarp": "seedDispensaryExit",
-			"facing": "down",
-			"x": 710,
-			"y": 235,
-			"w": 40,
-			"h": 40
-		},
-		"alleywayEntrance": {
-			"to": "alleyway",
-			"fromWarp": "alleywayExit",
-			"facing": "left",
-			"x": 859,
-			"y": 301,
-			"w": 40,
-			"h": 70
-		},
-		"oldtownEntrance": {
-			"to": "oldtown",
-			"fromWarp": "oldtownExit",
-			"facing": "right",
-			"x": 150,
-			"y": 301,
-			"w": 40,
-			"h": 70
-		}
-	},
+  "warps": {
+    "arcadeEntrance": {
+      "to": "arcade",
+      "fromWarp": "arcadeExit",
+      "facing": "right",
+      "x": 83,
+      "y": 410,
+      "w": 50,
+      "h": 40
+    },
+    "chictoriasSecretEntrance": {
+      "to": "chictoriassecret",
+      "fromWarp": "chictoriasSecretExit",
+      "facing": "left",
+      "x": 876,
+      "y": 386,
+      "w": 50,
+      "h": 40
+    },
+    "petstupidEntrance": {
+      "to": "petstupid",
+      "fromWarp": "petstupidExit",
+      "facing": "down",
+      "x": 337,
+      "y": 221,
+      "w": 40,
+      "h": 40
+    },
+    "seedDispensaryEntrance": {
+      "to": "seeddispensary",
+      "fromWarp": "seedDispensaryExit",
+      "facing": "down",
+      "x": 710,
+      "y": 235,
+      "w": 40,
+      "h": 40
+    },
+    "alleywayEntrance": {
+      "to": "alleyway",
+      "fromWarp": "alleywayExit",
+      "facing": "left",
+      "x": 859,
+      "y": 301,
+      "w": 40,
+      "h": 70
+    },
+    "oldtownEntrance": {
+      "to": "oldtown",
+      "fromWarp": "oldtownExit",
+      "facing": "right",
+      "x": 150,
+      "y": 301,
+      "w": 40,
+      "h": 70
+    }
+  },
 
-	"sprites": {
-		"alley2": {
-			"image": "hub-alley.png",
-			"framesx": 1,
-			"framesy": 1,
-			"ox": 201,
-			"oy": 0,
-			"qw": 226,
-			"qh": 215,
+  "sprites": {
+    "alley2": {
+      "image": "hub-alley.png",
+      "framesx": 1,
+      "framesy": 1,
+      "ox": 201,
+      "oy": 0,
+      "qw": 226,
+      "qh": 215,
 
-			"x": 798,
-			"y": 145,
-			"worldy": 356
-		},
-		"arcadeLights": {
-			"image": "hub-arcade.png",
-			"framesx": 2,
-			"framesy": 1,
-			"anim": {
-				"frames": [0,1],
-				"delay": 0.8
-			},
-			"qw": 280,
-			"qh": 450,
+      "x": 798,
+      "y": 145,
+      "worldy": 356
+    },
+    "arcadeLights": {
+      "image": "hub-arcade.png",
+      "framesx": 2,
+      "framesy": 1,
+      "anim": {
+        "frames": [0, 1],
+        "delay": 0.8
+      },
+      "qw": 280,
+      "qh": 450,
 
-			"x": 0,
-			"y": 0,
-			"worldy": 356
-		}
-	},
+      "x": 0,
+      "y": 0,
+      "worldy": 356
+    }
+  },
 
-	"triggers": {
-		"egg1": { 
-			"x": 793,
-			"y": 298,
-			"shape": [0,0, 40,0, 40,40, 0,40],
-			"clickable": true,
-			"icon": {"frame": 1, "x": 15, "y": -10},
+  "triggers": {
+    "egg1": {
+      "x": 793,
+      "y": 298,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
 
-			"action": "quest",
-			"quest": "easteregghunt",
-			"questSlot": 0,
-			"questSlotAdd": 1,
+      "action": "quest",
+      "quest": "easteregghunt",
+      "questSlot": 0,
+      "questSlotAdd": 1,
 
-			"condition": {
-				"quest": "easteregghunt",
-				"questSlot": 0,
-				"questSlotValue": 0
-			},
+      "condition": {
+        "quest": "easteregghunt",
+        "questSlot": 0,
+        "questSlotValue": 0
+      },
 
-			"sprite": {
-				"image": "egg.png",
-				"qw": 30,
-				"qh": 40,
+      "sprite": {
+        "image": "egg.png",
+        "qw": 30,
+        "qh": 40,
 
-				"worldy": 318
-			}
-		},
-		
-		"egg2": {
-			"x": 76,
-			"y": 479,
-			"shape": [0,0, 40,0, 40,40, 0,40],
-			"clickable": true,
-			"icon": {"frame": 1, "x": 15, "y": -10},
+        "worldy": 318
+      }
+    },
 
-			"action": "quest",
-			"quest": "easteregghunt",
-			"questSlot": 1,
-			"questSlotAdd": 1,
-			
-			"condition": {
-				"quest": "easteregghunt",
-				"questSlot": 1,
-				"questSlotValue": 0
-			},
+    "egg2": {
+      "x": 76,
+      "y": 479,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
 
-			"sprite": {
-				"image": "egg.png",
-				"qw": 30,
-				"qh": 40,
+      "action": "quest",
+      "quest": "easteregghunt",
+      "questSlot": 1,
+      "questSlotAdd": 1,
 
-				"worldy": 499
-			}
-		}
-	}
+      "condition": {
+        "quest": "easteregghunt",
+        "questSlot": 1,
+        "questSlotValue": 0
+      },
+
+      "sprite": {
+        "image": "egg.png",
+        "qw": 30,
+        "qh": 40,
+
+        "worldy": 499
+      }
+    }
+  }
 }
