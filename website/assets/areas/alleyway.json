@@ -1,42 +1,61 @@
 {
-	"walls": [
-        [0,0, 1024,0, 1024,261, 0,261],
+  "walls": [
+    [0, 0, 1024, 0, 1024, 261, 0, 261],
 
-        [952,261, 1024,261, 1024,576],
+    [952, 261, 1024, 261, 1024, 576],
 
-        [0,576, 1024,576, 1024,600, 0,600]
-    ],
+    [0, 576, 1024, 576, 1024, 600, 0, 600]
+  ],
 
-    "warps": {
-        "alleywayExit": {
-            "to": "hub",
-            "fromWarp": "alleywayEntrance",
-            "facing": "right",
-            "x": 0,
-            "y": 408,
-            "w": 30,
-            "h": 300
-        }
-    },
-
-	"NPCs": {
-		"dealer": {
-            "profile": {
-                "name": "???",
-                "color": "#285032",
-                "head": "hoodie",
-                "face": false,
-                "body": false
-            },
-            "x": 810,
-            "y": 300,
-            "facing": "up",
-            "roamRadius": 30,
-            "speechBubble": [
-                "I got the good stuff.",
-				"Money upfront.",
-                "How much do ya want?"
-			]
-        }
+  "warps": {
+    "alleywayExit": {
+      "to": "hub",
+      "fromWarp": "alleywayEntrance",
+      "facing": "right",
+      "x": 0,
+      "y": 408,
+      "w": 30,
+      "h": 300
     }
+  },
+
+  "NPCs": {
+    "dealer": {
+      "profile": {
+        "name": "???",
+        "color": "#285032",
+        "head": "hoodie",
+        "face": false,
+        "body": false
+      },
+      "x": 810,
+      "y": 300,
+      "facing": "up",
+      "roamRadius": 30,
+      "speechBubble": [
+        "I got the good stuff.",
+        "Money upfront.",
+        "How much do ya want?"
+      ]
+    }
+  },
+
+  "triggers": {
+    "sewersystem": {
+      "x": 903,
+      "y": 348,
+      "shape": [0, 0, 50, 0, 50, 50, 0, 50],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
+      "action": "dialogue",
+      "dialogue": [
+        {
+          "text": [
+            "The entrance to the underground sewer system.",
+            "It appears to be locked."
+          ]
+        }
+      ]
+    }
+  }
 }
