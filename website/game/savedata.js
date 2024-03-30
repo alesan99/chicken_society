@@ -22,6 +22,10 @@ function makeSaveData() {
 		},
 		nuggets: 100,
 		
+		// Coop furniture
+		// [
+		// 	{id: "table", x: 0, y: 0, dir: "down"},
+		// ]
 		coopFurniture: [],
 
 		// Equipped pet status
@@ -32,6 +36,7 @@ function makeSaveData() {
 			health: 1, // 0-1
 			hunger: 1, // 0-1
 			age: 0, // in days
+			lastUpdate: 0, // timestamp of last update
 			disease: false
 		},
 

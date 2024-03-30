@@ -111,49 +111,54 @@ class Pet extends PhysicsObject {
 			this.area = this.owner.area
 		}
 
-		// Click
+		// Manage -your- Pet
 		if (this.owner == PLAYER) {
+			// Click
 			if ((this.activated == false) && this.checkMouseOver()) {
 				this.mouseOver = true
 				CURSOR.on = true
 			} else {
 				this.mouseOver = false
 			}
-		}
 
-		// Update mood and life cycles
-		if (this.dead) {
-			
-		} else {
-			this.hunger = Math.max(0, this.hunger - 0.0004*dt)
-			let starvingThreshold = 0.2
-			if (this.hunger <= starvingThreshold) {
-				let speed = 0.005*((starvingThreshold-this.hunger)/starvingThreshold)
-				this.health = Math.max(0, this.health - speed*dt)
-			}
-
-			if (this.hunger < 0.75) {
-				this.happiness = Math.max(0, this.happiness - 0.003*dt)
-			}
-			if (this.health < 0.5) {
-				this.happiness = Math.max(0, this.happiness - 0.002*dt)
-			}
-			if (this.health > 0.85) {
-				this.happiness = Math.min(1, this.happiness + 0.002*dt)
-			}
-
-			if (this.happiness < 0.5) {
-				this.anim.setFrame(null, 1)
-			}
-
-			if (this.health <= 0) {
-				this.anim.setFrame(3,0)
-				this.dead = true
+			// Update mood and life cycles
+			if (this.dead) {
+				
+			} else {
+				this.updateLife(dt)
 			}
 		}
 
 		// Update Animation
 		this.anim.update(dt)
+	}
+
+	updateLife(dt) {
+		this.hunger = Math.max(0, this.hunger - 0.0004*dt)
+		let starvingThreshold = 0.2
+		if (this.hunger <= starvingThreshold) {
+			let speed = 0.005*((starvingThreshold-this.hunger)/starvingThreshold)
+			this.health = Math.max(0, this.health - speed*dt)
+		}
+
+		if (this.hunger < 0.75) {
+			this.happiness = Math.max(0, this.happiness - 0.003*dt)
+		}
+		if (this.health < 0.5) {
+			this.happiness = Math.max(0, this.happiness - 0.002*dt)
+		}
+		if (this.health > 0.85) {
+			this.happiness = Math.min(1, this.happiness + 0.002*dt)
+		}
+
+		if (this.happiness < 0.5) {
+			this.anim.setFrame(null, 1)
+		}
+
+		if (this.health <= 0) {
+			this.anim.setFrame(3,0)
+			this.dead = true
+		}
 	}
 
 	draw(drawX=this.x, drawY=this.y, dir=this.dir) {

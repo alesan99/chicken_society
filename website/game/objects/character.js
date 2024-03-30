@@ -515,4 +515,12 @@ class Character extends PhysicsObject {
 			this.controller.stopCollide(name, obj)
 		}
 	}
+
+	destroy() {
+		// Destroy pet as well
+		if (this.petObj) {
+			this.petObj.destroy()
+		}
+		super.destroy()
+	}
 }
