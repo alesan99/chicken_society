@@ -8,11 +8,21 @@
       "y": 322,
       "w": 50,
       "h": 50
+    },
+
+    "honeycombEntrance": {
+      "to": "icosahedralhoneycomb",
+      "fromWarp": "honeycombExit",
+      "facing": "left",
+      "x": 1024,
+      "y": 430,
+      "w": 50,
+      "h": 50
     }
   },
 
   "triggers": {
-    "loretest": {
+    "nonegglideanAdventure1": {
       "x": 100,
       "y": 200,
       "shape": [0, 0, 100, 0, 100, 200, 0, 200],

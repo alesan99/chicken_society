@@ -1,0 +1,79 @@
+{
+  "walls": [
+    [0, 576, 1024, 576, 1024, 600, 0, 600],
+    [-5, 576, -5, 163, 0, 163, 0, 576],
+    [1024, 576, 1024, 163, 1030, 163, 1030, 576],
+    [126, 298, 126, 204, 218, 204, 190, 329],
+    [303, 324, 278, 204, 372, 204, 368, 298],
+    [390, 295, 390, 197, 483, 197, 458, 327],
+    [568, 330, 542, 202, 636, 202, 636, 298],
+    [725, 330, 655, 296, 655, 198, 749, 198],
+    [836, 330, 809, 203, 899, 199, 902, 296]
+  ],
+
+  "warps": {
+    "neighborhoodExit": {
+      "to": "oldtown",
+      "fromWarp": "neighborhoodEntrance",
+      "facing": "down",
+      "x": 976,
+      "y": 176,
+      "w": 150,
+      "h": 40
+    },
+
+    "beefcakescoopEntrance": {
+      "to": "beefcakescoop",
+      "fromWarp": "beefcakescoopExit",
+      "facing": "down",
+      "x": 246,
+      "y": 230,
+      "w": 40,
+      "h": 40
+    },
+
+    "coopEntrance": {
+      "to": "coop",
+      "fromWarp": "coopExit",
+      "facing": "down",
+      "x": 65,
+      "y": 178,
+      "w": 180,
+      "h": 40
+    }
+  },
+
+  "triggers": {
+    "budsHome": {
+      "x": 486,
+      "y": 228,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
+      "action": "dialogue",
+      "dialogue": [
+        {
+          "text": [
+            "A plaque that reads:",
+            "Budrick K. Budbury III - 418 E. Shellington Street",
+            "The door appears to be locked."
+          ]
+        }
+      ]
+    },
+
+    "???sHome": {
+      "x": 753,
+      "y": 228,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": { "frame": 1, "x": 15, "y": -10 },
+      "action": "dialogue",
+      "dialogue": [
+        {
+          "text": ["This door appears to be locked."]
+        }
+      ]
+    }
+  }
+}

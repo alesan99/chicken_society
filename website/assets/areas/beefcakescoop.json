@@ -1,0 +1,248 @@
+{
+  "walls": [
+    [0, 576, 1024, 576, 1024, 600, 0, 600],
+    [866, 256, 1024, 256, 1024, 533],
+    [0, 256, 156, 256, 113, 333, 0, 333],
+    [0, 404, 71, 404, 0, 533],
+
+    [358, 349, 358, 317, 462, 317, 460, 350],
+    [579, 349, 579, 317, 667, 317, 667, 349],
+    [667, 312, 634, 227, 638, 227],
+    [358, 318, 393, 208, 399, 220],
+    [399, 220, 400, 183, 638, 181, 635, 224],
+    [153, 256, 153, 225, 380, 225, 380, 256],
+    [645, 256, 645, 225, 860, 225, 860, 256]
+  ],
+
+  "warps": {
+    "beefcakescoopExit": {
+      "to": "neighborhood",
+      "fromWarp": "beefcakescoopEntrance",
+      "facing": "right",
+      "x": 80,
+      "y": 363,
+      "w": 50,
+      "h": 40
+    }
+  },
+
+  "NPCs": {
+    "beefcake1": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 194,
+      "y": 298,
+      "facing": "down",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["I'm just a barbie girl living in my barbie world"]
+    },
+
+    "beefcake2": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 149,
+      "y": 421,
+      "facing": "right",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": [
+        "Any linear electrical network containing only voltage sources, current sources and resistances can be replaced at terminals A through B by an equivalent combination of a voltage source Vth in a series connection with a resistance Rth"
+      ]
+    },
+
+    "beefcake3": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 113,
+      "y": 499,
+      "facing": "up",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["Veni, vidi, vici"]
+    },
+
+    "beefcake4": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 296,
+      "y": 501,
+      "facing": "left",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": [
+        "Did you ever hear the tragedy of Darth Plagueis the Wise?"
+      ]
+    },
+
+    "beefcake5": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 319,
+      "y": 413,
+      "facing": "down",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": [
+        "I'm a god. How can you kill a god? What a grand and intoxicating innocence."
+      ]
+    },
+
+    "beefcake6": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 469,
+      "y": 251,
+      "facing": "left",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["I can't even"]
+    },
+
+    "beefcake7": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 483,
+      "y": 451,
+      "facing": "down",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["Don't talk to me until I've had my Starclucks."]
+    },
+
+    "beefcake8": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 665,
+      "y": 376,
+      "facing": "right",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["I hate men"]
+    },
+
+    "beefcake9": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 486,
+      "y": 480,
+      "facing": "up",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["цой жив"]
+    },
+
+    "beefcake10": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 784,
+      "y": 293,
+      "facing": "right",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["Whatever happens, happens"]
+    },
+
+    "beefcake11": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 804,
+      "y": 384,
+      "facing": "up",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": [
+        "There is nothing mysterious or natural about authority. It is formed, irradiated, disseminated; it is instrumental, it is persuasive; it has status, it establishes canons of taste and value; it is virtually indistinguishable from certain ideas it dignifies as true, and from traditions, perceptions, and judgments it forms, transmits, reproduces."
+      ]
+    },
+
+    "beefcake12": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 879,
+      "y": 464,
+      "facing": "left",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": [
+        "In the words of Sun Tzu: There is no war in Ba Sing Se."
+      ]
+    },
+
+    "beefcake13": {
+      "profile": {
+        "name": "Beefcake",
+        "color": "#fff0ff",
+        "head": false,
+        "face": false,
+        "body": "beefcakeaccessories"
+      },
+      "x": 735,
+      "y": 450,
+      "facing": "left",
+      "roamRadius": 5,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": ["So long, and thanks for all the fish!"]
+    }
+  }
+}

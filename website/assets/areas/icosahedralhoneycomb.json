@@ -1,0 +1,13 @@
+{
+  "warps": {
+    "honeycombExit": {
+      "to": "sjhdvbf",
+      "fromWarp": "honeycombEntrance",
+      "facing": "down",
+      "x": 530,
+      "y": 286,
+      "w": 20,
+      "h": 20
+    }
+  }
+}
