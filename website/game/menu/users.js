@@ -6,7 +6,7 @@ MENUS["usersMenu"] = new class extends Menu {
 		super(234,104, 560,350)
 	}
 
-    load (config) {
+    load () {
 		this.openTimer = 0
 
 		this.buttons = {}

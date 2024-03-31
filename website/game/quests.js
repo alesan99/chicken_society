@@ -201,6 +201,10 @@ const QuestSystem = (function() {
 			return activeQuests
 		},
 
+		getAllCompletedQuests() {
+			return {} //SAVEDATA.quests.completed (Not properly formatted)
+		},
+
 		// Print all active quest for testing purposes myes
 		debug() {
 			for (let questName in activeQuests) {

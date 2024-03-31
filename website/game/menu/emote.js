@@ -6,7 +6,7 @@ MENUS["emoteMenu"] = new class extends Menu {
 		super(177,414, 110,110)
 	}
 
-    load (config) {
+    load () {
 		this.buttons = {}
 
 		this.buttons[1] = new Button(false, ()=>{PLAYER.emote("wave"); CHAT.emoteMenuOpen = false},
