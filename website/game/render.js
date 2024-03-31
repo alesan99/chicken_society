@@ -87,8 +87,20 @@ class Render {
 		}
 	}
 
-	line(points) {
+	line(...points) {
+		if (points.length < 4) {
+			console.error("At least two points are required to draw a line.");
+			return
+		}
 
+		this.c.beginPath()
+		this.c.moveTo(points[0], points[1])
+		for (let i = 2; i < points.length; i += 2) {
+			const x = points[i]
+			const y = points[i + 1]
+			this.c.lineTo(x, y)
+		}
+		this.c.stroke()
 	}
 
 	// Draw polygon given [x,y,x,y,...], fill ("fill" or "line")

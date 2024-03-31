@@ -13,6 +13,10 @@ MENUS["questsMenu"] = new class extends Menu {
 		this.buttons = {}
 		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
 
+		this.buttons["sortAll"] = new Button("All", ()=>{closeMenu()}, null, 250,128, 100,32)
+		this.buttons["sortIncomplete"] = new Button("Incomplete", ()=>{closeMenu()}, null, 355,128, 100,32)
+		this.buttons["sortComplete"] = new Button("Complete", ()=>{closeMenu()}, null, 460,128, 100,32)
+
 		this.quests = QuestSystem.getAllActiveQuests()
 	}
 
@@ -37,6 +41,9 @@ MENUS["questsMenu"] = new class extends Menu {
 			scale = easing("easeOutBack", this.openTimer)
 		}
 		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
+		DRAW.setColor(180,180,200,1.0)
+		DRAW.setLineWidth(8)
+		DRAW.line(this.x+20,this.y+80+this.h-100, this.x+20,this.y+80, this.x+20+this.w-40,this.y+80)
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.rectangle(this.x+20, this.y+80, this.w-40, this.h-100, 1.0, 0, 0, 0, 0.5)
 

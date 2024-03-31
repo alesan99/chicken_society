@@ -116,10 +116,10 @@ function loadGameAssets() {
 	FONT.big = new RenderFont("Arial", 40)
 	FONT.hud = new RenderFont("Arial", 28)
 	FONT.caption = new RenderFont("Arial", 20)
-	FONT.nametag = new RenderFont("Arial", 16)
+	FONT.nametag = new RenderFont("Verdana", 16)
 	FONT.description = new RenderFont("Arial", 18)
 	FONT.speechBubble = new RenderFont("Courier New", 18)
-	FONT.guiLabel = new RenderFont("Times New Roman", 20)
+	FONT.guiLabel = new RenderFont("Verdana", 18)
 }
 
 function loadItem(category, itemId) {

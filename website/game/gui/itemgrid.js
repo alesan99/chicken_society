@@ -175,7 +175,8 @@ class ItemGrid {
 						if (ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
 							let image = ITEMS[itemType][this.list[i]].image
 							let sprite = ITEMS[itemType][this.list[i]].sprite
-							let scale = 0.4*(this.cw/42)
+
+							let scale = 0.9*(this.cw/Math.max(sprite.w, sprite.h))
 
 							if (image) {
 								DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5)

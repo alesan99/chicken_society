@@ -14,7 +14,9 @@ container.style.width = canvasWidth + "px"
 
 // Get the 2D rendering context for the canvas if supported by browser
 if (canvas.getContext) {
-	ctx = canvas.getContext("2d")
+	ctx = canvas.getContext("2d") // Use HTML5 2D rendering context (Simple, but slow and limited)
+	//ctx = canvas.getContext("webgl") // Use WebGL rendering context (Complex, but fast and flexible)
+	// To change the rendering backend, also go to index.html and change which render.js is loaded
 } else {
 	alert("Canvas is not supported in your browser.")
 }

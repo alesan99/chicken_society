@@ -86,6 +86,7 @@ class Button {
             
             DRAW.rectangle(this.x, this.y, this.w, this.h);
             DRAW.setColor(168, 85, 38, 1)
+            DRAW.setLineWidth(2)
             DRAW.rectangle(this.x, this.y, this.w, this.h, "line");
         }
 

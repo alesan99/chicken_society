@@ -7,6 +7,7 @@ var PROFILE = SAVEDATA.profile
 
 // Initialize game and load assets
 function gameLoad() {
+	DRAW = new Render(ctx)
 	loadGameAssets()
 
 	// Start netplay
@@ -15,8 +16,6 @@ function gameLoad() {
 	// Start world game state
 	WORLD = new World("hub")
 	setState(WORLD)
-
-	DRAW = new Render(ctx)
 }
 
 // update game logic
