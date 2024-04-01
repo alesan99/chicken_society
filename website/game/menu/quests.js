@@ -12,20 +12,26 @@ MENUS["questsMenu"] = new class extends Menu {
 
 		this.buttons = {}
 		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
-
-		this.buttons["sort:all"] = new Button("All", ()=>{this.sortQuests("all")}, null, 255,148, 100,32)
-		this.buttons["sort:incomplete"] = new Button("Incomplete", ()=>{this.sortQuests("incomplete")}, null, 360,148, 100,32)
-		this.buttons["sort:complete"] = new Button("Complete", ()=>{this.sortQuests("complete")}, null, 465,148, 100,32)
-
+		
+		// Quest display list
 		this.listX = this.x+20 // X position of list
-		this.listY = this.y+82 // Y position of list
-		this.listW = this.w-40 // Width of list
-		this.listH = this.h-100 // Height of list
+		this.listY = this.y+77 // Y position of list
+		this.listW = this.w-40-20 // Width of list
+		this.listH = this.h-110 // Height of list
 		this.listEntryH = 26 // Height of each entry
 		this.listScroll = 0 // Scroll position of list
+		this.listDisplayLen = Math.floor(this.listH/this.listEntryH) // Number of entries that can be displayed at once
 		this.list = [] // What is currently being displayed in menu (Because some quests may be expanded, or sorted out)
 
-		this.quests = []
+		// Sorting Buttons
+		this.buttons["sort:all"] = new Button("All", ()=>{this.sortQuests("all")}, null, 254,148, 110,32)
+		this.buttons["sort:incomplete"] = new Button("Incomplete", ()=>{this.sortQuests("incomplete")}, null, 369,148, 110,32)
+		this.buttons["sort:complete"] = new Button("Complete", ()=>{this.sortQuests("complete")}, null, 484,148, 110,32)
+
+		this.buttons["scrollBar"] = new ScrollBar(this.listX+this.listW, this.listY, 20, this.listH, 0, 100, this.listH/this.listEntryH, (scroll)=>{this.updateScroll(scroll)}, 1)
+		this.buttons["scrollBar"].updateRange(0, this.list.length, null)
+
+		this.quests = [] // Sorted quest info list
 		this.sorted = "all"
 		this.sortQuests(this.sorted)
 	}
@@ -52,35 +58,100 @@ MENUS["questsMenu"] = new class extends Menu {
 				this.quests.push(QuestSystem.getQuest(questName))
 			}
 		}
-		this.generateList()
+		this.generateList("refresh")
 	}
 
 	// Generate list of quests and progress to display
-	generateList() {
-		this.list = []
-		let i = 0
-		for (let quest of this.quests) {
-			let expandButton = new Button(quest.name, ()=>{this.toggleList(i)}, null, this.listX, this.listY+this.listEntryH*i, this.listW, this.listEntryH)
-			expandButton.labelJustify = "left"
-			let entry = {
-				type: "quest", // quest, progress, description
-				expanded: false,
-				button: expandButton,
+	generateList(refresh) {
+		if (refresh) {
+			// Create list from scratch
+			this.list = []
+			let i = 0
+			for (let quest of this.quests) {
+				let expandButton = new Button(quest.name, ()=>{this.toggleQuest(quest.name)}, null, this.listX, this.listY+this.listEntryH*i, this.listW, this.listEntryH)
+				expandButton.labelJustify = "left"
+				let entry = {
+					type: "quest", // quest, progress, description
+					quest: this.quests[i],
+					questi: i,
+					expanded: false,
+					button: expandButton,
+				}
+				this.list.push(entry)
+				i += 1
 			}
-			this.list.push(entry)
-			i += 1
+		} else {
+			// Update existing list
+			// Iterate through list and remove entries that have been collapsed or add new entries that have been expanded
+			let questAppearsExpanded = false // Does the quest entry have progress entries after it?
+			for (let i=this.list.length-1; i>=0; i--) {
+				let entry = this.list[i]
+				if (entry.type == "quest") {
+					if (questAppearsExpanded !== false) {
+						// Remove collapsed entries
+						if (!entry.expanded) {
+							this.list.splice(i+1, questAppearsExpanded-i)
+						}
+					} else {
+						// Add progress entries
+						if (entry.expanded) {
+							let quest = this.quests[entry.questi]
+							for (let j=0; j<quest.progress.length; j++) {
+								let progressEntry = {
+									type: "progress",
+									text: quest.progressDescription[j],
+									progress: quest.progress[j],
+									progressFinish: quest.progressFinish[j],
+								}
+								this.list.splice(i+1+j, 0, progressEntry)
+							}
+						}
+					}
+					questAppearsExpanded = false
+				} else if (entry.type == "progress") {
+					// Belongs to the previous quest in list
+					if (questAppearsExpanded === false) {
+						questAppearsExpanded = i // This is the last entry of the expanded quest
+					}
+				}
+			}
+			// Update positions of buttons
+			for (let i=0; i<this.list.length; i++) {
+				let entry = this.list[i]
+				if (entry.button) {
+					entry.button.y = this.listY+this.listEntryH*i
+				}
+			}
 		}
+
+		this.buttons["scrollBar"].updateRange(0, this.list.length, null)
 	}
 
 	// Toggle expanded state of list entry
-	toggleList(i) {
-		this.list[i].expanded = !this.list[i].expanded
+	toggleQuest(questName) {
+		// Find quest in display list with questName
+			for (let i=0; i<this.list.length; i++) {
+			let entry = this.list[i]
+			if (entry.type == "quest" && entry.quest.name == questName) {
+				entry.expanded = !entry.expanded
+				this.generateList()
+				return
+			}
+		}
 		this.generateList()
 	}
 
 	// Scrollbar has moved. Move buttons
-	updateScroll(v) {
+	updateScroll(scroll) {
+		this.listScroll = scroll
 
+		// Move buttons
+		for (let i=0; i<this.list.length; i++) {
+			let entry = this.list[i]
+			if (entry.button) {
+				entry.button.y = this.listY+this.listEntryH*i - this.listScroll*this.listEntryH
+			}
+		}
 	}
 
 	keyPress(key) {
@@ -90,10 +161,25 @@ MENUS["questsMenu"] = new class extends Menu {
 	}
 
 	mouseClick(button, x, y) {
+		// Click buttons in display list
+		let firstEntryi = Math.floor(this.listScroll)
+		for (let i=(Math.max(0,firstEntryi)); i<Math.min(this.list.length, firstEntryi+this.listDisplayLen+1); i++) {
+			let entry = this.list[i]
+			if (entry.button && entry.button.click(button, x, y)) {
+				return true
+			}
+		}
 		return super.mouseClick(button, x, y)
 	}
 
 	mouseRelease(button, x, y) {
+		// Release buttons in display list
+		for (let i=0; i<this.list.length; i++) {
+			let entry = this.list[i]
+			if (entry.button && entry.button.clickRelease(button, x, y)) {
+				return true
+			}
+		}
 		return super.mouseRelease(button, x, y)
 	}
 	
@@ -108,43 +194,46 @@ MENUS["questsMenu"] = new class extends Menu {
 		DRAW.rectangle(this.listX, this.listY, this.listW, this.listH, 1.0, 0, 0, 0, 0.5)
 		DRAW.setColor(180,180,200, scale)
 		DRAW.setLineWidth(4)
-		DRAW.line(this.x+22,this.y+82+this.h-100, this.x+22,this.y+82, this.x+22+this.w-40,this.y+82)
+		DRAW.line(this.listX+2,this.listY+this.listH, this.listX+2,this.listY+2, this.listX+this.listW,this.listY+2) // Indent shadow
 
-		// Render list of quests
+		// Categories
 		DRAW.setColor(112, 50, 16, scale)
 		DRAW.setFont(FONT.caption)
 		DRAW.text("Quests:", this.x+20, this.y+35, "left")
 
-		for (let i=0; i<this.list.length; i++) {
+		// Render list of quests
+		let firstEntryi = Math.floor(this.listScroll)
+		for (let i=(Math.max(0,firstEntryi)); i<Math.min(this.list.length, firstEntryi+this.listDisplayLen+1); i++) {
 			let entry = this.list[i]
-			let y = this.listY+this.listEntryH*i
-			if (entry.type == "quest") {
-				entry.button.draw()
+			let y = this.listY+this.listEntryH*i - this.listScroll*this.listEntryH
+			// Seperator line
+			DRAW.setColor(220,220,230, scale)
+			DRAW.setLineWidth(2)
+			DRAW.line(this.listX+4, y+this.listEntryH, this.listX+this.listW, y+this.listEntryH)
+
+			// Entry contents
+			if (entry) {
+				if (entry.type == "quest") {
+					entry.button.draw()
+				} else {
+					DRAW.setColor(0, 0, 0, scale)
+					DRAW.setFont(FONT.caption)
+					DRAW.text(entry.text, this.listX+10, y+this.listEntryH-4, "left")
+					if (entry.progress != null && entry.progressFinish != null) {
+						// Draw Checkbox
+						DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line")
+						if (entry.progress == entry.progressFinish) {
+							DRAW.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
+						}
+						// Debug; display as string
+						//DRAW.text(entry.progress + "/" + entry.progressFinish, this.listX+this.listW-10, y+this.listEntryH-4, "right")
+					}
+				}
 			}
 		}
-
-		// let y = this.y+100
-		// let line = 0
-		// let size = 24
-		// for (let quest of this.quests) {
-		// 	// let quest = QuestSystem.getQuest(questName)
-		// 	DRAW.setColor(220,220,230, scale)
-		// 	DRAW.setLineWidth(2)
-		// 	DRAW.line(this.x+20, y+line*size+2, this.x+20+this.w-40, y+line*size+2)
-		// 	DRAW.setColor(0, 0, 0, scale)
-		// 	DRAW.text(quest.name, this.x+20, y+line*size, "left")
-
-		// 	for (let i=0; i<quest.progress.length; i++) {
-		// 		DRAW.setColor(220,220,230, scale)
-		// 		DRAW.line(this.x+20, y+line*size+size+2, this.x+20+this.w-40, y+line*size+size+2)
-		// 		DRAW.setColor(0, 0, 0, scale)
-		// 		DRAW.text(quest.progressDescription[i], this.x+40, y+line*size+20, "left")
-		// 		DRAW.text(quest.progress[i] + "/" + quest.progressFinish[i], this.x+470, y+line*size+size, "left")
-		// 		line += 1
-		// 	}
-
-		// 	line += 1
-		// }
+		DRAW.setColor(244, 188, 105, 1.0) // Cover up scrolling past list window
+		DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
+		DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH/2, "fill")
 
 		// Render all buttons
 		this.drawButtons()
@@ -152,6 +241,14 @@ MENUS["questsMenu"] = new class extends Menu {
 
 	update(dt) {
 		this.openTimer = Math.min(1, this.openTimer + 4*dt)
+		
+		// Update buttons in display list
+		for (let i=0; i<this.list.length; i++) {
+			let entry = this.list[i]
+			if (entry.button) {
+				entry.button.update(dt)
+			}
+		}
 
 		this.updateButtons(dt)
 	}

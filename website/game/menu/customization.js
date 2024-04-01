@@ -47,9 +47,6 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["furnitureTab"] = new Button("FT", ()=>{this.filterInventory("furniture"); this.buttons[this.tab].selected=false; this.tab = "furnitureTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(3)}, 522+34*3,150, 34,34)
 		this.buttons["itemTab"] = new Button("I", ()=>{this.filterInventory("item"); this.buttons[this.tab].selected=false; this.tab = "itemTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(4)}, 522+34*4,150, 34,34)
 		this.buttons["petTab"] = new Button("P", ()=>{this.filterInventory("pet"); this.buttons[this.tab].selected=false; this.tab = "petTab"; this.buttons[this.tab].selected=true}, {icon:IMG.items, iconFrame:SPRITE.items.getFrame(5)}, 522+34*5,150, 34,34)
-		this.filter = "all"
-		this.filterInventory("all")
-		this.buttons["allTab"].selected = true
 
 		this.buttons["inventory"] = new ItemGrid(
 			(itemId,itemType)=>{
@@ -92,6 +89,11 @@ MENUS["customization"] = new class extends Menu {
 			}, 476,184, 56,56, 5,3)
 		this.buttons["inventory"].showCount = true // How how many of each item the player owns
 
+		// Do initial filter
+		this.filter = "all"
+		this.filterInventory("all")
+		this.buttons["allTab"].selected = true
+
 		// this.buttons["bodyRight"] = new Button(">", ()=>{
 		// 	let keys = Object.keys(SAVEDATA.items.body);
 		// 	if (keys.length == 0) {
@@ -119,6 +121,7 @@ MENUS["customization"] = new class extends Menu {
 				this.inventory.push(itemId)
 			}
 		}
+		this.buttons["inventory"].updateList(this.inventory)
 	}
 	
 	draw() {

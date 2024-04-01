@@ -58,6 +58,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					break
 				case "/give":
 					addItem(null, arg, arg2 || 1)
+					break
 				case "/head":
 					PROFILE.head = arg
 					PLAYER.updateProfile(PROFILE, "sendToServer")
@@ -95,7 +96,11 @@ MENUS["chatMenu"] = new class extends Menu {
 					QuestSystem.debug()
 					break
 				case "/quest": // Force progress in quest
-					QuestSystem.progress(arg, Number(arg2) || 0, Number(arg3) || 1)
+					if (!QuestSystem.getQuest(arg)) {
+						QuestSystem.start(arg)
+					} else {
+						QuestSystem.progress(arg, Number(arg2) || 0, Number(arg3) || 1)
+					}
 					break
 				case "/debug": // Debug physics
 					DEBUGPHYSICS = !DEBUGPHYSICS

@@ -32,8 +32,9 @@ class ItemGrid {
 		// Vertical scroll
 		this.scroll = 0
 		this.buttons = []
-		this.buttons["scrollUp"] = new Button("", ()=>{this.scrollUp()}, null, this.x+this.w, this.y, 20, 20)
-		this.buttons["scrollDown"] = new Button("", ()=>{this.scrollDown()}, null, this.x+this.w, this.y+this.h-20, 20, 20)
+		this.buttons["scrollBar"] = new ScrollBar(this.x+this.w, this.y, 20, this.h, 0, this.list.length/this.gw, this.gh, (scroll)=>{this.updateScroll(scroll)}, 1)
+		//this.buttons["scrollUp"] = new Button("", ()=>{this.scrollUp()}, null, this.x+this.w, this.y, 20, 20)
+		//this.buttons["scrollDown"] = new Button("", ()=>{this.scrollDown()}, null, this.x+this.w, this.y+this.h-20, 20, 20)
 
         this.hover = false;
         this.holding = false;
@@ -101,21 +102,10 @@ class ItemGrid {
 		}
     }
 	mouseScroll(dy){
-		if (this.hover) {
-			if (dy < 0) {
-				this.scrollUp()
-			} else {
-				this.scrollDown()
-			}
-		}
+		this.buttons["scrollBar"].mouseScroll(dy)
 	}
-	scrollUp(){
-		this.scroll -= 1
-		this.scroll = Math.max(0, Math.min(this.scroll, this.list.length/this.gw-this.gh))
-	}
-	scrollDown(){
-		this.scroll += 1
-		this.scroll = Math.max(0, Math.min(this.scroll, this.list.length/this.gw-this.gh))
+	updateScroll(scroll) {
+		this.scroll = Math.floor(scroll+0.5)
 	}
 
 	getCellIndex(cx, cy) {
@@ -129,12 +119,26 @@ class ItemGrid {
 		}
 	}
 
+	updateList(list) {
+		this.list = list
+		this.scroll = 0
+		this.buttons["scrollBar"].updateRange(0, this.list.length/this.gw, null)
+	}
+
     draw(){
+		// Scroll bar
+		DRAW.setColor(168, 85, 38, 1);
+		DRAW.rectangle(this.x+this.w, this.y, 20, this.h, "fill");
+		for (const button in this.buttons) {
+			this.buttons[button].draw()
+		}
+
 		// Render all grid cells
         let [mouseX, mouseY] = getMousePos(); //returns x and y pos of mouse
 		
 		DRAW.setColor(242, 242, 242, 1); // Light color for other cells
 		DRAW.rectangle(this.x, this.y, this.w, this.h);
+		DRAW.setFont(FONT.guiLabel);
 
 		for (let cx = 0; cx < this.gw; cx++) {
 			for (let cy = 0; cy < this.gh; cy++) {
@@ -201,17 +205,13 @@ class ItemGrid {
 			if (this.list[i]) {
 				let itemType = getItemCategory(this.list[i])
 				if (itemType && ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
+					let name = ITEMS[itemType][this.list[i]].name
+					DRAW.setColor(255,255,255, 0.5)
+					DRAW.rectangle(mouseX+20, mouseY, DRAW.getTextWidth(name), 24, "fill")
 					DRAW.setColor(0, 0, 0, 1)
-					DRAW.text(ITEMS[itemType][this.list[i]].name, mouseX+20, mouseY+20, "left")
+					DRAW.text(name, mouseX+20, mouseY+18, "left")
 				}
 			}
-		}
-
-		// Scroll bar
-		DRAW.setColor(168, 85, 38, 1);
-		DRAW.rectangle(this.x+this.w, this.y, 20, this.h, "fill");
-		for (const button in this.buttons) {
-			this.buttons[button].draw()
 		}
     }
 }

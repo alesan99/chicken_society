@@ -86,6 +86,7 @@ const QuestSystem = (function() {
 									// Is outfit greater/less than defined cost?
 									let cost = 0
 									if (head) {
+										console.log(head)
 										cost += ITEMS.head[head].cost
 									}
 									if (face) {
@@ -100,6 +101,12 @@ const QuestSystem = (function() {
 									if (cost >= event.costGreater) {
 										doProgress = true
 									}
+								}
+							} else if (type == "area") {
+								// args: area name
+								let area = args[0]
+								if (event.area == area) {
+									doProgress = true
 								}
 							} else {
 								// Not a predefined event

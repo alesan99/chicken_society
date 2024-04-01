@@ -99,6 +99,9 @@ class World {
 
 		// Load Area data
 		loadJSON(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this.area, this.oldArea, fromWarp, endFunc)})
+
+		// Progress Quests
+		QuestSystem.event("area", area) // Progress quests that look for areas
 	}
 
 	// Register an object as part of the physics world
