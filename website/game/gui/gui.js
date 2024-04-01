@@ -1,7 +1,9 @@
 class Button {
-    constructor(label, action, graphic, x, y, w, h) { //in px, label is text on button, action is function to call when clicked  
+    constructor(label="", action, graphic, x=0, y=0, w, h) { //in px, label is text on button, action is function to call when clicked  
         this.visible = true;
         this.label = label;
+        this.labelJustify = "center";
+
         if (graphic) {
             // If specified, render image for button with frames
             if (graphic.image) {
@@ -98,7 +100,13 @@ class Button {
             // Label
             DRAW.setFont(FONT.guiLabel)
             DRAW.setColor(112, 50, 16,1)
-            DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, "center")
+            if (this.labelJustify == "center") {
+                DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify)
+            } else if (this.labelJustify == "left") {
+                DRAW.text(this.label, this.x+10, this.y+this.h/2+7, this.labelJustify)
+            } else if (this.labelJustify == "right") {
+                DRAW.text(this.label, this.x+this.w-10, this.y+this.h/2+7, this.labelJustify)
+            }
         }
     }
 }
