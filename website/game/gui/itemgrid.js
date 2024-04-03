@@ -206,7 +206,7 @@ class ItemGrid {
 				let itemType = getItemCategory(this.list[i])
 				if (itemType && ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
 					let name = ITEMS[itemType][this.list[i]].name
-					DRAW.setColor(255,255,255, 0.5)
+					DRAW.setColor(255,255,255, 0.75)
 					DRAW.rectangle(mouseX+20, mouseY, DRAW.getTextWidth(name), 24, "fill")
 					DRAW.setColor(0, 0, 0, 1)
 					DRAW.text(name, mouseX+20, mouseY+18, "left")

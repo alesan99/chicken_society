@@ -6,15 +6,15 @@ MENUS["shop"] = new class extends Menu {
 		super(234,104, 560,350)
 	}
 
-    load (config) {
+	load (config) {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
+		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		this.name = config.name || ""
 		this.items = config.items || {} // {category: {itemId: price}}
-        // Shop items
+		// Shop items
 		// Inventory
 		this.tab = "allTab"
 		this.inventory = []
@@ -82,7 +82,7 @@ MENUS["shop"] = new class extends Menu {
 				this.buyItem(this.selectedItemType, this.selectedItem)
 			}
 		}, null, 664,400, 100,30)
-    }
+	}
 
 	filterInventory(category) {
 		this.inventory.length = 0

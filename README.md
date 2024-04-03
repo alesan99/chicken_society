@@ -28,5 +28,5 @@ These commands were used to set up node.js for use in the project.
 This is NOT required to simply install the project on a new machine.
 ```
 npm init -y
-npm install express socket.io socket.io-msgpack-parser express-session
+npm install express socket.io socket.io-msgpack-parser express-session json5
 ```

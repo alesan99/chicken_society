@@ -13,8 +13,13 @@ var MINIGAME
 class World {
 	constructor (area="hub") {
 		this.name = "world"
+
+		// Area information
 		this.area = area //Area name
 		this.oldArea = area //Where did the player just come from? (Think warps)
+
+		this.areaName = "???" // Neat name for Area
+		this.areaMapLocation = false // [x, y] location to be displayed in map menu
 
 		// Initialize Physics world
 		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
@@ -98,10 +103,29 @@ class World {
 		}
 
 		// Load Area data
-		loadJSON(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this.area, this.oldArea, fromWarp, endFunc)})
+		loadJSON5(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this, fromWarp, endFunc)})
 
 		// Progress Quests
 		QuestSystem.event("area", area) // Progress quests that look for areas
+	}
+
+	warpToArea (area, fromWarp, character) {
+		if (character == undefined) {
+			character = PLAYER
+		}
+		AudioSystem.fadeOutMusic(1)
+		PLAYER.static = true // Don't let player move when in the process of warping
+		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
+			// Display black screen while area is loading...
+			Transition.start("loading", "in", 100, null, null)
+			// Actually start loading Area
+			WORLD.loadArea(area, fromWarp, () => {
+				// Transition in once loading is done
+				Transition.start("iris", "in", 0.4, [character.x, character.y-40], () => {
+					PLAYER.static = false // Let player move after transition is done
+			})
+		})
+		})
 	}
 
 	// Register an object as part of the physics world

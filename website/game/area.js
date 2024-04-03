@@ -2,7 +2,14 @@
 // logic that controls the background and elements of an area
 
 // Load area data from .json
-function loadAreaFile(data, area, fromArea, fromWarp, endFunc) {
+function loadAreaFile(data, world, fromWarp, endFunc) {
+	let area = world.area
+	let fromArea = world.oldArea
+
+	// Get general information
+	world.areaName = data.name || "???"
+	world.areaMapLocation = data.mapLocation || false
+
 	// Load music
 	if (data.music) {
 		if (MUSIC[data.music]) {

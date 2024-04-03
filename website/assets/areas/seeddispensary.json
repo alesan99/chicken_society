@@ -1,4 +1,6 @@
 {
+    "name": "Seed Dispensary",
+    "mapLocation": [261, 196],
     "music": "seeddispensary",
 
 	"walls": [

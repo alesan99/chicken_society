@@ -14,6 +14,7 @@
     "bcrypt": "^5.1.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "json5": "^2.2.3",
     "mysql2": "^3.9.1",
     "socket.io": "^4.7.2",
     "socket.io-msgpack-parser": "^3.0.2",

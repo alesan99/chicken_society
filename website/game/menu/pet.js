@@ -10,7 +10,7 @@ MENUS["petMenu"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
+		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		// Get Pet information
 		this.pet = PLAYER.petObj

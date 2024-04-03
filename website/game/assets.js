@@ -57,6 +57,9 @@ function loadGameAssets() {
 	IMG.menu = new RenderImage("assets/gui/menu.png")
 	IMG.items = new RenderImage("assets/gui/items.png")
 	SPRITE.items = new Sprite(IMG.items, 6,1, 30,30, 0,0, 1,1)
+	IMG.map = new RenderImage("assets/gui/map.png")
+	SPRITE.map = new Sprite(IMG.map, 1,1, 512,304)
+	SPRITE.mapIcons = new Sprite(IMG.map, 2,1, 36,36, 0,304, 1,1)
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed
@@ -178,6 +181,25 @@ function loadJSON(filePath, callBack) {
 			console.log("JSON Network response was not ok")
 		}
 		return response.json()
+	})
+	.then(data => {
+		callBack(data)
+	})
+	.catch(error => {
+		console.log("There was a problem loading the JSON file:", error)
+	})
+}
+
+// Same as above, but for the more human-readable JSON5 format
+function loadJSON5(filePath, callBack) {
+	// JSON file must be loaded asynchronously
+	fetch(filePath).then(response => {
+		if (!response.ok) {
+			console.log("JSON Network response was not ok")
+		}
+		return response.text().then(text => {
+			return JSON5.parse(text)
+		})
 	})
 	.then(data => {
 		callBack(data)

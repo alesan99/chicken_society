@@ -11,7 +11,7 @@ MENUS["questsMenu"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
+		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 		
 		// Quest display list
 		this.listX = this.x+20 // X position of list
@@ -223,7 +223,8 @@ MENUS["questsMenu"] = new class extends Menu {
 						// Draw Checkbox
 						DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line")
 						if (entry.progress == entry.progressFinish) {
-							DRAW.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
+							DRAW.text("✔", this.listX+this.listW-30+10, y+20, "center")
+							//DRAW.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
 						}
 						// Debug; display as string
 						//DRAW.text(entry.progress + "/" + entry.progressFinish, this.listX+this.listW-10, y+this.listEntryH-4, "right")
@@ -233,7 +234,7 @@ MENUS["questsMenu"] = new class extends Menu {
 		}
 		DRAW.setColor(244, 188, 105, 1.0) // Cover up scrolling past list window
 		DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
-		DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH/2, "fill")
+		DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
 
 		// Render all buttons
 		this.drawButtons()

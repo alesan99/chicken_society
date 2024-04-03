@@ -21,7 +21,19 @@ Netplay = class {
 		this.timeOut = 10000 // Give up sending an important message after this amount of time (sec.)
 
 		// Other Clients (lets call them players)
+		// Format (as of 4/3/2024):
+		/* {
+			id: playerData.id,
+			state: playerData.state,
+			minigame: playerData.minigame,
+			area: playerData.area,
+			profile: playerData.profile,
+			name: playerData.name,
+			chicken: playerData.chicken
+		} */
 		this.playerList = {}
+
+		this.mutedPlayers = {} // Which playerIDs not to recieve updates from
 
 		// This Client
 		this.connect()
@@ -121,6 +133,11 @@ Netplay = class {
 			// Add player to area (in world.js)
 			WORLD.addPlayerToArea(id, this.playerList[id])
 			this.newPlayerJoined = true // New player! Let them know your information
+
+			// Add to connected player list, if open
+			if (getOpenMenu() == "usersMenu") {
+				MENUS[open_menu].generateConnectedPlayersList()
+			}
 		}
 	}
 
@@ -129,6 +146,11 @@ Netplay = class {
 		if (id != socket.id) {
 			WORLD.removePlayerFromArea(id)
 			delete this.playerList[id]
+			
+			// Add to connected player list, if open
+			if (getOpenMenu() == "usersMenu") {
+				MENUS[open_menu].generateConnectedPlayersList()
+			}
 		}
 	}
 
@@ -165,7 +187,12 @@ Netplay = class {
 	}
 
 	recieveChat (id, text) {
-		if (this.playerList[id] != null) {
+		if (this.mutedPlayers[id]) {
+			return false
+		}
+
+		let playerData = this.playerList[id]
+		if (playerData != null) {
 			let display = false
 			if ((PLAYER.area != this.playerList[id].area) || (this.minigame)) { // Display chat message in chat log if chicken is not visible
 				display = true
@@ -196,11 +223,9 @@ Netplay = class {
 	sendAction(name, ...args) {
 		console.log(name, args)
 		if (this.actionTimer > this.actionInterval) {
-			console.log(`Sent action: ${name}`)
 			socket.emit("action", [[name, args]])
 			this.actionTimer = 0
 		} else {
-			console.log(`Enqueued action: ${name}. ${this.actionTimer}, ${this.actionInterval}`)
 			this.actionQueue.push([name, args])
 		}
 	}
@@ -220,7 +245,6 @@ Netplay = class {
 	recieveAction(id, actions) {
 		let playerData = this.playerList[id]
 		if (playerData != null) {
-			console.log(`Recieved actions from ${playerData.name}`)
 			let chicken = CHARACTER[id]
 			if (chicken != null) {
 				for (let i in actions) {
@@ -373,6 +397,32 @@ Netplay = class {
 			this.minigame.highscores = data
 		}
 	}
+
+	// Mute player
+	// This disables visibility of a player and their action
+	mutePlayer(id, doMute) {
+		let playerData = this.playerList[id]
+		if (playerData) {
+			if (doMute) {
+				this.mutedPlayers[id] = true
+				Notify.new(`Muted ${playerData.name}.`, 2)
+			} else {
+				if (this.mutedPlayers[id]) {
+					delete this.mutedPlayers[id]
+				}
+				Notify.new(`Unmuted ${playerData.name}.`, 2)
+			}
+			return true
+		} else {
+			Notify.new(`Can't mute this player.`, 2, [255, 0, 0])
+			return false
+		}
+	}
+
+	// Get player data from player data list
+	getPlayerData(id) {
+		return this.playerList[id]
+	}
 }
 
 } else {
@@ -397,5 +447,7 @@ Netplay = class {
 		sendArea(area) {}
 		recieveArea(id, area) {}
 		sendMinigame(minigameName) {}
+		mutePlayer(id, doMute) {}
+		getPlayerData(id) {}
 	}
 }

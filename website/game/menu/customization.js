@@ -10,7 +10,7 @@ MENUS["customization"] = new class extends Menu {
 		this.openTimer = 0
 
 		this.buttons = {}
-		this.buttons["close"] = new Button("X", ()=>{closeMenu()}, null, 740,128, 32,32)
+		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		// Profile loading from local browser storage (NOT from server)
 		this.buttons["load"] = new Button("Load", ()=>{
