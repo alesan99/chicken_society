@@ -27,7 +27,7 @@ MENUS["customization"] = new class extends Menu {
 		}, null, 373,404, 100,32)
 
 		// Name
-		this.buttons["name"] = new Button(PROFILE.name, ()=>{}, null, 292,129, 140,32)
+		this.buttons["name"] = new TextBox(PROFILE.name, (text)=>{PROFILE.name = text; PLAYER.updateProfile(PROFILE, "sendToServer")}, null, 260,129, 200,32)
 
 		// Color
 		this.buttons["color"] = new Button("Random", ()=>{
@@ -94,17 +94,7 @@ MENUS["customization"] = new class extends Menu {
 		this.filterInventory("all")
 		this.buttons["allTab"].selected = true
 
-		// this.buttons["bodyRight"] = new Button(">", ()=>{
-		// 	let keys = Object.keys(SAVEDATA.items.body);
-		// 	if (keys.length == 0) {
-		// 		PROFILE.body = false
-		// 	} else {
-		// 		PROFILE.body = keys[Math.floor(Math.random() * keys.length)];
-		// 	}
-		// 	PLAYER.updateProfile(PROFILE, "sendToServer");
-		// }, null, 733,322, 32,32)
-		// Pet
-		this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
+		//this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
 	}
 
 	filterInventory(category) {
@@ -139,8 +129,6 @@ MENUS["customization"] = new class extends Menu {
 
 		DRAW.text("Color", 285, 388, "left")
 
-		DRAW.text("Pet", 613, 384, "left")
-
 		PLAYER.draw(360,340,"down")
 
 		// Render all buttons
@@ -151,14 +139,6 @@ MENUS["customization"] = new class extends Menu {
 		this.openTimer = Math.min(1, this.openTimer + 4*dt)
 
 		this.updateButtons(dt)
-	}
-
-	keyPress(key) {
-
-	}
-
-	keyRelease(key) {
-		
 	}
 
 	mouseClick(button, x, y) {

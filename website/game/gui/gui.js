@@ -114,6 +114,131 @@ class Button {
 	}
 }
 
+// TextBox
+// Lets you type text
+class TextBox extends Button {
+	constructor(text="", textAction=(text)=>{}, graphic, x=0, y=0, w, h) {
+		super("", ()=>{}, null, x, y, w, h)
+
+		this.textAction = textAction
+
+		this.text = text // text being edited
+		this.typing = false // can user type?
+
+		this.cursor = text.length // index of where to edit texxt
+
+		this.blinkTimer = 0 // blinking cursor animation
+	}
+
+	draw() {
+		if (this.holding == true){
+			DRAW.setColor(214,214,230,1); //dark
+		} else if (this.hover == true){
+			DRAW.setColor(255,255,255,1); //medium
+		} else {
+			DRAW.setColor(245,245,246,1); //light
+		}
+		
+		DRAW.rectangle(this.x, this.y, this.w, this.h);
+		DRAW.setColor(90,90,110, 1)
+		DRAW.setLineWidth(2)
+		DRAW.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
+
+		DRAW.setColor(255,255,255, 0.4);
+		DRAW.line(this.x+3, this.y+this.h-4, this.x+this.w-3, this.y+this.h-4); // Highlight
+
+		// Text input
+		DRAW.setFont(FONT.guiLabel)
+		DRAW.setColor(10,10,14,1)
+		let text = this.text
+
+		DRAW.text(text, this.x+10, this.y+this.h/2+7, "left")
+		
+		// Cursor
+		if (this.typing && this.blinkTimer < 0.5) {
+			// Show cursor only when typing
+			let cursorX = this.x + 10 + DRAW.getTextWidth(text.slice(0, this.cursor)) - 2
+			DRAW.text("|", cursorX, this.y+this.h/2+5, "left")
+		}
+	}
+
+	update(dt) {
+		this.blinkTimer = (this.blinkTimer + dt)%1
+		super.update(dt)
+	}
+
+	keyPress(key) {
+		if (key == "Enter") {
+			// Enter text
+			if (this.textAction) {
+				this.textAction(this.text)
+				this.typing = false
+			}
+			return true
+		} else if (key == "Backspace") {
+			// Remove text (from cursor location)
+			if (this.text.length > 0 && this.cursor > 0) {
+				this.text = this.text.slice(0, this.cursor-1) + this.text.slice(this.cursor)
+				this.cursor = Math.max(0, this.cursor - 1)
+			}
+
+			return true
+		} else if (key == "ArrowLeft") {
+			// Move cursor left
+			this.cursor = Math.max(0, this.cursor - 1)
+		} else if (key == "ArrowRight") {
+			// Move cursor right
+			this.cursor = Math.min(this.text.length, this.cursor + 1)
+		} else if (key.length === 1) {
+			// Add text
+			DRAW.setFont(FONT.guiLabel)
+			let textWidth = DRAW.getTextWidth(this.text + key)
+			if (textWidth < this.w-20) { // Only add character if it fits within box
+				// Insert character at cursor location
+				this.text = this.text.slice(0, this.cursor) + key + this.text.slice(this.cursor)
+
+				this.cursor = this.cursor + 1
+			}
+			return true
+		}
+	}
+
+	keyRelease(key) {
+
+	}
+	
+	click() {
+		super.click()
+		if (this.hover) {
+			this.typing = true
+
+			// Find cursor location
+			let [mouseX, mouseY] = getMousePos()
+			let text = this.text
+			let cursorX = this.x + 10
+			for (let i=0; i<=text.length; i++) {
+				let charW = DRAW.getTextWidth(text[i])
+				let nextX = cursorX + DRAW.getTextWidth(text[i])
+				if (mouseX < nextX-charW/2) {
+					this.cursor = i
+					break
+				}
+				cursorX = nextX
+			}
+			return true
+		} else {
+			if (this.textAction) {
+				this.textAction(this.text)
+			}
+			this.typing = false
+		}
+	}
+
+	clickRelease() {
+		super.clickRelease()
+	}
+}
+
 // Scrollbar
 class ScrollBar {
 	// position x, y, size w, h, min scroll, max scroll, "visible" window of scrolling area, scroll bar movement update function

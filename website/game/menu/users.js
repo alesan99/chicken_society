@@ -171,7 +171,6 @@ MENUS["usersMenu"] = new class extends Menu {
 	mutePlayer() {
 		let id = this.list[this.listSelection]
 
-		console.log(NETPLAY.mutedPlayers)
 		let doMute = true
 		if (NETPLAY.mutedPlayers && NETPLAY.mutedPlayers[id]) { // Toggle
 			doMute = false

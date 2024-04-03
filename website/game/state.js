@@ -32,11 +32,23 @@ function stateDraw() {
 }
 
 function stateKeyPress(key, code) {
+	// Is menu open?
+	if (open_menu) {
+		if (MENUS[open_menu].keyPress(key, code)) {
+			return true
+		}
+	}
 	if (game_state.keyPress) {
 		game_state.keyPress(key, code)
 	}
 }
 function stateKeyRelease(key, code) {
+	// Is menu open?
+	if (open_menu) {
+		if (MENUS[open_menu].keyRelease(key, code)) {
+			return true
+		}
+	}
 	if (game_state.keyRelease) {
 		game_state.keyRelease(key, code)
 	}

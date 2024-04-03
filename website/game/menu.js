@@ -29,12 +29,22 @@ class Menu {
 		}
     }
 
-    keyPress(key) {
-
+    keyPress(key, code) {
+		// Test click on all buttons
+		for (const [name, button] of Object.entries(this.buttons)) {
+			if (button.keyPress && button.keyPress(key, code)) {
+				return true
+			}
+		}
     }
 
-    keyRelease(key) {
-
+    keyRelease(key, code) {
+		// Test click on all buttons
+		for (const [name, button] of Object.entries(this.buttons)) {
+			if (button.keyRelease && button.keyRelease(key, code)) {
+				return true
+			}
+		}
     }
 
 	mouseClick(button, x, y) {
