@@ -1,6 +1,8 @@
 {
 	"name": "Tutorial",
 	"description": "Discover what to do in Chicken Society!",
+
+	"priority": true,
 	
 	"progressDescription": [
 		"Visit Chictoria's Secret and shop.",

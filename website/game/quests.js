@@ -3,6 +3,7 @@
 // Handles quest completion and rewards.
 
 const QuestSystem = (function() {
+	let questData = {}
 	let activeQuests = {}
 
 	const functions = {
@@ -18,38 +19,68 @@ const QuestSystem = (function() {
 
 		// Start quest if it isn't active and hasn't been completed yet.
 		start(questName, initial) {
-			let quest = this.getQuest(questName)
+			let quest = this.getQuest(questName) // Check if quest is already active
 			if (!quest && !SAVEDATA.quests.completed[questName]) {
 				// Load quest properties from json file in the assets folder
 				// BEWARE, the quest won't start until this file is finished loading
 				// TODO: Load all the quests beforehand? Their titles and descriptions will need to be seen in the quests menu.
-				loadJSON(`assets/quests/${questName}.json`, (data) => {
-					activeQuests[questName] = {
-						name: data.name,
-						description: data.description,
+				this.loadQuestData(questName, (data) => {
+					// Create copy of quest data to track progress
+					// activeQuests[questName] = {
+					// 	name: data.name,
+					// 	description: data.description,
 
-						progressDescription: data.progressDescription,
+					// 	progressDescription: data.progressDescription,
 
-						progress: SAVEDATA.quests.active[questName] || data.progressStart,
-						progressFinish: data.progressFinish,
+					// 	progress: SAVEDATA.quests.active[questName] || data.progressStart,
+					// 	progressFinish: data.progressFinish,
 
-						progressEvents: data.progressEvents,
+					// 	progressEvents: data.progressEvents,
 
-						reward: data.reward,
+					// 	reward: data.reward,
 
-						complete: false,
-					}
+					// 	complete: false,
+					// }
+					activeQuests[questName] = data
+					let quest = activeQuests[questName]
+
+					quest.progress = SAVEDATA.quests.active[questName] || data.progressStart
+					quest.complete = false
 
 					if (!SAVEDATA.quests.active[questName]) {
 						// TODO: There should be a SaveData function for this, saving progress will be more complicated when the database is implemented
-						SAVEDATA.quests.active[questName] = activeQuests[questName].progress
+						SAVEDATA.quests.active[questName] = quest.progress
 					}
 
-						
-					Notify.new("You started the quest: " + data.name, 8)
-					Notify.new(data.description, 8)
+					Notify.new(quest.description, 8)
+					Notify.new("You started the quest: " + quest.name, 8)
 				})
 			}
+		},
+
+		// Load quest data from file
+		// This does NOT start the quest
+		loadQuestData(questName, func) {
+			loadJSON(`assets/quests/${questName}.json`, (data) => {
+				questData[questName] = data
+				let quest = questData[questName]
+				if (SAVEDATA.quests.completed[questName]) {
+					quest.progress = SAVEDATA.quests.completed[questName]
+					quest.complete = true
+				}
+				quest.complete = false
+				func(data)
+			})
+		},
+		// Get quest data even if its not active
+		getQuestData(questName) {
+			let activeQuestData = this.getQuest(questName) // Attempt to get active quest data
+			if (activeQuestData) {
+				return activeQuestData // Return active quest if exists
+			} else if (questData[questName]) {
+				return questData[questName] // Otherwise, return raw quest data
+			}
+			return false // Or it doesn't exist
 		},
 
 		// Call anytime something happens that could possibly progress a quest.
@@ -178,6 +209,7 @@ const QuestSystem = (function() {
 				}
 
 				// Mark as complete
+				quest.complete = true
 				SAVEDATA.quests.completed[questName] = quest.progress
 				delete activeQuests[questName]
 				delete SAVEDATA.quests.active[questName]
@@ -187,8 +219,11 @@ const QuestSystem = (function() {
 			}
 		},
 
-		// Return quest progress, if it is active.
+		// Return active quest data/progress, if it is active.
 		getQuest(questName) {
+			if (!activeQuests[questName]) {
+				return false
+			}
 			return activeQuests[questName]
 		},
 
@@ -209,7 +244,28 @@ const QuestSystem = (function() {
 		},
 
 		getAllCompletedQuests() {
-			return {} //SAVEDATA.quests.completed (Not properly formatted)
+			//SAVEDATA.quests.completed (Not properly formatted)
+			let completedQuests = {}
+			for (let questName in SAVEDATA.quests.completed) {
+				let quest = this.getQuestData(questName)
+				if (quest) {
+					// Return quest if it has been loaded
+					completedQuests[questName] = quest
+				} else {
+					// Load quest data if it hasn't been loaded
+					completedQuests[questName] = {
+						name: "Loading...",
+						description: "Loading...",
+						progress: [],
+						progressFinish: [],
+						complete: true
+					}
+					this.loadQuestData(questName, (data) => {
+						completedQuests[questName] = data
+					})
+				}
+			}
+			return completedQuests
 		},
 
 		// Print all active quest for testing purposes myes

@@ -180,15 +180,18 @@ class TextBox extends Button {
 			if (this.text.length > 0 && this.cursor > 0) {
 				this.text = this.text.slice(0, this.cursor-1) + this.text.slice(this.cursor)
 				this.cursor = Math.max(0, this.cursor - 1)
+				this.blinkTimer = 0
 			}
 
 			return true
 		} else if (key == "ArrowLeft") {
 			// Move cursor left
 			this.cursor = Math.max(0, this.cursor - 1)
+			this.blinkTimer = 0
 		} else if (key == "ArrowRight") {
 			// Move cursor right
 			this.cursor = Math.min(this.text.length, this.cursor + 1)
+			this.blinkTimer = 0
 		} else if (key.length === 1) {
 			// Add text
 			DRAW.setFont(FONT.guiLabel)
@@ -198,6 +201,7 @@ class TextBox extends Button {
 				this.text = this.text.slice(0, this.cursor) + key + this.text.slice(this.cursor)
 
 				this.cursor = this.cursor + 1
+				this.blinkTimer = 0
 			}
 			return true
 		}
@@ -211,19 +215,26 @@ class TextBox extends Button {
 		super.click()
 		if (this.hover) {
 			this.typing = true
+			this.blinkTimer = 0
 
 			// Find cursor location
+			this.cursor = this.text.length
 			let [mouseX, mouseY] = getMousePos()
+			let mouseRX = mouseX - this.x - 10 // Relative x
 			let text = this.text
-			let cursorX = this.x + 10
+			DRAW.setFont(FONT.guiLabel)
+			let segW = 0 // Width of current segment (left-to-right)
 			for (let i=0; i<=text.length; i++) {
+				// Okay, we go through every single letter of the text in the box
 				let charW = DRAW.getTextWidth(text[i])
-				let nextX = cursorX + DRAW.getTextWidth(text[i])
-				if (mouseX < nextX-charW/2) {
+				segW += charW
+				// At each letter, we see if the mouse is behind the middle point of the letter
+				// If it is, the cursor is put behind that letter
+				// Otherwise, the next letter will perform the same check
+				if (mouseRX < (segW-(charW/2))) {
 					this.cursor = i
 					break
 				}
-				cursorX = nextX
 			}
 			return true
 		} else {

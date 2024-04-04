@@ -47,7 +47,7 @@ MENUS["questsMenu"] = new class extends Menu {
 				this.quests.push(QuestSystem.getQuest(questName))
 			}
 			for (let questName in QuestSystem.getAllCompletedQuests()) {
-				this.quests.push(QuestSystem.getQuest(questName))
+				this.quests.push(QuestSystem.getQuestData(questName))
 			}
 		} else if (category == "incomplete") {
 			for (let questName in QuestSystem.getAllActiveQuests()) {
@@ -55,10 +55,45 @@ MENUS["questsMenu"] = new class extends Menu {
 			}
 		} else if (category == "complete") {
 			for (let questName in QuestSystem.getAllCompletedQuests()) {
-				this.quests.push(QuestSystem.getQuest(questName))
+				this.quests.push(QuestSystem.getQuestData(questName))
 			}
 		}
+		// Sort the quests alphabetically by quest.name
+		// Also, quests with the property "priority" and "complete" = false should be the first section
+		// quest with "complete" = false should be in the middle section
+		// and quests with "complete" = true should be at the bottom section
+		// Each section should be sorted alphabetically
+		this.quests.sort((a, b) => {
+			if (a.priority && !a.complete) {
+				if (!b.priority && b.complete) {
+					return -1
+				}
+				return a.name.localeCompare(b.name)
+			} else if (!a.complete) {
+				if (b.priority && !b.complete) {
+					return 1
+				}
+				if (b.complete) {
+					return -1
+				}
+				return a.name.localeCompare(b.name)
+			} else if (a.complete) {
+				if (!b.complete) {
+					return 1
+				}
+				return a.name.localeCompare(b.name)
+			}
+			return a.name.localeCompare(b.name)
+		})
 		this.generateList("refresh")
+
+		// Expand all active priority quests
+		for (let i=0; i<this.list.length; i++) {
+			let entry = this.list[i]
+			if (entry.priority && !entry.complete) {
+				this.toggleQuest(entry.quest.name)
+			}
+		}
 	}
 
 	// Generate list of quests and progress to display
@@ -74,6 +109,8 @@ MENUS["questsMenu"] = new class extends Menu {
 					type: "quest", // quest, progress, description
 					quest: this.quests[i],
 					questi: i,
+					complete: quest.complete,
+					priority: quest.priority,
 					expanded: false,
 					button: expandButton,
 				}
@@ -96,19 +133,37 @@ MENUS["questsMenu"] = new class extends Menu {
 						// Add progress entries
 						if (entry.expanded) {
 							let quest = this.quests[entry.questi]
-							for (let j=0; j<quest.progress.length; j++) {
-								let progressEntry = {
-									type: "progress",
-									text: quest.progressDescription[j],
-									progress: quest.progress[j],
-									progressFinish: quest.progressFinish[j],
+							let addi = i+1 // Where to add the next entry
+							// Add description
+							if (quest.description) {
+								DRAW.setFont(FONT.caption)
+								let wrappedText = DRAW.wrapText(quest.description, this.listW-20)
+								for (let j=0; j<wrappedText.length; j++) {
+									let descriptionEntry = {
+										type: "description",
+										text: wrappedText[j],
+									}
+									this.list.splice(addi, 0, descriptionEntry)
+									addi += 1
 								}
-								this.list.splice(i+1+j, 0, progressEntry)
+							}
+							// Add progress entries
+							if (quest.progress) { // Active quest
+								for (let j=0; j<quest.progress.length; j++) {
+									let progressEntry = {
+										type: "progress",
+										text: quest.progressDescription[j],
+										progress: quest.progress[j],
+										progressFinish: quest.progressFinish[j],
+									}
+									this.list.splice(addi, 0, progressEntry)
+									addi += 1
+								}
 							}
 						}
 					}
 					questAppearsExpanded = false
-				} else if (entry.type == "progress") {
+				} else {
 					// Belongs to the previous quest in list
 					if (questAppearsExpanded === false) {
 						questAppearsExpanded = i // This is the last entry of the expanded quest
@@ -215,10 +270,24 @@ MENUS["questsMenu"] = new class extends Menu {
 			if (entry) {
 				if (entry.type == "quest") {
 					entry.button.draw()
+					// Draw Checkbox
+					DRAW.setColor(0, 0, 0, scale)
+					DRAW.setFont(FONT.caption)
+					DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line")
+					if (entry.complete) {
+						DRAW.text("✔", this.listX+this.listW-30+10, y+20, "center")
+					}
+					if (entry.priority && !entry.complete) {
+						DRAW.text("(!)", this.listX+this.listW-55, y+19, "left")
+					}
+				} else if (entry.type == "description") {
+					DRAW.setColor(80, 80, 85, scale)
+					DRAW.setFont(FONT.caption)
+					DRAW.text(entry.text, this.listX+10, y+this.listEntryH-4, "left")
 				} else {
 					DRAW.setColor(0, 0, 0, scale)
 					DRAW.setFont(FONT.caption)
-					DRAW.text(entry.text, this.listX+10, y+this.listEntryH-4, "left")
+					DRAW.text(`• ${entry.text}`, this.listX+10, y+this.listEntryH-4, "left") // Bullet point & step
 					if (entry.progress != null && entry.progressFinish != null) {
 						// Draw Checkbox
 						DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line")
