@@ -2,7 +2,7 @@
 
 class Warp extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
-	constructor (spatialHash,area, fromArea, name, fromWarp, facing, x, y, w, h) {
+	constructor (spatialHash,area, fromArea, name, fromWarp, facing, x, y, w, h, sound=false) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x
@@ -35,6 +35,9 @@ class Warp extends PhysicsObject {
 			-this.w/2, this.h/2
 		)
 
+		// Sound
+		this.sound = sound
+
 		this.active = true
 		this.static = true
 		this.setPosition(null,null)
@@ -52,7 +55,9 @@ class Warp extends PhysicsObject {
 
 	// Warp Player to area given to Warp
 	doWarp (character) {
-		AudioSystem.playSound(SFX.door)
+		if (this.sound) {
+			AudioSystem.playSound(SFX[this.sound])
+		}
 		WORLD.warpToArea(this.area, this.name, character)
 	}
 }

@@ -1,0 +1,20 @@
+{
+	// This is not actually a quest.
+	// This is used for storing the state of the world
+	// This will be save to the user's data, permanently, like a normal quest
+	"name": "World State",
+	"description": "A list of all world changes",
+	"hidden": true,
+
+	"progressDescription": [
+		"Placeholder"
+	],
+
+	"progressStart": [
+		0
+	],
+
+	"progressFinish": [
+		1
+	]
+}

@@ -41,7 +41,8 @@ function loadGameAssets() {
 
 	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a")
 
-	SFX.door = AudioSystem.newSound("assets/sfx/door.wav")
+	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg")
+	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg")
 
 	// CHAT MENU & HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")

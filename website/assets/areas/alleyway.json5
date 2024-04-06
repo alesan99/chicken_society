@@ -1,61 +1,137 @@
 {
-  "walls": [
-    [0, 0, 1024, 0, 1024, 261, 0, 261],
+	"walls": [
+		[0, 0, 1024, 0, 1024, 261, 0, 261],
 
-    [952, 261, 1024, 261, 1024, 576],
+		[952, 261, 1024, 261, 1024, 576],
 
-    [0, 576, 1024, 576, 1024, 600, 0, 600]
-  ],
+		[0, 576, 1024, 576, 1024, 600, 0, 600]
+	],
 
-  "warps": {
-    "alleywayExit": {
-      "to": "hub",
-      "fromWarp": "alleywayEntrance",
-      "facing": "right",
-      "x": 0,
-      "y": 408,
-      "w": 30,
-      "h": 300
-    }
-  },
+	"warps": {
+		"alleywayExit": {
+			"to": "hub",
+			"fromWarp": "alleywayEntrance",
+			"facing": "right",
+			"x": 0,
+			"y": 408,
+			"w": 30,
+			"h": 300,
+			"sound": "woosh"
+		}
+	},
 
-  "NPCs": {
-    "dealer": {
-      "profile": {
-        "name": "???",
-        "color": "#285032",
-        "head": "hoodie",
-        "face": false,
-        "body": false
-      },
-      "x": 810,
-      "y": 300,
-      "facing": "up",
-      "roamRadius": 30,
-      "speechBubble": [
-        "I got the good stuff.",
-        "Money upfront.",
-        "How much do ya want?"
-      ]
-    }
-  },
+	"NPCs": {
+		"dealer": {
+			"profile": {
+				"name": "???",
+				"color": "#285032",
+				"head": "hoodie",
+				"face": false,
+				"body": false
+			},
+			"x": 810,
+			"y": 300,
+			"facing": "up",
+			"roamRadius": 30,
+			"speechBubble": [
+				"I got the good stuff.",
+				"Money upfront.",
+				"How much do ya want?"
+			],
+			"dialogue": [
+				// Talking after looking in the dumpster
+				{
+					"text": [
+						"I can't have you snooping in our dumpster. Boss's orders.",
+						"Our \"partners\" pay a good amount of nuggets for the privilege of dumping their trash here. You understand, right?",
+						"If you were a trusted Mafia goon like me I'd let you look in there.",
+						"But if ya wanna look in there so bad, prove your worth to me and I can see about bringing you up to the boss."
+					],
+					"condition": {
+						"quest": "study_in_violet",
+						"questSlot": 1,
+						"questSlotValue": 1
+					},
+					"startQuest": "mafia_initiation"
+				},
+				// Default text
+				{
+					"text": [
+						"I'm not telling you anything."
+					]
+				}
+			]
+		}
+	},
 
-  "triggers": {
-    "sewersystem": {
-      "x": 903,
-      "y": 348,
-      "shape": [0, 0, 50, 0, 50, 50, 0, 50],
-      "clickable": true,
-      "icon": { "frame": 1, "x": 15, "y": -10 },
-      "action": "dialogue",
-      "dialogue": [
-        {
-          "text": [
-            "The entrance to the underground sewer system.",
-            "It appears to be locked."
-          ]
-        }
-      ]
-    }
-  }
+	"triggers": {
+		// Snake History Book
+		"snake_book": {
+			"x": 126,
+			"y": 268,
+			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
+			"clickable": true,
+			"action": "dialogue",
+			"icon": true,
+			"dialogue": [
+				// You can read it if you're part of the Mafia
+				{
+					"text": [
+						"(It's the book about snakes! Let's see here...)",
+						"Snakes - Squamata Ophidia Serpentes - these worm-like creatures roamed Roosterra many years ago.",
+						"Snakes primarily ate birds and eggs, making them feared among chickenkind. Though, they were reclusive, and prefered to live in caves away from chickens.",
+						"Snakes were quite an advanced species, with their own societal structure and language.",
+						"Snakekind specialized in arms manufacturing, supplying weapons and explosives to many nations.",
+						"However, after developing weapons of mass destruction, conflict arose among other species.",
+						"Tragically, all snakes were exiled to far off lands where snakekind met its demise."
+					],
+					"quest": "study_in_violet",
+					"questSlot": 2,
+					"questSlotSet": 1,
+					"condition": {
+						"quest": "mafia_initiation",
+						"questComplete": true
+					}
+				},
+				// Drug dealer won't let you read it
+				{
+					"text": [
+						"Hey! Don't touch that!",
+						"That dumpster and everything in it is property of the Mafia!",
+					],
+					"quest": "study_in_violet",
+					"questSlot": 1,
+					"questSlotSet": 1
+				}
+			],
+			"sprite": {
+				"image": "snake_book.png",
+				"w": 50,
+				"h": 50,
+				"worldy": 268
+			},
+			"condition": {
+				"quest": "study_in_violet",
+				"questSlot": 0,
+				"questSlotValue": 1
+			}
+		},
+		// Entrance to the sewers
+		"sewersystem": {
+			"x": 903,
+			"y": 348,
+			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
+			"clickable": true,
+			"icon": { "frame": 1, "x": 15, "y": -10 },
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"The entrance to the underground sewer system.",
+						"It appears to be locked."
+					]
+				}
+			]
+		}
+	}
 }

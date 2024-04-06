@@ -58,6 +58,13 @@ MENUS["questsMenu"] = new class extends Menu {
 				this.quests.push(QuestSystem.getQuestData(questName))
 			}
 		}
+		// Remove all quest that are hidden AND incomplete
+		for (let i=this.quests.length-1; i>=0; i--) {
+			let quest = this.quests[i]
+			if (quest.hidden && !quest.complete) {
+				this.quests.splice(i, 1)
+			}
+		}
 		// Sort the quests alphabetically by quest.name
 		// Also, quests with the property "priority" and "complete" = false should be the first section
 		// quest with "complete" = false should be in the middle section
@@ -193,8 +200,10 @@ MENUS["questsMenu"] = new class extends Menu {
 	// Toggle expanded state of list entry
 	toggleQuest(questName) {
 		// Find quest in display list with questName
-			for (let i=0; i<this.list.length; i++) {
+		console.log(questName)
+		for (let i=0; i<this.list.length; i++) {
 			let entry = this.list[i]
+			console.log(entry)
 			if (entry.type == "quest" && entry.quest.name == questName) {
 				entry.expanded = !entry.expanded
 				this.generateList()
@@ -310,8 +319,11 @@ MENUS["questsMenu"] = new class extends Menu {
 			}
 		}
 		DRAW.setColor(244, 188, 105, 1.0) // Cover up scrolling past list window
-		DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
-		DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
+		//DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
+		//DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.menu, [20,51, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH) // Cover top of list
+		DRAW.image(IMG.menu, [20,317, this.listW,this.listEntryH], this.listX, this.listY+this.listH) // Cover bottom of list
 
 		// Render all buttons
 		this.drawButtons()

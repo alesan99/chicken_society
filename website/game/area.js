@@ -33,7 +33,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 	// Load warps
 	if (data.warps) {
 		for (const [name, warp] of Object.entries(data.warps)) {
-			OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, name, warp.fromWarp, warp.facing, warp.x, warp.y, warp.w, warp.h)
+			OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, name, warp.fromWarp, warp.facing, warp.x, warp.y, warp.w, warp.h, warp.sound)
 		}
 		
 		// Get spawn location
@@ -53,6 +53,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 			if (isActive) {
 				OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area)
 				NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, {shop: npc.shop, dialogue: npc.dialogue}, npc.image)
+				NPCS[name].condition = npc.condition
 			}
 		}
 	}
@@ -65,14 +66,16 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				isActive = checkCondition(trig.condition)
 			}
 
-			if (isActive) {
+			//if (isActive) {
 				let func = false
 				// trig.action is a string describing what the trigger should do, create a function based on that
 				let action = trig.action
 				if (trig.cost && trig.icon) { // apply cost to icon text
 					trig.icon.text = trig.cost
 				}
-				OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon)
+				OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound)
+				OBJECTS["Trigger"][name].active = isActive
+				OBJECTS["Trigger"][name].condition = trig.condition
 				
 				// TODO: Put this code somewhere else (area.js?)
 				if (action == "minigame") {
@@ -98,20 +101,17 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 						} else if (trig.questSlotSet) {
 							QuestSystem.setProgress(trig.quest, trig.questSlot, trig.questSlotSet)
 						}
-						
-						// Disable trigger if conditions aren't met
-						// TODO: Move this to the progress function in QuestSystem so it gets updated when progressed in other ways
-						let isActive = true // If it belongs to a qsuest, make sure its active
-						if (trig.condition) {
-							isActive = checkCondition(trig.condition)
-						}
-						OBJECTS["Trigger"][name].active = isActive
 					}
 				} else if (action == "dialogue") {
 					// Start dialogue
 					func = function() {
 						DialogueSystem.start(trig.dialogue)
 						OBJECTS["Trigger"][name].reset()
+					}
+				} else if (action == "warp") {
+					// Warp to another area
+					func = function() {
+						WORLD.warpToArea(trig.area, name, PLAYER)
 					}
 				}
 
@@ -129,7 +129,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 					if (!data.sprites) { data.sprites = {} }
 					data.sprites[name] = sprite
 				}
-			}
+			//}
 		}
 	}
 	
@@ -206,4 +206,15 @@ function checkCondition(c) {
 		}
 	}
 	return true // No condition was defined, so just activate it anyway
+}
+
+// Check all objects with conditions to make sure they are up to date
+// Call this every time something may change the results of their condition checks (like quest progression)
+function conditionsUpdate() {
+	for (const [name, trig] of Object.entries(OBJECTS["Trigger"])) {
+		if (trig.condition) {
+			let isActive = checkCondition(trig.condition)
+			trig.active = isActive
+		}
+	}
 }

@@ -1,51 +1,51 @@
 // Menu; A pop-up window/container of buttons and other GUI
 class Menu {
 	constructor (x=0, y=0, w, h) {
-        this.x = x
-        this.y = y
-        this.w = w
-        this.h = h
-    }
+		this.x = x
+		this.y = y
+		this.w = w
+		this.h = h
+	}
 
-    load() {
-        this.buttons = {}
-    }
+	load() {
+		this.buttons = {}
+	}
 
-    close() {
-        closeMenu()
-    }
+	close() {
+		closeMenu()
+	}
 
-    updateButtons(dt) {
+	updateButtons(dt) {
 		// Update all buttons
 		for (const [name, button] of Object.entries(this.buttons)) {
 			button.update(dt)
 		}
-    }
+	}
 
-    drawButtons() {
+	drawButtons() {
 		// Render all buttons
 		for (const [name, button] of Object.entries(this.buttons)) {
 			button.draw()
 		}
-    }
+	}
 
-    keyPress(key, code) {
+	keyPress(key, code) {
 		// Test click on all buttons
 		for (const [name, button] of Object.entries(this.buttons)) {
 			if (button.keyPress && button.keyPress(key, code)) {
 				return true
 			}
 		}
-    }
+	}
 
-    keyRelease(key, code) {
+	keyRelease(key, code) {
 		// Test click on all buttons
 		for (const [name, button] of Object.entries(this.buttons)) {
 			if (button.keyRelease && button.keyRelease(key, code)) {
 				return true
 			}
 		}
-    }
+	}
 
 	mouseClick(button, x, y) {
 		// Test click on all buttons
@@ -54,9 +54,9 @@ class Menu {
 				return true
 			}
 		}
-        // Don't click on anything below if mouse is in menu
-        if (checkMouseInside(this.x, this.y, this.w, this.h)) {
-            return true
+		// Don't click on anything below if mouse is in menu
+		if (checkMouseInside(this.x, this.y, this.w, this.h)) {
+			return true
 		}
 		return false
 	}

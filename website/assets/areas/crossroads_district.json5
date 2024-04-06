@@ -1,0 +1,123 @@
+{
+	"name": "Crossroads District",
+	"mapLocation": false,
+
+	"walls": [
+		[0,576, 1024,576, 1024,600, 0,600] // bottom of screen
+	],
+
+	"warps": {
+		"crossroads_districtExit": {
+			"to": "hub",
+			"fromWarp": "crossroads_districtEntrance",
+			"facing": "down",
+			"x": 20,
+			"y": 400,
+			"w": 40,
+			"h": 400,
+			"sound": "door"
+		}
+	},
+
+	"NPCs": {
+		"detective": {
+			"profile": {
+				"name": "Detective",
+				"color": "#FFFFFF",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 830,
+			"y": 460,
+			"facing": "left",
+			"roamRadius": 5,
+			"speechBubble": [
+				"How could someone do such a thing?"
+			],
+			"condition": {
+				"quest": "factory_explosion"
+			},
+			"dialogue": [
+				// Show him/her the snake skin after you find it
+				{
+					"text": [
+						"What now, suspect? Blow up any more buildings?",
+						"What's that? Some sort of shiny purple skin? You're saying this belongs to the bomber?",
+						"Impossible, you don't have shiny purple skin!",
+						"...wait. Eureka! Hear me out, what if you're not the bomber and the bomber is actually a shiny purple fellow!",
+						"I may be onto something. Bomber, help me track down the origin of this skin and I may let you off the hook."
+					],
+					"condition": {
+						"quest": "factory_explosion",
+						"questSlot": [2, 3],
+						"questSlotValue": [1, 0]
+					},
+					"quest": "factory_explosion",
+					"questSlot": 3,
+					"questSlotSet": 1,
+				},
+				// Talk to him/her after you are no longer the no. 1 suspect
+				{
+					"text": [
+						"...wait. Eureka! Hear me out, what if you're not the bomber and the bomber is actually a shiny purple fellow!",
+						"I may be onto something. Bomber, help me track down the origin of this skin and I may let you off the hook."
+					],
+					"condition": {
+						"quest": "factory_explosion",
+						"questComplete": true
+					}
+				},
+				// Talk to him/her for the first time
+				{
+					"text": [
+						"It appears someone blew up one of the Chickpea factories.",
+						"With all this rubble its gonna be hard for me to find any clues by myself.",
+						"I came over as soon as I heard an explosion, but I didn't manage to see the bomber.",
+						"Now that I think about it, I don't think I've seen you around before, you new to town? That's mighty suspicious if you ask me.",
+						"You're my number one suspect right now. I'm keeping my eyes on you, bomber."
+					],
+					"quest": "factory_explosion",
+					"questSlot": 1,
+					"questSlotSet": 1,
+				}
+			],
+		}
+	},
+
+	"triggers": {
+		"snake_skin": {
+			"x": 600,
+			"y": 200,
+			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
+			"clickable": true,
+			"icon": false,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"(Look! There's something purple in the rubble!)",
+						"(It looks like a piece of skin. This could be a clue, I should show this to the detective.)"
+					],
+					"quest": "factory_explosion",
+					"questSlot": 2,
+					"questSlotSet": 1,
+				}
+			],
+
+			"condition": {
+				"quest": "factory_explosion",
+				"questSlot": [1, 2],
+				"questSlotValue": [1, 0]
+			},
+
+			"sprite": {
+				"image": "snake_skin.png",
+				"w": 50,
+				"h": 50,
+				"worldy": 200
+			}
+		}
+	}
+}

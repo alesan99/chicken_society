@@ -26,7 +26,6 @@ class World {
 
 		// Load Quests
 		QuestSystem.initialize()
-		QuestSystem.start("tutorial") // Temporary.. needs a better home
 
 		// Physics objects
 		OBJECTS = {}

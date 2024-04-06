@@ -12,6 +12,10 @@ const QuestSystem = (function() {
 			//TODO: start all quests previously started (stored in SAVEDATA)
 			activeQuests = {}; // Clear any quests from old saveData
 
+			this.start("tutorial") // First story quest
+			this.start("world") // Used for storing world state
+			this.start("factory_explosion") // Used for storing world state
+
 			for (let questName in SAVEDATA.quests.active) {
 				this.start(questName, "initial")
 			}
@@ -52,8 +56,12 @@ const QuestSystem = (function() {
 						SAVEDATA.quests.active[questName] = quest.progress
 					}
 
-					Notify.new(quest.description, 8)
-					Notify.new("You started the quest: " + quest.name, 8)
+					if (!quest.hidden) {
+						Notify.new(quest.description, 8)
+						Notify.new("You started the quest: " + quest.name, 8)
+					}
+				
+					conditionsUpdate()
 				})
 			}
 		},
@@ -171,6 +179,8 @@ const QuestSystem = (function() {
 
 				// Save progress
 				SAVEDATA.quests.active[questName] = quest.progress
+				
+				conditionsUpdate()
 
 				// Check completion
 				for (let i=0; i<quest.progress.length; i++) {
@@ -221,6 +231,8 @@ const QuestSystem = (function() {
 				SAVEDATA.quests.completed[questName] = quest.progress
 				delete activeQuests[questName]
 				delete SAVEDATA.quests.active[questName]
+				
+				conditionsUpdate()
 			}
 		},
 

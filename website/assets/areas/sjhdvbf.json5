@@ -28,8 +28,10 @@
       "x": 100,
       "y": 200,
       "shape": [0, 0, 100, 0, 100, 200, 0, 200],
-      "clickable": true,
-      "icon": { "frame": 1, "x": 15, "y": -10 },
+      "clickable": false,
+      "walkOver": true,
+      "activateOnce": true,
+      "icon": false,
       "action": "dialogue",
       "dialogue": [
         {
