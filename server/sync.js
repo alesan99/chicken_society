@@ -9,7 +9,7 @@ var minigameList = {
 		data: {},
 		host: false,
 		// Should be stored by the server
-		highscores: [[100, "Pro Gamer"],[0,"---"],[0,"---"]]
+		highscores: [[99, "Pro Gamer"],[0,"---"],[0,"---"]]
 	}
 };
 

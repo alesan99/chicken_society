@@ -15,8 +15,12 @@ class Trigger extends PhysicsObject {
 		this.actionReady = false // is the trigger ready to be activated (Ex: player is near trigger)
 		this.activated = false
 
+		// Icon that appear when trigger can be activated (when standing on it or mouse over it)
 		this.actionIconFrame = false
 		if (icon) {
+			if (icon === true) { // default icon requested
+				icon = {frame: 1, x: (this.shape.x2-this.shape.x1)/2, y: 0}
+			}
 			this.actionIconFrame = icon.frame
 			this.actionIconX = icon.x
 			this.actionIconY = icon.y

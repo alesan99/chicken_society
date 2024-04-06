@@ -33,7 +33,7 @@
   },
 
   "NPCs": {
-    "gamer": {
+    "eggery": {
       "profile": {
         "name": "Eggery",
         "color": "#ff5252",
@@ -49,42 +49,42 @@
       "speechBubble": ["Sighhhhhh"],
       "dialogue": [
         {
-          "id": "easteregghuntFail",
+          "id": "egg_huntFail",
           "text": ["Where could my eggs be?"],
           "condition": {
-            "quest": "easteregghunt",
+            "quest": "egg_hunt",
             "questSlot": 0,
             "questSlotValue": 0
           }
         },
         {
-          "id": "easteregghuntSuccess",
+          "id": "egg_huntSuccess",
           "text": ["You found my eggs!"],
           "condition": {
-            "quest": "easteregghunt",
+            "quest": "egg_hunt",
             "questSlot": [0, 1, 2, 3, 4],
             "questSlotValue": [1, 1, 1, 1, 1]
           },
-          "quest": "easteregghunt"
+          "quest": "egg_hunt"
         },
         {
-          "id": "easteregghuntComplete",
+          "id": "egg_huntComplete",
           "text": ["Those were all of my eggs... I think."],
           "randomDialogue": true,
           "condition": {
-            "quest": "easteregghunt",
+            "quest": "egg_hunt",
             "questComplete": true
           }
         },
         {
-          "id": "easteregghuntStart",
+          "id": "egg_huntStart",
           "text": [
             "Oh dear, I seem to have lost my eggs.",
             "They just won't stop popping out, its hard to keep track nowadays.",
             "If only some good samaritan could help me...",
             "You're a good person right? right?"
           ],
-          "startQuest": "easteregghunt"
+          "startQuest": "egg_hunt"
         }
       ]
     }
@@ -99,24 +99,24 @@
       "icon": { "frame": 1, "x": 15, "y": -10 },
 
       "action": "quest",
-      "quest": "easteregghunt",
+      "quest": "egg_hunt",
       "questSlot": 2,
       "questSlotAdd": 1,
 
       "condition": {
-        "quest": "easteregghunt",
+        "quest": "egg_hunt",
         "questSlot": 2,
         "questSlotValue": 0
       },
 
       "sprite": {
         "image": "egg.png",
-        "qw": 30,
-        "qh": 40,
-
+        "w": 30,
+        "h": 40,
         "worldy": 116
       }
     },
+    
     "loretest": {
       "x": 337,
       "y": 64,

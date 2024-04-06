@@ -43,5 +43,33 @@
       "w": 50,
       "h": 50
     }
+  },
+
+  "triggers": {
+    "egg6": {
+      "x": 914,
+      "y": 430,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": true,
+
+      "action": "quest",
+      "quest": "egg_hunt",
+      "questSlot": 5,
+      "questSlotAdd": 1,
+
+      "condition": {
+        "quest": "egg_hunt",
+        "questSlot": 5,
+        "questSlotValue": 0
+      },
+
+      "sprite": {
+        "image": "egg.png",
+        "w": 30,
+        "h": 40,
+        "worldy": 499
+      }
+    }
   }
 }

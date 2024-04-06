@@ -103,7 +103,7 @@ class World {
 		}
 
 		// Load Area data
-		loadJSON5(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this, fromWarp, endFunc)})
+		loadJSON5(`assets/areas/${this.area}.json5`, (data) => {loadAreaFile(data, this, fromWarp, endFunc)})
 
 		// Progress Quests
 		QuestSystem.event("area", area) // Progress quests that look for areas

@@ -69,7 +69,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				let func = false
 				// trig.action is a string describing what the trigger should do, create a function based on that
 				let action = trig.action
-				if (trig.cost && trig.icon) {
+				if (trig.cost && trig.icon) { // apply cost to icon text
 					trig.icon.text = trig.cost
 				}
 				OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon)
@@ -141,7 +141,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				if (!BACKGROUNDIMG[area][img]) {
 					BACKGROUNDIMG[area][img] = new RenderImage(`assets/areas/${img}`)
 				}
-				let sprite = new Sprite(BACKGROUNDIMG[area][img], s.framesx, s.framesy, s.qw, s.qh, s.ox, s.oy, s.sepx, s.sepy)
+				let sprite = new Sprite(BACKGROUNDIMG[area][img], s.framesx, s.framesy, s.w, s.h, s.ox, s.oy, s.sepx, s.sepy)
 				BACKGROUNDSPRITE[area][name] = new DrawableSprite(sprite, null, s.x, s.y, s.worldy)
 				// Conditional visiblity
 				if (s.condition) {

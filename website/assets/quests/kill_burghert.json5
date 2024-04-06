@@ -1,0 +1,27 @@
+{
+	"name": "Wack Burghert",
+	"description": "Burghert has betrayed the Mafia and ran off with Griswold! The Mafia wants you to kill him.",
+	"priority": true, // Important Story Quest
+
+	"progressDescription": [
+		"Find out where Burghert's hideout is.",
+		"Travel the sewers",
+		"Kill Burghert", // You don't actually do this
+		"Hide the body", // You don't actually do this either
+		"Repent" // You may do this if you want
+	],
+	"progressDescriptionSlotRequirement": [
+		false,
+		0,
+		false,
+		false,
+		false
+	],
+
+	"progressStart": [0,0,0,0,0],
+	"progressFinish": [1,1,1,1,1],
+
+	"reward": {
+		"nuggets": 10
+	}
+}

@@ -61,7 +61,7 @@ const QuestSystem = (function() {
 		// Load quest data from file
 		// This does NOT start the quest
 		loadQuestData(questName, func) {
-			loadJSON(`assets/quests/${questName}.json`, (data) => {
+			loadJSON5(`assets/quests/${questName}.json5`, (data) => {
 				questData[questName] = data
 				let quest = questData[questName]
 				if (SAVEDATA.quests.completed[questName]) {
@@ -195,8 +195,12 @@ const QuestSystem = (function() {
 
 		// Mark quest as complete, save progress, and remove from activeQuest update list.
 		complete(questName) {
+			// FYI: a quest is complete once all progress slots are >= progressFinish slots
 			let quest = this.getQuest(questName)
 			if (quest) {
+				// Notify
+				Notify.new("You completed the quest: " + quest.name)
+				
 				// Give reward(s)
 				for (let rewardType in quest.reward) {
 					if (rewardType == "nuggets") {
@@ -205,6 +209,10 @@ const QuestSystem = (function() {
 					} else if (rewardType == "item") {
 						// Item
 						addItem(null, quest.reward[rewardType])
+					} else if (rewardType == "quest") {
+						// Start new quest
+						let questName = quest.reward[rewardType]
+						this.start(questName)
 					}
 				}
 
@@ -213,9 +221,6 @@ const QuestSystem = (function() {
 				SAVEDATA.quests.completed[questName] = quest.progress
 				delete activeQuests[questName]
 				delete SAVEDATA.quests.active[questName]
-
-				// Notify
-				Notify.new("You completed the quest: " + quest.name)
 			}
 		},
 

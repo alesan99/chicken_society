@@ -1,0 +1,19 @@
+{
+	"name": "Factory Explosion Mystery",
+	"description": "There was an explosion at the North Chickpea Factory, and you're responsible apparently! Or not, prove yourself innocent.",
+	"priority": true, // Important Story Quest
+
+	"progressDescription": [
+		"Ask around for information.",
+		"Investigate rubble."
+	],
+	"progressDescriptionSlotRequirement": [false, false],
+
+	"progressStart": [0,0],
+	"progressFinish": [1,1],
+
+	"reward": {
+		"nuggets": 10,
+		"quest": "study_in_violet"
+	}
+}

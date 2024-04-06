@@ -1,0 +1,32 @@
+{
+	"name": "Find the Snake!",
+	"description": "The Mafia wants you to capture the snake who blew up the Chickpea Factory. Turns out Burghert was not a snake at all!",
+	"priority": true, // Important Story Quest
+
+	// You're investigation the snake again like in the beginning of the story
+	// What has changed? Why weren't you able to get a solid lead last time?
+	// Maybe the Mafia was conducting their own investigation and have more clues for you
+	// That would explain why they were willing to let you, the lead suspect, join the Mafia
+	"progressDescription": [
+		"Ask around for possible snake sightings.",
+		"Gather materials for the snake trap.",
+		"Set up the trap.",
+		"Capture the snake.",
+		"Interrogate the snake.",
+	],
+	"progressDescriptionSlotRequirement": [
+		false,
+		0,
+		0,
+		0,
+		0
+	],
+
+	"progressStart": [0,0,0,0,0],
+	"progressFinish": [1,1,1,1,1],
+
+	"reward": {
+		"nuggets": 50,
+		"quest": "second_explosion"
+	}
+}

@@ -9,6 +9,7 @@
 
 	"progressEvents": [
 		{
+			// Clothing must add up to 100 nuggets or more
 			"type": "clothes",
 			"costGreater": 100,
 			"questSlotSet": 1,
@@ -19,7 +20,6 @@
 	],
 
 	"progressStart": [0, 0],
-
 	"progressFinish": [1, 1],
 
 	"reward": {

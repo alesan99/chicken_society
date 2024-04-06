@@ -156,6 +156,14 @@ MENUS["questsMenu"] = new class extends Menu {
 										progress: quest.progress[j],
 										progressFinish: quest.progressFinish[j],
 									}
+									// Check if progress description should be hidden
+									if (quest.progressDescriptionSlotRequirement) {
+										let requiredSlot = quest.progressDescriptionSlotRequirement[j]
+										if (quest.progress[requiredSlot] < quest.progressFinish[requiredSlot]) {
+											progressEntry.text = "???"
+										}
+									}
+									// Ok, add it to list
 									this.list.splice(addi, 0, progressEntry)
 									addi += 1
 								}
@@ -291,7 +299,7 @@ MENUS["questsMenu"] = new class extends Menu {
 					if (entry.progress != null && entry.progressFinish != null) {
 						// Draw Checkbox
 						DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line")
-						if (entry.progress == entry.progressFinish) {
+						if (entry.progress >= entry.progressFinish) {
 							DRAW.text("✔", this.listX+this.listW-30+10, y+20, "center")
 							//DRAW.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
 						}

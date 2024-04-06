@@ -1,0 +1,20 @@
+{
+	"name": "Mafia: Initiation",
+	"description": "To get into the dumpster, you must join the Mafia. - Sun Tzu",
+	"priority": true, // Important Story Quest
+
+	"progressDescription": [
+		"Dress like a gangster",
+		"Show ??? your drip",
+		"Take the oath" // Player should be prompted to say the oath out loud IRL
+	],
+
+	"progressStart": [0,0,0],
+	"progressFinish": [1,1,1],
+
+	"reward": {
+		"nuggets": 50,
+		"item": "snake_history_book",
+		"quest": "mafia_welcome"
+	}
+}

@@ -190,7 +190,8 @@ function loadJSON(filePath, callBack) {
 	})
 }
 
-// Same as above, but for the more human-readable JSON5 format
+// Same as above, but for the more human-maintainable JSON5 format
+// https://json5.org/
 function loadJSON5(filePath, callBack) {
 	// JSON file must be loaded asynchronously
 	fetch(filePath).then(response => {
