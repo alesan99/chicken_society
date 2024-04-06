@@ -14,7 +14,6 @@ const QuestSystem = (function() {
 
 			this.start("tutorial") // First story quest
 			this.start("world") // Used for storing world state
-			this.start("factory_explosion") // Used for storing world state
 
 			for (let questName in SAVEDATA.quests.active) {
 				this.start(questName, "initial")
@@ -231,7 +230,7 @@ const QuestSystem = (function() {
 				SAVEDATA.quests.completed[questName] = quest.progress
 				delete activeQuests[questName]
 				delete SAVEDATA.quests.active[questName]
-				
+
 				conditionsUpdate()
 			}
 		},
