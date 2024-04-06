@@ -10,8 +10,8 @@
 	],
 	"progressDescriptionSlotRequirement": [
 		false,
-		false,
-		false
+		0,
+		1
 	],
 
 	"progressStart": [0,0,0],

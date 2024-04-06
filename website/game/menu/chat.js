@@ -3,7 +3,7 @@
 MENUS["chatMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {
-		super(202,525, 620,51)
+		super(202,525, 660,51)
 	}
 
 	load() {
