@@ -61,6 +61,8 @@ function loadGameAssets() {
 	IMG.map = new RenderImage("assets/gui/map.png")
 	SPRITE.map = new Sprite(IMG.map, 1,1, 512,304)
 	SPRITE.mapIcons = new Sprite(IMG.map, 2,1, 36,36, 0,304, 1,1)
+	IMG.colorSlider = new RenderImage("assets/gui/color.png")
+	SPRITE.colorSlider = new Sprite(IMG.color, 1,4, 140,12)
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed

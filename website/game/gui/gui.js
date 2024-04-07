@@ -26,7 +26,7 @@ class Button {
 		this.h = h;
 
 		this.hover = false;
-		this.holding = false;
+		this.held = false;
 		this.selected = false;
 	}
 
@@ -47,13 +47,13 @@ class Button {
 	click(button, x, y){
 		this.hover = this.checkMouseInside();
 		if (this.hover) {//this should only click if you're hovering over the button
-			this.holding = true
+			this.held = true
 			return true
 		}
 	}
 	clickRelease(button, x, y){
-		if (this.holding == true){
-			this.holding = false;
+		if (this.held == true){
+			this.held = false;
 			this.action();
 		}
 	}
@@ -67,7 +67,7 @@ class Button {
 		if (this.image) {
 			// Render image for button
 			let frame = 0
-			if (this.holding == true){
+			if (this.held == true){
 				frame = 2
 			} else if (this.hover == true){
 				frame = 1
@@ -76,7 +76,7 @@ class Button {
 			DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
 		} else {
 			// Render button with basic rectangles if no image was provided
-			if (this.holding == true){
+			if (this.held == true){
 				DRAW.setColor(216,151,91,1); //dark
 			} else if (this.hover == true){
 				DRAW.setColor(248,222,187,1); //medium
@@ -131,7 +131,7 @@ class TextBox extends Button {
 	}
 
 	draw() {
-		if (this.holding == true){
+		if (this.held == true){
 			DRAW.setColor(214,214,230,1); //dark
 		} else if (this.hover == true){
 			DRAW.setColor(255,255,255,1); //medium
@@ -287,7 +287,7 @@ class ScrollBar {
 		this.hover = this.checkMouseInside();
 
 		let [mouseX, mouseY] = getMousePos();
-		if (this.bar.holding) {
+		if (this.bar.held) {
 			this.bar.y = Math.min(this.barOriginY+this.barRange, Math.max(this.barOriginY, (mouseY-this.barClickY)));
 			let newScroll = this.min + (this.max-this.min-this.window)*(this.bar.y-this.barOriginY)/(this.barRange);
 			this.updateScroll(newScroll);
@@ -353,5 +353,84 @@ class ScrollBar {
 		this.scroll = Math.min(Math.max(this.min, this.max-this.window), Math.max(this.min, this.scroll));
 		this.updateFunc(this.scroll);
 		this.bar.y = this.barOriginY + this.barRange*(this.scroll-this.min)/(this.max-this.min-this.window);
+	}
+}
+
+// Color selector
+class ColorSlider {
+	constructor(x=0, y=0, w=100, h=20, value=0, minValue=0, maxValue=1, colorFunc=(value)=>{}, updateFunc=(value)=>{}, setFunc=(value)=>{}) {
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.colorFunc = colorFunc; // Used to determine color at any value (For display purposes)
+		this.updateFunc = updateFunc; // Called when slider is held down
+		this.setFunc = setFunc; // Called when slider is released
+
+		this.renderColors = true,
+
+		// convert value (minValue to maxValue) to a value between 0 and 1
+		this.value = (value-minValue)/(maxValue-minValue); // 0-1
+		this.oldRealValue = value;
+		this.minValue = minValue;
+		this.maxValue = maxValue;
+	}
+
+	checkMouseInside(){
+		let [mouseX, mouseY] = getMousePos(); //returns x and y pos of mouse
+		if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+			return true;
+		}
+		return false;
+	}
+
+	click(button, x, y){
+		if (this.checkMouseInside()) {
+			this.held = true;
+			return true;
+		}
+	}
+
+	clickRelease(button, x, y){
+		if (this.held) {
+			this.held = false;
+
+			let realValue = this.minValue + this.value*(this.maxValue-this.minValue);
+			this.setFunc(realValue);
+		}
+	}
+
+	update(dt){
+		this.hover = this.checkMouseInside();
+
+		if (this.held) {
+			// Update color selection
+			let [mouseX, mouseY] = getMousePos();
+			let newValue = Math.min(1, Math.max(0, (mouseX-this.x)/this.w)); // 0-1
+			this.value = newValue;
+			let realValue = this.minValue + this.value*(this.maxValue-this.minValue); // minValue-maxValue
+			if (realValue != this.oldRealValue) { // Only call update func if value changed
+				this.updateFunc(realValue);
+				this.oldRealValue = realValue;
+			}
+		}
+	}
+
+	draw() {
+		if (this.renderColors) {
+			// Background
+			DRAW.setColor(168, 85, 38, 1);
+			DRAW.rectangle(this.x, this.y, this.w, this.h, "fill");
+			// brute force a gradient
+			for (let i=0; i<this.w; i++) {
+				let color = this.colorFunc(i/this.w);
+				DRAW.setColor(color[0], color[1], color[2], 1);
+				DRAW.rectangle(this.x+i, this.y, 1, this.h, "fill");
+			}
+		}
+
+		// Slider
+		DRAW.setColor(255,255,255,1);
+		DRAW.rectangle(this.x+this.w*this.value -2, this.y, 4, this.h, "line");
 	}
 }
