@@ -86,7 +86,31 @@
             "If only some good samaritan could help me...",
             "You're a good person right? right?"
           ],
+          "responses": [
+            {
+              "text": "I'll help you.",
+              "response": "egg_huntYes"
+            },
+            {
+              "text": "Tough luck.",
+              "response": "egg_huntNo"
+            }
+          ]
+        },
+        {
+          "id": "egg_huntYes",
+          "text": ["You would do that for me?"],
+          "condition": {
+            "response": "egg_huntYes"
+          },
           "startQuest": "egg_hunt"
+        },
+        {
+          "id": "egg_huntNo",
+          "text": ["Good Grief."],
+          "condition": {
+            "response": "egg_huntNo"
+          }
         }
       ]
     }
