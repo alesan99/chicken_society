@@ -89,28 +89,30 @@
           "responses": [
             {
               "text": "I'll help you.",
-              "response": "egg_huntYes"
+              "to": "egg_huntYes"
             },
             {
               "text": "Tough luck.",
-              "response": "egg_huntNo"
+              "to": "egg_huntNo"
+            },
+            {
+              "text": "I'll murder you.",
+              "to": "egg_huntNo",
+              "condition": {
+                "quest": "factory_explosion",
+                "questActive": true
+              }
             }
           ]
         },
         {
           "id": "egg_huntYes",
           "text": ["You would do that for me?"],
-          "condition": {
-            "response": "egg_huntYes"
-          },
           "startQuest": "egg_hunt"
         },
         {
           "id": "egg_huntNo",
-          "text": ["Good Grief."],
-          "condition": {
-            "response": "egg_huntNo"
-          }
+          "text": ["Good Grief."]
         }
       ]
     }

@@ -174,9 +174,18 @@ function checkCondition(c) {
 			// "questComplete" just checks if the quest has ever been completed
 			// Setting it to false will check if it has never been completed
 			questCompleted = SAVEDATA.quests.completed[questName]
-			if (c.questComplete === true && questCompleted) {
+			if (c.questComplete === true && questCompleted) { // Quest must be complete
 				return true
-			} else if (c.questComplete === false && !questCompleted) {
+			} else if (c.questComplete === false && !questCompleted) { // Quest must not be complete
+				return true
+			}
+			return false
+		} else if (c.questActive === false) {
+			// Check if quest is not active
+			let questActive = QuestSystem.getQuest(questName)
+			if (c.questActive === true && questActive) { // Quest must be active
+				return false
+			} else if (c.questActive === false && !questActive) { // Quest must not be active
 				return true
 			}
 			return false

@@ -107,7 +107,6 @@ const QuestSystem = (function() {
 								let minigame = args[0]
 								if (event.minigame == null) { // any minigame will do
 									doProgress = true
-									console.log(event.minigame, event.minigame == null)
 								} else if (event.minigame == minigame) { // must be specified minigame
 									doProgress = true
 								}
@@ -134,7 +133,6 @@ const QuestSystem = (function() {
 									// Is outfit greater/less than defined cost?
 									let cost = 0
 									if (head) {
-										console.log(head)
 										cost += ITEMS.head[head].cost
 									}
 									if (face) {

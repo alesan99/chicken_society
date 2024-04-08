@@ -17,12 +17,15 @@ const DialogueSystem = (function() {
 	let speaker = false
 	let speakerNPC = false
 
+	let awaitingResponse = false
+	let responseButtons = []
+
 	const functions = {
 		// Start new dialogue conversation
-		start(dialogueTree, speakerName=false, npc=false) {
+		start(dialogueTreeData, speakerName=false, npc=false) {
 			open = true
 			stage = 0
-			dialogueTree = dialogueTree
+			dialogueTree = dialogueTreeData
 			speaker = speakerName
 			speakerNPC = npc
 
@@ -113,20 +116,47 @@ const DialogueSystem = (function() {
 					charStart += s.length
 				}
 
-				if (dialogueProgress >= currentText.length) {
-					// Draw continue prompt
-					DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134)
+				if (awaitingResponse) {
+					// Draw response buttons
+					for (let i = 0; i < responseButtons.length; i++) {
+						let button = responseButtons[i]
+						button.draw()
+					}
+				} else {
+					if (dialogueProgress >= currentText.length) {
+						// Draw continue prompt
+						DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134)
+					}
 				}
 			}
 		},
 
 		update(dt) {
 			if (open) {
+				// Text animations
 				if (dialogueProgress < currentText.length) {
 					dialogueTimer += 30*dt
 					dialogueProgress = Math.min(Math.floor(dialogueTimer), currentText.length)
 				} else {
+					// Continue prompt arrow movement
 					promptTimer = (promptTimer + 2*dt)%1
+
+					// Ask for responses
+					if (dialogueProgress >= currentText.length) {
+						// Dialogue has finished presenting
+						if (dialogueData.responses && stage >= dialogueData.text.length-1 && !awaitingResponse) {
+							// Await response
+							this.requestResponse(dialogueData.responses)
+						}
+					}
+				}
+
+				// Update response buttons
+				if (awaitingResponse) {
+					for (let i = 0; i < responseButtons.length; i++) {
+						let button = responseButtons[i]
+						button.update(dt)
+					}
 				}
 			}
 		},
@@ -148,14 +178,44 @@ const DialogueSystem = (function() {
 				return false
 			}
 
+			if (awaitingResponse) {
+				// Test click on all buttons
+				for (let i = 0; i < responseButtons.length; i++) {
+					let b = responseButtons[i]
+					if (b.click(button, x, y)) {
+						return true
+					}
+				}
+			}
+
 			this.next()
 			return true
+		},
+
+		mouseRelease(button, x, y) {
+			if (!open) {
+				return false
+			}
+
+			if (awaitingResponse) {
+				// Release click
+				for (let i = 0; i < responseButtons.length; i++) {
+					let b = responseButtons[i]
+					if (b.clickRelease(button, x, y)) {
+						return true
+					}
+				}
+			}
+			return false
 		},
 
 		next() {
 			if (dialogueProgress < currentText.length) {
 				// dialogue is not finished presenting, skip
 				dialogueProgress = currentText.length
+			} else if (dialogueData.responses && stage >= dialogueData.text.length-1) {
+				// Await response, if applicable
+				this.requestResponse(dialogueData.responses)
 			} else {
 				// go to next dialogue line
 				stage += 1
@@ -187,7 +247,7 @@ const DialogueSystem = (function() {
 		finish() {
 			open = false
 
-			d = dialogueData
+			let d = dialogueData
 
 			// Do any actions defined for the end of the dialogue
 			if (d.startQuest) {
@@ -201,6 +261,73 @@ const DialogueSystem = (function() {
 					QuestSystem.progress(d.quest, d.questSlot, d.questSlotAdd)
 				} else if (d.questSlotSet) {
 					QuestSystem.setProgress(d.quest, d.questSlot, d.questSlotSet)
+				}
+			}
+		},
+
+		// Show respnonse buttons
+		requestResponse(allResponses) {
+			if (awaitingResponse) {
+				return false
+			}
+			awaitingResponse = true
+			responseButtons = []
+
+			// Check which responses are available
+			responses = []
+			for (let i = 0; i < allResponses.length; i++) {
+				let r = allResponses[i]
+				let doAdd = true
+				if (r.condition) { // If response has condition, condition must be fulfilled
+					if (!checkCondition(r.condition)) {
+						doAdd = false
+					}
+				}
+				if (doAdd) {
+					responses.push(r)
+				}
+			}
+
+			// Create response buttons
+			let x = 240
+			if (speaker) {
+				// Draw speaker name
+				x = x + 65
+			}
+			let y = 340
+			let w = 550
+			let n = responses.length
+			let padding = 10
+			let spacing = 10
+			for (let i = 0; i < n; i++) {
+				let r = responses[i]
+				let button = new Button(r.text, ()=>{this.response(r.to)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
+				responseButtons.push(button)
+			}
+		},
+
+		// Jump to next dialogue block depending on response
+		response(responseId) {
+			awaitingResponse = false
+			responseButtons = []
+
+			// Finish dialogue block
+			this.finish()
+
+			// Start next dialogue block
+			for (let i = 0; i < dialogueTree.length; i++) {
+				let block = dialogueTree[i]
+				if (block.id == responseId) { // Look for dialogue block with this id
+					let doStart = true
+					if (block.condition && !checkCondition(block.condition)) {
+						doStart = false
+					}
+					if (doStart) {
+						open = true // Open dialogue menu again
+						dialogueData = dialogueTree[i]
+						this.startText(0)
+						return true
+					}
 				}
 			}
 		}

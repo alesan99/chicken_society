@@ -359,6 +359,12 @@ class World {
 
 	mouseRelease(button, x, y) {
 		CHAT.mouseRelease(button, x, y)
+
+		// Dialogue
+		if (DialogueSystem.mouseRelease(button, x, y)) {
+			return true
+		}
+
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.clickRelease(button, x, y)) {
