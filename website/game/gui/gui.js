@@ -114,9 +114,9 @@ class Button {
 	}
 }
 
-// TextBox
+// TextField
 // Lets you type text
-class TextBox extends Button {
+class TextField extends Button {
 	constructor(text="", textAction=(text)=>{}, graphic, x=0, y=0, w, h) {
 		super("", ()=>{}, null, x, y, w, h)
 

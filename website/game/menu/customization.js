@@ -27,7 +27,7 @@ MENUS["customization"] = new class extends Menu {
 		}, null, 373,404, 100,32)
 
 		// Name
-		this.buttons["name"] = new TextBox(PROFILE.name, (text)=>{PROFILE.name = text; PLAYER.updateProfile(PROFILE, "sendToServer")}, null, 260,129, 200,32)
+		this.buttons["name"] = new TextField(PROFILE.name, (text)=>{PROFILE.name = text; PLAYER.updateProfile(PROFILE, "sendToServer")}, null, 260,129, 200,32)
 
 		// Color
 		this.colorSel = HEXtoRGB(PROFILE.color)

@@ -18,7 +18,7 @@ MENUS["petMenu"] = new class extends Menu {
 		this.petMood = this.pet.getMood()
 
 		// Name
-		this.buttons["name"] = new TextBox(this.pet.name, (text)=>{this.pet.name = text}, null, 260,129, 200,32)
+		this.buttons["name"] = new TextField(this.pet.name, (text)=>{this.pet.name = text}, null, 260,129, 200,32)
 
 		// Inventory (just items; for feeding)
 		this.inventory = []

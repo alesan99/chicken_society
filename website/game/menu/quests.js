@@ -34,6 +34,9 @@ MENUS["questsMenu"] = new class extends Menu {
 		this.quests = [] // Sorted quest info list
 		this.sorted = "all"
 		this.sortQuests(this.sorted)
+
+		// Disable quest menu notification
+		MENUS["chatMenu"].notification("quest", false)
 	}
 
 	// Sort quests by completion

@@ -51,6 +51,7 @@ function loadGameAssets() {
 	IMG.chatMessage = new RenderImage("assets/chat_message.png")
 	SPRITE.chat = new Sprite(IMG.chat, 1,1, 660,51)
 	SPRITE.chatButton = new Sprite(IMG.chat, 3,6, 36,36, 0,51)
+	SPRITE.notif = new Sprite(IMG.chat, 2,1, 18,18, 108,51)
 	IMG.emoteMenu = new RenderImage("assets/gui/emote.png")
 	SPRITE.emoteButton = new Sprite(IMG.emoteMenu, 3,7, 36,36, 0,110)
 

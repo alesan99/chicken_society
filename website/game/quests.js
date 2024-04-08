@@ -58,6 +58,7 @@ const QuestSystem = (function() {
 					if (!quest.hidden) {
 						Notify.new(quest.description, 8)
 						Notify.new("You started the quest: " + quest.name, 8)
+						MENUS["chatMenu"].notification("quest", true)
 					}
 				
 					this.initialEvents(questName)

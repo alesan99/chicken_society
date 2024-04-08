@@ -166,6 +166,16 @@ const DialogueSystem = (function() {
 				return false
 			}
 
+			if (awaitingResponse) {
+				// Test click on all buttons
+				for (let i = 0; i < responseButtons.length; i++) {
+					let b = responseButtons[i]
+					if (b.keyPress(key)) {
+						return true
+					}
+				}
+			}
+
 			if (key == " ") {
 				this.next()
 				return true
@@ -301,8 +311,13 @@ const DialogueSystem = (function() {
 			let spacing = 10
 			for (let i = 0; i < n; i++) {
 				let r = responses[i]
-				let button = new Button(r.text, ()=>{this.response(r.to)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
-				responseButtons.push(button)
+				if (r.type) { // Type any response
+					let textField = new TextField(r.text, (text)=>{this.response(text)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
+					responseButtons.push(textField)
+				} else { // Preset response
+					let button = new Button(r.text, ()=>{this.response(r.to)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
+					responseButtons.push(button)
+				}
 			}
 		},
 
