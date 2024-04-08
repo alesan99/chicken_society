@@ -159,7 +159,11 @@ const DialogueSystem = (function() {
 			} else {
 				// go to next dialogue line
 				stage += 1
-				if (stage >= dialogueData.text.length) {
+				if (dialogueData.randomDialogue) {
+					// Random dialogue has only one stage
+					this.finish()
+					return
+				} if (stage >= dialogueData.text.length) {
 					this.finish()
 					return
 				}
@@ -169,6 +173,10 @@ const DialogueSystem = (function() {
 		},
 
 		startText(i) {
+			if (dialogueData.randomDialogue) {
+				// Random dialogue has only one stage, pick any to start at
+				i = Math.floor(Math.random()*dialogueData.text.length)
+			}
 			currentText = dialogueData.text[i]
 			DRAW.setFont(FONT.caption)
 			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2)

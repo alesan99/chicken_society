@@ -4,7 +4,7 @@
 	"priority": true, // Important Story Quest
 	
 	"progressDescription": [
-		"Visit Chictoria's Secret and shop.",
+		"Visit Chictoria's Secret and ask how to shop.",
 		"Visit the arcade and play a mini-game.",
 		"Visit the Old Town."
 	],
@@ -13,9 +13,8 @@
 	"progressEvents": [
 		false,
 		{
-			// Talk to Bud to progress
-			"type": "talk",
-			"name": "Bud",
+			// Play any minigame to progress
+			"type": "minigame",
 			"questSlotSet": 1
 		},
 		{

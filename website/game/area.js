@@ -86,6 +86,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 							removeNuggets(trig.cost)
 						}
 
+						PLAYER_CONTROLLER.stop()
 						PLAYER.static = true // Don't let player move
 						Transition.start("wipeLeft", "out", 0.8, null, () => {
 							OBJECTS["Trigger"][name].reset()

@@ -154,6 +154,8 @@ function removeNuggets(nuggets) {
 	if (CHAT) {
 		CHAT.nuggetCounter(-nuggets)
 	}
+	// Quest progression
+	QuestSystem.event("nuggets", SAVEDATA.nuggets)
 }
 
 function addNuggets(nuggets) {
@@ -163,6 +165,8 @@ function addNuggets(nuggets) {
 	if (CHAT) {
 		CHAT.nuggetCounter(nuggets)
 	}
+	// Quest progression
+	QuestSystem.event("nuggets", SAVEDATA.nuggets)
 }
 
 function spendNuggets(cost) {

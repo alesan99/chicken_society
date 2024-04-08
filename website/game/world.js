@@ -114,6 +114,7 @@ class World {
 		}
 		AudioSystem.fadeOutMusic(1)
 		PLAYER.static = true // Don't let player move when in the process of warping
+		PLAYER_CONTROLLER.stop()
 		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
 			// Display black screen while area is loading...
 			Transition.start("loading", "in", 100, null, null)

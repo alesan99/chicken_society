@@ -60,6 +60,7 @@ const QuestSystem = (function() {
 						Notify.new("You started the quest: " + quest.name, 8)
 					}
 				
+					this.initialEvents(questName)
 					conditionsUpdate()
 				})
 			}
@@ -101,7 +102,16 @@ const QuestSystem = (function() {
 						if (event != false && event.type == type) {
 							// Quest is accepting event!
 							doProgress = false
-							if (type == "minigameHighscore") {
+							if (type == "minigame") {
+								// args: minigame
+								let minigame = args[0]
+								if (event.minigame == null) { // any minigame will do
+									doProgress = true
+									console.log(event.minigame, event.minigame == null)
+								} else if (event.minigame == minigame) { // must be specified minigame
+									doProgress = true
+								}
+							} else if (type == "minigameHighscore") {
 								// args: minigame, score
 								let minigame = args[0]
 								let score = args[1]
@@ -120,7 +130,7 @@ const QuestSystem = (function() {
 								let face = args[1]
 								let body = args[2]
 								let item = args[3]
-								if (event.costGreater) {
+								if (event.costGreater != null) {
 									// Is outfit greater/less than defined cost?
 									let cost = 0
 									if (head) {
@@ -146,6 +156,12 @@ const QuestSystem = (function() {
 								if (event.area == area) {
 									doProgress = true
 								}
+							} else if (type == "nuggets") {
+								// args: nuggets
+								let nuggets = args[0]
+								if (nuggets >= event.nuggetsGreater) {
+									doProgress = true
+								}
 							} else {
 								// Not a predefined event
 								doProgress = true
@@ -164,6 +180,31 @@ const QuestSystem = (function() {
 									this.setProgress(questName, slot, event.questSlotDefault)
 								}
 							}
+						}
+					}
+				}
+			}
+		},
+
+		// Automatically trigger events that should've been triggered before quest was started.
+		initialEvents(questName) {
+			// Anything that type of quest event that can be completed before quest starts NEEDS to be here.
+			let quest = this.getQuest(questName)
+			if (quest.progressEvents) {
+				for (let slot=0; slot < quest.progressEvents.length; slot++) {
+					let event = quest.progressEvents[slot]
+					if (event != false) {
+						let type = event.type
+						// Minigame highscore might've been reached before quest started
+						if (type == "minigameHighscore") {
+							if (SAVEDATA.highscores[event.minigame]) {
+								this.event("minigameHighscore", SAVEDATA.highscores[event.minigame])
+							}
+						// Clothes requirements might've been met before quest started
+						} else if (type == "clothes") {
+							this.event("clothes", PLAYER.head, PLAYER.face, PLAYER.body, PLAYER.item)
+						} else if (type == "nuggets") {
+							this.event("nuggets", SAVEDATA.nuggets)
 						}
 					}
 				}

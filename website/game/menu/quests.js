@@ -200,10 +200,8 @@ MENUS["questsMenu"] = new class extends Menu {
 	// Toggle expanded state of list entry
 	toggleQuest(questName) {
 		// Find quest in display list with questName
-		console.log(questName)
 		for (let i=0; i<this.list.length; i++) {
 			let entry = this.list[i]
-			console.log(entry)
 			if (entry.type == "quest" && entry.quest.name == questName) {
 				entry.expanded = !entry.expanded
 				this.generateList()
