@@ -114,6 +114,9 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 					func = function() {
 						WORLD.warpToArea(trig.area, name, PLAYER)
 					}
+				} else if (action == "item") {
+					// Give item
+					addItem(d.item)
 				}
 
 				OBJECTS["Trigger"][name].action = func
@@ -212,6 +215,15 @@ function checkCondition(c) {
 			return progressMet
 		} else {
 			// condition not met
+			return false
+		}
+	}
+	if (c.item) {
+		// Check if player has item
+		let itemCount = SAVEDATA.items[c.item]
+		if (itemCount) {
+			return true
+		} else {
 			return false
 		}
 	}

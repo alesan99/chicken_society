@@ -13,7 +13,7 @@ MENUS["shop"] = new class extends Menu {
 		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		this.name = config.name || ""
-		this.items = config.items || {} // {category: {itemId: price}}
+		this.items = config.items || {} // {category: {itemId: true or {"items":{"priceItem":1},"nuggets":0}}}
 		// Shop items
 		// Inventory
 		this.tab = "allTab"
@@ -55,6 +55,7 @@ MENUS["shop"] = new class extends Menu {
 			(itemId,itemType)=>{
 				// Item to preview
 				if (itemId) {
+					this.selectedItemCost = this.items[itemType][itemId]
 					this.selectedItem = itemId
 					this.selectedItemType = itemType
 					if (ITEMS[itemType][itemId]) { // Make sure item has been loaded
@@ -79,7 +80,12 @@ MENUS["shop"] = new class extends Menu {
 
 		this.buttons["buy"] = new Button("Buy", ()=>{
 			if (this.selectedItem) {
-				this.buyItem(this.selectedItemType, this.selectedItem)
+				let cost = false
+				// check if item is set to array of costs
+				if (this.selectedItemCost && typeof this.selectedItemCost == "object") {
+					cost = this.selectedItemCost
+				}
+				this.buyItem(this.selectedItemType, this.selectedItem, cost)
 			}
 		}, null, 664,400, 100,30)
 	}
@@ -100,11 +106,58 @@ MENUS["shop"] = new class extends Menu {
 	}
 
 	// TODO: maybe this should be in a different file so items can also be earned in other ways?
-	buyItem(itemType, itemId) {
+	buyItem(itemType, itemId, cost=false) {
 		let item = ITEMS[itemType][itemId]
 		if (item) { // Make sure item has been loaded
-			if (spendNuggets(item.cost)) {
-				addItem(itemType, itemId)
+			if (!cost) {
+				// Use default cost
+				if (spendNuggets(item.cost)) {
+					addItem(itemType, itemId)
+				}
+			} else if (typeof cost == "number") {
+				// Use shop's nugget cost
+				if (spendNuggets(cost)) {
+					addItem(itemType, itemId)
+				}
+			} else {
+				// Use shop's cost
+				let itemsCost = cost.items
+				let nuggetsCost = cost.nuggets || 0
+				let canBuy = false
+
+				if (itemsCost) {
+					// Check if you have items neccessary
+					let canBuyItems = true
+					for (let itemId in itemsCost) {
+						let itemsOwned = getItem(itemId)
+						if (itemsOwned < itemsCost[itemId]) {
+							canBuyItems = false
+							break
+						}
+					}
+					if (canBuyItems) {
+						canBuy = true
+					}
+				}
+
+				if (nuggetsCost) {
+					// Check if you have enough nuggets
+					if (SAVEDATA.nuggets >= nuggetsCost) {
+						canBuy = true
+					}
+				}
+
+				if (canBuy) {
+					if (nuggetsCost) {
+						spendNuggets(nuggetsCost)
+					}
+					if (itemsCost) {
+						for (let itemId in itemsCost) {
+							removeItem(null, itemId, itemsCost[itemId])
+						}
+					}
+					addItem(itemType, itemId)
+				}
 			}
 		}
 	}
@@ -146,14 +199,47 @@ MENUS["shop"] = new class extends Menu {
 		if (this.selectedItem) {
 			let item = ITEMS[this.selectedItemType][this.selectedItem]
 			if (item) { // Make sure item has been loaded
+				// Name
 				DRAW.text(item.name, 563, 210, "left")
+	
+				let nuggetsCost = item.cost // Default item cost
+				let itemCost = false
+				if (this.selectedItemCost) {
+					if (typeof this.selectedItemCost == "object") {
+						// Define items (and nuggets, if desired)
+						nuggetsCost = false
+						itemCost = this.selectedItemCost.items
+						if (this.selectedItemCost.nuggets) {
+							nuggetsCost = this.selectedItemCost.nuggets
+						}
+					} else if (typeof this.selectedItemCost == "number") {
+						// Define nuggets
+						nuggetsCost = this.selectedItemCost
+					}
+				}
 
+				let costY = 388
+				if (nuggetsCost) { // Display nuggets cost
+					DRAW.text(`${item.cost} Nuggets`, 764, costY, "right")
+					costY -= 25
+				}
+				// Display items cost
+				if (itemCost) {
+					for (let itemId in itemCost) {
+						let item = getItemData(itemId)
+						if (item) {
+							DRAW.text(`${itemCost[itemId]} ${item.name}(s)`, 764, costY, "right")
+							costY -= 25
+						}
+					}
+				}
+
+				// Display how many of this item you own
 				if (SAVEDATA.items[this.selectedItemType][this.selectedItem]) {
-					DRAW.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, 360, "right")
+					DRAW.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, costY, "right")
 				}
 	
-				DRAW.text(`${item.cost} Nuggets`, 764, 388, "right")
-	
+				// Description
 				DRAW.setColor(152, 80, 46, scale)
 				DRAW.setFont(FONT.description)
 				if (this.selectedItemDescription) {

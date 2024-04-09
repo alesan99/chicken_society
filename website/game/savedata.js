@@ -214,6 +214,7 @@ function getItemCategory(id) {
 }
 
 function getItemData(id, type) {
+	// Get item data
 	let category
 	if (type) {
 		category = type
@@ -222,6 +223,21 @@ function getItemData(id, type) {
 	}
 
 	return ITEMS[category][id]
+}
+
+function getItem(id, type) {
+	// Get number of owned items
+	let category
+	if (type) {
+		category = type
+	} else {
+		category = getItemCategory(id)
+	}
+	if (category && SAVEDATA.items[category][id]) {
+		return SAVEDATA.items[category][id]
+	} else {
+		return false
+	}
 }
 
 // Chicken Coop Furniture

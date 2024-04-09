@@ -273,6 +273,11 @@ const DialogueSystem = (function() {
 					QuestSystem.setProgress(d.quest, d.questSlot, d.questSlotSet)
 				}
 			}
+
+			if (d.giveItem) {
+				// Give item
+				addItem(d.giveItem)
+			}
 		},
 
 		// Show respnonse buttons

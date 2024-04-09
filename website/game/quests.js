@@ -51,15 +51,17 @@ const QuestSystem = (function() {
 					quest.complete = false
 
 					if (!SAVEDATA.quests.active[questName]) {
+						// Starting quest for the first time
+						if (!quest.hidden) {
+							Notify.new(quest.description, 8)
+							Notify.new("You started the quest: " + quest.name, 8)
+							MENUS["chatMenu"].notification("quest", true)
+						}
+						// Save default progress
 						// TODO: There should be a SaveData function for this, saving progress will be more complicated when the database is implemented
 						SAVEDATA.quests.active[questName] = quest.progress
 					}
 
-					if (!quest.hidden) {
-						Notify.new(quest.description, 8)
-						Notify.new("You started the quest: " + quest.name, 8)
-						MENUS["chatMenu"].notification("quest", true)
-					}
 				
 					this.initialEvents(questName)
 					conditionsUpdate()
