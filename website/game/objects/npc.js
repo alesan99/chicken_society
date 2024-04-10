@@ -46,7 +46,11 @@ class NPC {
             let replyOptions = []
             // Open shop if specified
             if (this.shop) {
-                replyOptions.push(["Buy", () => {openMenu("shop", this.shop); this.closeReply()}])
+                if (this.shop.sell) {// Can you sell your items?
+                    replyOptions.push(["Sell", () => {openMenu("shop", this.shop, true); this.closeReply()}])
+                } else {
+                    replyOptions.push(["Buy", () => {openMenu("shop", this.shop, false); this.closeReply()}])
+                }
             }
             // Talk
             if (this.dialogue) {

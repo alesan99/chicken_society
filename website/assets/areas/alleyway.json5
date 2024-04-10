@@ -60,7 +60,16 @@
 						"I'm not telling you anything."
 					]
 				}
-			]
+			],
+			"shop": {
+				"name": "Drug Dealer Exchange",
+				"sell": true,
+				"items": {
+					"item": {
+						"gun": 80
+					}
+				}
+			}
 		}
 	},
 

@@ -6,17 +6,35 @@ MENUS["shop"] = new class extends Menu {
 		super(234,104, 560,350)
 	}
 
-	load (config) {
+	// Shop configuration (from area file), buyer
+	load (config, sell) {
 		this.openTimer = 0
 
 		this.buttons = {}
 		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 
+		// Configure shop inventory
 		this.name = config.name || ""
-		this.items = config.items || {} // {category: {itemId: true or {"items":{"priceItem":1},"nuggets":0}}}
+		this.items = config.items || {} // {category: {itemId: true or {"items":{"priceItem":1},"nuggets":0,"count":1}}}
+		this.sell = sell
+		if (this.sell) {
+			this.sellPercentage = config.percentage || 0.75
+			this.items = {} // Build new items list
+			// If an item from config.items is in the player's inventory, add it to the shop as a sellable item
+			for (let category in config.items) {
+				this.items[category] = {}
+				for (let itemId in config.items[category]) {
+					let inventoryCount = getItem(itemId, category)
+					if (inventoryCount) {
+						this.items[category][itemId] = config.items[category][itemId] // Set sell price
+					}
+				}
+			}
+		}
 		// Shop items
 		// Inventory
 		this.tab = "allTab"
+		this.tabType = "all"
 		this.inventory = []
 		this.buttons["allTab"] = new Button("All", ()=>{this.filterInventory("all"); this.buttons[this.tab].selected=false; this.tab = "allTab"; this.buttons[this.tab].selected=true}, null, 265,150, 46,34)
 		let i = 0
@@ -47,6 +65,7 @@ MENUS["shop"] = new class extends Menu {
 		this.filterInventory("all")
 		this.buttons["allTab"].selected = true
 
+		// Display information about selected item
 		this.selectedItem = false
 		this.selectedItemType = false
 		this.selectedItemDescription = []
@@ -61,7 +80,7 @@ MENUS["shop"] = new class extends Menu {
 					if (ITEMS[itemType][itemId]) { // Make sure item has been loaded
 						if (ITEMS[itemType][itemId].description) {
 							DRAW.setFont(FONT.description)
-							this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 200)
+							this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 200) // Pre-wrap text for performance
 						} else {
 							this.selectedItemDescription = false
 						}
@@ -78,20 +97,29 @@ MENUS["shop"] = new class extends Menu {
 				}
 			}, 265,184, 68,68, 4,3)
 
-		this.buttons["buy"] = new Button("Buy", ()=>{
-			if (this.selectedItem) {
-				let cost = false
-				// check if item is set to array of costs
-				if (this.selectedItemCost && typeof this.selectedItemCost == "object") {
-					cost = this.selectedItemCost
+		if (this.sell) {
+			this.buttons["sell"] = new Button("Sell", ()=>{ // Sell item
+				if (this.selectedItem) {
+					this.sellItem(this.selectedItemType, this.selectedItem, this.selectedItemCost, this.sellPercentage)
+					let intentoryCount = getItem(this.selectedItem, this.selectedItemType)
+					if (intentoryCount <= 0) { // Remove item from shop if sold out
+						delete this.items[this.selectedItemType][this.selectedItem]
+						this.filterInventory(this.tabType)
+					}
 				}
-				this.buyItem(this.selectedItemType, this.selectedItem, cost)
-			}
-		}, null, 664,400, 100,30)
+			}, null, 664,400, 100,30)
+		} else {
+			this.buttons["buy"] = new Button("Buy", ()=>{
+				if (this.selectedItem) {
+					this.buyItem(this.selectedItemType, this.selectedItem, this.selectedItemCost)
+				}
+			}, null, 664,400, 100,30)
+		}
 	}
 
 	filterInventory(category) {
 		this.inventory.length = 0
+		this.tabType = category
 		if (category == "all") {
 			for (let category in this.items) {
 				for (let itemId in this.items[category]) {
@@ -107,9 +135,10 @@ MENUS["shop"] = new class extends Menu {
 
 	// TODO: maybe this should be in a different file so items can also be earned in other ways?
 	buyItem(itemType, itemId, cost=false) {
+		// cost can be true, a number of nuggets, or an object with items and nuggets cost
 		let item = ITEMS[itemType][itemId]
 		if (item) { // Make sure item has been loaded
-			if (!cost) {
+			if (!cost || cost === true) {
 				// Use default cost
 				if (spendNuggets(item.cost)) {
 					addItem(itemType, itemId)
@@ -162,6 +191,40 @@ MENUS["shop"] = new class extends Menu {
 		}
 	}
 
+	sellItem(itemType, itemId, cost=false, percentage) {
+		// cost can be true, a number of nuggets, or an object with items and nuggets cost
+		let item = ITEMS[itemType][itemId]
+		if (item) { // Make sure item has been loaded
+			let intentoryCount = getItem(itemId, itemType)
+			if (intentoryCount > 0) {
+				if (!cost || cost === true) {
+					// Use default cost
+					addNuggets(Math.floor(item.cost*percentage))
+				} else if (typeof cost == "number") {
+					// Use shop's nugget cost
+					addNuggets(Math.floor(cost))
+				} else {
+					// Use shop's cost
+					let itemsCost = cost.items
+					let nuggetsCost = cost.nuggets || 0
+
+					if (nuggetsCost) {
+						addNuggets(nuggetsCost)
+					}
+					if (itemsCost) {
+						for (let itemId in itemsCost) {
+							addItem(null, itemId)
+						}
+					}
+				}
+				removeItem(itemType, itemId)
+				return true
+			} else {
+				return false
+			}
+		}
+	}
+
 	keyPress(key) {
 
 	}
@@ -204,6 +267,9 @@ MENUS["shop"] = new class extends Menu {
 	
 				let nuggetsCost = item.cost // Default item cost
 				let itemCost = false
+				if (this.sell) { // Get default sell price
+					nuggetsCost = Math.floor(nuggetsCost*this.sellPercentage)
+				}
 				if (this.selectedItemCost) {
 					if (typeof this.selectedItemCost == "object") {
 						// Define items (and nuggets, if desired)
@@ -220,7 +286,7 @@ MENUS["shop"] = new class extends Menu {
 
 				let costY = 388
 				if (nuggetsCost) { // Display nuggets cost
-					DRAW.text(`${item.cost} Nuggets`, 764, costY, "right")
+					DRAW.text(`${nuggetsCost} Nuggets`, 764, costY, "right")
 					costY -= 25
 				}
 				// Display items cost
