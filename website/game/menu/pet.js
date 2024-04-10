@@ -30,7 +30,7 @@ MENUS["petMenu"] = new class extends Menu {
 				let item = ITEMS[itemType][itemId]
 				if (itemType == "item" && item.consumable) {
 					this.pet.eat(item)
-					removeItem(itemType, itemId)
+					removeItem(itemId, itemType)
 					this.filterInventory(this.filter) // Refresh item list
 				}
 			},

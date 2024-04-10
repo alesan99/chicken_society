@@ -141,12 +141,12 @@ MENUS["shop"] = new class extends Menu {
 			if (!cost || cost === true) {
 				// Use default cost
 				if (spendNuggets(item.cost)) {
-					addItem(itemType, itemId)
+					addItem(itemId, itemType)
 				}
 			} else if (typeof cost == "number") {
 				// Use shop's nugget cost
 				if (spendNuggets(cost)) {
-					addItem(itemType, itemId)
+					addItem(itemId, itemType)
 				}
 			} else {
 				// Use shop's cost
@@ -182,10 +182,10 @@ MENUS["shop"] = new class extends Menu {
 					}
 					if (itemsCost) {
 						for (let itemId in itemsCost) {
-							removeItem(null, itemId, itemsCost[itemId])
+							removeItem(itemId, null, itemsCost[itemId])
 						}
 					}
-					addItem(itemType, itemId)
+					addItem(itemId, itemType)
 				}
 			}
 		}
@@ -213,11 +213,11 @@ MENUS["shop"] = new class extends Menu {
 					}
 					if (itemsCost) {
 						for (let itemId in itemsCost) {
-							addItem(null, itemId)
+							addItem(itemId)
 						}
 					}
 				}
-				removeItem(itemType, itemId)
+				removeItem(itemId, itemType)
 				return true
 			} else {
 				return false

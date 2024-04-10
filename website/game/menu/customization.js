@@ -109,7 +109,7 @@ MENUS["customization"] = new class extends Menu {
 					let item = ITEMS[itemType][itemId]
 					if (item && equipped) { // Make sure item has been loaded
 						if (itemType == "item" && item.consumable) { // TODO: Figure out a better place for this
-							removeItem(itemType, itemId)
+							removeItem(itemId, itemType)
 							if (item.statusEffect) {
 								PLAYER.startStatusEffect(item.statusEffect, item.statusEffectDuration)
 							}

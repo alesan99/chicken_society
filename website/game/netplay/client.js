@@ -403,17 +403,17 @@ Netplay = class {
 	mutePlayer(id, doMute) {
 		let playerData = this.playerList[id]
 		if (playerData) {
-			if (doMute) {
+			if (doMute) { // Mute
 				this.mutedPlayers[id] = true
 				Notify.new(`Muted ${playerData.name}.`, 2)
-			} else {
+			} else { // Unmute
 				if (this.mutedPlayers[id]) {
 					delete this.mutedPlayers[id]
 				}
 				Notify.new(`Unmuted ${playerData.name}.`, 2)
 			}
 			return true
-		} else {
+		} else { // Error
 			Notify.new(`Can't mute this player.`, 2, [255, 0, 0])
 			return false
 		}

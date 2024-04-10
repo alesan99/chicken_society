@@ -259,7 +259,7 @@ const QuestSystem = (function() {
 						addNuggets(quest.reward[rewardType])
 					} else if (rewardType == "item") {
 						// Item
-						addItem(null, quest.reward[rewardType])
+						addItem(quest.reward[rewardType])
 					} else if (rewardType == "quest") {
 						// Start new quest
 						let questName = quest.reward[rewardType]

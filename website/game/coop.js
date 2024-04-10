@@ -143,7 +143,7 @@ const Coop = (function() {
 			this.furnitureObj.static = true
 	
 			placeFurniture(itemId, this.furnitureX, this.furnitureY, this.furnitureDir)
-			removeItem("furniture", itemId) // Furniture has been placed, remove from inventory
+			removeItem(itemId, "furniture") // Furniture has been placed, remove from inventory
 		},
 
 		removeFurniture(x, y) {
@@ -151,7 +151,7 @@ const Coop = (function() {
 			for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
 				if (obj.shape.checkInside(x-obj.x, y-obj.y)) {
 					removeFurniture(obj.id, obj.x, obj.y)
-					addItem("furniture", obj.id) // Add back to inventory
+					addItem(obj.id) // Add back to inventory
 
 					// Remove furniture
 					obj.destroy()

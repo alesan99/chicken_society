@@ -61,7 +61,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/give":
-					addItem(null, arg, arg2 || 1)
+					addItem(arg, null, Number(arg2) || 1)
 					break
 				case "/head":
 					PROFILE.head = arg
