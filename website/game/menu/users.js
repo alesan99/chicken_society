@@ -161,6 +161,12 @@ MENUS["usersMenu"] = new class extends Menu {
 	selectPlayer(i) {
 		this.listSelection = i
 		let id = this.list[this.listSelection]
+		// Disable mute button for player
+		if (id == "PLAYER") {
+			this.buttons["mute"].disabled = true
+		} else {
+			this.buttons["mute"].disabled = false
+		}
 		// Change text on mute button
 		if (NETPLAY.mutedPlayers && NETPLAY.mutedPlayers[id]) {
 			this.buttons["mute"].label = "Unmute"

@@ -28,6 +28,7 @@ class Button {
 		this.hover = false;
 		this.held = false;
 		this.selected = false;
+		this.disabled = false;
 	}
 
 	checkMouseInside(){
@@ -38,9 +39,14 @@ class Button {
 		return false;
 	}
 	update(dt){
+		if (this.disabled) {
+			// Don't update if button is disabled
+			return false
+		}
+
 		this.hover = this.checkMouseInside();
 		if (this.hover) {
-			CURSOR.on = true;
+			CURSOR.on = true; // Show finger cursor
 		}
 	}
 
@@ -54,7 +60,9 @@ class Button {
 	clickRelease(button, x, y){
 		if (this.held == true){
 			this.held = false;
-			this.action();
+			if (!this.disabled) {
+				this.action();
+			}
 		}
 	}
 
@@ -76,7 +84,9 @@ class Button {
 			DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
 		} else {
 			// Render button with basic rectangles if no image was provided
-			if (this.held == true){
+			if (this.disabled == true) {
+				DRAW.setColor(208,125,68,1); //darkest
+			} else if (this.held == true){
 				DRAW.setColor(216,151,91,1); //dark
 			} else if (this.hover == true){
 				DRAW.setColor(248,222,187,1); //medium

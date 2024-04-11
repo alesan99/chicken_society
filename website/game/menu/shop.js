@@ -85,6 +85,14 @@ MENUS["shop"] = new class extends Menu {
 							this.selectedItemDescription = false
 						}
 					}
+					// Enable/disable buy/sell button
+					if (this.buttons["sell"]) {this.buttons["sell"].disabled = false}
+					if (this.buttons["buy"]) {
+						this.buttons["buy"].disabled = false
+						if (!this.canBuyItem(itemType, itemId, this.selectedItemCost)) {
+							this.buttons["buy"].disabled = true
+						}
+					}
 				}
 			},
 			this.inventory, 
@@ -97,6 +105,7 @@ MENUS["shop"] = new class extends Menu {
 				}
 			}, 265,184, 68,68, 4,3)
 
+		// Buy/Sell button
 		if (this.sell) {
 			this.buttons["sell"] = new Button("Sell", ()=>{ // Sell item
 				if (this.selectedItem) {
@@ -105,6 +114,7 @@ MENUS["shop"] = new class extends Menu {
 					if (intentoryCount <= 0) { // Remove item from shop if sold out
 						delete this.items[this.selectedItemType][this.selectedItem]
 						this.filterInventory(this.tabType)
+						this.buttons["sell"].disabled = true
 					}
 				}
 			}, null, 664,400, 100,30)
@@ -112,9 +122,14 @@ MENUS["shop"] = new class extends Menu {
 			this.buttons["buy"] = new Button("Buy", ()=>{
 				if (this.selectedItem) {
 					this.buyItem(this.selectedItemType, this.selectedItem, this.selectedItemCost)
+					if (!this.canBuyItem(this.selectedItemType, this.selectedItem, this.selectedItemCost)) {
+						this.buttons["buy"].disabled = true
+					}
 				}
 			}, null, 664,400, 100,30)
 		}
+		if (this.buttons["sell"]) {this.buttons["sell"].disabled = true}
+		if (this.buttons["buy"]) {this.buttons["buy"].disabled = true}
 	}
 
 	filterInventory(category) {
@@ -131,6 +146,58 @@ MENUS["shop"] = new class extends Menu {
 				this.inventory.push(itemId)
 			}
 		}
+	}
+
+	// This is bad copy paste code. Please refactor if you ever touch this again.
+	canBuyItem(itemType, itemId, cost=false) {
+		// cost can be true, a number of nuggets, or an object with items and nuggets cost
+		let item = ITEMS[itemType][itemId]
+		if (item) { // Make sure item has been loaded
+			let nuggets = SAVEDATA.nuggets
+			if (!cost || cost === true) {
+				// Use default cost
+				if (nuggets >= item.cost) {
+					return true
+				}
+			} else if (typeof cost == "number") {
+				// Use shop's nugget cost
+				if (nuggets >= cost) {
+					return true
+				}
+			} else {
+				// Use shop's cost
+				let itemsCost = cost.items
+				let nuggetsCost = cost.nuggets || 0
+				let canBuy = false
+
+				if (itemsCost) {
+					// Check if you have items neccessary
+					let canBuyItems = true
+					for (let itemId in itemsCost) {
+						let itemsOwned = getItem(itemId)
+						if (itemsOwned < itemsCost[itemId]) {
+							canBuyItems = false
+							break
+						}
+					}
+					if (canBuyItems) {
+						canBuy = true
+					}
+				}
+
+				if (nuggetsCost) {
+					// Check if you have enough nuggets
+					if (nuggets >= nuggetsCost) {
+						canBuy = true
+					}
+				}
+
+				if (canBuy) {
+					return true
+				}
+			}
+		}
+		return false
 	}
 
 	// TODO: maybe this should be in a different file so items can also be earned in other ways?
