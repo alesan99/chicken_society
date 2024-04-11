@@ -96,34 +96,8 @@ MENUS["customization"] = new class extends Menu {
 						this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 300)
 					}
 				}
-				// Set clothing item
-				if (PROFILE.hasOwnProperty(itemType)) {
-					let equipped = false
-					if (PROFILE[itemType] == itemId) {
-						PROFILE[itemType] = false;
-					} else {
-						equipped = true
-						PROFILE[itemType] = itemId;
-					}
-					PLAYER.updateProfile(PROFILE, "sendToServer");
-					let item = ITEMS[itemType][itemId]
-					if (item && equipped) { // Make sure item has been loaded
-						if (itemType == "item" && item.consumable) { // TODO: Figure out a better place for this
-							removeItem(itemId, itemType)
-							if (item.statusEffect) {
-								PLAYER.startStatusEffect(item.statusEffect, item.statusEffectDuration)
-							}
-							this.filterInventory(this.filter) // Refresh item list
-						}
-					}
-				} else {
-					let item = ITEMS[itemType][itemId]
-
-					if (item) {
-						if (itemType == "furniture" && PLAYER.area == "coop") { // TODO: Also figure out a better place for this
-							Coop.moveFurniture(itemId, closeMenu())
-						}
-					}
+				if (useItem(itemId, itemType)) { // Set clothing item or use consumable
+					this.filterInventory(this.filter) // Refresh item list
 				}
 			},
 			this.inventory, 
@@ -237,7 +211,11 @@ MENUS["customization"] = new class extends Menu {
 	}
 
 	mouseClick(button, x, y) {
-		return super.mouseClick(button, x, y)
+		super.mouseClick(button, x, y)
+		if (!MENUS["chatMenu"].checkMouseInside()) {
+			// Disable clicking anywhere else, except for chat hud
+			return true
+		}
 	}
 
 	mouseRelease(button, x, y) {

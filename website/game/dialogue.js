@@ -350,6 +350,10 @@ const DialogueSystem = (function() {
 					}
 				}
 			}
+		},
+
+		getOpen() {
+			return open
 		}
 	};
 	

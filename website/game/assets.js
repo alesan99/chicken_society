@@ -143,9 +143,9 @@ function loadItem(category, itemId) {
 		item.name = data.name
 		item.description = data.description
 		item.cost = data.cost
-		item.consumable = data.consumable // Can item only be used once?
 
 		// Consumables
+		item.consumable = data.consumable // Can item only be used once?
 		item.statusEffect = data.statusEffect
 		item.statusEffectChance = data.statusEffectChance
 		item.statusEffectDuration = data.statusEffectDuration
@@ -156,6 +156,9 @@ function loadItem(category, itemId) {
 		if (data.center) { // Center of frames
 			item.center = data.center
 		}
+
+		// Utility
+		item.dialogue = data.dialogue
 
 		// Furniture
 		item.shape = data.shape

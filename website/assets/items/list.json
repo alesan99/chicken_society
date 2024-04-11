@@ -9,16 +9,13 @@
     "scarf",
     "silverchains"
   ],
-  "furniture": [
-    "frame",
-    "lamp",
-    "rug",
-    "table"
-  ],
   "head": [
     "hoodie",
     "snapback",
     "tophat"
+  ],
+  "pet": [
+    "pillbug"
   ],
   "item": [
     "beer",
@@ -26,9 +23,13 @@
     "bullet",
     "gun",
     "heroin",
-    "seeds"
+    "seeds",
+    "snake_book"
   ],
-  "pet": [
-    "pillbug"
+  "furniture": [
+    "frame",
+    "lamp",
+    "rug",
+    "table"
   ]
 }

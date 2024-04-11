@@ -301,7 +301,11 @@ MENUS["shop"] = new class extends Menu {
 	}
 
 	mouseClick(button, x, y) {
-		return super.mouseClick(button, x, y)
+		super.mouseClick(button, x, y)
+		if (!MENUS["chatMenu"].checkMouseInside()) {
+			// Disable clicking anywhere else, except for chat hud
+			return true
+		}
 	}
 
 	mouseRelease(button, x, y) {

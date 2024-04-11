@@ -59,6 +59,10 @@ class Trigger extends PhysicsObject {
 		if (!this.active) {
 			return
 		}
+		// Do not interact with triggers if a menu is open
+		if (getOpenMenu() || DialogueSystem.getOpen()) {
+			return
+		}
 		// Is mouse inside clickable region?
 		if (this.clickable) {
 			if ((this.activated == false) && this.checkMouseOver()) {
@@ -159,6 +163,7 @@ class Trigger extends PhysicsObject {
 		}
 		if (this.clickable && ((this.activated == false) && this.checkMouseOver())) {
 			this.doAction()
+			this.mouseOver = false
 			return true
 		}
 	}

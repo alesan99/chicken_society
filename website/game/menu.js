@@ -47,6 +47,14 @@ class Menu {
 		}
 	}
 
+	checkMouseInside(){
+		let [mouseX, mouseY] = getMousePos(); //returns x and y pos of mouse
+		if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
+			return true;
+		}
+		return false;
+	}
+
 	mouseClick(button, x, y) {
 		// Test click on all buttons
 		for (const [name, button] of Object.entries(this.buttons)) {
