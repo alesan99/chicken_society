@@ -50,7 +50,7 @@ class NPC {
 				if (this.shop.condition) { // Check if shop should appear (quests)
 					shopEnabled = checkCondition(this.shop.condition)
 				}
-				if (!shopEnabled) {
+				if (shopEnabled) {
 					if (this.shop.sell) {// Can you sell your items?
 						replyOptions.push(["Sell", () => {openMenu("shop", this.shop, true); this.closeReply()}])
 					} else {
