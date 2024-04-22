@@ -218,6 +218,11 @@ const QuestSystem = (function() {
 			if (quest) {
 				quest.progress[progressSlot] = value
 
+				// Show notification for completing this step of the quest
+				if (value >= 1) {
+					Notify.new(`[✔] ${quest.progressDescription[progressSlot]}`, 5, [80,80,80])
+				}
+
 				// Save progress
 				SAVEDATA.quests.active[questName] = quest.progress
 				

@@ -9,6 +9,20 @@
 		"Take the oath" // Player should be prompted to say the oath out loud IRL
 	],
 
+	
+	"progressEvents": [
+		{
+			// Clothing must add up to 100 nuggets or more
+			"type": "clothes",
+			"costGreater": 40,
+			"questSlotSet": 0,
+
+			"questSlotDefault": 1
+		},
+		false,
+		false
+	],
+
 	"progressStart": [0,0,0],
 	"progressFinish": [1,1,1],
 

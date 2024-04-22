@@ -27,7 +27,6 @@ const TimedEvents = (function() {
 				let config = JSON5.parse(fs.readFileSync(configPath));
 				timedEventData[timedEvent] = config;
 				activeTimedEvents[timedEvent] = false; // Not active
-				console.log("Loaded timed event: " + timedEvent);
 			}
 		},
 
@@ -41,8 +40,6 @@ const TimedEvents = (function() {
 				let timedEvent = timedEventData[timedEventName]
 				let isActive = activeTimedEvents[timedEventName]
 				let isActiveNow = this.getActive(timedEvent, time)
-				console.log(`Checking timed event ${timedEventName}: Is it active?: ${isActiveNow}`)
-				console.log(isActive, isActiveNow)
 				if (isActiveNow != isActive) {
 					if (isActiveNow) {
 						// Enable timed event 

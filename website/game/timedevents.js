@@ -18,11 +18,13 @@ const TimedEventsSystem = (function() {
 			return new Promise((resolve) => {
 				// Load timed event data
 				// And resolve promise once all jsons were loaded
-				let queued = 0
+				let queued = activeTimedEvents.length
+				if (queued <= 0) { // Nothing in queue
+					resolve(data)
+				}
 				for (let i = 0; i < activeTimedEvents.length; i++) {
 					let timedEvent = activeTimedEvents[i]
 					if (true) { // Does this timed event modify this area?
-						queued++
 						loadJSON5(`assets/timedevents/${timedEvent}/${filename}.json5`, (timedEventData) => {
 							// Start injecting data
 							for (let key in timedEventData) {
@@ -50,6 +52,11 @@ const TimedEventsSystem = (function() {
 								resolve(data)
 							}
 						})
+					} else {
+						queued--
+						if (queued <= 0) {
+							resolve(data)
+						}
 					}
 				}
 			})

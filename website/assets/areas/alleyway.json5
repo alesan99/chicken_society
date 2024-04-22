@@ -39,6 +39,29 @@
 				"How much do ya want?"
 			],
 			"dialogue": [
+				{
+					"text": ["Turn on your microphone and say 'I pledge alegiance to the flag, of the Mafia'"],
+					"condition": {
+						"quest": "mafia_initiation",
+						"questSlot": 1,
+						"questSlotValue": 1
+					},
+					"quest": "mafia_initiation",
+					"questSlot": 2,
+					"questSlotSet": 1,
+				},
+				{
+					"text": ["You look broke dude. Welcome to the gang"],
+					"condition": {
+						"quest": "mafia_initiation",
+						"questSlot": 0,
+						"questSlotValue": 1
+					},
+					
+					"quest": "mafia_initiation",
+					"questSlot": 1,
+					"questSlotSet": 1,
+				},
 				// Talking after looking in the dumpster
 				{
 					"text": [
