@@ -1,7 +1,4 @@
 {
-  "face": [
-    "visors"
-  ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
@@ -9,13 +6,19 @@
     "scarf",
     "silverchains"
   ],
+  "furniture": [
+    "frame",
+    "lamp",
+    "rug",
+    "table"
+  ],
+  "face": [
+    "visors"
+  ],
   "head": [
     "hoodie",
     "snapback",
     "tophat"
-  ],
-  "pet": [
-    "pillbug"
   ],
   "item": [
     "beer",
@@ -26,10 +29,7 @@
     "seeds",
     "snake_book"
   ],
-  "furniture": [
-    "frame",
-    "lamp",
-    "rug",
-    "table"
+  "pet": [
+    "pillbug"
   ]
 }

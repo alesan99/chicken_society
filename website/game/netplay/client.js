@@ -72,6 +72,8 @@ Netplay = class {
 		socket.on("minigameAddPlayer", (id) => {this.addMinigamePlayer(id)})
 		socket.on("minigameRemovePlayer", (id) => {this.removeMinigamePlayer(id)})
 		socket.on("minigameHighscores", (id, data) => {this.recieveMinigameHighscores(id, data)})
+		// Timed Events
+		socket.on("timedEvents", (timedEvents) => {this.recieveTimedEvents(timedEvents)})
 	}
 
 	// Connect to server for the first time and send information about yourself
@@ -422,6 +424,12 @@ Netplay = class {
 	// Get player data from player data list
 	getPlayerData(id) {
 		return this.playerList[id]
+	}
+
+	// Timed Events
+	recieveTimedEvents(timedEvents) {
+		console.log("Recieved timed events:", timedEvents)
+		TimedEventsSystem.setActiveTimedEvents(timedEvents)
 	}
 }
 

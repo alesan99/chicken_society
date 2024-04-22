@@ -1,0 +1,17 @@
+// This is what happens when you play at midnight
+{
+	"NPCs": {
+		"shady": {
+			"profile": {
+				"name": "Shady",
+				"color": "#222222",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 400,
+			"y": 300,
+			"speechBubble": ["Come here often?"]
+		}
+	}
+}

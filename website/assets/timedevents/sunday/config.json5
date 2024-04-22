@@ -1,0 +1,14 @@
+{
+	"name": "Sunday",
+
+	"type": "weekly",
+
+	"day": "sunday",
+	"days": 1,
+
+	// Which areas are affected?
+	// Currently unused
+	"areas": [
+		"hub"
+	]
+}

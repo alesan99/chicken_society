@@ -199,11 +199,13 @@ function loadJSON(filePath, callBack) {
 
 // Same as above, but for the more human-maintainable JSON5 format
 // https://json5.org/
-function loadJSON5(filePath, callBack) {
+function loadJSON5(filePath, callBack, errorCallBack) {
 	// JSON file must be loaded asynchronously
 	fetch(filePath).then(response => {
 		if (!response.ok) {
-			console.log("JSON Network response was not ok")
+			console.log("JSON file could not be fetched: ", filePath)
+			if (errorCallBack) { errorCallBack() }
+			return false
 		}
 		return response.text().then(text => {
 			return JSON5.parse(text)
@@ -214,6 +216,7 @@ function loadJSON5(filePath, callBack) {
 	})
 	.catch(error => {
 		console.log("There was a problem loading the JSON file:", error)
+		if (errorCallBack) { errorCallBack() }
 	})
 }
 

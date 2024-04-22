@@ -1,0 +1,14 @@
+{
+	"name": "Christmas",
+
+	"type": "yearly",
+
+	"date": "12/15",
+	"days": 14,
+
+	// Which areas are affected?
+	// Currently unused
+	"areas": [
+		"hub"
+	]
+}

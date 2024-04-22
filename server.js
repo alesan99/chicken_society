@@ -80,7 +80,7 @@ if (useDB) {
 				}
 				else {
 					console.log('User table already exists');
-				}
+				}m
 		});
 	db.createPlayerTable(con);
 }

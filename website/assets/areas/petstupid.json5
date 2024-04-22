@@ -65,7 +65,7 @@
 			"shop": {
 				"name": "Pet'stupid",
 				"items": {
-					"item": {
+					"pet": {
 						"pillbug": true
 					}
 				}

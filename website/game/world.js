@@ -102,7 +102,14 @@ class World {
 		}
 
 		// Load Area data
-		loadJSON5(`assets/areas/${this.area}.json5`, (data) => {loadAreaFile(data, this, fromWarp, endFunc)})
+		//TimedEventsSystem.setActiveTimedEvents(["christmas", "midnight", "sunday"])
+		loadJSON5(`assets/areas/${this.area}.json5`, (data) => {
+			// Inject special timed event area data, if any
+			TimedEventsSystem.injectTimedEvents(`areas/${this.area}`, data).then(newData => {
+				// After all jsons have been read, finally load the area
+				loadAreaFile(newData, this, fromWarp, endFunc)
+			})
+		})
 
 		// Progress Quests
 		QuestSystem.event("area", area) // Progress quests that look for areas
