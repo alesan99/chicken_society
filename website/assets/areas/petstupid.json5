@@ -1,156 +1,156 @@
 {
-	"name": "Pet'stupid",
-	"mapLocation": [261, 196],
+  name: "Pet'stupid",
+  mapLocation: [261, 196],
 
-	"walls": [
-		[133, 276, 62, 576, 0, 576, 0, 276],
-		[1024, 372, 1024, 576, 844, 576, 844, 372],
-		[0, 576, 1024, 576, 1024, 600, 0, 600],
+  walls: [
+    [133, 276, 62, 576, 0, 576, 0, 276],
+    [1024, 372, 1024, 576, 844, 576, 844, 372],
+    [0, 576, 1024, 576, 1024, 600, 0, 600],
 
-		[849, 369, 852, 176, 862, 176, 859, 369],
-		[692, 300, 692, 246, 849, 246, 849, 300],
-		[692, 246, 769, 181, 769, 246],
-		[769, 180, 850, 180, 850, 222, 769, 222],
-		[696, 139, 696, 86, 920, 86, 920, 126],
-		[605, 261, 622, 139, 692, 105, 695, 140],
-		[613, 364, 604, 265, 613, 263, 632, 365],
-		[718, 366, 696, 305, 749, 296, 756, 333],
+    [849, 369, 852, 176, 862, 176, 859, 369],
+    [692, 300, 692, 246, 849, 246, 849, 300],
+    [692, 246, 769, 181, 769, 246],
+    [769, 180, 850, 180, 850, 222, 769, 222],
+    [696, 139, 696, 86, 920, 86, 920, 126],
+    [605, 261, 622, 139, 692, 105, 695, 140],
+    [613, 364, 604, 265, 613, 263, 632, 365],
+    [718, 366, 696, 305, 749, 296, 756, 333],
 
-		[134, 274, 134, 177, 179, 177, 179, 274],
-		[272, 298, 272, 248, 602, 248, 602, 298],
-		[67, 549, 76, 510, 238, 510, 238, 549],
-		[240, 510, 263, 450, 316, 450, 318, 510],
+    [134, 274, 134, 177, 179, 177, 179, 274],
+    [272, 298, 272, 248, 602, 248, 602, 298],
+    [67, 549, 76, 510, 238, 510, 238, 549],
+    [240, 510, 263, 450, 316, 450, 318, 510],
 
-		[952, 280, 932, 115, 1024, 115, 1024, 280]
-	],
+    [952, 280, 932, 115, 1024, 115, 1024, 280],
+  ],
 
-	"warps": {
-		"petstupidExit": {
-			"to": "hub",
-			"fromWarp": "petstupidEntrance",
-			"facing": "down",
-			"x": 217,
-			"y": 211,
-			"w": 40,
-			"h": 40,
-			"sound": "door"
-		},
-		"wtfEntrance": {
-			"to": "sjhdvbf",
-			"fromWarp": "wtfExit",
-			"facing": "left",
-			"x": 1150,
-			"y": 322,
-			"w": 50,
-			"h": 50
-		}
-	},
+  warps: {
+    petstupidExit: {
+      to: "hub",
+      fromWarp: "petstupidEntrance",
+      facing: "down",
+      x: 217,
+      y: 211,
+      w: 40,
+      h: 40,
+      sound: "door",
+    },
+    wtfEntrance: {
+      to: "sjhdvbf",
+      fromWarp: "wtfExit",
+      facing: "left",
+      x: 1150,
+      y: 322,
+      w: 50,
+      h: 50,
+    },
+  },
 
-	"NPCs": {
-		"cashier": {
-			"profile": {
-				"name": "Chicken",
-				"color": "#FFFFFF",
-				"head": false,
-				"face": false,
-				"body": false
-			},
-			"x": 210,
-			"y": 485,
-			"facing": "right",
-			"interactRange": [-50,-30, 160,-30, 160,50, -50, 50],
-			"speechBubble": [
-				"-"
-			],
-			"shop": {
-				"name": "Pet'stupid",
-				"items": {
-					"pet": {
-						"pillbug": true
-					}
-				}
-			},
-			"dialogue": [
-				// A Study in Violet, Ask this chicken about the snake skin
-				{
-					"text": [
-						"That piece of purple skin you have! I think I've seen it before.",
-						"Yes! I believe its from a long extinct creature called a snake.",
-						"Snakes were known for naturally shedding their skin, and by the looks of it the piece you have must've been shed very recently!",
-						"This is very exciting! I've heard legends about snakes still living in a hidden part of the world, who knew they were true!",
-						"Where did you find this? Here? A snake in Chikensas City is big news!",
-						"You're trying to track down the snake? I wish I could help more, but my knowledge of snakes is very limited",
-						"I had an old book about snakes here, but I threw it away recently. How unfortunate!"
-					],
-					"condition": {
-						"quest": "study_in_violet",
-						"questSlot": 2,
-						"questSlotValue": 0
-					},
-					"quest": "study_in_violet",
-					"questSlot": 0,
-					"questSlotSet": 1
-				},
-				// Default dialogue
-				{
-					"text": [
-						"-",
-					]
-				}
-			]
-		}
-	},
+  NPCs: {
+    cashier: {
+      profile: {
+        name: "Whisker Willikers",
+        color: "#ffe17a",
+        head: false,
+        face: false,
+        body: "scarf",
+      },
+      x: 210,
+      y: 485,
+      facing: "right",
+      interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
+      speechBubble: [
+        "Crickets and pillbugs and bees, oh my!",
+        "Check out the worm petting zoo!",
+        "BOGO Bug Toys for a limited time only!",
+      ],
+      shop: {
+        name: "Pet'stupid",
+        items: {
+          pet: {
+            pillbug: true,
+          },
+        },
+      },
+      dialogue: [
+        // A Study in Violet, Ask this chicken about the snake skin
+        {
+          text: [
+            "That piece of purple skin you have! I think I've seen it before.",
+            "Yes! I believe its from a long extinct creature called a snake.",
+            "Snakes were known for naturally shedding their skin, and by the looks of it the piece you have must've been shed very recently!",
+            "This is very exciting! I've heard legends about snakes still living in a hidden part of the world, who knew they were true!",
+            "Where did you find this? Here? A snake in Chikensas City is big news!",
+            "You're trying to track down the snake? I wish I could help more, but my knowledge of snakes is very limited",
+            "I had an old book about snakes here, but I threw it away recently. How unfortunate!",
+          ],
+          condition: {
+            quest: "study_in_violet",
+            questSlot: 2,
+            questSlotValue: 0,
+          },
+          quest: "study_in_violet",
+          questSlot: 0,
+          questSlotSet: 1,
+        },
+        // Default dialogue
+        {
+          text: ["-"],
+        },
+      ],
+    },
+  },
 
-	"sprites": {
-		"counter": {
-			"image": "petstupidoverlay.png",
-			"ox": 61,
-			"oy": 386,
-			"w": 1024,
-			"h": 600,
+  sprites: {
+    counter: {
+      image: "petstupidoverlay.png",
+      ox: 61,
+      oy: 386,
+      w: 1024,
+      h: 600,
 
-			"x": 61,
-			"y": 386,
-			"worldy": 515
-		},
-		"chandelier_and_railing": {
-			"image": "petstupidoverlay.png",
-			"ox": 344,
-			"oy": 0,
-			"w": 680,
-			"h": 376,
+      x: 61,
+      y: 386,
+      worldy: 515,
+    },
+    chandelier_and_railing: {
+      image: "petstupidoverlay.png",
+      ox: 344,
+      oy: 0,
+      w: 680,
+      h: 376,
 
-			"x": 344,
-			"y": 0,
-			"worldy": 376
-		}
-	},
+      x: 344,
+      y: 0,
+      worldy: 376,
+    },
+  },
 
-	"triggers": {
-		"egg6": {
-			"x": 914,
-			"y": 430,
-			"shape": [0, 0, 40, 0, 40, 40, 0, 40],
-			"clickable": true,
-			"icon": true,
+  triggers: {
+    egg6: {
+      x: 914,
+      y: 430,
+      shape: [0, 0, 40, 0, 40, 40, 0, 40],
+      clickable: true,
+      icon: true,
 
-			"action": "quest",
-			"quest": "egg_hunt",
-			"questSlot": 5,
-			"questSlotAdd": 1,
+      action: "quest",
+      quest: "egg_hunt",
+      questSlot: 5,
+      questSlotAdd: 1,
 
-			"condition": {
-				"quest": "egg_hunt",
-				"questSlot": 5,
-				"questSlotValue": 0
-			},
+      condition: {
+        quest: "egg_hunt",
+        questSlot: 5,
+        questSlotValue: 0,
+      },
 
-			"sprite": {
-				"image": "egg.png",
-				"w": 30,
-				"h": 40,
-				"worldy": 499
-			}
-		}
-	}
+      sprite: {
+        image: "egg.png",
+        w: 30,
+        h: 40,
+        worldy: 499,
+      },
+    },
+  },
 }
