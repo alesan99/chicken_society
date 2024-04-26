@@ -43,5 +43,27 @@
       "w": 50,
       "h": 50
     }
+  },
+
+  "NPCs": {
+    "cashier": {
+      "profile": {
+        "name": "Whisker Willikers",
+        "color": "#ffe17a",
+        "head": false,
+        "face": false,
+        "body": "scarf"
+      },
+      "x": 181,
+      "y": 478,
+      "facing": "right",
+      "roamRadius": 1,
+      "interactRange": [-180, -50, 50, -50, 50, 50, -160, 50],
+      "speechBubble": [
+        "Crickets and pillbugs and bees, oh my!",
+        "Check out the worm petting zoo!",
+        "BOGO Bug Toys for a limited time only!"
+      ]
+    }
   }
 }
