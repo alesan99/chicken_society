@@ -431,6 +431,11 @@ Netplay = class {
 		console.log("Recieved timed events:", timedEvents)
 		TimedEventsSystem.setActiveTimedEvents(timedEvents)
 	}
+
+	// Send message to server
+	sendMessageToServer(header, contents) {
+		this.sendAction("message", header, contents)
+	}
 }
 
 } else {
@@ -457,5 +462,6 @@ Netplay = class {
 		sendMinigame(minigameName) {}
 		mutePlayer(id, doMute) {}
 		getPlayerData(id) {}
+		sendMessageToServer(header, contents) {}
 	}
 }

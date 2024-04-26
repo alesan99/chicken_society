@@ -1,4 +1,7 @@
 {
+  "face": [
+    "visors"
+  ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
@@ -12,14 +15,6 @@
     "rug",
     "table"
   ],
-  "face": [
-    "visors"
-  ],
-  "head": [
-    "hoodie",
-    "snapback",
-    "tophat"
-  ],
   "item": [
     "beer",
     "black_coffee",
@@ -31,5 +26,10 @@
   ],
   "pet": [
     "pillbug"
+  ],
+  "head": [
+    "hoodie",
+    "snapback",
+    "tophat"
   ]
 }

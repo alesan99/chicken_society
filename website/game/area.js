@@ -227,6 +227,23 @@ function checkCondition(c) {
 			return false
 		}
 	}
+	if (c.isResponse) {
+		// Do not activate this response through normal means
+		return false
+	}
+	if (c.petRaceStarted) {
+		return false
+	}
+	if (c.hasPet != null) {
+		// Condition is met if player has this pet equipped
+		let pet = PROFILE.pet
+		if (c.hasPet === true && pet) {
+			return true
+		} else if (c.hasPet === false && !pet) {
+			return true
+		}
+		return false
+	}
 	return true // No condition was defined, so just activate it anyway
 }
 

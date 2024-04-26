@@ -278,6 +278,13 @@ const DialogueSystem = (function() {
 				// Give item
 				addItem(d.giveItem)
 			}
+
+			if (d.sendToServer) {
+				// Send a message to the server
+				let header = d.serverHeader
+				let message = d.serverMessage
+				NETPLAY.sendMessageToServer(header, message)
+			}
 		},
 
 		// Show respnonse buttons
@@ -335,13 +342,17 @@ const DialogueSystem = (function() {
 			this.finish()
 
 			// Start next dialogue block
+			if (responseId == null) {
+				return false
+			}
 			for (let i = 0; i < dialogueTree.length; i++) {
 				let block = dialogueTree[i]
 				if (block.id == responseId) { // Look for dialogue block with this id
 					let doStart = true
-					if (block.condition && !checkCondition(block.condition)) {
-						doStart = false
-					}
+					// Response is telling you to go to this block, so go to it no matter what
+					// if (block.condition && !checkCondition(block.condition)) {
+					// 	doStart = false
+					// }
 					if (doStart) {
 						open = true // Open dialogue menu again
 						dialogueData = dialogueTree[i]

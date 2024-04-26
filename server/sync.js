@@ -114,6 +114,11 @@ function listenToClient(socket) {
 					case "shoot":
 						actionsToSend.push(action)
 						break;
+					case "message":
+						let header = args[0];
+						let contents = args[1];
+						handleClientMessage(socket.id, header, contents)
+						break;
 				}
 			}
 			socket.to(`area:${playerData.area}`).emit("action", socket.id, actionsToSend);
@@ -402,6 +407,16 @@ function sendTimedEvents(id) {
 	} else {
 		// Send timed events to all players
 		io.emit("timedEvents", TimedEvents.getActiveTimedEvents());
+	}
+}
+
+// Handle message from client; client wants to tell only the server something
+function handleClientMessage(id, header, contents) {
+	let playerData = playerList[id];
+	if (header == "petRace") {
+		console.log(playerData.name, "wants to join pet race.")
+	} else if (header == "petRace:bet") {
+		console.log(playerData.name, "wants to bet on a pet in the pet race.")
 	}
 }
 
