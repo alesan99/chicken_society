@@ -26,7 +26,6 @@ class World {
 
 		// Load Quests
 		QuestSystem.initialize()
-		QuestSystem.start("tutorial") // Temporary.. needs a better home
 
 		// Physics objects
 		OBJECTS = {}
@@ -103,7 +102,14 @@ class World {
 		}
 
 		// Load Area data
-		loadJSON5(`assets/areas/${this.area}.json`, (data) => {loadAreaFile(data, this, fromWarp, endFunc)})
+		//TimedEventsSystem.setActiveTimedEvents(["christmas", "midnight", "sunday"])
+		loadJSON5(`assets/areas/${this.area}.json5`, (data) => {
+			// Inject special timed event area data, if any
+			TimedEventsSystem.injectTimedEvents(`areas/${this.area}`, data).then(newData => {
+				// After all jsons have been read, finally load the area
+				loadAreaFile(newData, this, fromWarp, endFunc)
+			})
+		})
 
 		// Progress Quests
 		QuestSystem.event("area", area) // Progress quests that look for areas
@@ -115,6 +121,7 @@ class World {
 		}
 		AudioSystem.fadeOutMusic(1)
 		PLAYER.static = true // Don't let player move when in the process of warping
+		PLAYER_CONTROLLER.stop()
 		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
 			// Display black screen while area is loading...
 			Transition.start("loading", "in", 100, null, null)
@@ -359,6 +366,12 @@ class World {
 
 	mouseRelease(button, x, y) {
 		CHAT.mouseRelease(button, x, y)
+
+		// Dialogue
+		if (DialogueSystem.mouseRelease(button, x, y)) {
+			return true
+		}
+
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.clickRelease(button, x, y)) {

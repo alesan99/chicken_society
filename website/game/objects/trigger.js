@@ -1,8 +1,8 @@
 //Trigger; Whenever the player is over this area, it can activate an action like a speechBubble or a quest progression
 
 class Trigger extends PhysicsObject {
-	//Initialize: x pos, y pos, shape in points
-	constructor (spatialHash, x, y, shape, action, clickable=false, icon=false) {
+	//Initialize: x pos, y pos, shape in points, action func, activate when clicked?, icon: {frame, x, y}, activate when walked over?
+	constructor (spatialHash, x, y, shape, action, clickable=false, icon=false, walkOver=false, activateOnce=false, sound=false) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x || 0
@@ -10,13 +10,17 @@ class Trigger extends PhysicsObject {
 
 		this.shape = new Shape(...shape)
 
-        this.action = action
+				this.action = action
 
 		this.actionReady = false // is the trigger ready to be activated (Ex: player is near trigger)
 		this.activated = false
 
+		// Icon that appear when trigger can be activated (when standing on it or mouse over it)
 		this.actionIconFrame = false
 		if (icon) {
+			if (icon === true) { // default icon requested
+				icon = {frame: 1, x: (this.shape.x2-this.shape.x1)/2, y: 0}
+			}
 			this.actionIconFrame = icon.frame
 			this.actionIconX = icon.x
 			this.actionIconY = icon.y
@@ -28,7 +32,8 @@ class Trigger extends PhysicsObject {
 		this.static = true
 		this.setPosition(null,null)
 
-		this.clickable = (clickable != null)
+		// Activate on click
+		this.clickable = (clickable != false)
 		if (clickable) {
 			this.mouseOver = false
 			if (Array.isArray(clickable)) { // Clickable is an array of points
@@ -38,10 +43,24 @@ class Trigger extends PhysicsObject {
 				this.clickShape = this.shape
 			}
 		}
+		// Activate when walked over
+		this.walkOver = walkOver
+		// Activate once until player goes to different area
+		this.activateOnce = activateOnce
+		this.activatedOnce = false
+		// Sound
+		this.sound = sound
+
+		// Is active according to conditions?
+		this.isActive = true
 	}
 
 	update(dt) {
 		if (!this.active) {
+			return
+		}
+		// Do not interact with triggers if a menu is open
+		if (getOpenMenu() || DialogueSystem.getOpen()) {
 			return
 		}
 		// Is mouse inside clickable region?
@@ -79,40 +98,72 @@ class Trigger extends PhysicsObject {
 	}
 
 	// Do action function if trigger hasn't been activated yet
-    doAction() {
+	doAction() {
+		if (!this.active) {
+			return
+		}
+		if (this.activateOnce && this.activatedOnce) {
+			return false // Don't activate again with activateOnce
+		}
 		if (!this.activated) {
 			this.activated = true
 			this.action()
+
+			if (this.sound) {
+				AudioSystem.playSound(SFX[this.sound])
+			}
+			return true
 		}
-    }
+	}
 
 	reset() {
 		// Act as if the trigger hasn't been activated
 		this.activated = false
 	}
-    
+		
 	// Collision
 	collide(name, obj, nx, ny) {
 		return false
 	}
 
-    startCollide(name, obj, nx, ny) {
+	startCollide(name, obj, nx, ny) {
+		if (!this.active) {
+			return
+		}
 		if (name == "Character" && obj == PLAYER) {
-			this.actionReady = true
-            // this.doAction()
+			if (this.walkOver) {
+				// Activate action immediately if walkOver is true
+				this.actionReady = true
+				this.doAction()
+				this.activatedOnce = true
+			} else {
+				// Otherwise, wait for input
+				this.actionReady = true
+			}
 		}
 	}
 
-    stopCollide(name, obj) {
+	stopCollide(name, obj) {
+		if (!this.active) {
+			return
+		}
 		if (name == "Character" && obj == PLAYER) {
 			this.actionReady = false
-			this.activated = false
+
+			// Reset trigger to activate again
+			if (!this.activateOnce) {
+				this.reset()
+			}
 		}
-    }
+	}
 
 	click(button, x, y) {
+		if (!this.active) {
+			return
+		}
 		if (this.clickable && ((this.activated == false) && this.checkMouseOver())) {
 			this.doAction()
+			this.mouseOver = false
 			return true
 		}
 	}

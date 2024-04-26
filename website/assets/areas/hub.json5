@@ -1,4 +1,7 @@
 {
+	"name": "Town Square",
+	"mapLocation": [261, 196],
+
 	// Wall Collision
 	"walls": [
 		// Buildings in the back
@@ -26,7 +29,8 @@
 			"x": 83,
 			"y": 410,
 			"w": 50,
-			"h": 40
+			"h": 40,
+			"sound": "door"
 		},
 		"chictoriasSecretEntrance": {
 			"to": "chictoriassecret",
@@ -35,7 +39,8 @@
 			"x": 876,
 			"y": 386,
 			"w": 50,
-			"h": 40
+			"h": 40,
+			"sound": "door"
 		},
 		"petstupidEntrance": {
 			"to": "petstupid",
@@ -44,7 +49,8 @@
 			"x": 337,
 			"y": 221,
 			"w": 40,
-			"h": 40
+			"h": 40,
+			"sound": "door"
 		},
 		"seedDispensaryEntrance": {
 			"to": "seeddispensary",
@@ -53,7 +59,8 @@
 			"x": 710,
 			"y": 235,
 			"w": 40,
-			"h": 40
+			"h": 40,
+			"sound": "door"
 		},
 		"alleywayEntrance": {
 			"to": "alleyway",
@@ -62,7 +69,8 @@
 			"x": 859,
 			"y": 301,
 			"w": 40,
-			"h": 70
+			"h": 70,
+			"sound": "woosh"
 		},
 		"oldtownEntrance": {
 			"to": "oldtown",
@@ -71,7 +79,8 @@
 			"x": 150,
 			"y": 301,
 			"w": 40,
-			"h": 70
+			"h": 70,
+			"sound": "woosh"
 		}
 	},
 
@@ -84,8 +93,8 @@
 			"framesy": 1,
 			"ox": 201,
 			"oy": 0,
-			"qw": 226,
-			"qh": 215,
+			"w": 226,
+			"h": 215,
 
 			"x": 798,
 			"y": 145,
@@ -100,8 +109,8 @@
 				"frames": [0, 1],
 				"delay": 0.8
 			},
-			"qw": 280,
-			"qh": 450,
+			"w": 280,
+			"h": 450,
 
 			"x": 0,
 			"y": 0,
@@ -111,57 +120,29 @@
 
 	"triggers": {
 		"egg1": {
-			"x": 793,
-			"y": 298,
+			"x": 76,
+			"y": 479,
 			"shape": [0, 0, 40, 0, 40, 40, 0, 40],
 			"clickable": true,
-			"icon": { "frame": 1, "x": 15, "y": -10 },
+			"icon": true,
 
 			"action": "quest",
-			"quest": "easteregghunt",
+			"quest": "egg_hunt",
 			"questSlot": 0,
 			"questSlotAdd": 1,
 
 			"condition": {
-				"quest": "easteregghunt",
+				"quest": "egg_hunt",
 				"questSlot": 0,
 				"questSlotValue": 0
 			},
 
 			"sprite": {
 				"image": "egg.png",
-				"qw": 30,
-				"qh": 40,
-
+				"w": 30,
+				"h": 40,
 				"worldy": 318
 			}
 		},
-
-		"egg2": {
-			"x": 76,
-			"y": 479,
-			"shape": [0, 0, 40, 0, 40, 40, 0, 40],
-			"clickable": true,
-			"icon": { "frame": 1, "x": 15, "y": -10 },
-
-			"action": "quest",
-			"quest": "easteregghunt",
-			"questSlot": 1,
-			"questSlotAdd": 1,
-
-			"condition": {
-				"quest": "easteregghunt",
-				"questSlot": 1,
-				"questSlotValue": 0
-			},
-
-			"sprite": {
-				"image": "egg.png",
-				"qw": 30,
-				"qh": 40,
-
-				"worldy": 499
-			}
-		}
 	}
 }

@@ -12,6 +12,9 @@ const QuestSystem = (function() {
 			//TODO: start all quests previously started (stored in SAVEDATA)
 			activeQuests = {}; // Clear any quests from old saveData
 
+			this.start("tutorial") // First story quest
+			this.start("world") // Used for storing world state
+
 			for (let questName in SAVEDATA.quests.active) {
 				this.start(questName, "initial")
 			}
@@ -48,12 +51,20 @@ const QuestSystem = (function() {
 					quest.complete = false
 
 					if (!SAVEDATA.quests.active[questName]) {
+						// Starting quest for the first time
+						if (!quest.hidden) {
+							Notify.new(quest.description, 8)
+							Notify.new("You started the quest: " + quest.name, 8)
+							MENUS["chatMenu"].notification("quest", true)
+						}
+						// Save default progress
 						// TODO: There should be a SaveData function for this, saving progress will be more complicated when the database is implemented
 						SAVEDATA.quests.active[questName] = quest.progress
 					}
 
-					Notify.new(quest.description, 8)
-					Notify.new("You started the quest: " + quest.name, 8)
+				
+					this.initialEvents(questName)
+					conditionsUpdate()
 				})
 			}
 		},
@@ -61,7 +72,7 @@ const QuestSystem = (function() {
 		// Load quest data from file
 		// This does NOT start the quest
 		loadQuestData(questName, func) {
-			loadJSON(`assets/quests/${questName}.json`, (data) => {
+			loadJSON5(`assets/quests/${questName}.json5`, (data) => {
 				questData[questName] = data
 				let quest = questData[questName]
 				if (SAVEDATA.quests.completed[questName]) {
@@ -94,7 +105,15 @@ const QuestSystem = (function() {
 						if (event != false && event.type == type) {
 							// Quest is accepting event!
 							doProgress = false
-							if (type == "minigameHighscore") {
+							if (type == "minigame") {
+								// args: minigame
+								let minigame = args[0]
+								if (event.minigame == null) { // any minigame will do
+									doProgress = true
+								} else if (event.minigame == minigame) { // must be specified minigame
+									doProgress = true
+								}
+							} else if (type == "minigameHighscore") {
 								// args: minigame, score
 								let minigame = args[0]
 								let score = args[1]
@@ -113,11 +132,10 @@ const QuestSystem = (function() {
 								let face = args[1]
 								let body = args[2]
 								let item = args[3]
-								if (event.costGreater) {
+								if (event.costGreater != null) {
 									// Is outfit greater/less than defined cost?
 									let cost = 0
 									if (head) {
-										console.log(head)
 										cost += ITEMS.head[head].cost
 									}
 									if (face) {
@@ -137,6 +155,12 @@ const QuestSystem = (function() {
 								// args: area name
 								let area = args[0]
 								if (event.area == area) {
+									doProgress = true
+								}
+							} else if (type == "nuggets") {
+								// args: nuggets
+								let nuggets = args[0]
+								if (nuggets >= event.nuggetsGreater) {
 									doProgress = true
 								}
 							} else {
@@ -163,14 +187,46 @@ const QuestSystem = (function() {
 			}
 		},
 
+		// Automatically trigger events that should've been triggered before quest was started.
+		initialEvents(questName) {
+			// Anything that type of quest event that can be completed before quest starts NEEDS to be here.
+			let quest = this.getQuest(questName)
+			if (quest.progressEvents) {
+				for (let slot=0; slot < quest.progressEvents.length; slot++) {
+					let event = quest.progressEvents[slot]
+					if (event != false) {
+						let type = event.type
+						// Minigame highscore might've been reached before quest started
+						if (type == "minigameHighscore") {
+							if (SAVEDATA.highscores[event.minigame]) {
+								this.event("minigameHighscore", SAVEDATA.highscores[event.minigame])
+							}
+						// Clothes requirements might've been met before quest started
+						} else if (type == "clothes") {
+							this.event("clothes", PLAYER.head, PLAYER.face, PLAYER.body, PLAYER.item)
+						} else if (type == "nuggets") {
+							this.event("nuggets", SAVEDATA.nuggets)
+						}
+					}
+				}
+			}
+		},
+
 		// Set quest progress slot to a value.
 		setProgress(questName, progressSlot, value) {
 			let quest = this.getQuest(questName)
 			if (quest) {
 				quest.progress[progressSlot] = value
 
+				// Show notification for completing this step of the quest
+				if (value >= 1) {
+					Notify.new(`[✔] ${quest.progressDescription[progressSlot]}`, 5, [80,80,80])
+				}
+
 				// Save progress
 				SAVEDATA.quests.active[questName] = quest.progress
+				
+				conditionsUpdate()
 
 				// Check completion
 				for (let i=0; i<quest.progress.length; i++) {
@@ -195,8 +251,12 @@ const QuestSystem = (function() {
 
 		// Mark quest as complete, save progress, and remove from activeQuest update list.
 		complete(questName) {
+			// FYI: a quest is complete once all progress slots are >= progressFinish slots
 			let quest = this.getQuest(questName)
 			if (quest) {
+				// Notify
+				Notify.new("You completed the quest: " + quest.name)
+				
 				// Give reward(s)
 				for (let rewardType in quest.reward) {
 					if (rewardType == "nuggets") {
@@ -204,7 +264,11 @@ const QuestSystem = (function() {
 						addNuggets(quest.reward[rewardType])
 					} else if (rewardType == "item") {
 						// Item
-						addItem(null, quest.reward[rewardType])
+						addItem(quest.reward[rewardType])
+					} else if (rewardType == "quest") {
+						// Start new quest
+						let questName = quest.reward[rewardType]
+						this.start(questName)
 					}
 				}
 
@@ -214,8 +278,7 @@ const QuestSystem = (function() {
 				delete activeQuests[questName]
 				delete SAVEDATA.quests.active[questName]
 
-				// Notify
-				Notify.new("You completed the quest: " + quest.name)
+				conditionsUpdate()
 			}
 		},
 

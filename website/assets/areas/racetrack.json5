@@ -1,0 +1,130 @@
+{
+	"name": "Racetrack",
+	"mapLocation": false,
+
+	"walls": [
+		[0,576, 1024,576, 1024,600, 0,600] // bottom of screen
+	],
+
+	"warps": {
+		"raceTrackExit": {
+			"to": "hub",
+			"fromWarp": "raceTrackEntrance",
+			"facing": "down",
+			"x": 20,
+			"y": 400,
+			"w": 40,
+			"h": 400
+		}
+	},
+
+	"NPCs": {
+		"hancock": {
+			"profile": {
+				"name": "Hancock",
+				"color": "#FFFFFF",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 130,
+			"y": 460,
+			"facing": "down",
+			"speechBubble": [
+				"Come one come all!"
+			],
+			"dialogue": [
+				{
+					"text": [
+						"The race is in full swing!"
+					],
+					"condition": {
+						"petRaceStarted": true
+					}
+				},
+				{
+					"text": [
+						"Welcome to the Kentucky Fried Derby! Witness the fastest pets race for glory!"
+					],
+					"responses": [
+						{
+							"text": "Put me in coach!",
+							"condition": {
+								"hasPet": false
+							},
+							"to": "putMeIn"
+						},
+						{
+							"text": "Participate",
+							"condition": {
+								"hasPet": true
+							},
+							"to": "participate"
+						},
+						{
+							"text": "Bet",
+							"to": "bet"
+						},
+						{
+							"text": "See ya."
+						}
+					]
+				},
+				{
+					"id": "bet",
+					"text": [
+						"What's your wager?"
+					],
+					"responses": [
+						{
+							"text": "10 nugs",
+							"to": "placeBet"
+						},
+						{
+							"text": "20 nugs",
+							"to": "placeBet"
+						},
+						{
+							"text": "50 nugs",
+							"to": "placeBet"
+						},
+						{
+							"text": "100 nugs",
+							"to": "placeBet"
+						}
+					],
+					"condition": {
+						"isResponse": true
+					}
+				},
+				{
+					"id": "putMeIn",
+					"text": ["Sorry pal, pets only."],
+					"condition": {
+						"isResponse": true
+					}
+				},
+				{
+					"id": "participate",
+					"text": ["You betcha. I'll put in your current pet."],
+					"condition": {
+						"isResponse": true
+					},
+					"sendToServer": true,
+					"serverHeader": "petRace",
+					"serverMessage": "participate"
+				},
+				{
+					"id": "placeBet",
+					"text": ["I'll take those nuggets. No refunds! Who do you think will win?"],
+					"condition": {
+						"isResponse": true
+					},
+					"sendToServer": true,
+					"serverHeader": "petRace:bet",
+					"serverMessage": 50
+				}
+			],
+		}
+	}
+}

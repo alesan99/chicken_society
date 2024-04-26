@@ -18,7 +18,7 @@ function makeSaveData() {
 			item: {},
 
 			furniture: {"table": 2, "lamp": 2, "frame": 2, "rug": 2},
-			pet: {"pillbug": 1}
+			pet: {}
 		},
 		nuggets: 100,
 		
@@ -154,6 +154,8 @@ function removeNuggets(nuggets) {
 	if (CHAT) {
 		CHAT.nuggetCounter(-nuggets)
 	}
+	// Quest progression
+	QuestSystem.event("nuggets", SAVEDATA.nuggets)
 }
 
 function addNuggets(nuggets) {
@@ -163,6 +165,8 @@ function addNuggets(nuggets) {
 	if (CHAT) {
 		CHAT.nuggetCounter(nuggets)
 	}
+	// Quest progression
+	QuestSystem.event("nuggets", SAVEDATA.nuggets)
 }
 
 function spendNuggets(cost) {
@@ -175,7 +179,7 @@ function spendNuggets(cost) {
 }
 
 // Get items like clothing and consumables
-function addItem(type, id, count=1) {
+function addItem(id, type, count=1) {
 	if (!type) {
 		// Item category not specified, look for it
 		type = getItemCategory(id)
@@ -186,7 +190,7 @@ function addItem(type, id, count=1) {
 	SAVEDATA.items[type][id] += count
 }
 
-function removeItem(type, id, count=1) {
+function removeItem(id, type, count=1) {
 	if (!type) {
 		// Item category not specified, look for it
 		type = getItemCategory(id)
@@ -210,6 +214,7 @@ function getItemCategory(id) {
 }
 
 function getItemData(id, type) {
+	// Get item data
 	let category
 	if (type) {
 		category = type
@@ -218,6 +223,21 @@ function getItemData(id, type) {
 	}
 
 	return ITEMS[category][id]
+}
+
+function getItem(id, type) {
+	// Get number of owned items
+	let category
+	if (type) {
+		category = type
+	} else {
+		category = getItemCategory(id)
+	}
+	if (category && SAVEDATA.items[category][id]) {
+		return SAVEDATA.items[category][id]
+	} else {
+		return false
+	}
 }
 
 // Chicken Coop Furniture

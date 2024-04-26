@@ -1,35 +1,35 @@
 {
 	"name": "Tutorial",
 	"description": "Discover what to do in Chicken Society!",
-
-	"priority": true,
+	"priority": true, // Important Story Quest
 	
 	"progressDescription": [
-		"Visit Chictoria's Secret and shop.",
+		"Visit Chictoria's Secret and ask how to shop.",
 		"Visit the arcade and play a mini-game.",
-		"Visit the old town"
+		"Visit the Old Town."
 	],
+	"progressDescriptionSlotRequirement": [false, false, false],
 
 	"progressEvents": [
 		false,
 		{
-			"type": "talk",
-			"name": "Bud",
+			// Play any minigame to progress
+			"type": "minigame",
 			"questSlotSet": 1
 		},
 		{
-			"type": "talk",
-			"name": "Eggery",
+			// Visit Old Town to progress
+			"type": "area",
+			"area": "oldtown",
 			"questSlotSet": 1
 		}
 	],
 
 	"progressStart": [0, 0, 0],
-
 	"progressFinish": [1, 1, 1],
 
 	"reward": {
 		"nuggets": 10,
-		"item": "tophat"
+		"quest": "factory_explosion"
 	}
 }

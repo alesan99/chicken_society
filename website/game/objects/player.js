@@ -167,7 +167,11 @@ class Player {
 		// Teleport character
 		char.setPosition(x, y)
 		char.dir = dir
-		char.flip = 1
+		if (dir == "left") {
+			char.flip = -1
+		} else {
+			char.flip = 1
+		}
 
 		// Also teleport pet
 		if (char.pet) {
@@ -176,6 +180,7 @@ class Player {
 
 		// Stop movement
 		this.target = false
+		this.mouseHold = false
 	}
 
 	stop() {

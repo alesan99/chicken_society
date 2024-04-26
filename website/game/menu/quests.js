@@ -34,6 +34,9 @@ MENUS["questsMenu"] = new class extends Menu {
 		this.quests = [] // Sorted quest info list
 		this.sorted = "all"
 		this.sortQuests(this.sorted)
+
+		// Disable quest menu notification
+		MENUS["chatMenu"].notification("quest", false)
 	}
 
 	// Sort quests by completion
@@ -56,6 +59,13 @@ MENUS["questsMenu"] = new class extends Menu {
 		} else if (category == "complete") {
 			for (let questName in QuestSystem.getAllCompletedQuests()) {
 				this.quests.push(QuestSystem.getQuestData(questName))
+			}
+		}
+		// Remove all quest that are hidden AND incomplete
+		for (let i=this.quests.length-1; i>=0; i--) {
+			let quest = this.quests[i]
+			if (quest.hidden && !quest.complete) {
+				this.quests.splice(i, 1)
 			}
 		}
 		// Sort the quests alphabetically by quest.name
@@ -156,6 +166,14 @@ MENUS["questsMenu"] = new class extends Menu {
 										progress: quest.progress[j],
 										progressFinish: quest.progressFinish[j],
 									}
+									// Check if progress description should be hidden
+									if (quest.progressDescriptionSlotRequirement) {
+										let requiredSlot = quest.progressDescriptionSlotRequirement[j]
+										if (quest.progress[requiredSlot] < quest.progressFinish[requiredSlot]) {
+											progressEntry.text = "???"
+										}
+									}
+									// Ok, add it to list
 									this.list.splice(addi, 0, progressEntry)
 									addi += 1
 								}
@@ -185,7 +203,7 @@ MENUS["questsMenu"] = new class extends Menu {
 	// Toggle expanded state of list entry
 	toggleQuest(questName) {
 		// Find quest in display list with questName
-			for (let i=0; i<this.list.length; i++) {
+		for (let i=0; i<this.list.length; i++) {
 			let entry = this.list[i]
 			if (entry.type == "quest" && entry.quest.name == questName) {
 				entry.expanded = !entry.expanded
@@ -224,7 +242,11 @@ MENUS["questsMenu"] = new class extends Menu {
 				return true
 			}
 		}
-		return super.mouseClick(button, x, y)
+		super.mouseClick(button, x, y)
+		if (!MENUS["chatMenu"].checkMouseInside()) {
+			// Disable clicking anywhere else, except for chat hud
+			return true
+		}
 	}
 
 	mouseRelease(button, x, y) {
@@ -291,7 +313,7 @@ MENUS["questsMenu"] = new class extends Menu {
 					if (entry.progress != null && entry.progressFinish != null) {
 						// Draw Checkbox
 						DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line")
-						if (entry.progress == entry.progressFinish) {
+						if (entry.progress >= entry.progressFinish) {
 							DRAW.text("✔", this.listX+this.listW-30+10, y+20, "center")
 							//DRAW.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
 						}
@@ -302,8 +324,11 @@ MENUS["questsMenu"] = new class extends Menu {
 			}
 		}
 		DRAW.setColor(244, 188, 105, 1.0) // Cover up scrolling past list window
-		DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
-		DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
+		//DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
+		//DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(IMG.menu, [20,51, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH) // Cover top of list
+		DRAW.image(IMG.menu, [20,317, this.listW,this.listEntryH], this.listX, this.listY+this.listH) // Cover bottom of list
 
 		// Render all buttons
 		this.drawButtons()

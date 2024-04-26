@@ -15,20 +15,21 @@
     "rug",
     "table"
   ],
-  "head": [
-    "hoodie",
-    "snapback",
-    "tophat"
-  ],
   "item": [
     "beer",
     "black_coffee",
     "bullet",
     "gun",
     "heroin",
-    "seeds"
+    "seeds",
+    "snake_book"
   ],
   "pet": [
     "pillbug"
+  ],
+  "head": [
+    "hoodie",
+    "snapback",
+    "tophat"
   ]
 }

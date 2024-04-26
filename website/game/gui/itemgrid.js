@@ -37,7 +37,7 @@ class ItemGrid {
 		//this.buttons["scrollDown"] = new Button("", ()=>{this.scrollDown()}, null, this.x+this.w, this.y+this.h-20, 20, 20)
 
         this.hover = false;
-        this.holding = false;
+        this.held = false;
     }
 
     checkMouseInside(){
@@ -56,7 +56,7 @@ class ItemGrid {
     update(dt){
         let [cx, cy] = this.checkMouseInside();
         if (cx !== false && cy !== false) {
-			if (!this.holding) {
+			if (!this.held) {
 				this.overx = cx
 				this.overy = cy
 			}
@@ -81,7 +81,7 @@ class ItemGrid {
         if (cx !== false && cy !== false) {
 			this.overx = cx
 			this.overy = cy
-            this.holding = true
+            this.held = true
             return true
         }
 
@@ -91,9 +91,9 @@ class ItemGrid {
 		}
     }
     clickRelease(button, x, y){
-        if (this.holding == true){
+        if (this.held == true){
 			this.gridAction(this.overx, this.overy)
-			this.holding = false
+			this.held = false
         }
 
 		// Scroll bar
@@ -133,13 +133,23 @@ class ItemGrid {
 			this.buttons[button].draw()
 		}
 
-		// Render all grid cells
+		// Render grid
         let [mouseX, mouseY] = getMousePos(); //returns x and y pos of mouse
 		
 		DRAW.setColor(242, 242, 242, 1); // Light color for other cells
 		DRAW.rectangle(this.x, this.y, this.w, this.h);
 		DRAW.setFont(FONT.guiLabel);
+		DRAW.setLineWidth(2);
+		// grid lines
+		DRAW.setColor(220,220,230, 1.0)
+		for (let x = 1; x < this.gw; x++) {
+			DRAW.line(this.x + x*this.cw, this.y, this.x + x*this.cw, this.y + this.h)
+		}
+		for (let y = 1; y < this.gh; y++) {
+			DRAW.line(this.x, this.y + y*this.ch, this.x + this.w, this.y + y*this.ch)
+		}
 
+		// Render all grid cells
 		for (let cx = 0; cx < this.gw; cx++) {
 			for (let cy = 0; cy < this.gh; cy++) {
 				let i = this.getCellIndex(cx, cy) // Index of cell
@@ -153,17 +163,17 @@ class ItemGrid {
 					// Set the color based on whether the cell is being hovered over
 					let hover = (this.hover && this.overx === cx && this.overy === cy)
 					let selected = this.selectedFunc(this.list[i],itemType,hover)
-					let holding = (this.holding && this.overx === cx && this.overy === cy)
-					if (hover || holding || selected) {
-						if (holding) {
-							DRAW.setColor(218, 165, 32, 1); // Dark color for selected cell (while holding
+					let held = (this.held && this.overx === cx && this.overy === cy)
+					if (hover || held || selected) {
+						if (held) {
+							DRAW.setColor(165, 165, 175, 1); // Dark color for selected cell (while held)
 						} else if (hover) {
-							DRAW.setColor(248, 222, 187, 1); // Medium color for hovered cell
+							DRAW.setColor(208, 208, 238, 1); // Medium color for hovered cell
 						} else if (this.list[i] && selected) {
 							if (selected == "gray") {
 								DRAW.setColor(200, 200, 200, 1); // Dark color for selected cell
 							} else {
-								DRAW.setColor(218, 165, 32, 1); // Dark color for selected cell
+								DRAW.setColor(180, 190, 240, 1); // Dark color for selected cell
 							}
 						}
 						// Draw the cell
@@ -171,8 +181,8 @@ class ItemGrid {
 					}
 
 					// Draw the cell border
-					DRAW.setColor(168, 85, 38, 1);
-					DRAW.rectangle(cellX, cellY, this.cw, this.ch, "line");
+					DRAW.setColor(140, 140, 160, 1);
+					DRAW.rectangle(cellX+1, cellY+1, this.cw-2, this.ch-2, "line");
 
 					// Draw item in this cell
 					if (this.list[i]) {
@@ -180,7 +190,7 @@ class ItemGrid {
 							let image = ITEMS[itemType][this.list[i]].image
 							let sprite = ITEMS[itemType][this.list[i]].sprite
 
-							let scale = 0.9*(this.cw/Math.max(sprite.w, sprite.h))
+							let scale = Math.min(1.0, 0.9*(this.cw/Math.max(sprite.w, sprite.h)))
 
 							if (image) {
 								DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5)

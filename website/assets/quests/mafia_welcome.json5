@@ -1,0 +1,19 @@
+{
+	"name": "Mafia: Welcome to the Family",
+	"description": "You are officially a one of the Mafia's goons. Learn the ropes and start earning money.",
+	"priority": true, // Important Story Quest
+
+	"progressDescription": [
+		"Meet your Capo.",
+		"Learn the secrets of the sewers.",
+		"Complete your first task." //steal eggs, chickpeas, pennywise sewer style
+	],
+
+	"progressStart": [0,0,0],
+	"progressFinish": [1,1,1],
+
+	"reward": {
+		"nuggets": 100,
+		"quest": "mafia_hideout"
+	}
+}

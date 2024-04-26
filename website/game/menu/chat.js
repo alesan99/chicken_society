@@ -3,7 +3,7 @@
 MENUS["chatMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {
-		super(202,525, 620,51)
+		super(202,525, 660,51)
 	}
 
 	load() {
@@ -31,6 +31,10 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34)
 		this.buttons[5] = new Button(false, ()=>{if (getOpenMenu() != "questsMenu") {openMenu("questsMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,5),SPRITE.chatButton.getFrame(1,5),SPRITE.chatButton.getFrame(2,5)]}, 813,535, 34,34) 
 
+		this.notifications = { // A red dot that appears by buttons
+			quest: false
+		}
+
 		this.textField = document.getElementById('gameTextInput');
 		this.textField.addEventListener('keydown', (event) => {
 			if (event.key === 'Enter' || event.code === 'Enter') {
@@ -57,7 +61,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					PLAYER.updateProfile(PROFILE, "sendToServer")
 					break
 				case "/give":
-					addItem(null, arg, arg2 || 1)
+					addItem(arg, null, Number(arg2) || 1)
 					break
 				case "/head":
 					PROFILE.head = arg
@@ -174,6 +178,11 @@ MENUS["chatMenu"] = new class extends Menu {
 		// Render all buttons
 		this.drawButtons()
 
+		// Render notification dot
+		if (this.notifications.quest) {
+			DRAW.image(IMG.chat, SPRITE.notif.getFrame(1,0), this.buttons[5].x+this.buttons[5].w-3, this.buttons[5].y+3, 0, 1,1, 0.5,0.5)
+		}
+
 		// Display whats being typed
 		if (this.open) {
 			// DRAW.setColor(0,0,0,0.5)
@@ -279,5 +288,9 @@ MENUS["chatMenu"] = new class extends Menu {
 		// Play nugget animation
 		this.nuggetDiff = nuggets
 		this.nuggetTimer = 1
+	}
+
+	notification(type, enable=True) {
+		this.notifications[type] = enable
 	}
 }()

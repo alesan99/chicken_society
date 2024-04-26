@@ -11,17 +11,20 @@ class MinigameState {
 		// Load minigame and let server know you're playing
 		this.minigameName = minigameName
 		this.minigame = MINIGAMES[minigameName]
-        this.minigame.load()
+		this.minigame.load()
 
 		NETPLAY.sendMinigame(this.minigame, minigameName)
 
 		this.exitButton = new Button("Exit", () => {this.exit()}, null, 900,50, 80,80)
 		this.exited = false
+
+		// Quest progression
+		QuestSystem.event("minigame", this.minigameName)
 	}
 
 	update(dt) {
 		// Update minigame
-        this.minigame.update(dt)
+		this.minigame.update(dt)
 		if (!this.exited) {
 			NETPLAY.update(dt)
 		}
@@ -33,8 +36,8 @@ class MinigameState {
 	}
 
 	draw() {
-        // Render minigame contents
-        this.minigame.draw()
+		// Render minigame contents
+		this.minigame.draw()
 
 		this.exitButton.draw()
 		
@@ -51,36 +54,39 @@ class MinigameState {
 		this.exited = true
 		NETPLAY.sendMinigame(false) // Disconnect from minigame
 
-        Transition.start("wipeLeft", "out", 0.8, null, () => {
+		Transition.start("wipeLeft", "out", 0.8, null, () => {
 			// Unload minigame assets
 			if (this.minigame.exit) {
 				this.minigame.exit()
 			}
-            PLAYER.static = false
-            setState(WORLD) // Go back to world
-            Transition.start("wipeRight", "in", 0.8, null, null)
-        })
+			PLAYER.static = false
+			setState(WORLD) // Go back to world
+			Transition.start("wipeRight", "in", 0.8, null, null)
+		})
 	}
 
 	newHighscore(score) {
-        QuestSystem.event("minigameHighscore", this.minigameName, score) // Progress quests
+		// Save highscore
+		SAVEDATA.highscores[this.minigameName] = score
+		// Update quest progression
+		QuestSystem.event("minigameHighscore", this.minigameName, score) // Progress quests
 	}
 
 	keyPress(key) {
 		// Exit minigame
 		if (key == "Escape") {
-            this.exit()
+			this.exit()
 			return true
 		}
 		CHAT.keyPress(key)
 
 		// Control minigame
-        this.minigame.keyPress(key)
+		this.minigame.keyPress(key)
 	}
 
 	keyRelease(key) {
 		// Control minigame
-        this.minigame.keyRelease(key)
+		this.minigame.keyRelease(key)
 	}
 
 	mouseClick(button, x, y) {
@@ -91,7 +97,7 @@ class MinigameState {
 			return true
 		}
 		// Control minigame
-        this.minigame.mouseClick(button, x, y)
+		this.minigame.mouseClick(button, x, y)
 	}
 
 	mouseRelease(button, x, y) {

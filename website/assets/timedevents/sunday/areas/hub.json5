@@ -1,0 +1,16 @@
+{
+	"NPCs": {
+		"chickfila": {
+			"profile": {
+				"name": "Chick fil A",
+				"color": "#AAAA50",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 600,
+			"y": 350,
+			"speechBubble": ["I'm closed."]
+		}
+	}
+}

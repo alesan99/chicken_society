@@ -1,0 +1,16 @@
+{
+	"NPCs": {
+		"santa": {
+			"profile": {
+				"name": "Santa",
+				"color": "#EE4040",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 800,
+			"y": 450,
+			"speechBubble": ["Ho ho ho!"]
+		}
+	}
+}

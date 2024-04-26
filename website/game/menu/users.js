@@ -76,7 +76,11 @@ MENUS["usersMenu"] = new class extends Menu {
 				this.selectPlayer(i)
 			}
 		}
-		return super.mouseClick(button, x, y)
+		super.mouseClick(button, x, y)
+		if (!MENUS["chatMenu"].checkMouseInside()) {
+			// Disable clicking anywhere else, except for chat hud
+			return true
+		}
 	}
 
 	mouseRelease(button, x, y) {
@@ -133,8 +137,10 @@ MENUS["usersMenu"] = new class extends Menu {
 			DRAW.text(name, this.listX+10, y+this.listEntryH-4, "left")
 		}
 		DRAW.setColor(244, 188, 105, 1.0) // Cover up scrolling past list window
-		DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
-		DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
+		//DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill") // Cover top
+		//DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill") // Cover bottom
+		DRAW.image(IMG.menu, [20,24, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH) // Cover top
+		DRAW.image(IMG.menu, [20,320, this.listW,this.listEntryH], this.listX, this.listY+this.listH) // Cover bottom
 
 		// Text
 		DRAW.setColor(112, 50, 16, scale)
@@ -159,6 +165,12 @@ MENUS["usersMenu"] = new class extends Menu {
 	selectPlayer(i) {
 		this.listSelection = i
 		let id = this.list[this.listSelection]
+		// Disable mute button for player
+		if (id == "PLAYER") {
+			this.buttons["mute"].disabled = true
+		} else {
+			this.buttons["mute"].disabled = false
+		}
 		// Change text on mute button
 		if (NETPLAY.mutedPlayers && NETPLAY.mutedPlayers[id]) {
 			this.buttons["mute"].label = "Unmute"

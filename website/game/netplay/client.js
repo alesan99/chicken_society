@@ -72,6 +72,8 @@ Netplay = class {
 		socket.on("minigameAddPlayer", (id) => {this.addMinigamePlayer(id)})
 		socket.on("minigameRemovePlayer", (id) => {this.removeMinigamePlayer(id)})
 		socket.on("minigameHighscores", (id, data) => {this.recieveMinigameHighscores(id, data)})
+		// Timed Events
+		socket.on("timedEvents", (timedEvents) => {this.recieveTimedEvents(timedEvents)})
 	}
 
 	// Connect to server for the first time and send information about yourself
@@ -403,17 +405,17 @@ Netplay = class {
 	mutePlayer(id, doMute) {
 		let playerData = this.playerList[id]
 		if (playerData) {
-			if (doMute) {
+			if (doMute) { // Mute
 				this.mutedPlayers[id] = true
 				Notify.new(`Muted ${playerData.name}.`, 2)
-			} else {
+			} else { // Unmute
 				if (this.mutedPlayers[id]) {
 					delete this.mutedPlayers[id]
 				}
 				Notify.new(`Unmuted ${playerData.name}.`, 2)
 			}
 			return true
-		} else {
+		} else { // Error
 			Notify.new(`Can't mute this player.`, 2, [255, 0, 0])
 			return false
 		}
@@ -422,6 +424,17 @@ Netplay = class {
 	// Get player data from player data list
 	getPlayerData(id) {
 		return this.playerList[id]
+	}
+
+	// Timed Events
+	recieveTimedEvents(timedEvents) {
+		console.log("Recieved timed events:", timedEvents)
+		TimedEventsSystem.setActiveTimedEvents(timedEvents)
+	}
+
+	// Send message to server
+	sendMessageToServer(header, contents) {
+		this.sendAction("message", header, contents)
 	}
 }
 
@@ -449,5 +462,6 @@ Netplay = class {
 		sendMinigame(minigameName) {}
 		mutePlayer(id, doMute) {}
 		getPlayerData(id) {}
+		sendMessageToServer(header, contents) {}
 	}
 }

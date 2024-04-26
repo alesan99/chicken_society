@@ -90,12 +90,12 @@ function stateScroll(dy) {
 }
 
 // Open pop-up menu
-function openMenu(name, args) {
+function openMenu(name, ...args) {
 	if (open_menu) {
 		closeMenu()
 	}
 	open_menu = name
-	MENUS[name].load(args)
+	MENUS[name].load(...args)
 
 	// Stop world events
 	if (PLAYER_CONTROLLER) {

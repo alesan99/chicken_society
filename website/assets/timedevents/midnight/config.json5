@@ -1,0 +1,14 @@
+{
+	"name": "Midnight",
+
+	"type": "daily",
+
+	"time": "23:00", // 11:00 PM
+	"duration": "2:00", // 2 hours long
+
+	// Which areas are affected?
+	// Currently unused
+	"areas": [
+		"hub"
+	]
+}

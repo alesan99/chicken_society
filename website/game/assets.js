@@ -41,7 +41,8 @@ function loadGameAssets() {
 
 	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a")
 
-	SFX.door = AudioSystem.newSound("assets/sfx/door.wav")
+	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg")
+	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg")
 
 	// CHAT MENU & HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")
@@ -50,6 +51,7 @@ function loadGameAssets() {
 	IMG.chatMessage = new RenderImage("assets/chat_message.png")
 	SPRITE.chat = new Sprite(IMG.chat, 1,1, 660,51)
 	SPRITE.chatButton = new Sprite(IMG.chat, 3,6, 36,36, 0,51)
+	SPRITE.notif = new Sprite(IMG.chat, 2,1, 18,18, 108,51)
 	IMG.emoteMenu = new RenderImage("assets/gui/emote.png")
 	SPRITE.emoteButton = new Sprite(IMG.emoteMenu, 3,7, 36,36, 0,110)
 
@@ -60,6 +62,8 @@ function loadGameAssets() {
 	IMG.map = new RenderImage("assets/gui/map.png")
 	SPRITE.map = new Sprite(IMG.map, 1,1, 512,304)
 	SPRITE.mapIcons = new Sprite(IMG.map, 2,1, 36,36, 0,304, 1,1)
+	IMG.colorSlider = new RenderImage("assets/gui/color.png")
+	SPRITE.colorSlider = new Sprite(IMG.color, 1,4, 140,12)
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed
@@ -139,9 +143,9 @@ function loadItem(category, itemId) {
 		item.name = data.name
 		item.description = data.description
 		item.cost = data.cost
-		item.consumable = data.consumable // Can item only be used once?
 
 		// Consumables
+		item.consumable = data.consumable // Can item only be used once?
 		item.statusEffect = data.statusEffect
 		item.statusEffectChance = data.statusEffectChance
 		item.statusEffectDuration = data.statusEffectDuration
@@ -152,6 +156,9 @@ function loadItem(category, itemId) {
 		if (data.center) { // Center of frames
 			item.center = data.center
 		}
+
+		// Utility
+		item.dialogue = data.dialogue
 
 		// Furniture
 		item.shape = data.shape
@@ -190,12 +197,15 @@ function loadJSON(filePath, callBack) {
 	})
 }
 
-// Same as above, but for the more human-readable JSON5 format
-function loadJSON5(filePath, callBack) {
+// Same as above, but for the more human-maintainable JSON5 format
+// https://json5.org/
+function loadJSON5(filePath, callBack, errorCallBack) {
 	// JSON file must be loaded asynchronously
 	fetch(filePath).then(response => {
 		if (!response.ok) {
-			console.log("JSON Network response was not ok")
+			console.log("JSON file could not be fetched: ", filePath)
+			if (errorCallBack) { errorCallBack() }
+			return false
 		}
 		return response.text().then(text => {
 			return JSON5.parse(text)
@@ -206,6 +216,7 @@ function loadJSON5(filePath, callBack) {
 	})
 	.catch(error => {
 		console.log("There was a problem loading the JSON file:", error)
+		if (errorCallBack) { errorCallBack() }
 	})
 }
 

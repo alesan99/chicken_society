@@ -1,0 +1,20 @@
+{
+	"name": "Eggery's Egg Hunt",
+	"description": "Find all of Eggery's lost eggs around the town.",
+
+	"progressDescription": [
+		"Find egg #1.",
+		"Find egg #2.",
+		"Find egg #3.",
+		"Find egg #4.",
+		"Find egg #5.",
+		"Find egg #6."
+	],
+
+	"progressStart": [0,0,0,0,0,0],
+	"progressFinish": [1,1,1,1,1,1],
+
+	"reward": {
+		"nuggets": 50
+	}
+}

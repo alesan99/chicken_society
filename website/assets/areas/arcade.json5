@@ -26,7 +26,8 @@
 			"x": 826,
 			"y": 327,
 			"w": 30,
-			"h": 50
+			"h": 50,
+			"sound": "door"
 		}
 	},
 
@@ -133,8 +134,8 @@
 			"framesy": 1,
 			"ox": 0,
 			"oy": 0,
-			"qw": 265,
-			"qh": 72,
+			"w": 265,
+			"h": 72,
 
 			"x": 244,
 			"y": 244,
@@ -185,21 +186,20 @@
 			"icon": {"frame": 1, "x": 15, "y": -10},
 
 			"action": "quest",
-			"quest": "easteregghunt",
+			"quest": "egg_hunt",
 			"questSlot": 3,
 			"questSlotAdd": 1,
 
 			"condition": {
-				"quest": "easteregghunt",
+				"quest": "egg_hunt",
 				"questSlot": 3,
 				"questSlotValue": 0
 			},
 
 			"sprite": {
 				"image": "egg.png",
-				"qw": 30,
-				"qh": 40,
-
+				"w": 30,
+				"h": 40,
 				"worldy": 157
 			}
 		}

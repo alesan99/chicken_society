@@ -1,0 +1,32 @@
+{
+	"name": "Factory Explosion Mystery",
+	"description": "There was an explosion at the North Chickpea Factory, and you're responsible apparently! Maybe not, try to prove yourself innocent.",
+	"priority": true, // Important Story Quest
+
+	"progressDescription": [
+		"Visit the Chickpea Factory.",
+		"Ask around for information.",
+		"Investigate rubble.",
+		"Prove you may be innocent."
+	],
+	"progressDescriptionSlotRequirement": [false, false],
+	"progressEvents": [
+		{
+			// Visit Crossroads District
+			"type": "area",
+			"area": "crossroads_district",
+			"questSlotSet": 1
+		},
+		false,
+		false,
+		false
+	],
+
+	"progressStart": [0,0,0,0],
+	"progressFinish": [1,1,1,1],
+
+	"reward": {
+		"nuggets": 10,
+		"quest": "study_in_violet"
+	}
+}

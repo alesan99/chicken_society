@@ -1,0 +1,23 @@
+{
+	"name": "A Study in Violet",
+	"description": "Find the origin of the mysterious purple dead skin you found in the Chickpea Factory Rubble.",
+	"priority": true, // Important Story Quest
+
+	"progressDescription": [
+		"Ask around for information.",
+		"Find the trashed history book.", // Hidden until you complete previous step
+		"Read the dumpster history book." // Read dumpster book after joining the Mafia
+	],
+	"progressDescriptionSlotRequirement": [
+		false,
+		0,
+		1
+	],
+
+	"progressStart": [0, 0, 0],
+	"progressFinish": [1, 1, 1],
+
+	"reward": {
+		"nuggets": 10
+	}
+}

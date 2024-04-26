@@ -1,0 +1,22 @@
+{
+    "name": "Snake History Book",
+    "description": "Contains the long lost history of the snake species.",
+    "cost": 20,
+
+	"dialogue": [
+		{
+			"text": [
+				"(It's the book about snakes! Let's see here...)",
+				"Snakes - Squamata Ophidia Serpentes - these worm-like creatures roamed Roosterra many years ago.",
+				"Snakes primarily ate birds and eggs, making them feared among chickenkind. Though, they were reclusive, and prefered to live in caves away from chickens.",
+				"Snakes were quite an advanced species, with their own societal structure and language.",
+				"Snakekind specialized in arms manufacturing, supplying weapons and explosives to many nations.",
+				"However, after developing weapons of mass destruction, conflict arose among other species.",
+				"Tragically, all snakes were exiled to far off lands where snakekind met its demise."
+			],
+			"quest": "study_in_violet",
+			"questSlot": 2,
+			"questSlotSet": 1
+		}
+	]
+}

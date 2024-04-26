@@ -1,5 +1,6 @@
 // Recieves client information and relays it to every other client.
 const {io, playerList} = require("../server.js");
+const {TimedEvents} = require("./timedevents.js");
 
 // Minigame data
 var minigameList = {
@@ -9,9 +10,12 @@ var minigameList = {
 		data: {},
 		host: false,
 		// Should be stored by the server
-		highscores: [[100, "Pro Gamer"],[0,"---"],[0,"---"]]
+		highscores: [[99, "Pro Gamer"],[0,"---"],[0,"---"]]
 	}
 };
+
+// Timed events
+TimedEvents.loadTimedEvents();
 
 // User Connected! Start listening for any messages.
 function listenToClient(socket) {
@@ -56,6 +60,9 @@ function listenToClient(socket) {
 		socket.emit("playerList", cleanPlayerList(playerList))
 		// Send everyone else just a new entry to their player list
 		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerList[socket.id]))
+
+		// Send this player all the timed events
+		sendTimedEvents(socket.id);
 
 		console.log(`Player "${profile.name}" joined.`);
 
@@ -106,6 +113,11 @@ function listenToClient(socket) {
 						break
 					case "shoot":
 						actionsToSend.push(action)
+						break;
+					case "message":
+						let header = args[0];
+						let contents = args[1];
+						handleClientMessage(socket.id, header, contents)
 						break;
 				}
 			}
@@ -361,6 +373,8 @@ function getPlayerFromSession(sessionId) {
 // Used for:
 // to predict player states
 // server-wide events
+let timedEventsCheckTime = 10*60; // Check for timed events every 10 minutes
+let timedEventsTimer = timedEventsCheckTime;
 function serverLoop(dt) {
 	// Update player predictions
 	for (const [id, playerData] of Object.entries(playerList)) {
@@ -373,6 +387,36 @@ function serverLoop(dt) {
 				statusEffects.splice(i, 1)
 			}
 		}
+	}
+
+	// Update timed events every hour
+	timedEventsTimer += dt;
+	if (timedEventsTimer >= timedEventsCheckTime) {
+		if (TimedEvents.update()) {
+			// Timed events have changed
+			sendTimedEvents();
+		}
+		timedEventsTimer -= timedEventsCheckTime;
+	}
+}
+
+function sendTimedEvents(id) {
+	if (id) {
+		// Send timed events to one player
+		io.to(id).emit("timedEvents", TimedEvents.getActiveTimedEvents());
+	} else {
+		// Send timed events to all players
+		io.emit("timedEvents", TimedEvents.getActiveTimedEvents());
+	}
+}
+
+// Handle message from client; client wants to tell only the server something
+function handleClientMessage(id, header, contents) {
+	let playerData = playerList[id];
+	if (header == "petRace") {
+		console.log(playerData.name, "wants to join pet race.")
+	} else if (header == "petRace:bet") {
+		console.log(playerData.name, "wants to bet on a pet in the pet race.")
 	}
 }
 
