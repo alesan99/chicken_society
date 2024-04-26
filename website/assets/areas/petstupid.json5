@@ -49,15 +49,16 @@
   NPCs: {
     cashier: {
       profile: {
-        name: "Whisker Willikers",
-        color: "#ffe17a",
-        head: false,
-        face: false,
-        body: "scarf",
+        "name": "Whisker Willikers",
+        "color": "#fecc03",
+        "head": false,
+        "face": "catears",
+        "body": "petstupiduniform",
       },
       x: 210,
       y: 485,
-      facing: "right",
+      facing: "down",
+      roamRadius: 10,
       interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
       speechBubble: [
         "Crickets and pillbugs and bees, oh my!",
