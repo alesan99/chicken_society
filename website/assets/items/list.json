@@ -1,13 +1,15 @@
 {
   "face": [
-    "visors"
+    "visors",
+    "catears"
   ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
     "chains",
     "scarf",
-    "silverchains"
+    "silverchains",
+    "petstupiduniform"
   ],
   "furniture": [
     "frame",
