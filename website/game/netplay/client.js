@@ -52,6 +52,9 @@ Netplay = class {
 		this.oldMinigameData = false
 		this.role = "player"
 
+		// Pet race syncing
+		this.petRaceData = [] // List of 4 max pets that are in pet race {"pet": "petItemId", "name": "string", "x": 0, "y": 0, "sx": 0, "sy": 0, "id": "playerId}
+
 		// Events //
 		// Players joining
 		socket.on("playerList", (playerList) => {this.recievePlayerList(playerList)})
@@ -74,6 +77,9 @@ Netplay = class {
 		socket.on("minigameHighscores", (id, data) => {this.recieveMinigameHighscores(id, data)})
 		// Timed Events
 		socket.on("timedEvents", (timedEvents) => {this.recieveTimedEvents(timedEvents)})
+		// Pet Race
+		socket.on("petRaceData", (data) => {this.recievePetRaceData(data)})
+		socket.on("petRaceFinish", (pet) => {})
 	}
 
 	// Connect to server for the first time and send information about yourself
@@ -435,6 +441,19 @@ Netplay = class {
 	// Send message to server
 	sendMessageToServer(header, contents) {
 		this.sendAction("message", header, contents)
+	}
+
+	// Recieve pet race
+	recievePetRaceData(data) {
+		if (data === false) {
+			// Race ended
+			this.petRaceData = false
+			if (PLAYERCHARACTER.petObj) {
+				PLAYERCHARACTER.petObj.hidden = false;
+			}
+			return false
+		}
+		this.petRaceData = data
 	}
 }
 

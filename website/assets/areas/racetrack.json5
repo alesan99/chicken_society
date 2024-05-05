@@ -120,6 +120,31 @@
 					"condition": {
 						"isResponse": true
 					},
+					"responses": [
+						{
+							"text": "Pet #1",
+							"to": "placeBet2"
+						},
+						{
+							"text": "Pet #2",
+							"to": "placeBet2"
+						},
+						{
+							"text": "Pet #3",
+							"to": "placeBet2"
+						},
+						{
+							"text": "Pet #4",
+							"to": "placeBet2"
+						}
+					]
+				},
+				{
+					"id": "placeBet2",
+					"text": ["You're in!"],
+					"condition": {
+						"isResponse": true
+					},
 					"sendToServer": true,
 					"serverHeader": "petRace:bet",
 					"serverMessage": 50

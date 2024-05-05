@@ -45,6 +45,9 @@ class Pet extends PhysicsObject {
 
 		this.dead = false
 
+		// Pet race
+		this.hidden = false
+
 		// Movement
 		this.walking = false
 
@@ -112,7 +115,7 @@ class Pet extends PhysicsObject {
 		}
 
 		// Manage -your- Pet
-		if (this.owner == PLAYER) {
+		if (this.owner == PLAYER && !this.hidden) {
 			// Click
 			if ((this.activated == false) && this.checkMouseOver()) {
 				this.mouseOver = true
@@ -162,6 +165,10 @@ class Pet extends PhysicsObject {
 	}
 
 	draw(drawX=this.x, drawY=this.y, dir=this.dir) {
+		if (this.hidden) {
+			return false
+		}
+
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(IMG.shadow, null, drawX, drawY, 0, this.scale, this.scale, 0.5, 1)
 

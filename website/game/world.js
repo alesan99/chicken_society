@@ -214,6 +214,31 @@ class World {
 			}
 		}
 
+		// Pet race
+		if (this.area == "racetrack") {
+			let data = NETPLAY.petRaceData
+			if (data) {
+				for (let i = 0; i < data.length; i++) {
+					let [itemId, name, pos, speed] = data[i]
+
+					let length = 800
+					let posRange = 100
+
+					let x = (canvasWidth-length)/2 + (pos/posRange)*length
+					let y = 120 + i*60
+
+					let img = ITEMS.pet[itemId].image
+					let sprite = ITEMS.pet[itemId].sprite
+
+					DRAW.setColor(0,0,0)
+					DRAW.image(img, sprite.getFrame(0,0), x, y)
+					DRAW.setColor(255,255,255)
+					DRAW.setFont(FONT.nametag, 3)
+					DRAW.text(name, x, y, "center")
+				}
+			}
+		}
+
 		// Draw objects
 		for (const [id, obj] of Object.entries(CHARACTER)) {
 			drawQueue.push(obj)

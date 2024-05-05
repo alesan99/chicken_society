@@ -1,6 +1,9 @@
 // Recieves client information and relays it to every other client.
 const {io, playerList} = require("../server.js");
 const {TimedEvents} = require("./timedevents.js");
+const {PetRaceClass} = require("./petrace.js");
+
+PetRace = new PetRaceClass();
 
 // Minigame data
 var minigameList = {
@@ -398,6 +401,9 @@ function serverLoop(dt) {
 		}
 		timedEventsTimer -= timedEventsCheckTime;
 	}
+
+	// Pet race
+	PetRace.update(dt)
 }
 
 function sendTimedEvents(id) {
@@ -415,9 +421,14 @@ function handleClientMessage(id, header, contents) {
 	let playerData = playerList[id];
 	if (header == "petRace") {
 		console.log(playerData.name, "wants to join pet race.")
+		let pet = playerData.profile.pet
+		PetRace.addPet(id, pet)
 	} else if (header == "petRace:bet") {
 		console.log(playerData.name, "wants to bet on a pet in the pet race.")
+		console.log(contents)
+		PetRace.placeBet(id, contents)
 	}
+	PetRace.status()
 }
 
 module.exports = {

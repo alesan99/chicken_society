@@ -103,7 +103,7 @@ function makeProfile() {
 		body: false,
 		item: false,
 
-		pet: false
+		pet: "pillbug"
 	}
 	
 	return profile
