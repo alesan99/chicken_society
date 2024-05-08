@@ -216,10 +216,11 @@ const QuestSystem = (function() {
 		setProgress(questName, progressSlot, value) {
 			let quest = this.getQuest(questName)
 			if (quest) {
+				let oldProgress = quest.progress[progressSlot]
 				quest.progress[progressSlot] = value
 
 				// Show notification for completing this step of the quest
-				if (value >= 1) {
+				if (value >= quest.progressFinish[progressSlot] && value != oldProgress) {
 					Notify.new(`[✔] ${quest.progressDescription[progressSlot]}`, 5, [80,80,80])
 				}
 

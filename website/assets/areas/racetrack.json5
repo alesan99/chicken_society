@@ -78,19 +78,23 @@
 					"responses": [
 						{
 							"text": "10 nugs",
-							"to": "placeBet"
+							"to": "placeBet",
+							"addToServerMessage": 10,
 						},
 						{
 							"text": "20 nugs",
-							"to": "placeBet"
+							"to": "placeBet",
+							"addToServerMessage": 20,
 						},
 						{
 							"text": "50 nugs",
-							"to": "placeBet"
+							"to": "placeBet",
+							"addToServerMessage": 50,
 						},
 						{
 							"text": "100 nugs",
-							"to": "placeBet"
+							"to": "placeBet",
+							"addToServerMessage": 100,
 						}
 					],
 					"condition": {
@@ -110,9 +114,9 @@
 					"condition": {
 						"isResponse": true
 					},
-					"sendToServer": true,
-					"serverHeader": "petRace",
-					"serverMessage": "participate"
+					"serverMessage": "",
+					"serverMessageHeader": "petRace",
+					"sendServerMessage": true,
 				},
 				{
 					"id": "placeBet",
@@ -123,19 +127,23 @@
 					"responses": [
 						{
 							"text": "Pet #1",
-							"to": "placeBet2"
+							"to": "placeBet2",
+							"addToServerMessage": 0
 						},
 						{
 							"text": "Pet #2",
-							"to": "placeBet2"
+							"to": "placeBet2",
+							"addToServerMessage": 1
 						},
 						{
 							"text": "Pet #3",
-							"to": "placeBet2"
+							"to": "placeBet2",
+							"addToServerMessage": 2
 						},
 						{
 							"text": "Pet #4",
-							"to": "placeBet2"
+							"to": "placeBet2",
+							"addToServerMessage": 3
 						}
 					]
 				},
@@ -145,9 +153,8 @@
 					"condition": {
 						"isResponse": true
 					},
-					"sendToServer": true,
-					"serverHeader": "petRace:bet",
-					"serverMessage": 50
+					"serverMessageHeader": "petRace:bet",
+					"sendServerMessage": true
 				}
 			],
 		}

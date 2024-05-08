@@ -227,6 +227,11 @@ class World {
 					let x = (canvasWidth-length)/2 + (pos/posRange)*length
 					let y = 120 + i*60
 
+					if (!ITEMS.pet[itemId]) {
+						console.log(`There is no pet with itemId ${itemId}`)
+						continue
+					}
+					
 					let img = ITEMS.pet[itemId].image
 					let sprite = ITEMS.pet[itemId].sprite
 

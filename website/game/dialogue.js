@@ -17,20 +17,25 @@ const DialogueSystem = (function() {
 	let speaker = false
 	let speakerNPC = false
 
-	let awaitingResponse = false
-	let responseButtons = []
+	let awaitingResponse = false // Continue once reponse is chosen
+	let responseButtons = [] // List of response buttons / text fields
+
+	let serverMessage = false // This message will be built and sent to the server. Used for interacting with server through dialogue.
 
 	const functions = {
 		// Start new dialogue conversation
 		start(dialogueTreeData, speakerName=false, npc=false) {
 			open = true
-			stage = 0
-			dialogueTree = dialogueTreeData
-			speaker = speakerName
-			speakerNPC = npc
+			stage = 0 // Stage of current dialogue block
+			dialogueTree = dialogueTreeData // List of dialogue blocks (not really a tree structurally)
+			speaker = speakerName // Name of speaker
+			speakerNPC = npc // NPC object of speaker
 
+			serverMessage = false // Reset server message
+
+			// Look for which dialogue block to start with
 			for (let i = 0; i < dialogueTree.length; i++) {
-				if (dialogueTree[i].condition) {
+				if (dialogueTree[i].condition) { // conditional block
 					if (checkCondition(dialogueTree[i].condition)) {
 						dialogueData = dialogueTree[i]
 						break
@@ -43,6 +48,7 @@ const DialogueSystem = (function() {
 			}
 
 			// dialogue data structure:
+			// Read more: https://github.com/alesan99/chicken_society/wiki/Making-Areas#dialogue
 
 			// [{ // Dialogue block
 			// 	"text": [
@@ -50,12 +56,7 @@ const DialogueSystem = (function() {
 			//		"Line 2",
 			//		"Line 3"
 			//	],
-			//  "randomDialogue": false, // Randomly select a line from the text array
-			//	"condition": { // What makes condition activates this block of dialogue
-			//		"quest": "tutorial",
-			//		"questSlot": 0,
-			//		"questSlotValue": 0
-			//	},
+			//	"condition": {...} // What makes condition activates this block of dialogue
 			// },
 			// {...}] // More dialogue blocks
 
@@ -260,13 +261,13 @@ const DialogueSystem = (function() {
 			let d = dialogueData
 
 			// Do any actions defined for the end of the dialogue
+			// Start a quest
 			if (d.startQuest) {
-				// Start a quest
 				QuestSystem.start(d.startQuest)
 			}
 
+			// Quest progress from talking
 			if (d.quest) {
-				// Quest progress from talking
 				if (d.questSlotAdd) {
 					QuestSystem.progress(d.quest, d.questSlot, d.questSlotAdd)
 				} else if (d.questSlotSet) {
@@ -274,15 +275,15 @@ const DialogueSystem = (function() {
 				}
 			}
 
+			// Give item
 			if (d.giveItem) {
-				// Give item
 				addItem(d.giveItem)
 			}
 
-			if (d.sendToServer) {
-				// Send a message to the server
-				let header = d.serverHeader
-				let message = d.serverMessage
+			// Send a message to the server
+			if (d.sendServerMessage) {
+				let header = d.serverMessageHeader
+				let message = serverMessage
 				NETPLAY.sendMessageToServer(header, message)
 			}
 		},
@@ -324,30 +325,43 @@ const DialogueSystem = (function() {
 			for (let i = 0; i < n; i++) {
 				let r = responses[i]
 				if (r.type) { // Type any response
-					let textField = new TextField(r.text, (text)=>{this.response(text)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
+					let textField = new TextField(r.text, (text)=>{this.response(r, text)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
 					responseButtons.push(textField)
 				} else { // Preset response
-					let button = new Button(r.text, ()=>{this.response(r.to)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
+					let button = new Button(r.text, ()=>{this.response(r, r.to)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
 					responseButtons.push(button)
 				}
 			}
 		},
 
 		// Jump to next dialogue block depending on response
-		response(responseId) {
+		response(response, nextId) {
 			awaitingResponse = false
 			responseButtons = []
+
+			// Add to current server message being built
+			if (response.addToServerMessage) {
+				console.log(`Adding to server message: ${response.addToServerMessage}`)
+				let messageAddition = response.addToServerMessage
+				// Check if serverMessage is an array (not object), otherwise don't do anything
+				if (Array.isArray(serverMessage)) {
+					serverMessage.push(messageAddition)
+				} else {
+					// console.log("[Dialogue] Attempted to add to server message, but message hasn't been started yet.")
+					serverMessage = [messageAddition]
+				}
+			}
 
 			// Finish dialogue block
 			this.finish()
 
 			// Start next dialogue block
-			if (responseId == null) {
+			if (nextId == null) {
 				return false
 			}
 			for (let i = 0; i < dialogueTree.length; i++) {
 				let block = dialogueTree[i]
-				if (block.id == responseId) { // Look for dialogue block with this id
+				if (block.id == nextId) { // Look for dialogue block with this id
 					let doStart = true
 					// Response is telling you to go to this block, so go to it no matter what
 					// if (block.condition && !checkCondition(block.condition)) {

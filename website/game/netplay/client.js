@@ -53,6 +53,7 @@ Netplay = class {
 		this.role = "player"
 
 		// Pet race syncing
+		this.petRaceStarted = false
 		this.petRaceData = [] // List of 4 max pets that are in pet race {"pet": "petItemId", "name": "string", "x": 0, "y": 0, "sx": 0, "sy": 0, "id": "playerId}
 
 		// Events //
@@ -67,6 +68,8 @@ Netplay = class {
 		// Area player events
 		socket.on("chicken", (id, x, y, sx, sy) => {this.recievePosition(id, x, y, sx, sy)})
 		socket.on("action", (id, actions) => {this.recieveAction(id, actions)})
+		socket.on("addNuggets", (nuggets) => {this.recieveAddNuggets(nuggets)})
+		socket.on("giveItem", (item) => {this.recieveGiveItem(item)})
 		// Server events
 		socket.on("notify", (text, duration, color) => {this.recieveNotificaton(text, duration, color)})
 		// Minigame events
@@ -448,12 +451,26 @@ Netplay = class {
 		if (data === false) {
 			// Race ended
 			this.petRaceData = false
-			if (PLAYERCHARACTER.petObj) {
-				PLAYERCHARACTER.petObj.hidden = false;
+			this.petRaceStarted = false
+			// Show pet
+			if (PLAYER && PLAYER.petObj) {
+				PLAYER.petObj.hidden = false;
 			}
 			return false
 		}
 		this.petRaceData = data
+		this.petRaceStarted = true
+	}
+
+	// Recieve items
+	recieveAddNuggets(nuggets) {
+		// Add nuggets to player's inventory
+		addNuggets(nuggets)
+	}
+	recieveGiveItem(item, count=1) {
+		// Add item to player's inventory
+		Notify.new(`You recieved ${item.name} (${count}).`, 5)
+		addItem(item, null, count)
 	}
 }
 

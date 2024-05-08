@@ -232,6 +232,10 @@ function checkCondition(c) {
 		return false
 	}
 	if (c.petRaceStarted) {
+		// Condition is met if pet race is currently active (GOOD code)
+		if (NETPLAY.petRaceStarted) {
+			return true
+		}
 		return false
 	}
 	if (c.hasPet != null) {

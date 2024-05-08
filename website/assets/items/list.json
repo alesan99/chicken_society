@@ -1,21 +1,26 @@
 {
-  "face": [
-    "visors",
-    "catears"
-  ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
     "chains",
+    "petstupiduniform",
     "scarf",
-    "silverchains",
-    "petstupiduniform"
+    "silverchains"
   ],
   "furniture": [
     "frame",
     "lamp",
     "rug",
     "table"
+  ],
+  "face": [
+    "catears",
+    "visors"
+  ],
+  "head": [
+    "hoodie",
+    "snapback",
+    "tophat"
   ],
   "item": [
     "beer",
@@ -28,10 +33,5 @@
   ],
   "pet": [
     "pillbug"
-  ],
-  "head": [
-    "hoodie",
-    "snapback",
-    "tophat"
   ]
 }
