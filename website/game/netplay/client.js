@@ -96,7 +96,6 @@ Netplay = class {
 				console.log(`Successfully connected to server! Status: ${response.status}`);
 
 				// Update server on other information
-				console.log(PROFILE.pet)
 				if (PROFILE.pet) {
 					this.sendPetProfile(SAVEDATA.pet)
 				}
@@ -256,7 +255,6 @@ Netplay = class {
 	// Sent to the server as soon as possible if this client hasn't been sent any action in the last X seconds
 	// If it has, enqueue action and it will be sent next time this client has an update cycle.
 	sendAction(name, ...args) {
-		console.log(name, args)
 		if (this.actionTimer > this.actionInterval) {
 			socket.emit("action", [[name, args]])
 			this.actionTimer = 0
