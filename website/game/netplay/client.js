@@ -64,6 +64,7 @@ Netplay = class {
 		// Global player events
 		socket.on("chat", (id, text) => {this.recieveChat(id, text)})
 		socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile)})
+		socket.on("updatePetProfile",(id, profile) => {this.recievePetProfile(id, profile)})
 		socket.on("area", (id, area) => {this.recieveArea(id, area)})
 		// Area player events
 		socket.on("chicken", (id, x, y, sx, sy) => {this.recievePosition(id, x, y, sx, sy)})
@@ -93,6 +94,12 @@ Netplay = class {
 				// the other side did not acknowledge the event in the given delay
 			} else {
 				console.log(`Successfully connected to server! Status: ${response.status}`);
+
+				// Update server on other information
+				console.log(PROFILE.pet)
+				if (PROFILE.pet) {
+					this.sendPetProfile(SAVEDATA.pet)
+				}
 			}
 		});
 	}
@@ -224,6 +231,23 @@ Netplay = class {
 			// Update player's character object
 			if (CHARACTER[id] != null) {
 				CHARACTER[id].updateProfile(profile)
+			}
+		}
+	}
+
+	// Update Pet Information when changed
+	sendPetProfile(profile) {
+		socket.emit("updatePetProfile", profile)
+	}
+	recievePetProfile(id, profile) {
+		let playerData = this.playerList[id]
+		if (playerData != null) {
+			// Update player's pet
+			if (CHARACTER[id] != null) {
+				let chicken = CHARACTER[id]
+				if (chicken.petObj) {
+					chicken.petObj.updateProfile(profile)
+				}
 			}
 		}
 	}
@@ -458,8 +482,27 @@ Netplay = class {
 			}
 			return false
 		}
+		let oldPetRaceDataLen = 0
+		if (this.petRaceData) {
+			oldPetRaceDataLen = this.petRaceData.length
+		}
 		this.petRaceData = data
-		this.petRaceStarted = true
+		this.petRaceStarted = data[0]
+		
+		// TODO: Improve this!
+		if (oldPetRaceDataLen > 0 && this.petRaceData.length > oldPetRaceDataLen) {
+			// Hide pet
+			if (PLAYER && PLAYER.petObj) {
+				// Look if pet is in the race
+				let pet = PLAYER.petObj
+				for (let i = 1; i < data.length; i++) {
+					if (pet.id == data[i][0] && pet.name == data[i][1]) {
+						pet.hidden = true;
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	// Recieve items
@@ -491,6 +534,8 @@ Netplay = class {
 		recieveChat (id, text) {}
 		sendProfile(profile) {}
 		recieveProfile(id, profile) {}
+		sendPetProfile(profile) {}
+		recievePetProfile(id, profile) {}
 		sendEmote(emote) {}
 		recieveEmote(id, emote) {}
 		sendArea(area) {}

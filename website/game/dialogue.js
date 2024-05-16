@@ -340,8 +340,8 @@ const DialogueSystem = (function() {
 			responseButtons = []
 
 			// Add to current server message being built
-			if (response.addToServerMessage) {
-				console.log(`Adding to server message: ${response.addToServerMessage}`)
+			if (response.addToServerMessage != null) {
+				// console.log(`Adding to server message: ${response.addToServerMessage}`)
 				let messageAddition = response.addToServerMessage
 				// Check if serverMessage is an array (not object), otherwise don't do anything
 				if (Array.isArray(serverMessage)) {

@@ -22,25 +22,12 @@ class Pet extends PhysicsObject {
 
 		// Pet data
 		this.id = id
-		let names = [
-			"Bugathan",
-			"Barnham",
-			"T.J. Cream",
-			"Gubgub",
-			"Mr. Dubstep",
-			"Keyboard Jen",
-			"Diesel",
-			"Ulysses"
-		]
-		this.name = SAVEDATA.pet.name || names[(Math.random()*(names.length-1))|0]
+		this.updateProfile(SAVEDATA.pet)
 		this.owner = owner
 		this.speed = 180
 		this.area = owner.area
 
 		// Status
-		this.happiness = SAVEDATA.pet.happiness || 0.8
-		this.health = SAVEDATA.pet.health || 1
-		this.hunger = SAVEDATA.pet.hunger || 1
 		this.disease = false
 
 		this.dead = false
@@ -56,6 +43,7 @@ class Pet extends PhysicsObject {
 		this.activated = false
 
 		// Graphics
+		// TODO: Come up with a better solution!
 		if (ITEMS.pet[id]) {
 			this.image = ITEMS.pet[id].image
 			this.sprite = ITEMS.pet[id].sprite
@@ -75,6 +63,15 @@ class Pet extends PhysicsObject {
 	}
 
 	update(dt) {
+		// Fix placeholder image
+		if (this.image == IMG.placeholder) {
+			if (ITEMS.pet[this.id]) {
+				this.image = ITEMS.pet[this.id].image
+				this.sprite = ITEMS.pet[this.id].sprite
+				this.anim.sprite = this.sprite
+			}
+		}
+
 		// Follow behind owner
 		if (this.owner != null && !this.dead) {
 			// Target
@@ -175,6 +172,10 @@ class Pet extends PhysicsObject {
 		// Pet graphic
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY, 0, this.flip*this.scale, this.scale, 0.5, 1)
+
+		// Name
+		DRAW.setFont(FONT.nametag, 3)
+		DRAW.text(this.name, drawX, Math.floor(drawY)+20, "center")
 	}
 
 	checkMouseOver() {
@@ -243,6 +244,28 @@ class Pet extends PhysicsObject {
 
 			// Satisfy hunger
 			this.hunger = Math.min(1.0, this.hunger + item.food)
+		}
+	}
+
+	// Update customization data
+	updateProfile(profile, sendToServer) {
+		let names = [
+			"Bugathan",
+			"Barnham",
+			"T.J. Cream",
+			"Gubgub",
+			"Mr. Dubstep",
+			"Keyboard Jen",
+			"Diesel",
+			"Ulysses"
+		]
+		this.name = profile.name || names[(Math.random()*(names.length-1))|0]
+		this.happiness = profile.happiness || 0.8
+		this.health = profile.health || 1
+		this.hunger = profile.hunger || 1
+
+		if (sendToServer) {
+			NETPLAY.sendPetProfile(profile)
 		}
 	}
 }

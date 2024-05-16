@@ -77,6 +77,11 @@
 					],
 					"responses": [
 						{
+							"text": "5 nugs",
+							"to": "placeBet",
+							"addToServerMessage": 5,
+						},
+						{
 							"text": "10 nugs",
 							"to": "placeBet",
 							"addToServerMessage": 10,
@@ -90,11 +95,6 @@
 							"text": "50 nugs",
 							"to": "placeBet",
 							"addToServerMessage": 50,
-						},
-						{
-							"text": "100 nugs",
-							"to": "placeBet",
-							"addToServerMessage": 100,
 						}
 					],
 					"condition": {

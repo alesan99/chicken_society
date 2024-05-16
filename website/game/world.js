@@ -179,6 +179,11 @@ class World {
 		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
 
 		NETPLAY.update(dt)
+
+		// Pet race
+		if (this.area == "racetrack") {
+			PetRaceSystem.update(dt)
+		}
 		
 		// Dialogue box
 		DialogueSystem.update(dt)
@@ -216,32 +221,7 @@ class World {
 
 		// Pet race
 		if (this.area == "racetrack") {
-			let data = NETPLAY.petRaceData
-			if (data) {
-				for (let i = 0; i < data.length; i++) {
-					let [itemId, name, pos, speed] = data[i]
-
-					let length = 800
-					let posRange = 100
-
-					let x = (canvasWidth-length)/2 + (pos/posRange)*length
-					let y = 120 + i*60
-
-					if (!ITEMS.pet[itemId]) {
-						console.log(`There is no pet with itemId ${itemId}`)
-						continue
-					}
-					
-					let img = ITEMS.pet[itemId].image
-					let sprite = ITEMS.pet[itemId].sprite
-
-					DRAW.setColor(0,0,0)
-					DRAW.image(img, sprite.getFrame(0,0), x, y)
-					DRAW.setColor(255,255,255)
-					DRAW.setFont(FONT.nametag, 3)
-					DRAW.text(name, x, y, "center")
-				}
-			}
+			PetRaceSystem.draw()
 		}
 
 		// Draw objects

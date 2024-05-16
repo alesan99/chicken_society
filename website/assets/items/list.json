@@ -7,15 +7,15 @@
     "scarf",
     "silverchains"
   ],
+  "face": [
+    "catears",
+    "visors"
+  ],
   "furniture": [
     "frame",
     "lamp",
     "rug",
     "table"
-  ],
-  "face": [
-    "catears",
-    "visors"
   ],
   "head": [
     "hoodie",

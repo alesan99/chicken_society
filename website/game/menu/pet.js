@@ -18,7 +18,10 @@ MENUS["petMenu"] = new class extends Menu {
 		this.petMood = this.pet.getMood()
 
 		// Name
-		this.buttons["name"] = new TextField(this.pet.name, (text)=>{this.pet.name = text}, null, 260,129, 200,32)
+		this.buttons["name"] = new TextField(this.pet.name, (text)=>{
+			SAVEDATA.pet.name = text
+			this.pet.updateProfile(SAVEDATA.pet, "sendToServer")
+		}, null, 260,129, 200,32)
 
 		// Inventory (just items; for feeding)
 		this.inventory = []
@@ -79,14 +82,13 @@ MENUS["petMenu"] = new class extends Menu {
 			scale = easing("easeOutBack", this.openTimer)
 		}
 		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
-
-		DRAW.setColor(112, 50, 16, scale)
-		DRAW.setFont(FONT.caption)
-
+		
 		// Pet
 		this.pet.draw(360,340,"down")
 
 		// Pet Status
+		DRAW.setColor(112, 50, 16, scale)
+		DRAW.setFont(FONT.caption)
 		DRAW.setColor(112, 50, 16, scale)
 		DRAW.text(`Feeling ${this.petMood}.`, 476, 184, "left")
 		DRAW.text("Health:", 476, 224, "left")

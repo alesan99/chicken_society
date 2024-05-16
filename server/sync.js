@@ -55,6 +55,13 @@ function listenToClient(socket) {
 				statusEffects: [],
 				static: false
 			},
+
+			pet: {
+				name: "",
+				x: 0,
+				y: 0,
+				dead: false
+			}
 		};
 
 		socket.join(`area:${playerList[socket.id].area}`) // Listen for events in area
@@ -144,6 +151,15 @@ function listenToClient(socket) {
 			playerData.profile = profile;
 			playerData.name = profile.name;
 			socket.broadcast.emit("updateProfile", socket.id, profile);
+		}
+	});
+
+	// Player's pet information changed
+	socket.on("updatePetProfile", (profile) =>{
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			playerData.pet = profile;
+			socket.broadcast.emit("updatePetProfile", socket.id, profile);
 		}
 	});
 	
@@ -422,14 +438,15 @@ function handleClientMessage(id, header, contents) {
 	if (header == "petRace") {
 		//console.log(playerData.name, "wants to join pet race.");
 		let pet = playerData.profile.pet;
-		PetRace.addPet(id, pet);
+		let petName = playerData.pet.name;
+		PetRace.addPet(id, pet, petName);
 	} else if (header == "petRace:bet") {
 		//console.log(playerData.name, "wants to bet on a pet in the pet race.");
 		amount = contents[0];
 		petNo = contents[1];
 		PetRace.placeBet(id, amount, petNo);
 	}
-	PetRace.status();
+	// PetRace.status(); // debug console print
 }
 
 module.exports = {
