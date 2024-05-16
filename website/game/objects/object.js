@@ -77,10 +77,19 @@ class PhysicsObject {
 
 	destroy() {
 		let [cx, cy, cw, ch] = this.spatialHash.getCoords(this.x+this.shape.x1,this.y+this.shape.y1,this.x+this.shape.x2,this.y+this.shape.y2)
-		// Remove references to this object
+		// Remove references to this object from spatial hash
 		for (let x = cx; x <= cw; x++) {
 			for (let y = cy; y <= ch; y++) {
 				this.spatialHash.removeFromCell(x, y, this)
+			}
+		}
+		// Uncollide with all objects
+		if (this.collisions.size > 0) {
+			for (const [b, coll] of this.collisions.entries()) {
+				if (b.collisions.has(this)) {
+					b.stopCollide(this.constructor.name, this)
+					b.collisions.delete(this)
+				}
 			}
 		}
 		this.DELETED = true

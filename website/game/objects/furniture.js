@@ -27,7 +27,11 @@ class Furniture extends PhysicsObject {
 
 		// How many objects are colliding with this
 		this.colliding = 0
+		this.wallsColliding = 0
 		this.furnitureColliding = 0
+		this.tablesColliding = 0
+		this.tablesCollidingList = []
+		this.rugsColliding = 0
 
 		// Table? (for placing items on top)
 		this.table = item.table
@@ -46,6 +50,7 @@ class Furniture extends PhysicsObject {
 	}
 
 	update(dt) {
+		console.log(this.colliding)
 	}
 
 	draw() {
@@ -71,6 +76,7 @@ class Furniture extends PhysicsObject {
 		}
 	}
 
+	// Set direction furniture is facing
 	setDir(dir="down") {
 		this.dir = dir
 		let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
@@ -83,15 +89,34 @@ class Furniture extends PhysicsObject {
 			// set Shape if there are multiple shapes for each direction
 			let shape = this.item.shape[dir_lookup[dir]]
 			if (dir == "left") {
-				// reverse "right" shape to get "left" shape
-				shape = shape.slice(0)
-				for (let i=0; i<shape.length; i+=2) {
-					shape[i] = -shape[i]
+				// flip "right" shape to get "left" shape
+				// reverse order to preserve winding
+				// x,y positions must be reversed in pairs, so we can't just use shape.reverse()
+				let newShape = []
+				for (let i=shape.length-2; i>=0; i-=2) {
+					newShape.push(-shape[i], shape[i+1]) // flip vertex x
 				}
+				shape = newShape
+
 			}
 			this.setShape(new Shape(...shape))
 		} else {
+			// or just use single Shape
 			this.shape = new Shape(...this.item.shape);
+		}
+	}
+
+	// Update stacking of furniture
+	updateStacking() {
+		// only for tabletop items
+		if (this.tabletops) {
+			// Get tallest table, and make that the vertical offset of this tabletop item
+			this.tabletopOffset = 0
+			for (const table of this.tablesCollidingList) {
+				if (table.height > this.tabletopOffset) {
+					this.tabletopOffset = table.height
+				}
+			}
 		}
 	}
 
@@ -107,24 +132,53 @@ class Furniture extends PhysicsObject {
 	startCollide(name, obj) {
 		this.colliding += 1
 
-		if (name == "Furniture" && obj.table) {
+		console.log(name)
+		if (name == "Furniture") {
 			this.furnitureColliding += 1
 
-			if (this.tabletops) {
-				this.tabletopOffset += obj.height
+			if (obj.rug) {
+				this.rugsColliding += 1
 			}
+
+			if (obj.table) {
+				this.tablesColliding += 1
+				this.tablesCollidingList.push(obj)
+			}
+
+			// if (this.tabletops) {
+			// 	this.tabletopOffset += obj.height
+			// }
+		}
+		if (name == "Wall") {
+			this.wallsColliding += 1
 		}
 	}
 
 	stopCollide(name, obj) {
 		this.colliding -= 1
 
-		if (name == "Furniture" && obj.table) {
+		if (name == "Furniture") {
 			this.furnitureColliding -= 1
 
-			if (this.tabletops) {
-				this.tabletopOffset -= obj.height
+			if (obj.rug) {
+				this.rugsColliding -= 1
 			}
+
+			if (obj.table) {
+				this.tablesColliding -= 1
+				// remove from list
+				let index = this.tablesCollidingList.indexOf(obj)
+				if (index > -1) {
+					this.tablesCollidingList.splice(index, 1)
+				}
+			}
+
+			// if (this.tabletops) {
+			// 	this.tabletopOffset -= obj.height
+			// }
+		}
+		if (name == "Wall") {
+			this.wallsColliding -= 1
 		}
 	}
 }

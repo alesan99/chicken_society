@@ -37,6 +37,7 @@ const Coop = (function() {
 				this.furnitureY = Math.floor(my)
 
 				this.furnitureObj.setPosition(this.furnitureX, this.furnitureY)
+				this.furnitureObj.updateStacking()
 			}
 		},
 
@@ -53,14 +54,9 @@ const Coop = (function() {
 
 		keyPress(key) {
 			if (key == "e") {
+				// Rotate furniture that is being placed
 				if (this.furniture) {
-					let furnitureDirs = ["down", "left", "up", "right"]
-					// Rotate furniture clockwise
-					// find index of current dir, then get next dir
-					let dirIndex = furnitureDirs.indexOf(this.furnitureDir)
-					let nextDirIndex = (dirIndex+1) % furnitureDirs.length
-					this.furnitureDir = furnitureDirs[nextDirIndex]
-					this.furnitureObj.setDir(this.furnitureDir)
+					this.rotateFurniture(1)
 				}
 			}
 		},
@@ -72,11 +68,11 @@ const Coop = (function() {
 		mouseClick(button, x, y) {
 			// Furniture
 			if (button == 0 && this.furniture) {
-				// Place furniture
+				// Place furniture (if currently placing furniture)
 				this.placeFurniture(this.furnitureItem)
 				return true
-			} else if (button == 2) {
-				// Remove furniture
+			} else if (button == 2 && !this.furniture) {
+				// Remove furniture (if not currently placing furniture)
 				// Don't need to check if area is "coop", there should be no furniture in other areas
 				if (this.removeFurniture(x, y)) {
 					return true
@@ -88,26 +84,40 @@ const Coop = (function() {
 			
 		},
 
+		mouseScroll(dy) {
+			if (Math.abs(dy) >= 1) {
+				// Rotate furniture that is being placed
+				if (this.furniture) {
+					this.rotateFurniture(Math.max(-1,Math.min(1,dy)))
+				}
+			}
+		},
+
 		getFurniturePlaceable(itemId) {
 			let obj = this.furnitureObj
 			let item = getItemData(itemId)
 
 			// Can the item be placed at this location?
 			if (item.walls) { // only walls
-				if (!(obj.y < 200)) {
-					return false
-				}
-			} else if (item.rug) { // only floor
-				if (obj.colliding === obj.furnitureColliding) {
+				// Wall items must be colliding with one wall and no furniture
+				if (obj.wallsColliding === 1 && obj.furnitureColliding === 0 && obj.y < 200) {
 					return true
 				}
+				return false
+			} else if (item.rug) { // only floor
+				// Rugs can't collide with other rugs or walls
+				if (obj.colliding === obj.furnitureColliding && !(obj.rugsColliding > 0)) {
+					return true
+				}
+				return false
 			} else if (item.tabletops) { // tabletops allowed
 				// Collisions are free game so long as its colliding with a table
-				if (!(obj.colliding === 0 || (obj.colliding === 1 && obj.furnitureColliding === 1))) {
+				if (!(obj.colliding-obj.rugsColliding === 0 || (obj.colliding-obj.rugsColliding === 1 && obj.tablesColliding === 1))) {
 					return false
 				}
 			} else {
-				if (obj.colliding > 0) {
+				// Other furniture cannot collide with anything, except rugs
+				if (obj.colliding > 0 && !(obj.colliding === obj.rugsColliding)) {
 					return false
 				}
 			}
@@ -144,21 +154,41 @@ const Coop = (function() {
 	
 			placeFurniture(itemId, this.furnitureX, this.furnitureY, this.furnitureDir)
 			removeItem(itemId, "furniture") // Furniture has been placed, remove from inventory
+
+			// Update stacking of furniture
+			for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
+				obj.updateStacking()
+			}
 		},
 
 		removeFurniture(x, y) {
 			// Look for furniture at point (x, y)
 			for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
-				if (obj.shape.checkInside(x-obj.x, y-obj.y)) {
-					removeFurniture(obj.id, obj.x, obj.y)
+				let [objx, objy] = [obj.x, obj.y-obj.tabletopOffset]
+				if (obj.shape.checkInside(x-objx, y-objy)) {
+					removeFurniture(obj.id, objx, objy)
 					addItem(obj.id) // Add back to inventory
 
 					// Remove furniture
 					obj.destroy()
+					// Update stacking of furniture
+					for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
+						obj.updateStacking()
+					}
 					return true
 				}
 			}
 			return false
+		},
+
+		rotateFurniture(amount=1) {
+			let furnitureDirs = ["down", "left", "up", "right"]
+			// Rotate furniture clockwise
+			// find index of current dir, then get next dir
+			let dirIndex = furnitureDirs.indexOf(this.furnitureDir)
+			let nextDirIndex = (dirIndex+amount) % furnitureDirs.length
+			this.furnitureDir = furnitureDirs[nextDirIndex]
+			this.furnitureObj.setDir(this.furnitureDir)
 		}
 	};
 	

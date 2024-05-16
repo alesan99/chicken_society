@@ -35,7 +35,7 @@ class World {
 		// Initialize all characters
 		NPCS = {}
 		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth/2, canvasHeight/2, PROFILE, this.area)
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area)
 		
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
@@ -67,7 +67,7 @@ class World {
 
 		// Transport player to new area
 		PLAYER.area = this.area
-		PLAYER_CONTROLLER.reset(canvasWidth/2, canvasHeight/2, "down")
+		PLAYER_CONTROLLER.reset(canvasWidth*0.5, canvasHeight*0.6, "down")
 		
 		// Clear any uneeded objects
 		for (const [name, npc] of Object.entries(NPCS)) {
@@ -398,6 +398,13 @@ class World {
 
 		// Player
 		PLAYER_CONTROLLER.mouseRelease(button, x, y)
+	}
+
+	mouseScroll(dy) {
+		// Area
+		if (this.area == "coop") {
+			Coop.mouseScroll(dy)
+		}
 	}
 
 	findPlayersInArea(area) {

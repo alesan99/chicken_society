@@ -67,12 +67,15 @@ function updatePhysics(objs, spatialHash, dt) {
 										// note down the collision to tell if its colliding for the first or last time
 										if (a.collisions) {
 											listOfCollisions.set(b,true)
-											if (!a.collisions.get(b)) {
+											if (!a.collisions.has(b)) {
+												a.collisions.set(b,true)
 												let testColl1 = a.startCollide(b.constructor.name, b, moveAxisX, moveAxisY)
+											}
+											// TODO: also set this for b? Test if this is needed, as it might be for static objects
+											if (!b.collisions.has(a)) {
+												b.collisions.set(a,true)
 												let testColl2 = b.startCollide(a.constructor.name, a, -moveAxisX, -moveAxisY)
 											}
-											a.collisions.set(b,true)
-											// TODO: also set this for b? Test if this is needed, as it might be for static objects
 										}
 									}
 								}
@@ -83,12 +86,15 @@ function updatePhysics(objs, spatialHash, dt) {
 					// Check when object are no longer colliding
 					if (a.collisions) {
 						for (const [b, coll] of a.collisions.entries()) {
-							if (!(listOfCollisions.get(b)) && coll == true) {
+							if (!(listOfCollisions.has(b)) && coll == true) {
 								if (b) {
 									let testColl1 = a.stopCollide(b.constructor.name, b)
-									let testColl2 = b.stopCollide(a.constructor.name, a)
+									if (b.collisions.get(a)) {
+										let testColl2 = b.stopCollide(a.constructor.name, a)
+										b.collisions.delete(a)
+									}
 								}
-								a.collisions.set(b,false)
+								a.collisions.delete(b)
 							}
 						}
 					}
