@@ -14,7 +14,7 @@ let properties = false
 
 const transitionFunctions = {
 	// Update Animation timing
-	update: function(dt) {
+	update(dt) {
 		if (transitioning) {
 			timer += dt
 
@@ -28,7 +28,7 @@ const transitionFunctions = {
 	},
 
 	// Render Animation
-	draw: function() {
+	draw() {
 		if (transitioning) {
 			let t = 1-(timer/length) // Animation position
 			if (direction == "out") {
@@ -80,7 +80,7 @@ const transitionFunctions = {
 	},
 	
 	// Start Transitioning; (Name of transition animation, "in" or "out", animation length, properties, function to call when done)
-	start: function(transitionName, inOut, animLength, props, func) {
+	start(transitionName, inOut, animLength, props, func) {
 		currentTransition = transitionName // Which animation to use
 		direction = inOut || "in" // Is it transitioning in or out?
 		length = animLength	// Length in seconds
@@ -91,7 +91,7 @@ const transitionFunctions = {
 		transitioning = true
 	},
 
-	playing: function() {
+	playing() {
 		return transitioning
 	}
 };

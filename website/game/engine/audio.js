@@ -9,8 +9,8 @@ const AudioSystem = (function() {
 	let sounds = []
 	let music = []
 	
-	const audioFunctions = {
-		newMusic: function(path) {
+	const functions = {
+		newMusic(path) {
 			// These need to be streamed
 			return new Howl({
 				src: [path],
@@ -19,53 +19,53 @@ const AudioSystem = (function() {
 			});
 		},
 
-		newSound: function(path) {
+		newSound(path) {
 			// These can be loaded in memory
 			return new Howl({
 				src: [path]
 			});
 		},
 
-		update: function(dt) {
+		update(dt) {
 			// Fade music here
 		},
 
-		playMusic: function(src) {
+		playMusic(src) {
 			this.stopMusic();
 			src.volume(1.0); // Reset if it was faded (i wish i were faded)
 			src.play();
 			currentMusic = src;
 		},
 
-		stopMusic: function() {
+		stopMusic() {
 			if (currentMusic) {
 				currentMusic.stop();
 				currentMusic = false;
 			}
 		},
 
-		playSound: function(src) {
+		playSound(src) {
 			src.play();
 		},
 
-		stopSound: function(src) {
+		stopSound(src) {
 			src.stop();
 		},
 
-		fadeOutMusic: function(time=1) {
+		fadeOutMusic(time=1) {
 			if (currentMusic) {
 				currentMusic.fade(1.0, 0.0, 500);
 			}
 		},
 
-		stopAudio: function() {
+		stopAudio() {
 			this.stopMusic();
 			// TODO: Stop all sound effects
 		},
 
-		setVolume: function(vol) {
+		setVolume(vol) {
 			Howler.volume(vol)
 		}
 	};
 	
-	return audioFunctions; })()
+	return functions; })()

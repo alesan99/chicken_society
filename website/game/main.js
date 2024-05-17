@@ -10,16 +10,26 @@ function gameLoad() {
 	DRAW = new Render(ctx)
 	loadGameAssets()
 
-	// Start netplay
-	NETPLAY = new Netplay()
+	LoadingScreen.start(() => {
+		// Start netplay
+		NETPLAY = new Netplay()
 
-	// Start world game state
-	WORLD = new World("hub")
-	setState(WORLD)
+		// Start world game state
+		WORLD = new World("hub")
+		setState(WORLD)
+
+		Transition.start("fade", "in", 0.2)
+	})
 }
 
 // update game logic
 function gameUpdate(dt) {
+	// Loading screen
+	if (LoadingScreen.playing()) {
+		LoadingScreen.update(dt)
+		return
+	}
+
 	// Reset mouse cursor
 	CURSOR.on = false
 
@@ -42,6 +52,12 @@ function gameUpdate(dt) {
 
 // Render to canvas
 function gameDraw() {
+	// Loading screen
+	if (LoadingScreen.playing()) {
+		LoadingScreen.draw()
+		return
+	}
+
 	// Clear
 	// Note: The canvas is no longer cleared. It is safe to assume there will always be a background covering up the last frame
 	// DRAW.clear(0,0,0,1)

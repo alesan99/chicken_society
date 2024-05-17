@@ -9,7 +9,7 @@ const Notify = (function() {
 	
 	const notifyFunctions = {
 		// Create new notification
-		new: function(text, duration=3, color=[0,0,0]) {
+		new(text, duration=3, color=[0,0,0]) {
 			DRAW.setFont(FONT.description)
 			let wrappedText = DRAW.wrapText(text, 300 - 6)
 			notifications.push({
@@ -23,7 +23,7 @@ const Notify = (function() {
 		},
 
 		// Check if notification should expire
-		update: function(dt) {
+		update(dt) {
 			for (let i = 0; i < notifications.length; i++) {
 				const notification = notifications[i];
 				notification.timer -= dt
@@ -41,7 +41,7 @@ const Notify = (function() {
 		},
 
 		// Render all notifications
-		draw: function() {
+		draw() {
 			if (notifications.length == 0) {
 				return
 			}

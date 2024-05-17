@@ -15,6 +15,10 @@ BACKGROUNDANIM = []
 DIRECTORYTREE = {}
 
 function loadGameAssets() {
+	// Loading Screen
+	IMG.loading = new RenderImage("assets/loading.png")
+	SPRITE.loading = new Sprite(IMG.loading, 2,1, 88,128, 0,0, 0,0)
+
 	// World objects
 	// Chicken
 	IMG.chicken = new RenderImage("assets/chicken.png")

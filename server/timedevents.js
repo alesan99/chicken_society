@@ -15,7 +15,7 @@ const TimedEvents = (function() {
 	
 	const functions = {
 		// Load all information about timed events, so server knows which event times to check.
-		loadTimedEvents: function() {
+		loadTimedEvents() {
 			// The current directory is root/server/
 			// Get all directories inside root/websites/assets/timedevents/
 			// Then read config.json5 in each directory
@@ -30,7 +30,7 @@ const TimedEvents = (function() {
 			}
 		},
 
-		update: function() {
+		update() {
 			console.log("Updating timed events");
 			let time = new Date();
 
@@ -56,7 +56,7 @@ const TimedEvents = (function() {
 			return eventsChanged;
 		},
 
-		getActive: function(event, timeOfDay) {
+		getActive(event, timeOfDay) {
 			// let hour = timeOfDay.getHours(); // 23:00
 			let dayOfWeek = timeOfDay.getDay();
 			let month = timeOfDay.getMonth();
@@ -104,7 +104,7 @@ const TimedEvents = (function() {
 		},
 
 		// Return array of timed event name strings
-		getActiveTimedEvents: function() {
+		getActiveTimedEvents() {
 			let activeTimedEventsArray = [];
 			for (let timedEventName in activeTimedEvents) {
 				if (activeTimedEvents[timedEventName]) {
@@ -114,7 +114,7 @@ const TimedEvents = (function() {
 			return activeTimedEventsArray;
 		},
 
-		getWeekDayID: function(dayString) {
+		getWeekDayID(dayString) {
 			let days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 			dayString = dayString.toLowerCase();
 			for (let i = 0; i < days.length; i++) {
@@ -124,7 +124,7 @@ const TimedEvents = (function() {
 			}
 		},
 
-		getWeekDayName: function(dayID) {
+		getWeekDayName(dayID) {
 			let days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 			return days[dayID]
 		},

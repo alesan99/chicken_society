@@ -234,6 +234,7 @@ class RenderImage {
 		this.src = src
 		this.w = 1
 		this.h = 1
+		LoadingScreen.wait(this)
 		this.image.onload = () => {
 			this.w = this.image.width
 			this.h = this.image.height
@@ -241,10 +242,15 @@ class RenderImage {
 				this.canvas.width = this.w
 				this.canvas.height = this.h
 			}
+			this.loaded = true
 			// Images are loaded asynchronously, so pass this function if you need to do anything with the image data
 			if (asyncFunc) {
 				asyncFunc()
 			}
+		}
+		this.image.onerror = () => {
+			console.error(`Failed to load image: ${src}`)
+			this.loaded = true
 		}
 		this.canvas = false
 		this.colorable = false
