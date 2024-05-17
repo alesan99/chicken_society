@@ -26,7 +26,10 @@ function makeSaveData() {
 		// [
 		// 	{id: "table", x: 0, y: 0, dir: "down"},
 		// ]
-		coopFurniture: [],
+		coop: {
+			theme: false,
+			furniture: []
+		},
 
 		// Equipped pet status
 		// Persists between play sessions, but only stored for 1 pet at a time
@@ -243,14 +246,14 @@ function getItem(id, type) {
 // Chicken Coop Furniture
 function placeFurniture(itemId, x, y, dir="down") {
 	// Add to list of furniture in player's coop
-	SAVEDATA.coopFurniture.push({id: itemId, x: x, y: y, dir: dir})
+	SAVEDATA.coop.furniture.push({id: itemId, x: x, y: y, dir: dir})
 }
 
 function removeFurniture(itemId, x, y) {
 	// Look for furniture in savedata that matches the given furniture info
-	for (let i=0; i<SAVEDATA.coopFurniture.length; i++) {
-		if (SAVEDATA.coopFurniture[i].id == itemId && SAVEDATA.coopFurniture[i].x == x && SAVEDATA.coopFurniture[i].y == y) {
-			SAVEDATA.coopFurniture.splice(i, 1)
+	for (let i=0; i<SAVEDATA.coop.furniture.length; i++) {
+		if (SAVEDATA.coop.furniture[i].id == itemId && SAVEDATA.coop.furniture[i].x == x && SAVEDATA.coop.furniture[i].y == y) {
+			SAVEDATA.coop.furniture.splice(i, 1)
 			return true
 		}
 	}

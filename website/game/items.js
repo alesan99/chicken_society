@@ -54,13 +54,26 @@ function useItem(itemId, itemType) {
 				}
 			}
 		}
-	// Place furniture
+	// Other items
 	} else {
 		let item = ITEMS[itemType][itemId]
 
 		if (item) {
+			// Change Coop theme
+			if (item.coopTheme && PLAYER.area == "coop") {
+				if (SAVEDATA.coop.theme == item.coopTheme) {
+					// Toggle theme off
+					Coop.setTheme(false)
+				} else {
+					// Set theme
+					Coop.setTheme(item.coopTheme)
+				}
+				return false
+			}
+			// Place furniture
 			if (itemType == "furniture" && PLAYER.area == "coop") {
 				Coop.moveFurniture(itemId, closeMenu())
+				return false
 			}
 		}
 	}

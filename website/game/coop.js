@@ -15,21 +15,41 @@ const Coop = (function() {
 			this.furnitureY = 0 // placing y
 			this.furnitureDir = "down"
 			this.furnitureValidPosition = false // can the furniture be placed?
+
+			this.initialCollisionCheck = false
 		},
 
-		load(coopFurniture, owner=false) {
+		load(coopFurniture, owner) {
 			this.owner = owner
+
+			this.initialCollisionCheck = 2 // Do two update cycles before enabling static furniture
 
 			// Create objects for all saved furniture
 			for (let i = 0; i < coopFurniture.length; i++) {
 				let data = coopFurniture[i]
 				let itemId = data.id
 
-				WORLD.spawnObject("Furniture", new Furniture(PHYSICSWORLD, itemId, data.x, data.y, data.dir))
+				obj = new Furniture(PHYSICSWORLD, itemId, data.x, data.y, data.dir)
+				obj.static = false // Temporary, for initial collision check
+
+				WORLD.spawnObject("Furniture", obj)
 			}
 		},
 
 		update(dt) {
+			// Initial collision check
+			if (this.initialCollisionCheck) {
+				this.initialCollisionCheck -= 1
+				if (this.initialCollisionCheck == 0) {
+					// Update stacking of furniture
+					for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
+						obj.static = true
+						obj.updateStacking()
+					}
+					this.initialCollisionCheck = false
+				}
+			}
+
 			// Moving furniture?
 			if (this.furniture) {
 				let [mx, my] = getMousePos()
@@ -53,6 +73,10 @@ const Coop = (function() {
 		},
 
 		keyPress(key) {
+			if (this.owner != NETPLAY.id) {
+				// Can't edit coop if you're not the owner
+				return false
+			}
 			if (key == "e") {
 				// Rotate furniture that is being placed
 				if (this.furniture) {
@@ -66,6 +90,10 @@ const Coop = (function() {
 		},
 
 		mouseClick(button, x, y) {
+			if (this.owner != NETPLAY.id) {
+				// Can't edit coop if you're not the owner
+				return false
+			}
 			// Furniture
 			if (button == 0 && this.furniture) {
 				// Place furniture (if currently placing furniture)
@@ -81,10 +109,17 @@ const Coop = (function() {
 		},
 
 		mouseRelease(button, x, y) {
-			
+			if (this.owner != NETPLAY.id) {
+				// Can't edit coop if you're not the owner
+				return false
+			}
 		},
 
 		mouseScroll(dy) {
+			if (this.owner != NETPLAY.id) {
+				// Can't edit coop if you're not the owner
+				return false
+			}
 			if (Math.abs(dy) >= 1) {
 				// Rotate furniture that is being placed
 				if (this.furniture) {
@@ -125,6 +160,12 @@ const Coop = (function() {
 		},
 
 		moveFurniture(itemId) {
+			if (this.owner != NETPLAY.id) {
+				// Can't edit coop if you're not the owner
+				return false
+			}
+			
+			// Start placing furniture
 			this.furniture = true
 			this.furnitureItem = itemId
 	
@@ -133,6 +174,7 @@ const Coop = (function() {
 			// Create furniture item physics object
 			this.furnitureObj = WORLD.spawnObject("Furniture", new Furniture(PHYSICSWORLD, itemId, 0, 0, this.furnitureDir))
 			this.furnitureObj.static = false
+			this.furnitureObj.moving = true
 		},
 
 		placeFurniture(itemId) {
@@ -151,6 +193,7 @@ const Coop = (function() {
 			this.furnitureY = Math.floor(this.furnitureY)
 			this.furnitureObj.setPosition(this.furnitureX, this.furnitureY)
 			this.furnitureObj.static = true
+			this.furnitureObj.moving = false
 	
 			placeFurniture(itemId, this.furnitureX, this.furnitureY, this.furnitureDir)
 			removeItem(itemId, "furniture") // Furniture has been placed, remove from inventory
@@ -159,6 +202,10 @@ const Coop = (function() {
 			for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
 				obj.updateStacking()
 			}
+
+			// TEMPORARY
+			// This should use a more sophisticated system designed around the database once its finished
+			NETPLAY.sendCoopData()
 		},
 
 		removeFurniture(x, y) {
@@ -189,6 +236,19 @@ const Coop = (function() {
 			let nextDirIndex = (dirIndex+amount) % furnitureDirs.length
 			this.furnitureDir = furnitureDirs[nextDirIndex]
 			this.furnitureObj.setDir(this.furnitureDir)
+		},
+
+		// Set theme of coop; the background
+		setTheme(theme) {
+			if (this.owner != NETPLAY.id) {
+				// Can't edit coop if you're not the owner
+				return false
+			}
+			// Set theme
+			SAVEDATA.coop.theme = theme
+			NETPLAY.sendCoopData()
+			// Refresh (lazy)
+			WORLD.warpToArea("coop", null, null, this.owner, SAVEDATA.coop);
 		}
 	};
 	

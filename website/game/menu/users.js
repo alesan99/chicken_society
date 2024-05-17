@@ -13,7 +13,24 @@ MENUS["usersMenu"] = new class extends Menu {
 		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 740,128, 32,32)
 
 		// Actions
-		this.buttons["visitCoop"] = new Button("Visit Coop", ()=>{WORLD.warpToArea("coop"); closeMenu()}, null, this.x+this.w-170,this.y+this.h-100, 150,30)
+		this.buttons["visitCoop"] = new Button("Visit Coop", ()=>{
+			let ownerId = NETPLAY.id
+			if (this.listSelection > 0) {
+				ownerId = this.list[this.listSelection]
+			}
+			if (ownerId == NETPLAY.id) {
+				// Your coop
+				WORLD.warpToArea("coop", null, null, ownerId, SAVEDATA.coop);
+			} else {
+				// Other player's coop (once you've recieved it from the server)
+				NETPLAY.requestCoopData(ownerId, (data)=>{
+					if (data) {
+						WORLD.warpToArea("coop", null, null, ownerId, data);
+					}
+				})
+			}
+			closeMenu();
+		}, null, this.x+this.w-170,this.y+this.h-100, 150,30)
 		this.buttons["mute"] = new Button("Mute", ()=>{this.mutePlayer()}, null, this.x+this.w-170,this.y+this.h-60, 150,30)
 
 		// User display list

@@ -37,6 +37,7 @@ Netplay = class {
 
 		// This Client
 		this.connect()
+		this.id = socket.id // Socket ID
 
 		// Chicken syncing information
 		this.oldx = 0
@@ -306,8 +307,8 @@ Netplay = class {
 	}
 
 	//Area
-	sendArea(area) {
-		socket.emit("area", area)
+	sendArea(area, ownerId) {
+		socket.emit("area", area, ownerId)
 	}
 	recieveArea(id, area) {
 		if (this.playerList[id] != null) {
@@ -513,12 +514,25 @@ Netplay = class {
 		Notify.new(`You recieved ${item.name} (${count}).`, 5)
 		addItem(item, null, count)
 	}
+
+	// Get coop data
+	sendCoopData() {
+		socket.emit("coopData", SAVEDATA.coop)
+	}
+	requestCoopData(id, callback) {
+		socket.emit("requestCoopData", id, (response) => {
+			console.log("Recieved coop data:", response)
+			callback(response)
+		})
+	}
 }
 
 } else {
 	// Fallback; This is just so the game doesn't crash if its running without a server
 	Netplay = class {
-		constructor () {}
+		constructor () {
+			this.id = "OFFLINE"
+		}
 		connect () {}
 		update (dt) {}
 		addPlayer (id, player) {}
@@ -542,5 +556,7 @@ Netplay = class {
 		mutePlayer(id, doMute) {}
 		getPlayerData(id) {}
 		sendMessageToServer(header, contents) {}
+		sendCoopData() {}
+		requestCoopData(callback) {}
 	}
 }

@@ -61,7 +61,13 @@ function listenToClient(socket) {
 				x: 0,
 				y: 0,
 				dead: false
-			}
+			},
+			
+			// TEMPORARY: This should use a more sophisticated system designed around the database once its finished
+			coop: {
+				theme: false,
+				furniture: []
+			},
 		};
 
 		socket.join(`area:${playerList[socket.id].area}`) // Listen for events in area
@@ -164,10 +170,16 @@ function listenToClient(socket) {
 	});
 	
 	// Player moved area
-	socket.on("area", (area) =>{
+	socket.on("area", (area, ownerId=false) =>{
 		let playerData = playerList[socket.id];
 		if (playerData) {
+			// Send player into current area room
 			let oldArea = playerData.area;
+			let rawArea = area; // Area before server-specific modifications
+			if (area == "coop") {
+				// Make each player's coop a unique room
+				area = `coop:${ownerId}`
+			}
 			playerData.area = area;
 
 			// Leave old area
@@ -335,6 +347,30 @@ function listenToClient(socket) {
 				}
 			}
 		}
+	});
+
+	// Coops
+	// Receive coop layout updates
+	socket.on("coopData", (data) => {
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			playerData.coop = data;
+		}
+	});
+	// send coop data once requested
+	socket.on("requestCoopData", (id, callback) => {
+		let playerData = playerList[id];
+		let data = false;
+		if (playerData) {
+			data = playerData.coop;
+		} else {
+			data = {
+				theme: false,
+				furniture: []
+			}
+		}
+		// Confirm a successful connection to client
+		callback(data);
 	});
 }
 

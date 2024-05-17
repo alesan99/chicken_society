@@ -167,6 +167,8 @@ function loadItem(category, itemId) {
 		item.height = data.height
 		item.walls = data.walls
 		item.tabletops = data.tabletops
+
+		item.coopTheme = data.coopTheme
 	})
 	let async = function() {
 		if (category == "pet") {

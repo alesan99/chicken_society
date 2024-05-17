@@ -71,7 +71,6 @@ function updatePhysics(objs, spatialHash, dt) {
 												a.collisions.set(b,true)
 												let testColl1 = a.startCollide(b.constructor.name, b, moveAxisX, moveAxisY)
 											}
-											// TODO: also set this for b? Test if this is needed, as it might be for static objects
 											if (!b.collisions.has(a)) {
 												b.collisions.set(a,true)
 												let testColl2 = b.startCollide(a.constructor.name, a, -moveAxisX, -moveAxisY)

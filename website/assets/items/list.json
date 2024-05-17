@@ -14,8 +14,12 @@
   "furniture": [
     "frame",
     "lamp",
+    "room_blue",
     "rug",
     "table"
+  ],
+  "pet": [
+    "pillbug"
   ],
   "head": [
     "hoodie",
@@ -23,15 +27,12 @@
     "tophat"
   ],
   "item": [
-    "beer",
     "black_coffee",
-    "bullet",
+    "beer",
     "gun",
-    "heroin",
+    "bullet",
     "seeds",
+    "heroin",
     "snake_book"
-  ],
-  "pet": [
-    "pillbug"
   ]
 }

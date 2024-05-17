@@ -13,6 +13,9 @@ class Furniture extends PhysicsObject {
 		this.id = itemId
 		
 		this.dir_lookup = {up: 2, down: 0, left: 1, right: 1}
+
+		// Being placed? (moving)
+		this.moving = false
 		
 		// Collision
 		// Can be a single shape: [x,y, x,y, x,y...]
@@ -50,7 +53,6 @@ class Furniture extends PhysicsObject {
 	}
 
 	update(dt) {
-		console.log(this.colliding)
 	}
 
 	draw() {
@@ -63,7 +65,7 @@ class Furniture extends PhysicsObject {
 		DRAW.image(this.image, this.sprite.getFrame(0,this.dir_lookup[this.dir]), this.x, this.y-this.tabletopOffset, 0, flip, 1.0, this.center[this.dir_lookup[this.dir]][0]/this.sprite.w, this.center[this.dir_lookup[this.dir]][1]/this.sprite.h)
 
 		// Draw footprint when moving
-		if (!this.static) {
+		if (this.moving) {
 			DRAW.push()
 			DRAW.translate(this.x, this.y)
 			if (!Coop.getFurniturePlaceable(this.id)) {
@@ -132,7 +134,6 @@ class Furniture extends PhysicsObject {
 	startCollide(name, obj) {
 		this.colliding += 1
 
-		console.log(name)
 		if (name == "Furniture") {
 			this.furnitureColliding += 1
 

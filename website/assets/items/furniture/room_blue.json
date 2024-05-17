@@ -1,0 +1,7 @@
+{
+    "name": "Blue Coop",
+    "description": "A blue theme for your coop.",
+    "cost": 20,
+
+	"coopTheme": "coops/blue"
+}

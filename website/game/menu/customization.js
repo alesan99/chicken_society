@@ -90,10 +90,11 @@ MENUS["customization"] = new class extends Menu {
 				// Select item (to display information below inventory)
 				this.selectedItem = itemId
 				this.selectedItemType = itemType
-				if (ITEMS[itemType][itemId]) { // Make sure item has been loaded
-					if (ITEMS[itemType][itemId].description) {
+				let item = ITEMS[itemType][itemId]
+				if (item) { // Make sure item has been loaded
+					if (item.description) {
 						DRAW.setFont(FONT.description)
-						this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 300)
+						this.selectedItemDescription = DRAW.wrapText(item.description, 300)
 					}
 				}
 				if (useItem(itemId, itemType)) { // Set clothing item or use consumable

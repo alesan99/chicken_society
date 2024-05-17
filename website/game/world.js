@@ -55,10 +55,15 @@ class World {
 	}
 
 	// Load Area data; loads background image & objects
-	// (Area name, Name of previous area, function to call after loading is successful, playerId of owner of area (for coop))
-	loadArea (area="hub", fromWarp, endFunc, ownerId=false) {
+	// (Area name, Name of previous area, function to call after loading is successful, playerId of owner of area (for coop), additional data (coop furniture))
+	loadArea (area="hub", fromWarp, endFunc, ownerId=false, data) {
+		// Owner of area
+		if (area == "coop" && ownerId == false) {
+			ownerId = NETPLAY.id
+		}
+
 		// Let server know player is moving
-		NETPLAY.sendArea(area)
+		NETPLAY.sendArea(area, ownerId)
 
 		this.oldArea = this.area
 		this.area = area
@@ -84,22 +89,31 @@ class World {
 
 		this.findPlayersInArea(this.area)
 
-		// Area graphics
-		BACKGROUND[this.area] = new RenderImage(`assets/areas/${this.area}.png`)
-		BACKGROUNDIMG[this.area] = {}
-		BACKGROUNDSPRITE[this.area] = {}
-		BACKGROUNDANIM[this.area] = {}
-
 		// Load Chicken Coop
 		if (this.area == "coop") {
 			// Furniture
-			if (this.areaOwner == false) {
+			if (this.areaOwner == NETPLAY.id) {
 				// Load your own furniture
-				Coop.load(SAVEDATA.coopFurniture)
+				data = SAVEDATA.coop
+				Coop.load(data.furniture, this.areaOwner)
 			} else {
 				// Load other player's furniture
+				console.log("Loading coop furniture", data)
+				Coop.load(data.furniture, this.areaOwner)
 			}
 		}
+
+		// Area graphics
+		if (this.area == "coop" && data.theme) {
+			// Custom coop background
+			BACKGROUND[this.area] = new RenderImage(`assets/areas/${data.theme}.png`)
+		} else {
+			// Normal Area background
+			BACKGROUND[this.area] = new RenderImage(`assets/areas/${this.area}.png`)
+		}
+		BACKGROUNDIMG[this.area] = {}
+		BACKGROUNDSPRITE[this.area] = {}
+		BACKGROUNDANIM[this.area] = {}
 
 		// Load Area data
 		//TimedEventsSystem.setActiveTimedEvents(["christmas", "midnight", "sunday"])
@@ -115,7 +129,7 @@ class World {
 		QuestSystem.event("area", area) // Progress quests that look for areas
 	}
 
-	warpToArea (area, fromWarp, character) {
+	warpToArea (area, fromWarp, character, ownerId, data) {
 		if (character == undefined) {
 			character = PLAYER
 		}
@@ -131,7 +145,7 @@ class World {
 				Transition.start("iris", "in", 0.4, [character.x, character.y-40], () => {
 					PLAYER.static = false // Let player move after transition is done
 			})
-		})
+		}, ownerId, data)
 		})
 	}
 
@@ -414,7 +428,8 @@ class World {
 			return []
 		}
 		for (const [id, playerData] of Object.entries(NETPLAY.playerList)) {
-			if (playerData.area == area) {
+			console.log(`${area}:${this.areaOwner}`, playerData.area)
+			if (playerData.area == area || (this.areaOwner && playerData.area == `${area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
 				this.addPlayerToArea(id, playerData)
 				players.push(playerData)
 			} else {
@@ -428,7 +443,8 @@ class World {
 		// When a player join an area, create a character object for them
 		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
 		let chicken = playerData.chicken
-		if (playerData.area == PLAYER.area) { // Player is in your area
+		console.log(`${playerData.area}:${this.areaOwner}`, PLAYER.area)
+		if (playerData.area == PLAYER.area || (this.areaOwner && playerData.area == `${PLAYER.area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
 			if (!CHARACTER[id]) {
 				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
 				CHARACTER[id].area = playerData.area
