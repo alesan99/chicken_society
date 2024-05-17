@@ -104,7 +104,11 @@ MENUS["customization"] = new class extends Menu {
 			this.inventory, 
 			(itemId,itemType)=>{
 				// Is selected?
-				if (PROFILE[itemType] && PROFILE[itemType] == itemId) {
+				let item =  ITEMS[itemType][itemId]
+				if (PROFILE[itemType] && PROFILE[itemType] == itemId) { // equipped?
+					return true
+				}
+				if (item && item.coopTheme && SAVEDATA.coop.theme == item.coopTheme) { // coop theme selected?
 					return true
 				}
 			}, 476,184, 56,56, 5,3)

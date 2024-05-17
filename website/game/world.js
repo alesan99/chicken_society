@@ -428,7 +428,6 @@ class World {
 			return []
 		}
 		for (const [id, playerData] of Object.entries(NETPLAY.playerList)) {
-			console.log(`${area}:${this.areaOwner}`, playerData.area)
 			if (playerData.area == area || (this.areaOwner && playerData.area == `${area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
 				this.addPlayerToArea(id, playerData)
 				players.push(playerData)
@@ -443,7 +442,6 @@ class World {
 		// When a player join an area, create a character object for them
 		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
 		let chicken = playerData.chicken
-		console.log(`${playerData.area}:${this.areaOwner}`, PLAYER.area)
 		if (playerData.area == PLAYER.area || (this.areaOwner && playerData.area == `${PLAYER.area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
 			if (!CHARACTER[id]) {
 				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
