@@ -456,6 +456,8 @@ class Character extends PhysicsObject {
 	// Misc. Actions
 	// Shooting! Guns etc.
 	shoot(nx=0, ny=0) {
+		// Play gunshot sound
+		AudioSystem.playSound(SFX.gun)
 		// You, the player, shot a gun
 		if (this == PLAYER) {
 			// direction normal

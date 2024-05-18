@@ -196,6 +196,11 @@ class Player {
 		if (button == 0) {
 			this.mouseHold = true
 		}
+
+		// Use item
+		if (button == 2) {
+			this.obj.useItem()
+		}
 	}
 	mouseRelease(button, x, y) {
 		// Movement

@@ -47,7 +47,7 @@ class World {
 		// Minigames
 		MINIGAME = new MinigameState()
 
-		this.loadArea(area)
+		this.loadArea(area) // Actually load area
 	}
 
 	load () {
@@ -127,6 +127,9 @@ class World {
 
 		// Progress Quests
 		QuestSystem.event("area", area) // Progress quests that look for areas
+
+		// End loading screen
+		LoadingScreen.start(() => {})
 	}
 
 	warpToArea (area, fromWarp, character, ownerId, data) {

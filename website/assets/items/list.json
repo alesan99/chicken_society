@@ -1,4 +1,8 @@
 {
+  "face": [
+    "catears",
+    "visors"
+  ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
@@ -6,10 +10,6 @@
     "petstupiduniform",
     "scarf",
     "silverchains"
-  ],
-  "face": [
-    "catears",
-    "visors"
   ],
   "furniture": [
     "frame",
@@ -27,10 +27,10 @@
     "tophat"
   ],
   "item": [
-    "black_coffee",
     "beer",
-    "gun",
+    "black_coffee",
     "bullet",
+    "gun",
     "seeds",
     "heroin",
     "snake_book"

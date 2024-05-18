@@ -95,8 +95,6 @@ class Pet extends PhysicsObject {
 					this.anim.playAnimation([1,2], 0.15)
 					this.walking = true
 				}
-
-				this.activated = false // Temporary, moving will let you click on pet again
 			} else {
 				this.sx = 0
 				this.sy = 0
@@ -113,6 +111,9 @@ class Pet extends PhysicsObject {
 
 		// Manage -your- Pet
 		if (this.owner == PLAYER && !this.hidden) {
+			if (!getOpenMenu()) {
+				this.activated = false // Closing menu will let you click on pet again
+			}
 			// Click
 			if ((this.activated == false) && this.checkMouseOver()) {
 				this.mouseOver = true
@@ -249,17 +250,7 @@ class Pet extends PhysicsObject {
 
 	// Update customization data
 	updateProfile(profile, sendToServer) {
-		let names = [
-			"Bugathan",
-			"Barnham",
-			"T.J. Cream",
-			"Gubgub",
-			"Mr. Dubstep",
-			"Keyboard Jen",
-			"Diesel",
-			"Ulysses"
-		]
-		this.name = profile.name || names[(Math.random()*(names.length-1))|0]
+		this.name = profile.name || ""
 		this.happiness = profile.happiness || 0.8
 		this.health = profile.health || 1
 		this.hunger = profile.hunger || 1

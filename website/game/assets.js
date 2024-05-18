@@ -47,6 +47,7 @@ function loadGameAssets() {
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg")
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg")
+	SFX.gun = AudioSystem.newSound("assets/sfx/gun.ogg")
 
 	// CHAT MENU & HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")
@@ -187,8 +188,10 @@ function loadItem(category, itemId) {
 }
 
 // Load array with JSON data; filePath, callBack function called after file is finished loading
-function loadJSON(filePath, callBack) {
+function loadJSON(filePath, callBack, errorCallBack) {
 	// JSON file must be loaded asynchronously
+	let loadingObject = {loaded: false}
+	LoadingScreen.wait(loadingObject)
 	fetch(filePath).then(response => {
 		if (!response.ok) {
 			console.log("JSON Network response was not ok")
@@ -197,9 +200,12 @@ function loadJSON(filePath, callBack) {
 	})
 	.then(data => {
 		callBack(data)
+		loadingObject.loaded = true
 	})
 	.catch(error => {
 		console.log("There was a problem loading the JSON file:", error)
+		if (errorCallBack) { errorCallBack() }
+		loadingObject.loaded = true
 	})
 }
 
@@ -207,6 +213,8 @@ function loadJSON(filePath, callBack) {
 // https://json5.org/
 function loadJSON5(filePath, callBack, errorCallBack) {
 	// JSON file must be loaded asynchronously
+	let loadingObject = {loaded: false}
+	LoadingScreen.wait(loadingObject)
 	fetch(filePath).then(response => {
 		if (!response.ok) {
 			console.log("JSON file could not be fetched: ", filePath)
@@ -219,10 +227,12 @@ function loadJSON5(filePath, callBack, errorCallBack) {
 	})
 	.then(data => {
 		callBack(data)
+		loadingObject.loaded = true
 	})
 	.catch(error => {
 		console.log("There was a problem loading the JSON file:", error)
 		if (errorCallBack) { errorCallBack() }
+		loadingObject.loaded = true
 	})
 }
 

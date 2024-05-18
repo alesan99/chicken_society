@@ -66,7 +66,7 @@ const Coop = (function() {
 			if (this.furniture) {
 				DRAW.setColor(0,0,0,1.0)
 				DRAW.setFont(FONT.caption)
-				DRAW.text("Rotate Furniture with E", 10, 30)
+				DRAW.text("Rotate Furniture with Scroll Wheel or E key", 10, 30)
 				DRAW.text("Place Furniture with Left Click", 10, 50)
 				DRAW.text("Remove Furniture with Right Click", 10, 70)
 			}

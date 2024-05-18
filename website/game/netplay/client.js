@@ -476,11 +476,10 @@ Netplay = class {
 			this.petRaceData = false
 			this.petRaceStarted = false
 			// Show pet
-			if (PLAYER && PLAYER.petObj) {
-				PLAYER.petObj.hidden = false;
-			}
+			PetRaceSystem.end()
 			return false
 		}
+		let oldRaceStarted = this.petRaceStarted
 		let oldPetRaceDataLen = 0
 		if (this.petRaceData) {
 			oldPetRaceDataLen = this.petRaceData.length
@@ -488,19 +487,14 @@ Netplay = class {
 		this.petRaceData = data
 		this.petRaceStarted = data[0]
 		
-		// TODO: Improve this!
+		// There is a new pet in
 		if (oldPetRaceDataLen > 0 && this.petRaceData.length > oldPetRaceDataLen) {
-			// Hide pet
-			if (PLAYER && PLAYER.petObj) {
-				// Look if pet is in the race
-				let pet = PLAYER.petObj
-				for (let i = 1; i < data.length; i++) {
-					if (pet.id == data[i][0] && pet.name == data[i][1]) {
-						pet.hidden = true;
-						break;
-					}
-				}
-			}
+			PetRaceSystem.newPet(data)
+		}
+
+		// Race has started
+		if (this.petRaceStarted && !oldRaceStarted) {
+			PetRaceSystem.start()
 		}
 	}
 

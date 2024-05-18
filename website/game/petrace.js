@@ -3,6 +3,7 @@
 const PetRaceSystem = (function() {
 	// Animations
 	let animations = [0, 0,0,0,0]; // values 0-1
+	let inRace = false;
 
 	const functions = {
 		update(dt) {
@@ -59,6 +60,38 @@ const PetRaceSystem = (function() {
 					DRAW.text(name, x, Math.floor(y + py)+20, "center")
 				}
 			}
+		},
+
+		newPet(data) {
+			// Hide pet
+			if (PLAYER && PLAYER.petObj) {
+				// Look if pet is in the race
+				let pet = PLAYER.petObj
+				for (let i = 1; i < data.length; i++) {
+					if (pet.id == data[i][0] && pet.name == data[i][1]) {
+						pet.hidden = true;
+						inRace = true;
+						break;
+					}
+				}
+			}
+		},
+
+		start() {
+			// Play gunshot sound
+			AudioSystem.playSound(SFX.gun)
+		},
+
+		end() {
+			// Show pet again
+			if (PLAYER && PLAYER.petObj) {
+				PLAYER.petObj.hidden = false;
+				if (inRace) {
+					// Pet should get tired after racing
+					PLAYER.petObj.health -= 0.08;
+				}
+			}
+			inRace = false;
 		}
 	};
 	
