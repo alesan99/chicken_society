@@ -12,6 +12,7 @@ const LoadingScreen = (function() {
 	let eggTimer = 0.5
 	// Fading
 	let fade = 0
+	let initial = true
 	
 	const functions = {
 		// Start loading screen
@@ -19,7 +20,10 @@ const LoadingScreen = (function() {
 			endFunc = func
 			loadingListLength = loadingList.length
 			loading = true
+
+			// Animation
 			fade = 0
+			initial = true
 		},
 
 		end() {
@@ -112,8 +116,15 @@ const LoadingScreen = (function() {
 			}
 
 			// Fade in/out
-			if (fade < 1) {
-				fade = Math.min(1, fade + 12*dt)
+			if (!initial) {
+				if (fade < 1) {
+					fade = Math.min(1, fade + 12*dt)
+				}
+			}
+
+			// No longer initial frame
+			if (initial) {
+				initial = false
 			}
 		},
 	};

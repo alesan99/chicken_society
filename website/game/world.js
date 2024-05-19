@@ -5,6 +5,7 @@ var CHARACTER
 var PLAYER
 var PLAYER_CONTROLLER
 var NPCS
+var PARTICLES
 var CHAT
 var OBJECTS
 var DEBUGPHYSICS = false
@@ -31,6 +32,8 @@ class World {
 		OBJECTS = {}
 		OBJECTS["Character"] = {}
 		OBJECTS["Pet"] = {}
+
+		PARTICLES = []
 
 		// Initialize all characters
 		NPCS = {}
@@ -88,6 +91,8 @@ class World {
 		PHYSICSWORLD.clear()
 
 		this.findPlayersInArea(this.area)
+
+		PARTICLES = []
 
 		// Load Chicken Coop
 		if (this.area == "coop") {
@@ -197,6 +202,16 @@ class World {
 
 		NETPLAY.update(dt)
 
+		// Particles
+		// PARTICLES is an array, NOT an object
+		for (let i = PARTICLES.length-1; i >= 0; i--) {
+			let particle = PARTICLES[i]
+			particle.update(dt)
+			if (particle.DELETED) {
+				PARTICLES.splice(i, 1)
+			}
+		}
+
 		// Pet race
 		if (this.area == "racetrack") {
 			PetRaceSystem.update(dt)
@@ -261,7 +276,12 @@ class World {
 			obj.draw()
 		}
 
-		// Draw plyaer movement cursor
+		// Particles
+		for (const [id, obj] of Object.entries(PARTICLES)) {
+			obj.draw()
+		}
+
+		// Draw player movement cursor
 		PLAYER_CONTROLLER.draw()
 
 		// Area Overlay
@@ -319,6 +339,11 @@ class World {
 
 	// Received keyboard input
 	keyPress(key, code) {
+		// Do not do anything while transitioning
+		if (Transition.playing()) {
+			return true
+		}
+
 		// Dialogue
 		if (DialogueSystem.keyPress(key)) {
 			return true
@@ -337,6 +362,11 @@ class World {
 		CHAT.keyPress(key)
 	}
 	keyRelease(key, code) {
+		// Do not do anything while transitioning
+		if (Transition.playing()) {
+			return true
+		}
+
 		// Area
 		if (this.area == "coop") {
 			if (Coop.keyRelease(key)) {
@@ -350,6 +380,12 @@ class World {
 
 	// Recieved mouse input
 	mouseClick(button, x, y) {
+		// Do not click while transitioning
+		if (Transition.playing()) {
+			return true
+		}
+
+		// Chat Menu
 		if (CHAT.mouseClick(button, x, y)) {
 			return true
 		}
@@ -392,6 +428,11 @@ class World {
 	}
 
 	mouseRelease(button, x, y) {
+		// Do not click while transitioning
+		if (Transition.playing()) {
+			return true
+		}
+
 		CHAT.mouseRelease(button, x, y)
 
 		// Dialogue

@@ -19,6 +19,7 @@ class Player {
 		this.targetX = 0
 		this.targetY = 0
 		this.targetTimer = 0
+		this.targetTime = 4.0 // Max time that will be spent moving to target
 
 		// Which triggers is the player currently inside of?
 		this.triggers = new Map()
@@ -33,10 +34,14 @@ class Player {
 		if (this.mouseHold) {
 			let [mx, my] = getMousePos()
 
-			this.target = true
-			this.targetX = mx
-			this.targetY = my
-			this.targetTimer = 4.0
+			let dist = ((mx-char.x)**2 + (my-char.y)**2)
+
+			if (dist > 20**2) { // Don't move if mouse is too close to player
+				this.target = true
+				this.targetX = mx
+				this.targetY = my
+				this.targetTimer = this.targetTime
+			}
 		}
 		if (this.target) {
 			let targetX = this.targetX

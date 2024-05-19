@@ -476,7 +476,15 @@ class Character extends PhysicsObject {
 					[ny, nx] = [0, 1]
 					break
 			}
+			let [muzzleX, muzzleY] = [this.x+nx*50, this.y-65+ny*12]
+			if (this.dir == "down") {
+				muzzleX -= 32
+			} else if (this.dir == "up") {
+				muzzleX += 32
+			}
 			NETPLAY.sendAction("shoot", nx, ny)
+			// Gunshot particle
+			PARTICLES.push(new Particle(muzzleX, muzzleY, IMG.particle, SPRITE.gunshot, [0,1], 0.05))
 		// Other player shot a gun, see if you, the player, got hit
 		} else {
 			// Check which chickens are in the line of fire

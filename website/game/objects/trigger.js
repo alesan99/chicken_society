@@ -50,6 +50,8 @@ class Trigger extends PhysicsObject {
 		this.activatedOnce = false
 		// Sound
 		this.sound = sound
+		// Particle
+		this.particle = true
 
 		// Is active according to conditions?
 		this.isActive = true
@@ -106,11 +108,15 @@ class Trigger extends PhysicsObject {
 			return false // Don't activate again with activateOnce
 		}
 		if (!this.activated) {
+			// Activate trigger
 			this.activated = true
 			this.action()
 
 			if (this.sound) {
 				AudioSystem.playSound(SFX[this.sound])
+			}
+			if (this.particle && !this.active) {
+				PARTICLES.push(new Particle(this.x+(this.shape.x2-this.shape.x1)/2, this.y+(this.shape.y2-this.shape.y1)/2, IMG.particle, SPRITE.dust, [0,1], 0.1))
 			}
 			return true
 		}
