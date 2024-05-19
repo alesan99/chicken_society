@@ -362,11 +362,6 @@ class World {
 		CHAT.keyPress(key)
 	}
 	keyRelease(key, code) {
-		// Do not do anything while transitioning
-		if (Transition.playing()) {
-			return true
-		}
-
 		// Area
 		if (this.area == "coop") {
 			if (Coop.keyRelease(key)) {
@@ -428,11 +423,6 @@ class World {
 	}
 
 	mouseRelease(button, x, y) {
-		// Do not click while transitioning
-		if (Transition.playing()) {
-			return true
-		}
-
 		CHAT.mouseRelease(button, x, y)
 
 		// Dialogue

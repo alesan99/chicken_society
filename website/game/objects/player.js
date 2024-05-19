@@ -21,6 +21,8 @@ class Player {
 		this.targetTimer = 0
 		this.targetTime = 4.0 // Max time that will be spent moving to target
 
+		this.targetOffsetY = 20 // Offset for where character will move to when clicking
+
 		// Which triggers is the player currently inside of?
 		this.triggers = new Map()
 	}
@@ -34,18 +36,15 @@ class Player {
 		if (this.mouseHold) {
 			let [mx, my] = getMousePos()
 
-			let dist = ((mx-char.x)**2 + (my-char.y)**2)
+			let dist = ((mx-char.x)**2 + ((my + this.targetOffsetY)-char.y)**2)
 
 			if (dist > 20**2) { // Don't move if mouse is too close to player
-				this.target = true
-				this.targetX = mx
-				this.targetY = my
-				this.targetTimer = this.targetTime
+				this.setTarget(mx, my)
 			}
 		}
 		if (this.target) {
 			let targetX = this.targetX
-			let targetY = this.targetY + 20
+			let targetY = this.targetY + this.targetOffsetY
 			let targetDiffX = targetX - char.x
 			let targetDiffY = targetY - char.y
 
@@ -166,6 +165,14 @@ class Player {
 		}
 	}
 
+	// Set new moving target
+	setTarget(x, y) {
+		this.target = true
+		this.targetX = x
+		this.targetY = y
+		this.targetTimer = this.targetTime
+	}
+
 	// Reset state of player and player controller when moving to new area
 	reset(x, y, dir="down") {
 		let char = this.obj
@@ -188,6 +195,7 @@ class Player {
 		this.mouseHold = false
 	}
 
+	// Stop moving towards target
 	stop() {
 		let char = this.obj
 		// Stop movement
@@ -199,6 +207,7 @@ class Player {
 		// Movement
 		// Check if left mouse button is being held
 		if (button == 0) {
+			this.setTarget(x, y)
 			this.mouseHold = true
 		}
 

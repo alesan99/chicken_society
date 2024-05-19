@@ -24,7 +24,8 @@ class Pet extends PhysicsObject {
 		this.id = id
 		this.updateProfile(SAVEDATA.pet)
 		this.owner = owner
-		this.speed = 180
+		this.maxSpeed = 180
+		this.speed = this.maxSpeed
 		this.area = owner.area
 
 		// Status
@@ -134,14 +135,18 @@ class Pet extends PhysicsObject {
 		this.anim.update(dt)
 	}
 
+	// Update pet life
 	updateLife(dt) {
+		// Hunger decreases over time
 		this.hunger = Math.max(0, this.hunger - 0.0004*dt)
 		let starvingThreshold = 0.2
 		if (this.hunger <= starvingThreshold) {
+			// If starving, health decreases
 			let speed = 0.005*((starvingThreshold-this.hunger)/starvingThreshold)
 			this.health = Math.max(0, this.health - speed*dt)
 		}
 
+		// Hunger affects happiness
 		if (this.hunger < 0.75) {
 			this.happiness = Math.max(0, this.happiness - 0.003*dt)
 		}
@@ -152,13 +157,24 @@ class Pet extends PhysicsObject {
 			this.happiness = Math.min(1, this.happiness + 0.002*dt)
 		}
 
-		if (this.happiness < 0.5) {
+		this.speed = this.maxSpeed - 50*(1.0-this.happiness)
+
+		// Update graphics
+		if (this.happiness >= 0.5) {
+			// Happy frames
+			this.anim.setFrame(null, 0)
+		} else {
+			// Sad frames
 			this.anim.setFrame(null, 1)
 		}
 
 		if (this.health <= 0) {
-			this.anim.setFrame(3,0)
+			// Dead
+			this.anim.stopAnimation(3,1)
 			this.dead = true
+			this.sx = 0
+			this.sy = 0
+			this.walking = false
 		}
 	}
 

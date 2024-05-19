@@ -43,8 +43,8 @@ function loadGameAssets() {
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
 	IMG.particle = new RenderImage("assets/particle.png")
-	SPRITE.gunshot = new Sprite(IMG.particle, 2,1, 64,64, 0,0)
-	SPRITE.dust = new Sprite(IMG.particle, 2,1, 64,64, 0,64)
+	SPRITE.gunshot = new Sprite(IMG.particle, 2,1, 64,64, 0,0, 1,1)
+	SPRITE.dust = new Sprite(IMG.particle, 2,1, 64,64, 0,65, 1,1)
 
 	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a")
 

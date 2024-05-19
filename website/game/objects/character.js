@@ -461,7 +461,7 @@ class Character extends PhysicsObject {
 		// You, the player, shot a gun
 		if (this == PLAYER) {
 			// direction normal
-			let [nx, ny] = [1, 0]
+			[nx, ny] = [1, 0]
 			switch (this.dir) {
 				case "up":
 					[ny, nx] = [-1, 0]
@@ -476,29 +476,52 @@ class Character extends PhysicsObject {
 					[ny, nx] = [0, 1]
 					break
 			}
-			let [muzzleX, muzzleY] = [this.x+nx*50, this.y-65+ny*12]
-			if (this.dir == "down") {
-				muzzleX -= 32
-			} else if (this.dir == "up") {
-				muzzleX += 32
-			}
 			NETPLAY.sendAction("shoot", nx, ny)
-			// Gunshot particle
-			PARTICLES.push(new Particle(muzzleX, muzzleY, IMG.particle, SPRITE.gunshot, [0,1], 0.05))
 		// Other player shot a gun, see if you, the player, got hit
 		} else {
-			// Check which chickens are in the line of fire
-			let obj = PLAYER
+		}
+		// Check which chickens are in the line of fire
+		let closestDist = Infinity
+		let closestCharacter = false
+		for (const [id, obj] of Object.entries(OBJECTS["Character"])) {
+			if (obj == this) { // Do not shoot self
+				continue
+			}
+			let dist = Math.abs(obj.x - this.x) + Math.abs(obj.y - this.y) // get distance
 			let dx = obj.x - this.x
 			let dy = obj.y - this.y
 			if (Math.abs(dx) < 50 || Math.abs(dy) < 50) {
 				// check if normal is facing in right direction
-				let dot = nx*dx + ny*dy
-				if (dot > 0) {
-					obj.startStatusEffect("dead", 10)
+				// normalize dx, dy
+				let [ndx, ndy] = vec2Unit(dx, dy)
+				// Get similarity between the two vectors, (nx,ny) and (ndx,ndy)
+				let dot = ndx*nx + ndy*ny
+				if (dot > 0.5 && dist < closestDist) {
+					closestDist = dist
+					closestCharacter = obj
 				}
 			}
-		}	
+		}
+		// Hit closest character
+		if (closestCharacter) {
+			if (this != PLAYER) {
+				if (closestCharacter == PLAYER && !closestCharacter.getStatusEffect("dead")) {
+					// only kill players
+					closestCharacter.startStatusEffect("dead", 10)
+				}
+			}
+			// Show hit particle
+			PARTICLES.push(new Particle(closestCharacter.x, closestCharacter.y-65, IMG.particle, SPRITE.dust, [0,1], 0.1))
+		}
+	
+		// Gunshot particle
+		let [muzzleX, muzzleY] = [this.x+nx*50, this.y-65+ny*12]
+		if (this.dir == "down") {
+			muzzleX -= 32
+		} else if (this.dir == "up") {
+			muzzleX += 32
+		}
+		PARTICLES.push(new Particle(muzzleX, muzzleY, IMG.particle, SPRITE.gunshot, [0,1], 0.05))
 	}
 
 	// Collision
