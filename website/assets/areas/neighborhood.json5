@@ -37,9 +37,9 @@
 			"sound": "door"
 		},
 
-		"coopEntrance": {
-			"to": "coop",
-			"fromWarp": "coopExit",
+		"pathwayEntrance": {
+			"to": "pathway",
+			"fromWarp": "pathwayExit",
 			"facing": "down",
 			"x": 65,
 			"y": 178,

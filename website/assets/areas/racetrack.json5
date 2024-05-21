@@ -3,18 +3,22 @@
 	"mapLocation": false,
 
 	"walls": [
-		[0,576, 1024,576, 1024,600, 0,600] // bottom of screen
+		[0, 576, 1024, 576, 1024, 600, 0, 600],
+		[-5, 576, -5, 163, 0, 163, 0, 576],
+		[1024, 576, 1024, 163, 1030, 163, 1030, 576],
+		[0,425,0,272,148,265,151,424],
+		[0,274,0,256,1024,256,1024,274]
 	],
 
 	"warps": {
 		"raceTrackExit": {
-			"to": "hub",
+			"to": "pathway",
 			"fromWarp": "raceTrackEntrance",
-			"facing": "down",
-			"x": 20,
-			"y": 400,
-			"w": 40,
-			"h": 400
+			"facing": "right",
+			"x": 11,
+			"y": 487,
+			"w": 30,
+			"h": 300
 		}
 	},
 
@@ -27,8 +31,8 @@
 				"face": false,
 				"body": false
 			},
-			"x": 130,
-			"y": 460,
+			"x": 223,
+			"y": 378,
 			"facing": "down",
 			"speechBubble": [
 				"Come one come all!"
