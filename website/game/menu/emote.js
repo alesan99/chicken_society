@@ -1,5 +1,11 @@
 //Emote menu; Press a button an player emotes
 
+import {Menu, MENUS} from "../menu.js"
+import {Button} from "../gui/gui.js"
+import {RGBtoHEX, addNuggets} from "../savedata.js"
+import {DRAW, SAVEDATA} from "../main.js"
+import {IMG, SPRITE} from "../assets.js"
+
 MENUS["emoteMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {

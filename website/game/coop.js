@@ -253,3 +253,5 @@ const Coop = (function() {
 	};
 	
  return functions; })()
+
+ export default Coop;

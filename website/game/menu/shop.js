@@ -1,5 +1,11 @@
 //Customize Player Menu; Menu with options to modify player profile and customize chicken
 
+import {Menu, MENUS} from "../menu.js"
+import {Button} from "../gui/gui.js"
+import {RGBtoHEX, addNuggets} from "../savedata.js"
+import {DRAW, SAVEDATA} from "../main.js"
+import {IMG, SPRITE} from "../assets.js"
+
 MENUS["shop"] = new class extends Menu {
 	//Initialize
 	constructor () {

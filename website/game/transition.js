@@ -1,5 +1,8 @@
 // Transitions; Cover the entire screen with an animation, when the animation ends it calls a given function
 
+import { canvasWidth, canvasHeight } from "./engine/render.js"
+import { DRAW } from "./main.js"
+
 const Transition = (function() {
 
 let transitioning = false
@@ -97,3 +100,5 @@ const transitionFunctions = {
 };
 
 return transitionFunctions; })()
+
+export default Transition;

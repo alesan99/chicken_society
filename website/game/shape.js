@@ -1,6 +1,8 @@
 // 'Shape' of a collision hitbox for a physics object
 
-class Shape {
+import { vec2Unit, vec2Norm, vec2Dot } from "./lib/vec2.js"
+
+export default class Shape {
 	//Initialize: points [x,y, x,y, x,y ...]
 	constructor (...points) {
 		// List of vertices

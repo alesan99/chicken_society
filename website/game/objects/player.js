@@ -1,6 +1,11 @@
 //Player object, listens to inputs to control another object
 
-class Player {
+import { getMousePos } from "../engine/input.js"
+import { vec2Unit } from "../lib/vec2.js"
+import { DRAW } from "../main.js"
+import { IMG } from "../assets.js"
+
+export default class Player {
 	//Initialize: x pos, y pos, width, height
 	constructor (obj) {
 		this.obj = obj

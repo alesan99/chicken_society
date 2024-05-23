@@ -383,3 +383,5 @@ const DialogueSystem = (function() {
 	};
 	
 return functions; })()
+
+export default DialogueSystem;

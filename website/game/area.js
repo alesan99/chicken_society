@@ -1,6 +1,17 @@
 // Area
 // logic that controls the background and elements of an area
 
+import { DRAW, WORLD } from "./main.js"
+import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS } from "./world.js"
+import AudioSystem from "./engine/audio.js"
+import { BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM } from "./assets.js"
+import { RenderImage } from "./engine/render.js"
+import { Sprite, DrawableSprite, Animation } from "./engine/sprite.js"
+import { setState } from "./state.js"
+import {addItem, removeNuggets} from "./savedata.js"
+import QuestSystem from "./quests.js"
+import Objects from "./objects/objects.js"
+
 // Load area data from .json
 function loadAreaFile(data, world, fromWarp, endFunc) {
 	let area = world.area
@@ -27,13 +38,13 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 		for (const poly of data.walls) {
 			// Create wall object
 			i++
-			OBJECTS["Wall"][i] = new Wall(PHYSICSWORLD, ...poly)
+			OBJECTS["Wall"][i] = new Objects.Wall(PHYSICSWORLD, ...poly)
 		}
 	}
 	// Load warps
 	if (data.warps) {
 		for (const [name, warp] of Object.entries(data.warps)) {
-			OBJECTS["Warp"][name] = new Warp(PHYSICSWORLD, warp.to, warp.from, name, warp.fromWarp, warp.facing, warp.x, warp.y, warp.w, warp.h, warp.sound)
+			OBJECTS["Warp"][name] = new Objects.Warp(PHYSICSWORLD, warp.to, warp.from, name, warp.fromWarp, warp.facing, warp.x, warp.y, warp.w, warp.h, warp.sound)
 		}
 		
 		// Get spawn location
@@ -51,8 +62,8 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				isActive = checkCondition(npc.condition)
 			}
 			if (isActive) {
-				OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area)
-				NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, {shop: npc.shop, dialogue: npc.dialogue}, npc.image)
+				OBJECTS["Character"][name] = new Objects.Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area)
+				NPCS[name] = new Objects.NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, {shop: npc.shop, dialogue: npc.dialogue}, npc.image)
 				NPCS[name].condition = npc.condition
 			}
 		}
@@ -73,7 +84,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				if (trig.cost && trig.icon) { // apply cost to icon text
 					trig.icon.text = trig.cost
 				}
-				OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound)
+				OBJECTS["Trigger"][name] = new Objects.Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound)
 				OBJECTS["Trigger"][name].active = isActive
 				OBJECTS["Trigger"][name].condition = trig.condition
 				
@@ -261,3 +272,5 @@ function conditionsUpdate() {
 		}
 	}
 }
+
+export { loadAreaFile, checkCondition, conditionsUpdate }

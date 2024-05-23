@@ -1,6 +1,9 @@
 //Trigger; Whenever the player is over this area, it can activate an action like a speechBubble or a quest progression
 
-class Trigger extends PhysicsObject {
+import PhysicsObject from "./object.js"
+import Shape from "../shape.js"
+
+export default class Trigger extends PhysicsObject {
 	//Initialize: x pos, y pos, shape in points, action func, activate when clicked?, icon: {frame, x, y}, activate when walked over?
 	constructor (spatialHash, x, y, shape, action, clickable=false, icon=false, walkOver=false, activateOnce=false, sound=false) {
 		// Collision

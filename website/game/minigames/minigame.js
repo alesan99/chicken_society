@@ -113,3 +113,5 @@ class MinigameState {
 		}
 	}
 }
+
+export {MinigameState, MINIGAMES}

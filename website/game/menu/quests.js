@@ -1,6 +1,12 @@
 // Quests Menu
 // Lists out all active quests and their steps
 
+import {Menu, MENUS} from "../menu.js"
+import {Button} from "../gui/gui.js"
+import {RGBtoHEX, addNuggets} from "../savedata.js"
+import {DRAW, SAVEDATA} from "../main.js"
+import {IMG, SPRITE} from "../assets.js"
+
 MENUS["questsMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {

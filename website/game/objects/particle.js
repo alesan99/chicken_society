@@ -2,7 +2,9 @@
 // This is a small little animation that briefly appears in the world
 // This can be something like a gunshot or dust cloud
 
-class Particle {
+import { Animation } from "../engine/sprite.js"
+
+export default class Particle {
 	constructor(x, y, image, sprite, anim, delay=0.1) {
 		this.x = x
 		this.y = y

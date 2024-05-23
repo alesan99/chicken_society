@@ -2,6 +2,13 @@
 // Can be used to start and progress a quest.
 // Handles quest completion and rewards.
 
+import { SAVEDATA } from "./main.js"
+import Notify from "./gui/notification.js"
+import { conditionsUpdate } from "./area.js"
+import { loadJSON5 } from "./assets.js"
+import { addNuggets, addItem } from "./savedata.js"
+import { MENUS } from "./menu.js"
+
 const QuestSystem = (function() {
 	let questData = {}
 	let activeQuests = {}
@@ -104,7 +111,7 @@ const QuestSystem = (function() {
 						let event = quest.progressEvents[slot]
 						if (event != false && event.type == type) {
 							// Quest is accepting event!
-							doProgress = false
+							let doProgress = false
 							if (type == "minigame") {
 								// args: minigame
 								let minigame = args[0]
@@ -347,3 +354,5 @@ const QuestSystem = (function() {
 	};
 	
 return functions; })()
+
+export default QuestSystem;

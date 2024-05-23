@@ -1,5 +1,7 @@
 // Rendering functions for a '2d' canvas.
 
+import { ctx, canvasWidth, canvasHeight } from "./canvas.js"
+
 class Render {
 	constructor (canvas) {
 		this.c = false
@@ -227,6 +229,8 @@ class Render {
 	}
 }
 
+import LoadingScreen from "../loading.js"
+
 class RenderImage {
 	constructor (src, asyncFunc) {
 		this.image = new Image()
@@ -286,3 +290,5 @@ class RenderFont {
 		this.size = size || 20
 	}
 }
+
+export { Render, RenderImage, RenderFont, canvasWidth, canvasHeight }

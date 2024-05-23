@@ -1,6 +1,13 @@
 // Warp object; Moves player to a different location when touched.
 
-class Warp extends PhysicsObject {
+import { PLAYER } from "../world.js"
+import AudioSystem from "../engine/audio.js"
+import { SFX } from "../assets.js"
+import { WORLD } from "../main.js"
+import PhysicsObject from "./object.js"
+import Shape from "../shape.js"
+
+export default class Warp extends PhysicsObject {
 	//Initialize: x pos, y pos, width, height
 	constructor (spatialHash,area, fromArea, name, fromWarp, facing, x, y, w, h, sound=false) {
 		// Collision

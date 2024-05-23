@@ -1,6 +1,6 @@
 //Physics object base class
 
-class PhysicsObject {
+export default class PhysicsObject {
 	//Initialize: x pos, y pos
 	constructor (spatialHash, x, y) {
 		// Position and speed

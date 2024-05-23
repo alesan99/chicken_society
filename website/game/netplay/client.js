@@ -554,3 +554,5 @@ Netplay = class {
 		requestCoopData(callback) {}
 	}
 }
+
+export default Netplay;

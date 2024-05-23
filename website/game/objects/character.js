@@ -1,8 +1,18 @@
 //Character object, a 'chicken' with a collision box and the ability to move
 
+import Shape from "../shape.js"
+import PhysicsObject from "./object.js"
+import { IMG, SPRITE, ANIM, FONT } from "../assets.js"
+import { HEXtoRGB } from "../savedata.js"
+import { canvasHeight } from "../engine/render.js"
+import { DRAW } from "../main.js"
+import { PLAYER_CONTROLLER } from "../world.js"
+import { Animation } from "../engine/sprite.js"
+import QuestSystem from "../quests.js"
+
 let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
-class Character extends PhysicsObject {
+export default class Character extends PhysicsObject {
 	//Initialize: spatialHash, x pos, y pos, width, height
 	constructor (spatialHash, x, y, profile, area) {
 		// Collision

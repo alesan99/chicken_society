@@ -1,5 +1,11 @@
 // Map menu; Displays map and allows quick travel (?)
 
+import {Menu, MENUS} from "../menu.js"
+import {Button} from "../gui/gui.js"
+import {RGBtoHEX, addNuggets} from "../savedata.js"
+import {DRAW, SAVEDATA} from "../main.js"
+import {IMG, SPRITE} from "../assets.js"
+
 MENUS["mapMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {

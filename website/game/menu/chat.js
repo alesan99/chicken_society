@@ -1,5 +1,15 @@
 //Chat Menu; Menu with input field for chat messages and buttons for emotes and settings
 
+import { DRAW } from "../main.js"
+import {Menu, MENUS} from "../menu.js"
+import {Button} from "../gui/gui.js"
+import {RGBtoHEX, addNuggets} from "../savedata.js"
+import {SAVEDATA, PROFILE} from "../main.js"
+import {IMG, SPRITE, FONT} from "../assets.js"
+
+import {openMenu, closeMenu, getOpenMenu} from "../state.js"
+import {PLAYER} from "../world.js"
+
 MENUS["chatMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {

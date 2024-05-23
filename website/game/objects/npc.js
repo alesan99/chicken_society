@@ -1,6 +1,9 @@
 //NPC object, controls the position of another object along with interactable dialouge
+import { IMG, SPRITE, ANIM, FONT } from "../assets.js"
+import { DRAW } from "../main.js"
+import { WORLD } from "../main.js"
 
-class NPC {
+export default class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
 	constructor (obj, speechBubble, facing="down", roamRadius=false, interactRange=50, replies, imageName="chicken") {
 		this.obj = obj

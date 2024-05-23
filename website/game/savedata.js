@@ -290,3 +290,5 @@ function HEXtoRGB(hex) {
 	// Return the RGB values as an object
 	return [red, green, blue];
 }
+
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB}

@@ -1,6 +1,9 @@
 // Notification
 // A little popup that appears at the top of the screen
 
+import { DRAW } from "../main.js"
+import { FONT } from "../assets.js"
+
 const Notify = (function() {
 	let notifications = [];
 	let notifHeight = 32;
@@ -80,7 +83,7 @@ const Notify = (function() {
 				// Text
 				DRAW.setColor(notification.color[0],notification.color[1],notification.color[2],1.0*a)
 
-				for (line = 0; line < notification.lines; line++) {
+				for (let line = 0; line < notification.lines; line++) {
 					DRAW.text(notification.text[line], x +3, y+line*30 + 25, "left")
 				}
 				y += notification.lines*notifHeight
@@ -88,3 +91,5 @@ const Notify = (function() {
 		}
 	}
 	return notifyFunctions; })()
+
+export default Notify;

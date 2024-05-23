@@ -1,6 +1,12 @@
 // Adopt prompt
 // Tells you that equipping a pet will overwrite your current pet
 
+import {Menu, MENUS} from "../menu.js"
+import {Button} from "../gui/gui.js"
+import {RGBtoHEX, addNuggets} from "../savedata.js"
+import {SAVEDATA} from "../main.js"
+import {IMG, SPRITE} from "../assets.js"
+
 MENUS["adoptMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {

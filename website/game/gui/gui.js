@@ -1,3 +1,7 @@
+import { DRAW, CURSOR } from "../main.js"
+import { FONT } from "../assets.js"
+import { getMousePos } from "../engine/input.js"
+
 class Button {
 	constructor(label="", action=()=>{}, graphic, x=0, y=0, w, h) { //in px, label is text on button, action is function to call when clicked  
 		this.visible = true;
@@ -454,3 +458,5 @@ class ColorSlider {
 		DRAW.rectangle(this.x+this.w*this.value -2, this.y, 4, this.h, "line");
 	}
 }
+
+export {Button, TextField, ScrollBar, ColorSlider}

@@ -1,8 +1,4 @@
 {
-  "face": [
-    "catears",
-    "visors"
-  ],
   "body": [
     "alesanaccessories",
     "beefcakeaccessories",
@@ -10,6 +6,24 @@
     "petstupiduniform",
     "scarf",
     "silverchains"
+  ],
+  "face": [
+    "catears",
+    "visors"
+  ],
+  "item": [
+    "black_coffee",
+    "beer",
+    "gun",
+    "heroin",
+    "seeds",
+    "snake_book",
+    "bullet"
+  ],
+  "head": [
+    "hoodie",
+    "snapback",
+    "tophat"
   ],
   "furniture": [
     "frame",
@@ -20,19 +34,5 @@
   ],
   "pet": [
     "pillbug"
-  ],
-  "head": [
-    "hoodie",
-    "snapback",
-    "tophat"
-  ],
-  "item": [
-    "beer",
-    "black_coffee",
-    "bullet",
-    "gun",
-    "seeds",
-    "heroin",
-    "snake_book"
   ]
 }

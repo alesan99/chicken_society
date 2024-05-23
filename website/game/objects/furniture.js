@@ -1,6 +1,9 @@
 //Furniture
 
-class Furniture extends PhysicsObject {
+import PhysicsObject from "./object.js"
+import Shape from "../shape.js"
+
+export default class Furniture extends PhysicsObject {
 	//Initialize: list of points
 	constructor (spatialHash, itemId, x=0, y=0, dir="down") {
 		super(spatialHash,0,0)

@@ -1,6 +1,9 @@
 // Pet object; Follows player.
 
-class Pet extends PhysicsObject {
+import Shape from "../shape.js"
+import PhysicsObject from "./object.js"
+
+export default class Pet extends PhysicsObject {
 	//Initialize: pet id (item id), x pos, y pos, 'owner' object to follow
 	constructor (spatialHash, id, x, y, owner) {
 		// Collision
