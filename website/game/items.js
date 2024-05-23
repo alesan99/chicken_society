@@ -25,8 +25,25 @@ function useItem(itemId, itemType) {
 	// Set clothing item
 	// Returns true if item was removed
 
+	// Equip Pet
+	if (itemType == "pet") {
+		// Equip
+		let equipped = false
+		if (PROFILE[itemType] == itemId) { // unequip
+			PROFILE[itemType] = false;
+		} else { // prompt to equip
+			if (SAVEDATA.pet.id != itemId) {
+				// Prompt to adopt a new pet
+				openMenu("adoptMenu", itemId)
+				return false;
+			} else {
+				PROFILE[itemType] = itemId;
+			}
+		}
+		PLAYER.updateProfile(PROFILE, "sendToServer");
 	// Equip clothing or item
-	if (PROFILE.hasOwnProperty(itemType)) {
+	} else if (PROFILE.hasOwnProperty(itemType)) {
+		// Equip
 		let equipped = false
 		if (PROFILE[itemType] == itemId) { // unequip
 			PROFILE[itemType] = false;
@@ -34,6 +51,7 @@ function useItem(itemId, itemType) {
 			equipped = true
 			PROFILE[itemType] = itemId;
 		}
+		console.log("ERmm")
 		PLAYER.updateProfile(PROFILE, "sendToServer");
 
 		// Use consumable item
@@ -78,4 +96,17 @@ function useItem(itemId, itemType) {
 		}
 	}
 	return false
+}
+
+// Adopt a new pet
+// Replaces current pet data and assigns a name
+function adoptPet(itemId, name="") {
+	// Erase exisiting data
+	SAVEDATA.pet = makePetData()
+	// Set new pet data
+	SAVEDATA.pet.name = name
+	SAVEDATA.pet.id = itemId
+
+	PROFILE.pet = itemId
+	PLAYER.updateProfile(PROFILE, "sendToServer");
 }

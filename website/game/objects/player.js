@@ -198,9 +198,14 @@ class Player {
 	// Stop moving towards target
 	stop() {
 		let char = this.obj
-		// Stop movement
+		// Stop mouse movement
 		this.target = false
 		char.move(0, 0)
+		// Stop keyboard movement
+		this.arrowKeys.left = false
+		this.arrowKeys.right = false
+		this.arrowKeys.up = false
+		this.arrowKeys.down = false
 	}
 
 	mouseClick(button, x, y) {

@@ -18,7 +18,7 @@ function makeSaveData() {
 			item: {},
 
 			furniture: {},
-			pet: {}
+			pet: {pillbug: 1}
 		},
 		nuggets: 100,
 		
@@ -33,15 +33,7 @@ function makeSaveData() {
 
 		// Equipped pet status
 		// Persists between play sessions, but only stored for 1 pet at a time
-		pet: {
-			name: "",
-			happiness: 0.8, // 0-1
-			health: 1, // 0-1
-			hunger: 1, // 0-1
-			age: 0, // in days
-			lastUpdate: 0, // timestamp of last update
-			disease: false
-		},
+		pet: makePetData(),
 
 		quests: {
 			// Quest progress
@@ -110,6 +102,19 @@ function makeProfile() {
 	}
 	
 	return profile
+}
+
+function makePetData() {
+	return {
+		name: "", // Custom name of pet
+		id: "", // Item ID of pet
+		happiness: 0.8, // 0-1
+		health: 1, // 0-1
+		hunger: 1, // 0-1
+		age: 0, // in days
+		lastUpdate: 0, // timestamp of last update
+		disease: false
+	}
 }
 
 // Saving SaveData

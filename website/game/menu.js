@@ -57,10 +57,14 @@ class Menu {
 
 	mouseClick(button, x, y) {
 		// Test click on all buttons
+		let buttonClicked = false
 		for (const [name, button] of Object.entries(this.buttons)) {
 			if (button.click(button, x, y)) {
-				return true
+				buttonClicked = true
 			}
+		}
+		if (buttonClicked) {
+			return true
 		}
 		// Don't click on anything below if mouse is in menu
 		if (checkMouseInside(this.x, this.y, this.w, this.h)) {

@@ -65,6 +65,7 @@ function loadGameAssets() {
 
 	// MENUS
 	IMG.menu = new RenderImage("assets/gui/menu.png")
+	IMG.popup = new RenderImage("assets/gui/popup.png")
 	IMG.items = new RenderImage("assets/gui/items.png")
 	SPRITE.items = new Sprite(IMG.items, 6,1, 30,30, 0,0, 1,1)
 	IMG.map = new RenderImage("assets/gui/map.png")

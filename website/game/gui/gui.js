@@ -54,7 +54,7 @@ class Button {
 		this.hover = this.checkMouseInside();
 		if (this.hover) {//this should only click if you're hovering over the button
 			this.held = true
-			return true
+			return true // ignore all other buttons
 		}
 	}
 	clickRelease(button, x, y){
@@ -248,7 +248,7 @@ class TextField extends Button {
 			}
 			return true
 		} else {
-			if (this.textAction) {
+			if (this.typing && this.textAction) {
 				this.textAction(this.text)
 			}
 			this.typing = false
@@ -257,6 +257,16 @@ class TextField extends Button {
 
 	clickRelease() {
 		super.clickRelease()
+		if (this.hover) {
+
+		} else {
+			// Lazy hack
+			// Allows field to be unselected when a different button is pressed
+			if (this.typing && this.textAction) {
+				this.textAction(this.text)
+			}
+			this.typing = false
+		}
 	}
 }
 

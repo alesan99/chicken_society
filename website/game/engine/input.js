@@ -22,6 +22,10 @@ function keyPressed(event) {
 		return;
 	}
 	event.preventDefault()
+	if (event.repeat) {
+		// Ignore repeated key presses when holding down key
+		return;
+	}
 	stateKeyPress(event.key, event.code)
 }
 function keyReleased(event) {
@@ -30,6 +34,10 @@ function keyReleased(event) {
 		return;
 	}
 	event.preventDefault()
+	if (event.repeat) {
+		// Ignore repeated key presses when holding down key
+		return;
+	}
 	stateKeyRelease(event.key, event.code)
 }
 
