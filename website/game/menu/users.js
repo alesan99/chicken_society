@@ -3,7 +3,7 @@
 import {Menu, MENUS} from "../menu.js"
 import {Button} from "../gui/gui.js"
 import {RGBtoHEX, addNuggets} from "../savedata.js"
-import {SAVEDATA} from "../main.js"
+import {DRAW, SAVEDATA} from "../main.js"
 import {IMG, SPRITE} from "../assets.js"
 
 MENUS["usersMenu"] = new class extends Menu {
