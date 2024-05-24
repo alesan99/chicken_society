@@ -1,8 +1,14 @@
 {
     "name": "Heroin",
     "description": "Black Tar Heroin fresh off the street.",
-    "cost": 10,
+    "cost": 20,
     "consumable": true,
+
+    "center": [
+        [30,30],
+        [30,30],
+        [30,30]
+    ],
 
     "statusEffect": "drowsy",
     "statusEffectChance": 1.0,

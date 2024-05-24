@@ -55,8 +55,9 @@
 				"items": {
 					"item": {
 						"seeds": true,
-						"black_coffee": true,
-						"gun": {"items": {"black_coffee": 1, "seeds": 5}}
+						"kernels": true,
+						"sunflower_seeds": {"items": {"seeds": 2}},
+						"cannabis_seeds": {"items": {"sunflower_seeds": 10}},
 					}
 				}
 			}

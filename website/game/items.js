@@ -51,7 +51,6 @@ function useItem(itemId, itemType) {
 			equipped = true
 			PROFILE[itemType] = itemId;
 		}
-		console.log("ERmm")
 		PLAYER.updateProfile(PROFILE, "sendToServer");
 
 		// Use consumable item

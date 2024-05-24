@@ -1,0 +1,11 @@
+{
+    "name": "Toothpick",
+    "description": "A toofpick changes everythang.",
+    "cost": 1,
+
+    "center": [
+        [0,-43],
+        [-9,-33],
+        [0,-40]
+    ]
+}
