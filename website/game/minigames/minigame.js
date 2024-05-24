@@ -1,7 +1,26 @@
 // Minigame state;
 // Runs a given minigame script while allowing the player to still chat and exit the game
+import { DRAW, SAVEDATA, WORLD } from "../main.js"
+import Notify from "../gui/notification.js"
+import { conditionsUpdate } from "../area.js"
+import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, ITEMS } from "../assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
+import { MENUS } from "../menu.js"
+import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, CHAT, MINIGAME } from "../world.js"
+import { NETPLAY } from "../main.js"
+import { canvasWidth, canvasHeight, RenderImage } from "../engine/render.js"
+import { Sprite, Animation } from "../engine/sprite.js"
+import Shape from "../shape.js"
+import AudioSystem from "../engine/audio.js"
+import {PhysicsObject} from "../objects/objects.js"
+import QuestSystem from "../quests.js"
+import Transition from "../transition.js"
+import { setState } from "../state.js"
+import { Button, TextField, ColorSlider, ScrollBar } from "../gui/gui.js"
+import { getMousePos } from "../engine/input.js"
 
 var MINIGAMES = {}
+
 class MinigameState {
 	constructor() {
 		this.name = "minigame"

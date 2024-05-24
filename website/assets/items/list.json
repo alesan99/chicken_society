@@ -7,16 +7,13 @@
     "scarf",
     "silverchains"
   ],
+  "pet": [
+    "pillbug"
+  ],
   "head": [
     "hoodie",
     "snapback",
     "tophat"
-  ],
-  "face": [
-    "catears",
-    "sunglasses",
-    "toothpick",
-    "visors"
   ],
   "furniture": [
     "frame",
@@ -25,8 +22,11 @@
     "rug",
     "table"
   ],
-  "pet": [
-    "pillbug"
+  "face": [
+    "catears",
+    "sunglasses",
+    "toothpick",
+    "visors"
   ],
   "item": [
     "beer",

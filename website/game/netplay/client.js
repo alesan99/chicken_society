@@ -1,5 +1,23 @@
 // Netplay module; Communicates with the server to allow multiplayer
+
+import {DRAW, SAVEDATA, PROFILE, WORLD, CURSOR} from "../main.js"
+import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture} from "../savedata.js"
+import {openMenu, closeMenu, getOpenMenu} from "../state.js"
+import {OBJECTS, PLAYER, PLAYER_CONTROLLER, CHARACTER, PHYSICSWORLD, CHAT} from "../world.js"
+import QuestSystem from "../quests.js"
+import Transition from "../transition.js"
+import AudioSystem from "../engine/audio.js"
+import Notify from "../gui/notification.js"
+import {getState} from "../state.js"
+import TimedEventsSystem from "../timedevents.js"
+import {checkCondition} from "../area.js"
+import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js"
+import { canvasWidth, canvasHeight } from "../engine/render.js"
+import {Furniture} from "../objects/objects.js"
+import { getMousePos } from "../engine/input.js"
 import PetRaceSystem from "../petrace.js"
+
 var Netplay
 if (typeof io !== 'undefined') { // Check if communication module was loaded (it isn't when testing the game)
 var socket = io(); // No URL because it defaults to trying to connect to host that serves page

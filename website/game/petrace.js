@@ -1,13 +1,15 @@
 // Client Pet Race code
 
-import { SAVEDATA } from "./main.js"
+import { DRAW, SAVEDATA } from "./main.js"
 import Notify from "./gui/notification.js"
 import { conditionsUpdate } from "./area.js"
-import { loadJSON5, ITEMS } from "./assets.js"
+import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, ITEMS } from "./assets.js"
 import { addNuggets, addItem } from "./savedata.js"
 import { MENUS } from "./menu.js"
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "./world.js"
 import { NETPLAY } from "./main.js"
+import { canvasWidth, canvasHeight } from "./engine/render.js"
+import AudioSystem from "./engine/audio.js"
 
 const PetRaceSystem = (function() {
 	// Animations
