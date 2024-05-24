@@ -1,7 +1,21 @@
 // Pet object; Follows player.
 
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js"
+import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
 import Shape from "../shape.js"
-import PhysicsObject from "./object.js"
+import { canvasWidth, canvasHeight } from "../engine/render.js"
+import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "../world.js"
+import { Animation } from "../engine/sprite.js"
+import QuestSystem from "../quests.js"
+import DialogueSystem from "../dialogue.js"
+import AudioSystem from "../engine/audio.js"
+import Transition from "../transition.js"
+import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js"
+import { getMousePos } from "../engine/input.js"
+import { vec2Unit } from "../lib/vec2.js"
+import {PhysicsObject,Character,Player,NPC,Trigger,Wall,Warp,Furniture,Particle} from "./objects.js"
+import {openMenu, closeMenu, getOpenMenu} from "../state.js"
 
 export default class Pet extends PhysicsObject {
 	//Initialize: pet id (item id), x pos, y pos, 'owner' object to follow

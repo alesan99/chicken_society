@@ -1,6 +1,18 @@
 // Dialogue System
 // NOT the speech bubbles that apeear when when you first talk to an NPC
 
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js"
+import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "./assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "./savedata.js"
+import {openMenu, closeMenu, getOpenMenu} from "./state.js"
+import {PLAYER, PLAYER_CONTROLLER} from "./world.js"
+import QuestSystem from "./quests.js"
+import Transition from "./transition.js"
+import AudioSystem from "./engine/audio.js"
+import {checkCondition} from "./area.js"
+import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js"
+import { canvasWidth, canvasHeight } from "./engine/render.js"
+
 const DialogueSystem = (function() {
 	let open = false // Dialogue is open?
 	let stage = 0 // Stage in dialogue sequence
@@ -297,7 +309,7 @@ const DialogueSystem = (function() {
 			responseButtons = []
 
 			// Check which responses are available
-			responses = []
+			let responses = []
 			for (let i = 0; i < allResponses.length; i++) {
 				let r = allResponses[i]
 				let doAdd = true

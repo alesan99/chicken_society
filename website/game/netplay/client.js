@@ -1,4 +1,5 @@
 // Netplay module; Communicates with the server to allow multiplayer
+import PetRaceSystem from "../petrace.js"
 var Netplay
 if (typeof io !== 'undefined') { // Check if communication module was loaded (it isn't when testing the game)
 var socket = io(); // No URL because it defaults to trying to connect to host that serves page

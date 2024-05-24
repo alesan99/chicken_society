@@ -2,6 +2,7 @@
 // For example: the world shouldn't update if you're playing a minigame
 // Functions to interact with states
 import {MENUS} from "./menu.js"
+import {PLAYER_CONTROLLER} from "./world.js"
 
 let game_state = false
 let game_state_name = ""

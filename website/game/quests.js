@@ -5,9 +5,10 @@
 import { SAVEDATA } from "./main.js"
 import Notify from "./gui/notification.js"
 import { conditionsUpdate } from "./area.js"
-import { loadJSON5 } from "./assets.js"
+import { loadJSON5, ITEMS } from "./assets.js"
 import { addNuggets, addItem } from "./savedata.js"
 import { MENUS } from "./menu.js"
+import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "./world.js"
 
 const QuestSystem = (function() {
 	let questData = {}

@@ -1,5 +1,14 @@
 // Client Pet Race code
 
+import { SAVEDATA } from "./main.js"
+import Notify from "./gui/notification.js"
+import { conditionsUpdate } from "./area.js"
+import { loadJSON5, ITEMS } from "./assets.js"
+import { addNuggets, addItem } from "./savedata.js"
+import { MENUS } from "./menu.js"
+import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "./world.js"
+import { NETPLAY } from "./main.js"
+
 const PetRaceSystem = (function() {
 	// Animations
 	let animations = [0, 0,0,0,0]; // values 0-1
@@ -96,3 +105,5 @@ const PetRaceSystem = (function() {
 	};
 	
 return functions; })()
+
+export default PetRaceSystem;

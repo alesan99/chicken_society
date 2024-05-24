@@ -17,8 +17,7 @@ import { canvasWidth, canvasHeight } from "./engine/canvas.js"
 import { RenderImage } from "./engine/render.js"
 import { IMG, SFX, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js"
 import { SpatialHash, updatePhysics, drawPhysics } from "./physics.js"
-import Objects from "./objects/objects.js"
-import Player from "./objects/player.js"
+import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js"
 
 import { PROFILE, SAVEDATA } from "./main.js"
 
@@ -48,6 +47,7 @@ import {} from "./menu/adopt.js"
 import { MinigameState } from "./minigames/minigame.js"
 
 import { loadAreaFile } from "./area.js"
+import PetRaceSystem from "./petrace.js"
 
 const World = class {
 	constructor (area="hub") {
@@ -76,7 +76,7 @@ const World = class {
 		// Initialize all characters
 		NPCS = {}
 		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Objects.Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area)
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area)
 		
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller

@@ -1,4 +1,10 @@
 // Item button grid; Imagine the inventory from minecraft
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js"
+import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js"
+import { getMousePos } from "../engine/input.js"
+import {Button, ScrollBar} from "./gui.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
+
 class ItemGrid {
 	// Callback function, x pos, y pos, cell width, cell height, grid width, grid height
     constructor(action, list, selectedFunc, x, y, cw=56, ch=56, gw, gh) {
@@ -229,3 +235,5 @@ class ItemGrid {
 		}
     }
 }
+
+export {ItemGrid};

@@ -1,10 +1,17 @@
 //Customize Player Menu; Menu with options to modify player profile and customize chicken
 
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js"
+import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js"
+import {canvasWidth, canvasHeight} from "../engine/render.js"
 import {Menu, MENUS} from "../menu.js"
-import {Button} from "../gui/gui.js"
-import {RGBtoHEX, addNuggets} from "../savedata.js"
-import {DRAW, SAVEDATA} from "../main.js"
-import {IMG, SPRITE} from "../assets.js"
+import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js"
+import {ItemGrid} from "../gui/itemgrid.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
+import {openMenu, closeMenu, getOpenMenu} from "../state.js"
+import {PLAYER, PLAYER_CONTROLLER} from "../world.js"
+import QuestSystem from "../quests.js"
+import Transition from "../transition.js"
+import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js"
 
 MENUS["shop"] = new class extends Menu {
 	//Initialize
