@@ -7,23 +7,16 @@
     "scarf",
     "silverchains"
   ],
-  "face": [
-    "catears",
-    "visors"
-  ],
-  "item": [
-    "black_coffee",
-    "beer",
-    "gun",
-    "heroin",
-    "seeds",
-    "snake_book",
-    "bullet"
-  ],
   "head": [
     "hoodie",
     "snapback",
     "tophat"
+  ],
+  "face": [
+    "catears",
+    "sunglasses",
+    "toothpick",
+    "visors"
   ],
   "furniture": [
     "frame",
@@ -34,5 +27,17 @@
   ],
   "pet": [
     "pillbug"
+  ],
+  "item": [
+    "beer",
+    "black_coffee",
+    "bullet",
+    "cannabis_seeds",
+    "gun",
+    "heroin",
+    "kernels",
+    "seeds",
+    "snake_book",
+    "sunflower_seeds"
   ]
 }

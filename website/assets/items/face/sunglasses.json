@@ -1,0 +1,11 @@
+{
+    "name": "Sunglasses",
+    "description": "Keeps your peepers safe from the sun.",
+    "cost": 8,
+
+    "center": [
+        [32,5],
+        [32,7],
+        [32,6]
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "name": "Cannabis Seeds",
+    "description": "A novelty collection item. Nothing more.",
+    "cost": 5,
+    "consumable": true,
+
+    "center": [
+        [18,18],
+        [18,18],
+        [18,18]
+    ],
+
+    "statusEffect": "drowsy",
+    "statusEffectChance": 1.0,
+    "statusEffectDuration": 20.0,
+
+    "food": 0.1
+}

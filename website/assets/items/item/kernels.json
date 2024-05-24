@@ -1,0 +1,14 @@
+{
+    "name": "Corn Kernels",
+    "description": "Straight from the cob.",
+    "cost": 3,
+    "consumable": true,
+
+    "center": [
+        [18,18],
+        [18,18],
+        [18,18]
+    ],
+
+    "food": 0.3
+}

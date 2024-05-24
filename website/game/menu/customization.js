@@ -128,9 +128,9 @@ MENUS["customization"] = new class extends Menu {
 		//this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
 	}
 
+	// Filter inventory for item grid
 	filterInventory(category) {
 		this.filter = category
-		this.selectedItem = false
 		this.inventory.length = 0
 		if (category == "all") {
 			for (let category in SAVEDATA.items) {
@@ -144,6 +144,11 @@ MENUS["customization"] = new class extends Menu {
 			}
 		}
 		this.buttons["inventory"].updateList(this.inventory)
+
+		// un select item if its no longer in sorted inventory
+		if (this.selectedItemDescription && !this.inventory.includes(this.selectedItem)) {
+			this.selectedItem = false
+		}
 	}
 	
 	draw() {

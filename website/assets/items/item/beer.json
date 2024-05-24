@@ -1,8 +1,14 @@
 {
     "name": "Beer",
-    "description": "This'll get you drunk instantly.",
+    "description": "This'll get you drunk instantly if you're a lightweight.",
     "cost": 4,
     "consumable": true,
+
+    "center": [
+        [30,30],
+        [30,30],
+        [30,30]
+    ],
 
     "statusEffect": "drunk",
     "statusEffectChance": 0.5,

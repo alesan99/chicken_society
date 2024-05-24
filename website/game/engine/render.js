@@ -37,8 +37,8 @@ class Render {
 
 	// Draw image
 	// ImageObject, [image bounds (x, y, w, h)] or null, x pos., y pos., rotation, scale x, scale y, offset x, offset y
-	image(img, anim, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
-		let transform = ((r != 0) || (sx != 1) || (sy != 1) || (ox != 0) || (ox != 0)) // For perfomance reasons, only attempt to transform if settings are not default
+	image(img, anim, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0, yas) {
+		let transform = ((r != 0) || (sx != 1) || (sy != 1) || (ox != 0) || (oy != 0)) // For perfomance reasons, only attempt to transform if settings are not default
 		if (transform) {
 			// Transform image
 			this.push() // save current render state to undo all transformations
