@@ -108,4 +108,8 @@ function adoptPet(itemId, name="") {
 
 	PROFILE.pet = itemId
 	PLAYER.updateProfile(PROFILE, "sendToServer");
+
+	if (PLAYER.petObj) {
+		PLAYER.petObj.updateProfile(SAVEDATA.pet, "sendToServer")
+	}
 }
