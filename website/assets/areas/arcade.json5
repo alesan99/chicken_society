@@ -160,6 +160,22 @@
 			"minigameName": "runner",
 			"cost": 1
 		},
+		"wormdlerMinigame": {
+			"x": 107,
+			"y": 529,
+			"shape": [-40,-40, 40,-40, 40,40, -40,40],
+
+			"clickable": [-70,-100, 10,-100, 10,40, -70,40],
+			"icon": {
+				"frame": 2,
+				"x": -20,
+				"y": -100
+			},
+
+			"action": "minigame",
+			"minigameName": "wormdle",
+			"cost": 1
+		},
 		
 		"clawMachine": {
 			"x": 700,
