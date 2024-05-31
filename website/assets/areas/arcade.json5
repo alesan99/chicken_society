@@ -144,12 +144,13 @@
 	},
 
 	"triggers": {
+		// Chicken Run Arcade Machine
 		"runnerMinigame": {
 			"x": 160,
 			"y": 458,
-			"shape": [-40,-40, 40,-40, 40,40, -40,40],
+			"shape": [-40,-30, 40,-30, 40,30, -40,30],
 
-			"clickable": [-70,-100, 10,-100, 10,40, -70,40],
+			"clickable": [-69,-62, -38,-90, 11,-72, 12,-12, -26,37],
 			"icon": {
 				"frame": 2,
 				"x": -20,
@@ -160,12 +161,13 @@
 			"minigameName": "runner",
 			"cost": 1
 		},
-		"wormdlerMinigame": {
+		// Wormdle Arcade Machine
+		"wormdleMinigame": {
 			"x": 107,
 			"y": 529,
-			"shape": [-40,-40, 40,-40, 40,40, -40,40],
+			"shape": [-40,-30, 40,-30, 40,30, -40,30],
 
-			"clickable": [-70,-100, 10,-100, 10,40, -70,40],
+			"clickable": [-95,-74, -22,-130, 25,-37, -28,29, -94,29],
 			"icon": {
 				"frame": 2,
 				"x": -20,
@@ -177,6 +179,7 @@
 			"cost": 1
 		},
 		
+		// Claw Machine
 		"clawMachine": {
 			"x": 700,
 			"y": 279,

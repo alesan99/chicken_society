@@ -72,6 +72,7 @@ MINIGAMES["wormdle"] = new class {
 	}
 
 	win() {
+		// Win when word is guessed
 		if (this.won) {
 			return
 		}
@@ -180,7 +181,7 @@ MINIGAMES["wormdle"] = new class {
 
 		// Word
 		if (this.worm) {
-			let wormWordStart = Math.floor(this.worm.letters.length/this.word.length)*this.word.length
+			let wormWordStart = (Math.ceil(this.worm.letters.length/this.word.length)-1)*this.word.length
 			for (let i = 0; i < this.word.length; i++) {
 				let letter = this.worm.letters[i+wormWordStart]
 				if (letter) {
@@ -263,7 +264,22 @@ MINIGAMES["wormdle"] = new class {
 		let places = []
 		for (let x = 0; x < this.gridW; x++) {
 			for (let y = 0; y < this.gridH; y++) {
+				let pass = false
+				// space must be empty
 				if (this.grid.getCell(x, y) === false) {
+					pass = true
+				}
+				// space cannot be in front of snake
+				if (this.worm.dir == "down" && y == this.worm.y-1 && x == this.worm.x) {
+					pass = false
+				} else if (this.worm.dir == "up" && y == this.worm.y+1 && x == this.worm.x) {
+					pass = false
+				} else if (this.worm.dir == "left" && x == this.worm.x+1 && y == this.worm.y) {
+					pass = false
+				} else if (this.worm.dir == "right" && x == this.worm.x-1 && y == this.worm.y) {
+					pass = false
+				}
+				if (pass) {
 					places.push([x,y])
 				}
 			}
@@ -275,6 +291,8 @@ MINIGAMES["wormdle"] = new class {
 	}
 
 	getLetterCorrect(letter, i) {
+		// Returns if letter is in word
+		// 0 = incorrect, 1 = correct letter, 2 = correct position
 		let correct = 0
 		if (this.word[i] == letter) {
 			correct = 2
@@ -285,16 +303,20 @@ MINIGAMES["wormdle"] = new class {
 	}
 
 	keyPress(key) {
-		if (key == "ArrowDown") {
-			this.worm.dir = "down"
-		} else if (key == "ArrowUp") {
-			this.worm.dir = "up"
-		} else if (key == "ArrowLeft") {
-			this.worm.dir = "left"
-		} else if (key == "ArrowRight") {
-			this.worm.dir = "right"
+		// Change direction
+		if (this.started) {
+			if (key == "ArrowDown") {
+				this.worm.turn("down")
+			} else if (key == "ArrowUp") {
+				this.worm.turn("up")
+			} else if (key == "ArrowLeft") {
+				this.worm.turn("left")
+			} else if (key == "ArrowRight") {
+				this.worm.turn("right")
+			}
 		}
 
+		// Press any button to start
 		if (!this.started && this.loaded) {
 			this.start()
 		}
@@ -305,7 +327,28 @@ MINIGAMES["wormdle"] = new class {
 	}
 
 	mouseClick(button, x, y) {
+		// Change direction
+		if (this.started) {
+			let [gridX, gridY] = [(x-this.gridX)/this.gridSize, (y-this.gridY)/this.gridSize]
+			if (Math.abs(gridX - this.worm.x) > Math.abs(gridY - this.worm.y)) {
+				if (gridX > this.worm.x) {
+					this.worm.turn("right")
+				} else if (gridX < this.worm.x) {
+					this.worm.turn("left")
+				}
+			} else {
+				if (gridY > this.worm.y) {
+					this.worm.turn("down")
+				} else if (gridY < this.worm.y) {
+					this.worm.turn("up")
+				}
+			}
+		}
 
+		// Press any button to start
+		if (!this.started && this.loaded) {
+			this.start()
+		}
 	}
 }()
 
@@ -388,6 +431,28 @@ Worm = class {
 				this.addSegment(cell, nx, ny)
 				this.game.addLetters()
 			}
+		}
+	}
+	turn(dir) {
+		// Change direction of movement
+		let pass = true
+		// Check if not turning back onto previous segment
+		let prevSeg = this.segs[this.segs.length-2]
+		if (prevSeg) {
+			let [px, py] = prevSeg
+			if (dir == "down" && py == this.y+1) {
+				pass = false
+			} else if (dir == "up" && py == this.y-1) {
+				pass = false
+			} else if (dir == "left" && px == this.x-1) {
+				pass = false
+			} else if (dir == "right" && px == this.x+1) {
+				pass = false
+			}
+		}
+		// Turn if pass
+		if (pass) {
+			this.dir = dir
 		}
 	}
 	move(nx, ny) {
