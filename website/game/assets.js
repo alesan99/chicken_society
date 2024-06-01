@@ -134,7 +134,7 @@ function loadGameAssets() {
 	FONT.caption = new RenderFont("Arial", 20)
 	FONT.nametag = new RenderFont("Verdana", 16)
 	FONT.description = new RenderFont("Arial", 18)
-	FONT.speechBubble = new RenderFont("Courier New", 18)
+	FONT.speechBubble = new RenderFont("Arial", 17)
 	FONT.guiLabel = new RenderFont("Verdana", 18)
 }
 

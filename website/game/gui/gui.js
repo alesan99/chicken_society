@@ -4,6 +4,8 @@ class Button {
 		this.label = label;
 		this.labelJustify = "center";
 
+		this.textColor = [112, 50, 16];
+
 		if (graphic) {
 			// If specified, render image for button with frames
 			if (graphic.image) {
@@ -16,6 +18,12 @@ class Button {
 			}
 			if (graphic.visible != null) {
 				this.visible = graphic.visible;
+			}
+			if (graphic.labelJustify) {
+				this.labelJustify = graphic.labelJustify;
+			}
+			if (graphic.textColor) {
+				this.textColor = graphic.textColor;
 			}
 		}
 		this.action = action;
@@ -112,7 +120,7 @@ class Button {
 		} else if (this.label) {
 			// Label
 			DRAW.setFont(FONT.guiLabel)
-			DRAW.setColor(112, 50, 16,1)
+			DRAW.setColor(this.textColor[0], this.textColor[1], this.textColor[2],1)
 			if (this.labelJustify == "center") {
 				DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify)
 			} else if (this.labelJustify == "left") {

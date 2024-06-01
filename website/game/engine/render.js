@@ -149,17 +149,43 @@ class Render {
 		let words = text.split(' ');
 		let currentLine = '';
 
-		for (let i = 0; i < words.length; i++) {
+		let i = 0;
+		while (i < words.length) {
+			// Add each word individually to the current line until it exceeds the width
 			let word = words[i];
 			let testLine = currentLine + word + ' ';
 			let testWidth = this.getTextWidth(testLine);
 
 			if (testWidth > width) {
-				wrappedText.push(currentLine.trim());
+				// Width of line exceeds the width of the rectangle
+
+				// Check if word should be broken
+				let wordWidth = this.getTextWidth(word);
+				if (wordWidth > width) {
+					// Word is too long to fit on a line
+					for (let j = 0; j < word.length; j++) {
+						let partialWord = word.substring(0, j);
+						let partialWidth = this.getTextWidth(partialWord);
+						if (partialWidth > width) {
+							// Insert partial words to list of words
+							words.splice(i+1, 0, word.substring(j-1));
+							word = word.substring(0,j);
+							break
+						}
+					}
+				}
+				
+				// Move onto next line
+				let currentLineTrim = currentLine.trim();
+				if (currentLineTrim.length > 0) { // Don't add empty lines (happens when breaking up a word)
+					wrappedText.push(currentLineTrim);
+				}
 				currentLine = word + ' ';
 			} else {
+				// Add word to current line
 				currentLine = testLine;
 			}
+			i++;
 		}
 
 		wrappedText.push(currentLine.trim());
