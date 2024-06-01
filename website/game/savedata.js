@@ -162,6 +162,14 @@ function loadSaveData(saveData) {
 	return retrievedObject
 }
 
+function replaceObjectValues(objectTo, objectFrom) {
+	// Replace all values in objectTo with values from objectFrom
+	// This is only needed because
+	for (const key in objectFrom) {
+		objectTo[key] = objectFrom[key]
+	}
+}
+
 // Functions for modifying save data:
 // Remove nugget currency.
 function removeNuggets(nuggets) {
@@ -300,4 +308,4 @@ function HEXtoRGB(hex) {
 	return [red, green, blue];
 }
 
-export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB}
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues}

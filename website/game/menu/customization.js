@@ -6,7 +6,7 @@ import {canvasWidth, canvasHeight} from "../engine/render.js"
 import {Menu, MENUS} from "../menu.js"
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js"
 import {ItemGrid} from "../gui/itemgrid.js"
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, replaceObjectValues} from "../savedata.js"
 import {openMenu, closeMenu, getOpenMenu} from "../state.js"
 import {PLAYER, PLAYER_CONTROLLER} from "../world.js"
 import QuestSystem from "../quests.js"
@@ -28,16 +28,16 @@ MENUS["customization"] = new class extends Menu {
 
 		// Profile loading from local browser storage (NOT from server)
 		this.buttons["load"] = new Button("Load", ()=>{
-			let data = loadSaveData();
+			let data = loadSaveData(SAVEDATA);
 			if (data) {
-				SAVEDATA = data;
-				PROFILE = SAVEDATA.profile;
+				replaceObjectValues(SAVEDATA, data);
+				replaceObjectValues(PROFILE, SAVEDATA.profile);
 				PLAYER.updateProfile(PROFILE, "sendToServer");
 			}
 		}, null, 263,404, 100,32)
 		this.buttons["save"] = new Button("Save", ()=>{
 			saveSaveData(SAVEDATA);
-			PROFILE = SAVEDATA.profile;
+			replaceObjectValues(PROFILE, SAVEDATA.profile);
 		}, null, 373,404, 100,32)
 
 		// Name
