@@ -74,15 +74,19 @@ const PetRaceSystem = (function() {
 		},
 
 		newPet(data) {
-			// Hide pet
-			if (PLAYER && PLAYER.petObj) {
-				// Look if pet is in the race
-				let pet = PLAYER.petObj
-				for (let i = 1; i < data.length; i++) {
-					if (pet.id == data[i][0] && pet.name == data[i][1]) {
-						pet.hidden = true;
-						inRace = true;
-						break;
+			// Hide pets
+			for (const [id, char] of Object.entries(CHARACTER)) {
+				if (char && char.petObj) {
+					// Look if pet is in the race
+					let pet = char.petObj
+					for (let i = 1; i < data.length; i++) {
+						if (pet.id == data[i][0] && pet.name == data[i][1]) {
+							pet.hidden = true;
+							if (char == PLAYER) {
+								inRace = true;
+							}
+							break;
+						}
 					}
 				}
 			}
@@ -94,12 +98,14 @@ const PetRaceSystem = (function() {
 		},
 
 		end() {
-			// Show pet again
-			if (PLAYER && PLAYER.petObj) {
-				PLAYER.petObj.hidden = false;
-				if (inRace) {
-					// Pet should get tired after racing
-					PLAYER.petObj.health -= 0.08;
+			// Show pets again
+			for (const [id, char] of Object.entries(CHARACTER)) {
+				if (char && char.petObj) {
+					char.petObj.hidden = false;
+					if (char == PLAYER && inRace) {
+						// Pet should get tired after racing
+						char.petObj.health -= 0.08;
+					}
 				}
 			}
 			inRace = false;

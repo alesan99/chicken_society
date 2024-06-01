@@ -12,7 +12,7 @@ class PetRaceClass {
 
 		this.maxPets = 4;
 
-		this.waitTime = 10; // sec
+		this.waitTime = 30; // sec
 		this.waitTimer = false;
 
 		this.pets = [];
