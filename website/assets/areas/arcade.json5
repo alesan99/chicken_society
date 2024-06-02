@@ -38,7 +38,7 @@
 				"color": "#c8d2ff",
 				"head": false,
 				"face": "visors",
-				"body": "alesanaccessories"
+				"body": "bud_accessories"
 			},
 			"x": 406,
 			"y": 290,
@@ -69,7 +69,7 @@
 			"roamRadius": false,
 			"speechBubble": [
 				"Psst. Press the emote button in the chat HUD.",
-				"Psst. Type /head tophat",
+				"Psst. Type /head top_hat",
 				"Psst. Type /body scarf",
 				"Psst. Press the '/' key to type in the chat.",
 				"Psst. Change your name with /name YOURNAME"
