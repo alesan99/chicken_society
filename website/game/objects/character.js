@@ -328,32 +328,8 @@ export default class Character extends PhysicsObject {
 		this.bubbleTimer = 0
 
 		// Wrap text so it fits in text bubble
-		this.bubbleTextWrapped = []
-
-		let fullText = this.bubbleText
-		let lineLength = 15 // How many characters can fit in a single line?
-		let line = 0
-		let i = 0
-		while (i < fullText.length) {
-			let i2 = Math.min(i+lineLength, fullText.length)
-			let lineString = fullText.substring(i, i2)
-			// Check if line ended in the middle of a word
-			let lastChar = fullText.substring(i2, i2)
-			let nextChar = fullText.substring(i2+1, i2+1)
-			// Wrap at closest space if next word is cut-off
-			if (lineString.length == lineLength && lastChar != " " && nextChar != " ") {
-				let closestSpace = lineString.lastIndexOf(" ")
-				if (closestSpace != -1) { // Only separate at last space if an instance was found
-					i2 = i+closestSpace
-				}
-			}
-
-			// Add line to list of lines
-			let textSegment = fullText.substring(i, i2).trim()
-			this.bubbleTextWrapped.push(textSegment)
-			i = i2+1
-			line += 1
-		}
+		DRAW.setFont(FONT.speechBubble)
+		this.bubbleTextWrapped = DRAW.wrapText(this.bubbleText, 156)
 	}
 
 	// Play emote animation; will stop when player moves

@@ -194,7 +194,14 @@ export default class NPC {
 		for (let i = 0; i < replies; i++) {
 			let label = options[i][0]
 			let func = options[i][1]
-			let button = new Button(label, func, {image: IMG.replyBubble, frames:[SPRITE.replyBubble.getFrame(0),SPRITE.replyBubble.getFrame(0),SPRITE.replyBubble.getFrame(1)]}, this.obj.x+66*i-(replies*66/2), this.obj.y-275, 64,32)
+			let button = new Button(label, func, {
+				image: IMG.replyBubble,
+				frames:[
+					SPRITE.replyBubble.getFrame(0),
+					SPRITE.replyBubble.getFrame(0),
+					SPRITE.replyBubble.getFrame(1)],
+				textColor: [30, 30, 32]
+				}, this.obj.x+66*i-(replies*66/2), this.obj.y-275, 64,32)
 			this.replyButtons.push(button)
 		}
 	}
