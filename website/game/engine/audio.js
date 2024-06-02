@@ -69,3 +69,5 @@ const AudioSystem = (function() {
 	};
 	
 	return functions; })()
+
+export default AudioSystem;

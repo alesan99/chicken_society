@@ -1,18 +1,30 @@
 //Load images, audio, and other data
 
-IMG = []
-SPRITE = []
-ANIM = []
-FONT = []
-MUSIC = []
-SFX = []
+import LoadingScreen from "./loading.js"
+import AudioSystem from "./engine/audio.js"
+import { RenderImage, RenderFont } from "./engine/render.js"
+import { Sprite } from "./engine/sprite.js"
 
-BACKGROUND = []
-BACKGROUNDIMG = []
-BACKGROUNDSPRITE = []
-BACKGROUNDANIM = []
+var IMG = []
+var SPRITE = []
+var ANIM = []
+var FONT = []
+var MUSIC = []
+var SFX = []
 
-DIRECTORYTREE = {}
+var ITEMS
+var HEADOFFSET
+var FACEOFFSET
+var BODYOFFSET
+var ITEMOFFSET
+var CHICKENROTATION
+
+var BACKGROUND = []
+var BACKGROUNDIMG = []
+var BACKGROUNDSPRITE = []
+var BACKGROUNDANIM = []
+
+//DIRECTORYTREE = {}
 
 function loadGameAssets() {
 	// Loading Screen
@@ -250,3 +262,5 @@ function loadJSON5(filePath, callBack, errorCallBack) {
 	// 	})
 	// 	.catch(error => { console.error(error) });
 	// console.log(DIRECTORYTREE)
+
+export { IMG, SPRITE, ANIM, FONT, MUSIC, SFX, loadGameAssets, loadJSON, loadJSON5, ITEMS, HEADOFFSET, FACEOFFSET, BODYOFFSET, ITEMOFFSET, CHICKENROTATION, BACKGROUND, BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM }

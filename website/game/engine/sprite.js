@@ -1,5 +1,7 @@
 //Sprite object; Takes in an image with multiple frames and splits it up to render just one frame
 
+import { DRAW } from "../main.js"
+
 class Sprite {
 	//Initialize: image, frame count x & y, offset x & y, frame width & height, offset width & height to start splitting the image
 	constructor (img, fx=1, fy=1, w, h, ox=0, oy=0, sepx=0, sepy=0) {
@@ -128,3 +130,5 @@ class DrawableSprite {
 		DRAW.image(this.sprite.img, anim, this.drawx, this.drawy)
 	}
 }
+
+export { Sprite, Animation, DrawableSprite }

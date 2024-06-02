@@ -1,6 +1,21 @@
 // Area
 // logic that controls the background and elements of an area
 
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js"
+import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS } from "./world.js"
+import AudioSystem from "./engine/audio.js"
+import { BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM } from "./assets.js"
+import { canvasWidth, canvasHeight, RenderImage } from "./engine/render.js"
+import { Sprite, DrawableSprite, Animation } from "./engine/sprite.js"
+import { setState } from "./state.js"
+import {addItem, removeNuggets} from "./savedata.js"
+import QuestSystem from "./quests.js"
+import DialogueSystem from "./dialogue.js"
+import Transition from "./transition.js"
+import { MUSIC } from "./assets.js"
+import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js"
+
+
 // Load area data from .json
 function loadAreaFile(data, world, fromWarp, endFunc) {
 	let area = world.area
@@ -176,7 +191,7 @@ function checkCondition(c) {
 		if (c.questComplete != null) {
 			// "questComplete" just checks if the quest has ever been completed
 			// Setting it to false will check if it has never been completed
-			questCompleted = SAVEDATA.quests.completed[questName]
+			let questCompleted = SAVEDATA.quests.completed[questName]
 			if (c.questComplete === true && questCompleted) { // Quest must be complete
 				return true
 			} else if (c.questComplete === false && !questCompleted) { // Quest must not be complete
@@ -261,3 +276,5 @@ function conditionsUpdate() {
 		}
 	}
 }
+
+export { loadAreaFile, checkCondition, conditionsUpdate }

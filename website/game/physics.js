@@ -1,5 +1,9 @@
 // Collision & physics system
 
+import { DRAW } from "./main.js"
+import { FONT } from "./assets.js"
+import { vec2Dot } from "./lib/vec2.js"
+
 // Update physics; (list of objects, deltaTime)
 let listOfCollisions = new Map()
 function updatePhysics(objs, spatialHash, dt) {
@@ -296,3 +300,5 @@ function drawPhysics(objs, spatialHash, offsetX, offsetY) {
 		}
 	}
 }
+
+export { updatePhysics, SpatialHash, drawPhysics }

@@ -64,3 +64,5 @@ const TimedEventsSystem = (function() {
 	};
 	
 return functions; })()
+
+export default TimedEventsSystem;

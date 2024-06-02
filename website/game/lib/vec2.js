@@ -21,3 +21,5 @@ function vec2Norm(ex, ey) {
 function vec2Dot(x1, y1, x2, y2) {
 	return x1*x2 + y1*y2
 }
+
+export { vec2Len, vec2Unit, vec2Norm, vec2Dot }

@@ -1,5 +1,8 @@
 // Input Handler; This passes user inputs to the game with useful functions
 
+import {canvas} from "./canvas.js"
+import {stateKeyPress, stateKeyRelease, stateMouseClick, stateMouseRelease, stateScroll} from "../state.js"
+
 // Recieve keyboard inputs
 window.addEventListener("keydown", keyPressed)
 window.addEventListener("keyup", keyReleased)
@@ -115,3 +118,5 @@ function touchMoved(event) {
 	var touch = event.touches[0];
 	[mouseScreenX, mouseScreenY] = convertTouchCoordsToScreen(touch.clientX, touch.clientY)
 }
+
+export {getMousePos, checkMouseInside}

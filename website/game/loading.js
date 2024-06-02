@@ -1,5 +1,9 @@
 // Loading Screen
 
+import { DRAW } from "./main.js"
+import { IMG, SPRITE } from "./assets.js"
+import { canvasWidth, canvasHeight } from "./engine/render.js"
+
 const LoadingScreen = (function() {
 	// Loading
 	let loading = false
@@ -130,3 +134,5 @@ const LoadingScreen = (function() {
 	};
 	
 	return functions; })()
+
+export default LoadingScreen

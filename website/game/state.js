@@ -1,6 +1,9 @@
 // State Handler; Handles which "mode" the game is currently in.
 // For example: the world shouldn't update if you're playing a minigame
 // Functions to interact with states
+import {MENUS} from "./menu.js"
+import {PLAYER_CONTROLLER} from "./world.js"
+
 let game_state = false
 let game_state_name = ""
 let open_menu = false
@@ -114,3 +117,5 @@ function getOpenMenu() {
 	}
 	return false
 }
+
+export {setState, getState, stateUpdate, stateDraw, stateKeyPress, stateKeyRelease, stateMouseClick, stateMouseRelease, stateScroll, openMenu, closeMenu, getOpenMenu}

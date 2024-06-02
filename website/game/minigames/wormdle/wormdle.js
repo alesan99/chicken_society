@@ -1,3 +1,22 @@
+// WORMDLE
+// Like Wordle, but with Snake gameplay
+
+import { MINIGAMES } from "../minigame.js"
+import { DRAW, SAVEDATA } from "../../main.js"
+import Notify from "../../gui/notification.js"
+import { conditionsUpdate } from "../../area.js"
+import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS } from "../../assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../../savedata.js"
+import { MENUS } from "../../menu.js"
+import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js"
+import { NETPLAY } from "../../main.js"
+import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js"
+import { Sprite, Animation } from "../../engine/sprite.js"
+import Shape from "../../shape.js"
+import AudioSystem from "../../engine/audio.js"
+import { SpatialHash, updatePhysics, drawPhysics } from "../../physics.js"
+import {PhysicsObject} from "../../objects/objects.js"
+
 if (true) {
 let Grid;
 let Worm;
