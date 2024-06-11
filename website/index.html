@@ -11,24 +11,28 @@
 <nav>
 	<li id="home"><a href="#"><img src="./assets/logo.png"></a></li>
 	<li id="login-li">
-		<div class="loginContainer">
-			<form id="loginForm">
-				<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username"
-					maxlength="16" autocomplete="off" required />
-				<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password"
-					maxlength="16" autocomplete="off" required />
-				<button id="login" class="login-stuff" type="button">Login</button>
-			</form>
+		<div class="dropdown">
+			<button class="dropdown-btn">Log-in</button>
+			<div class="dropdown-content">
+				<div class="loginContainer">
+					<form id="loginForm">
+						<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username"
+							maxlength="16" autocomplete="off" required />
+						<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password"
+							maxlength="16" autocomplete="off" required />
+						<button id="login" class="login-stuff" type="button">Login</button>
+					</form>
+				</div>
+				<div class="loginContainer">
+					<form id="registerForm">
+						<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
+						<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
+						<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
+						<button id="register" class="register-stuff" type="button">Register</button>
+					</form>
+				</div>
+			</div>
 		</div>
-	</li>
-	<li id="login-li">
-		<div class="loginContainer">
-			<form id="registerForm">
-				<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
-				<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
-				<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
-				<button id="register" class="register-stuff" type="button">Register</button>
-			</form>
 	</li>
 </nav>
 
@@ -45,6 +49,16 @@
 			<input id="gameTextInput" type="text" maxlength="47" style="position:fixed;top:0;left:-200px" ;>
 		</div>
 	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".dropdown-btn").click(function(){
+                $(".dropdown-content").toggle();
+            });
+        });
+    </script>
+
 	<!-- Socket.IO v4.7.2 with Msgpack parser -->
 	<!-- May need to be updated whenever server's socket.io version is updated. -->
 	<script src="socket.io.msgpack.min.js"></script>
