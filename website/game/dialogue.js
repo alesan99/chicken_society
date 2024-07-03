@@ -14,8 +14,10 @@ const DialogueSystem = (function() {
 	let dialogueTimer = 0
 	let currentText = ""
 	let currentTextWrap = []
-	let speaker = false
-	let speakerNPC = false
+	let defaultSpeaker = false
+	let speaker = false // Speaker name string
+	let speakerIcon = false // Speaker icon name
+	let speakerNPC = false // NPC object of speaker
 
 	let awaitingResponse = false // Continue once reponse is chosen
 	let responseButtons = [] // List of response buttons / text fields
@@ -28,8 +30,9 @@ const DialogueSystem = (function() {
 			open = true
 			stage = 0 // Stage of current dialogue block
 			dialogueTree = dialogueTreeData // List of dialogue blocks (not really a tree structurally)
-			speaker = speakerName // Name of speaker
+			defaultSpeaker = speakerName // Default speaker name
 			speakerNPC = npc // NPC object of speaker
+			this.setSpeaker(speakerName, true) // Defauly name of speaker for a dialogue block
 
 			serverMessage = false // Reset server message
 
@@ -75,10 +78,9 @@ const DialogueSystem = (function() {
 				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
 
 				if (speaker) {
-					// Draw speaker name
+					// Move dialogue box to the right and draw speaker on the left
 					x = x + 65
-					// DRAW.setColor(120,250,120,1)
-					// DRAW.rectangle(x-140 +16, y+16, 100,100, "fill")
+					// Draw speaker icon
 					if (speakerNPC) {
 						DRAW.setColor(255,255,255,1)
 						if (speakerNPC.icon) {
@@ -86,13 +88,21 @@ const DialogueSystem = (function() {
 						} else {
 							speakerNPC.draw(x-140 +65, y +150, "down")
 						}
+					} else {
+						// Show mystery speaker
+						// TODO
 					}
 
 					DRAW.setColor(255,255,255,1)
 					DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y)
 					
-					DRAW.setFont(FONT.caption)
+					// Draw speaker name
 					DRAW.setColor(0,0,0,1)
+					DRAW.setFont(FONT.caption)
+					if (DRAW.getTextWidth(speaker) > 128) {
+						// Shrink text if name is long for name container
+						DRAW.setFont(FONT.nametag)
+					}
 					DRAW.text(speaker, x-140 + 65, y+153, "center")
 				}
 
@@ -235,6 +245,7 @@ const DialogueSystem = (function() {
 					this.finish()
 					return
 				} if (stage >= dialogueData.text.length) {
+					// No more dialogue lines, finish dialogue
 					this.finish()
 					return
 				}
@@ -248,11 +259,18 @@ const DialogueSystem = (function() {
 				// Random dialogue has only one stage, pick any to start at
 				i = Math.floor(Math.random()*dialogueData.text.length)
 			}
+			// Dialogue text animation
 			currentText = dialogueData.text[i]
 			DRAW.setFont(FONT.caption)
-			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2)
+			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2) // Wrap text
 			dialogueProgress = 0
 			dialogueTimer = 0
+			// Speaker
+			if (dialogueData.speaker != null) {
+				this.setSpeaker(dialogueData.speaker)
+			} else {
+				this.setSpeaker(defaultSpeaker) // Reset to default
+			}
 		},
 
 		finish() {
@@ -285,6 +303,11 @@ const DialogueSystem = (function() {
 				let header = d.serverMessageHeader
 				let message = serverMessage
 				NETPLAY.sendMessageToServer(header, message)
+			}
+
+			// Go to next dialogue block, if defined
+			if (d.to) {
+				this.goToDialogueBlock(d.to)
 			}
 		},
 
@@ -359,9 +382,14 @@ const DialogueSystem = (function() {
 			if (nextId == null) {
 				return false
 			}
+			this.gotToDialogueBlock(nextId)
+		},
+
+		// Go to a different dialogue block. Used for jumping to different parts of the dialogue tree.
+		goToDialogueBlock(id) {
 			for (let i = 0; i < dialogueTree.length; i++) {
 				let block = dialogueTree[i]
-				if (block.id == nextId) { // Look for dialogue block with this id
+				if (block.id == id) { // Look for dialogue block with this id
 					let doStart = true
 					// Response is telling you to go to this block, so go to it no matter what
 					// if (block.condition && !checkCondition(block.condition)) {
@@ -375,6 +403,13 @@ const DialogueSystem = (function() {
 					}
 				}
 			}
+		},
+
+		// Set speaker of current dialogue block.
+		setSpeaker(name, icon=false) {
+			// icon: false = no icon, true = use icon of speakerNPC, string = custom icon
+			speaker = name
+			speakerIcon = icon
 		},
 
 		getOpen() {
