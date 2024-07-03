@@ -1,0 +1,72 @@
+{
+	"walls": [
+        [0,564, 0,517, 1024,517, 1024,564],
+        [0,197, 0,56, 1024,5, 1024,197],
+        [17,345, 19,261, 248,261, 171,340],
+        [489,271, 512,241, 678,240, 678,271],
+        [797,297, 769,269, 932,254, 982,289],
+        [0,510, 0,192, 10,194, 10,510],
+        [1020,510, 1020,420, 1024,420, 1024,510]
+	],
+
+	"warps": {
+		"marketExit": {
+			"to": "pathway",
+			"fromWarp": "marketEntrance",
+			"facing": "left",
+			"x": 1024,
+			"y": 359,
+			"w": 30,
+			"h": 150,
+			"sound": "woosh"
+		},
+        "pldistrictEntrance": {
+			"to": "pldistrict",
+			"fromWarp": "pldistrictExit",
+			"facing": "down",
+			"x": 0,
+			"y": 0,
+			"w": 30,
+			"h": 300,
+			"sound": "woosh"
+		}
+	},
+
+"sprites": {
+	"grassLayer": {
+		"image": "marketlayer.png",
+		"w": 1024,
+		"h": 100,
+		"x": 0, 
+		"y": 420,
+                "worldy": 490 
+	},
+
+    	"leftStall": {
+		"image": "leftstall.png",
+		"w": 300,
+		"h": 400,
+		"x": 3, 
+		"y": 38,
+                "worldy": 265
+	},
+
+	"middleStall": {
+		"image": "middlestall.png",
+		"w": 300,
+		"h": 400,
+		"x": 482, 
+		"y": 48,
+                "worldy": 265 
+	},
+
+	"rightStall": {
+		"image": "rightStall.png",
+		"w": 300,
+		"h": 400,
+		"x": 768, 
+		"y": 38,
+                "worldy": 270 
+	}
+}
+}
