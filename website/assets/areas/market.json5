@@ -61,7 +61,7 @@
 	},
 
 	"rightStall": {
-		"image": "rightStall.png",
+		"image": "rightstall.png",
 		"w": 300,
 		"h": 400,
 		"x": 768, 
