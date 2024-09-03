@@ -30,6 +30,12 @@
 				<button id="register" class="register-stuff" type="button">Register</button>
 			</form>
 	</li>
+	<script type="importmap">
+		{
+		  "imports": {
+		  }
+		}
+	</script>
 </nav>
 
 <body>
@@ -49,71 +55,17 @@
 	<!-- May need to be updated whenever server's socket.io version is updated. -->
 	<script src="socket.io.msgpack.min.js"></script>
 	<!-- <script src="/socket.io/socket.io.js"></script> -->
-	<script src="game/netplay/client.js"></script>
 
 	<!-- Libraries -->
 	<script src="game/lib/json5.index.min.js"></script>
 	<script src="game/lib/easing.js.min.js"></script>
-	<script src="game/lib/vec2.js"></script>
 	<script src="game/lib/howler.core.js"></script>
 
 	<!-- Run game code -->
-	<script src="game/engine/canvas.js"></script>
-	<script src="game/engine/render.js"></script>
+	<script src="game/engine/canvas.js" type="module"></script>
 
 	<script src="game/login.js"></script>
-
-	<script src="game/shape.js"></script>
-	<script src="game/objects/object.js"></script>
-	<script src="game/objects/character.js"></script>
-	<script src="game/objects/player.js"></script>
-	<script src="game/objects/npc.js"></script>
-	<script src="game/objects/pet.js"></script>
-	<script src="game/objects/trigger.js"></script>
-	<script src="game/objects/wall.js"></script>
-	<script src="game/objects/warp.js"></script>
-	<script src="game/objects/furniture.js"></script>
-	<script src="game/objects/particle.js"></script>
-
-	<script src="game/minigames/minigame.js"></script>
-	<script src="game/minigames/test/test.js"></script>
-	<script src="game/minigames/slots/slots.js"></script>
-	<script src="game/minigames/claw/claw.js"></script>
-	<script src="game/minigames/runner/runner.js"></script>
-	<script src="game/minigames/wormdle/wormdle.js"></script>
-
-	<script src="game/loading.js"></script>
-	<script src="game/transition.js"></script>
-	<script src="game/gui/notification.js"></script>
-	<script src="game/state.js"></script>
-	<script src="game/physics.js"></script>
-	<script src="game/world.js"></script>
-	<script src="game/petrace.js"></script>
-	<script src="game/dialogue.js"></script>
-	<script src="game/area.js"></script>
-	<script src="game/engine/input.js"></script>
-	<script src="game/engine/audio.js"></script>
-	<script src="game/engine/sprite.js"></script>
-	<script src="game/assets.js"></script>
-	<script src="game/quests.js"></script>
-	<script src="game/timedevents.js"></script>
-	<script src="game/coop.js"></script>
-	<script src="game/savedata.js"></script>
-	<script src="game/items.js"></script>
-
-	<script src="game/gui/gui.js"></script>
-	<script src="game/gui/itemgrid.js"></script>
-	<script src="game/menu.js"></script>
-	<script src="game/menu/customization.js"></script>
-	<script src="game/menu/map.js"></script>
-	<script src="game/menu/users.js"></script>
-	<script src="game/menu/shop.js"></script>
-	<script src="game/menu/chat.js"></script>
-	<script src="game/menu/emote.js"></script>
-	<script src="game/menu/quests.js"></script>
-	<script src="game/menu/pet.js"></script>
-	<script src="game/menu/adopt.js"></script>
-	<script src="game/main.js"></script>
+	<script src="game/main.js" type="module"></script>
 </body>
 
 </html>

@@ -2,6 +2,15 @@
 // SaveData: Stores all player data & game progress, including private data (Excluding login information)
 // Profile: Stores only chicken information; this is information that's always accessible to other players
 
+import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js"
+import {SAVEDATA} from "./main.js"
+import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS, CHAT } from "./world.js"
+import QuestSystem from "./quests.js"
+import AudioSystem from "./engine/audio.js"
+import DialogueSystem from "./dialogue.js"
+import Transition from "./transition.js"
+import {requestItem, compareItems, clearItems, useItem, adoptPet} from "./items.js"
+
 function makeSaveData() {
 	let saveData = {
 		// Chicken customization
@@ -153,6 +162,14 @@ function loadSaveData(saveData) {
 	return retrievedObject
 }
 
+function replaceObjectValues(objectTo, objectFrom) {
+	// Replace all values in objectTo with values from objectFrom
+	// This is only needed because
+	for (const key in objectFrom) {
+		objectTo[key] = objectFrom[key]
+	}
+}
+
 // Functions for modifying save data:
 // Remove nugget currency.
 function removeNuggets(nuggets) {
@@ -290,3 +307,5 @@ function HEXtoRGB(hex) {
 	// Return the RGB values as an object
 	return [red, green, blue];
 }
+
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues}

@@ -11,7 +11,48 @@ var OBJECTS
 var DEBUGPHYSICS = false
 var MINIGAME
 
-class World {
+import { DRAW } from "./main.js"
+
+import { canvasWidth, canvasHeight } from "./engine/canvas.js"
+import { RenderImage } from "./engine/render.js"
+import { IMG, SFX, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js"
+import { SpatialHash, updatePhysics, drawPhysics } from "./physics.js"
+import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js"
+
+import { PROFILE, SAVEDATA } from "./main.js"
+
+import QuestSystem from "./quests.js"
+
+import AudioSystem from "./engine/audio.js"
+import Transition from "./transition.js"
+import DialogueSystem from "./dialogue.js"
+import LoadingScreen from "./loading.js"
+import TimedEventsSystem from "./timedevents.js"
+import { checkCondition } from "./area.js"
+import { getMousePos } from "./engine/input.js"
+import Coop from "./coop.js"
+import { NETPLAY } from "./main.js"
+import { MENUS } from "./menu.js"
+
+import {} from "./menu/chat.js"
+import {} from "./menu/emote.js"
+import {} from "./menu/customization.js"
+import {} from "./menu/map.js"
+import {} from "./menu/users.js"
+import {} from "./menu/quests.js"
+import {} from "./menu/shop.js"
+import {} from "./menu/pet.js"
+import {} from "./menu/adopt.js"
+
+import { MinigameState } from "./minigames/minigame.js"
+import {} from "./minigames/claw/claw.js"
+import {} from "./minigames/runner/runner.js"
+import {} from "./minigames/wormdle/wormdle.js"
+
+import { loadAreaFile } from "./area.js"
+import PetRaceSystem from "./petrace.js"
+
+const World = class {
 	constructor (area="hub") {
 		this.name = "world"
 
@@ -496,3 +537,6 @@ class World {
 	}
 }
 
+import { WORLD} from "./main.js"
+
+export { World, PHYSICSWORLD, OBJECTS, CHARACTER, PLAYER, PLAYER_CONTROLLER, NPCS, PARTICLES, CHAT, DEBUGPHYSICS, MINIGAME }

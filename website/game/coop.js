@@ -1,6 +1,20 @@
 // TODO: Visit other player's coops
 // TODO: Wallpapers
 
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js"
+import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "./assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture} from "./savedata.js"
+import {openMenu, closeMenu, getOpenMenu} from "./state.js"
+import {OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD} from "./world.js"
+import QuestSystem from "./quests.js"
+import Transition from "./transition.js"
+import AudioSystem from "./engine/audio.js"
+import {checkCondition} from "./area.js"
+import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js"
+import { canvasWidth, canvasHeight } from "./engine/render.js"
+import {Furniture} from "./objects/objects.js"
+import { getMousePos } from "./engine/input.js"
+
 const Coop = (function() {
 	// Chicken Coop Furniture
 	const functions = {
@@ -29,7 +43,7 @@ const Coop = (function() {
 				let data = coopFurniture[i]
 				let itemId = data.id
 
-				obj = new Furniture(PHYSICSWORLD, itemId, data.x, data.y, data.dir)
+				let obj = new Furniture(PHYSICSWORLD, itemId, data.x, data.y, data.dir)
 				obj.static = false // Temporary, for initial collision check
 
 				WORLD.spawnObject("Furniture", obj)
@@ -253,3 +267,5 @@ const Coop = (function() {
 	};
 	
  return functions; })()
+
+ export default Coop;

@@ -40,3 +40,5 @@ resizeCanvas()
 
 // Resize the canvas whenever the window size changes
 window.addEventListener('resize', resizeCanvas)
+
+export {canvas, ctx, canvasWidth, canvasHeight}

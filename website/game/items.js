@@ -1,5 +1,15 @@
 // Behavior for items (Clothing, consumables, furniture, etc.)
 
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js"
+import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js"
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, makePetData} from "./savedata.js"
+import {openMenu, closeMenu, getOpenMenu} from "./state.js"
+import {PLAYER, PLAYER_CONTROLLER} from "./world.js"
+import QuestSystem from "./quests.js"
+import Transition from "./transition.js"
+import Coop from "./coop.js"
+import DialogueSystem from "./dialogue.js"
+
 let activeItems = {} // List of items that are currently in player's inventory, being worn by other chickens, and being sold in area
 // Mark down an item as active
 function requestItem(itemId, itemType) {
@@ -113,3 +123,5 @@ function adoptPet(itemId, name="") {
 		PLAYER.petObj.updateProfile(SAVEDATA.pet, "sendToServer")
 	}
 }
+
+export {requestItem, compareItems, clearItems, useItem, adoptPet}

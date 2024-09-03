@@ -22,13 +22,19 @@
     "silver_chains",
     "spike_choker"
   ],
+  "pet": [
+    "pillbug"
+  ],
   "head": [
     "hoodie",
     "snapback",
     "top_hat"
   ],
-  "pet": [
-    "pillbug"
+  "face": [
+    "catears",
+    "sunglasses",
+    "toothpick",
+    "visors"
   ],
   "item": [
     "beer",

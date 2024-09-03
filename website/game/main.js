@@ -1,9 +1,26 @@
 // Main Game Loop; This is the first file that initializes the game.
-var NETPLAY = false
+import {canvas, ctx} from "./engine/canvas.js"
+import AudioSystem from "./engine/audio.js"
+import Netplay from "./netplay/client.js"
+var NETPLAY
 var CURSOR = {on: false, cursor: "auto"}
 
+import { makeSaveData } from "./savedata.js"
 var SAVEDATA = makeSaveData()
 var PROFILE = SAVEDATA.profile
+
+import { Render } from "./engine/render.js"
+var DRAW = {}
+
+import { loadGameAssets } from "./assets.js"
+import LoadingScreen from "./loading.js"
+
+import { World } from "./world.js"
+var WORLD
+
+import { setState, stateUpdate, stateDraw } from "./state.js"
+import Transition from "./transition.js"
+import Notify from "./gui/notification.js"
 
 // Initialize game and load assets
 function gameLoad() {
@@ -79,6 +96,7 @@ function gameDraw() {
 // Run game loop
 gameLoad()
 let lastTimestamp = 0
+var FPS
 function gameLoop(timestamp) {
 	const dt = Math.min((timestamp - lastTimestamp) / 1000, 1/15) // Delta time; should be capped (currently at 15FPS)
 	FPS = 1/((timestamp - lastTimestamp) / 1000)
@@ -90,3 +108,5 @@ function gameLoop(timestamp) {
 	requestAnimationFrame(gameLoop)
 }
 requestAnimationFrame(gameLoop)
+
+export { PROFILE, SAVEDATA, CURSOR, DRAW, NETPLAY, WORLD }

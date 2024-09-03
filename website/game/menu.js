@@ -1,4 +1,7 @@
 // Menu; A pop-up window/container of buttons and other GUI
+var MENUS = {}
+import {getMousePos, checkMouseInside} from "./engine/input.js"
+
 class Menu {
 	constructor (x=0, y=0, w, h) {
 		this.x = x
@@ -92,4 +95,4 @@ class Menu {
 	}
 }
 
-var MENUS = {}
+export {Menu, MENUS};
