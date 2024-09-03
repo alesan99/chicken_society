@@ -11,5 +11,27 @@
       "w": 20,
       "h": 20
     }
+  },
+
+    NPCs: {
+    cashier: {
+      profile: {
+        "name": "Crowbar Lidia",
+        "color": "#a3ffb4",
+        "head": false,
+        "face": false,
+        "body": "barista_accessories",
+      },
+      x: 804,
+      y: 375,
+      facing: "down",
+      roamRadius: 5,
+      interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
+      speechBubble: [
+        "\"Nihil est sine ratione\" - Gottfried Leibniz",
+        "Solve this initial value problem: 4y'' - y = 0, y(-2) = 1, y'(-2) = -1",
+        "If n≥0, and x and y are numbers, then (x+y)^n = n∑k=0 (n;k) x^(n-k) ⋅ y^k",
+      ]
+    }
   }
 }

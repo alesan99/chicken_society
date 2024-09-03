@@ -52,8 +52,8 @@
         "name": "Whisker Willikers",
         "color": "#fecc03",
         "head": false,
-        "face": "catears",
-        "body": "petstupiduniform",
+        "face": "cat_ears",
+        "body": "petstupid_uniform",
       },
       x: 210,
       y: 485,
@@ -76,6 +76,7 @@
       dialogue: [
         // A Study in Violet, Ask this chicken about the snake skin
         {
+          id: "study_in_violet_ask",
           text: [
             "That piece of purple skin you have! I think I've seen it before.",
             "Yes! I believe its from a long extinct creature called a snake.",
@@ -97,6 +98,8 @@
         // Default dialogue
         {
           text: ["-"],
+          speaker: "Test",
+          to: "study_in_violet_ask",
         },
       ],
     },

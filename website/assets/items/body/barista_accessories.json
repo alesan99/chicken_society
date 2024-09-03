@@ -1,0 +1,11 @@
+{
+    "name": "Barista Accessories",
+    "description": "Equip for 15% chance to deflect complaints with a perfectly timed eye twitch.",
+    "cost": 20,
+
+    "center": [
+        [60.5,55],
+        [91.9,51],
+        [63,56]
+    ]
+}

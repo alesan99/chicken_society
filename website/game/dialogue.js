@@ -26,8 +26,12 @@ const DialogueSystem = (function() {
 	let dialogueTimer = 0
 	let currentText = ""
 	let currentTextWrap = []
-	let speaker = false
-	let speakerNPC = false
+	let defaultSpeaker = false
+	let speaker = false // Speaker name string
+	let speakerIcon = false // Speaker icon name
+	let speakerNPC = false // NPC object of speaker
+
+	let dialogueType = false // Type of dialogue display. False = normal, "book" = book with pages
 
 	let awaitingResponse = false // Continue once reponse is chosen
 	let responseButtons = [] // List of response buttons / text fields
@@ -40,8 +44,9 @@ const DialogueSystem = (function() {
 			open = true
 			stage = 0 // Stage of current dialogue block
 			dialogueTree = dialogueTreeData // List of dialogue blocks (not really a tree structurally)
-			speaker = speakerName // Name of speaker
+			defaultSpeaker = speakerName // Default speaker name
 			speakerNPC = npc // NPC object of speaker
+			this.setSpeaker(speakerName, true) // Defauly name of speaker for a dialogue block
 
 			serverMessage = false // Reset server message
 
@@ -79,67 +84,104 @@ const DialogueSystem = (function() {
 
 		draw() {
 			if (open) {
-				let x = 240
-				let y = 340
-
-				// Darken surrounds
+				// Darken surroundings
 				DRAW.setColor(0,0,0,0.2)
 				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
 
-				if (speaker) {
-					// Draw speaker name
-					x = x + 65
-					// DRAW.setColor(120,250,120,1)
-					// DRAW.rectangle(x-140 +16, y+16, 100,100, "fill")
-					if (speakerNPC) {
-						DRAW.setColor(255,255,255,1)
-						if (speakerNPC.icon) {
-							DRAW.image(icon, 0, x-140, y)
+				// Dialogue Box
+				if (dialogueType === false) {
+					let x = 240
+					let y = 340
+
+					if (speaker) {
+						// Move dialogue box to the right and draw speaker on the left
+						x = x + 65
+						// Draw speaker icon
+						if (speakerNPC) {
+							DRAW.setColor(255,255,255,1)
+							if (speakerNPC.icon) {
+								DRAW.image(icon, 0, x-140, y)
+							} else {
+								speakerNPC.draw(x-140 +65, y +150, "down")
+							}
 						} else {
-							speakerNPC.draw(x-140 +65, y +150, "down")
+							// Show mystery speaker
+							// TODO
+						}
+
+						DRAW.setColor(255,255,255,1)
+						DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y)
+						
+						// Draw speaker name
+						DRAW.setColor(0,0,0,1)
+						DRAW.setFont(FONT.caption)
+						if (DRAW.getTextWidth(speaker) > 128) {
+							// Shrink text if name is long for name container
+							DRAW.setFont(FONT.nametag)
+						}
+						DRAW.text(speaker, x-140 + 65, y+153, "center")
+					}
+
+					// Dialogue box
+					DRAW.setColor(255,255,255,1)
+					DRAW.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y)
+					DRAW.setColor(0,0,0,1)
+					DRAW.setFont(FONT.caption)
+
+					let charStart = 0 // Character index from line break
+					for (let i=0; i < currentTextWrap.length; i++) {
+						let s = currentTextWrap[i]
+						if (dialogueProgress < charStart + s.length) {
+							s = s.substring(0, dialogueProgress - charStart)
+						}
+						DRAW.text(s, x + 30, y + 40 + i*30)
+
+						if (s.length != currentTextWrap[i].length) {
+							// line has been cut, don't continue to the next one
+							break
+						}
+						charStart += s.length
+					}
+
+					if (awaitingResponse) {
+						// Draw response buttons
+						for (let i = 0; i < responseButtons.length; i++) {
+							let button = responseButtons[i]
+							button.draw()
+						}
+					} else {
+						if (dialogueProgress >= currentText.length) {
+							// Draw continue prompt
+							DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134)
 						}
 					}
+				} else if (dialogueType == "book") {
+					let x = 184
+					let y = 41
+					let padding = 30 // Padding between text and page
 
-					DRAW.setColor(255,255,255,1)
-					DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y)
-					
+					let pageLines = 14 // How many lines per page
+
+					DRAW.setColor(255,255,255,1.0)
+					DRAW.image(IMG.book, null, x, y)
+
+					DRAW.setColor(0,0,0,1.0)
 					DRAW.setFont(FONT.caption)
-					DRAW.setColor(0,0,0,1)
-					DRAW.text(speaker, x-140 + 65, y+153, "center")
-				}
-
-				// Dialogue box
-				DRAW.setColor(255,255,255,1)
-				DRAW.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y)
-				DRAW.setColor(0,0,0,1)
-				DRAW.setFont(FONT.caption)
-
-				let charStart = 0 // Character index from line break
-				for (let i=0; i < currentTextWrap.length; i++) {
-					let s = currentTextWrap[i]
-					if (dialogueProgress < charStart + s.length) {
-						s = s.substring(0, dialogueProgress - charStart)
+					
+					// Draw first set of line on left page
+					for (let i=0; i < Math.min(currentTextWrap.length, pageLines); i++) {
+						let s = currentTextWrap[i]
+						DRAW.text(s, x + padding, y + padding + i*30)
 					}
-					DRAW.text(s, x + 30, y + 40 + i*30)
+					// Draw second set of lines on right page
+					for (let i=0; i < Math.min(currentTextWrap.length-pageLines, pageLines); i++) {
+						let s = currentTextWrap[i+pageLines]
+						DRAW.text(s, x + 680/2 + padding, y + padding + i*30)
+					}
 
-					if (s.length != currentTextWrap[i].length) {
-						// line has been cut, don't continue to the next one
-						break
-					}
-					charStart += s.length
-				}
-
-				if (awaitingResponse) {
-					// Draw response buttons
-					for (let i = 0; i < responseButtons.length; i++) {
-						let button = responseButtons[i]
-						button.draw()
-					}
-				} else {
-					if (dialogueProgress >= currentText.length) {
-						// Draw continue prompt
-						DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134)
-					}
+					// Page numbers
+					DRAW.text((stage+1)*2-1, canvasWidth/2-680/4, y + 446, "center")
+					DRAW.text((stage+1)*2, canvasWidth/2+680/4, y + 446, "center")
 				}
 			}
 		},
@@ -189,6 +231,7 @@ const DialogueSystem = (function() {
 				}
 			}
 
+			// Continue
 			if (key == " ") {
 				this.next()
 				return true
@@ -247,6 +290,7 @@ const DialogueSystem = (function() {
 					this.finish()
 					return
 				} if (stage >= dialogueData.text.length) {
+					// No more dialogue lines, finish dialogue
 					this.finish()
 					return
 				}
@@ -260,11 +304,32 @@ const DialogueSystem = (function() {
 				// Random dialogue has only one stage, pick any to start at
 				i = Math.floor(Math.random()*dialogueData.text.length)
 			}
+			// Dialogue text animation
 			currentText = dialogueData.text[i]
 			DRAW.setFont(FONT.caption)
-			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2)
+			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2) // Wrap text
 			dialogueProgress = 0
 			dialogueTimer = 0
+			// Speaker
+			if (dialogueData.speaker != null) {
+				this.setSpeaker(dialogueData.speaker)
+			} else {
+				this.setSpeaker(defaultSpeaker) // Reset to default
+			}
+			// Dialogue type
+			let type = dialogueData.type
+			if (type) {
+				dialogueType = type
+				if (type == "book") {
+					// start book
+					currentTextWrap = DRAW.wrapText(currentText, 680/2 - 30*2) // Wrap text for one page of the book
+					pageNumber = 0
+					console.log(currentText, i)
+					dialogueProgress = currentText.length
+				}
+			} else {
+				dialogueType = false
+			}
 		},
 
 		finish() {
@@ -297,6 +362,11 @@ const DialogueSystem = (function() {
 				let header = d.serverMessageHeader
 				let message = serverMessage
 				NETPLAY.sendMessageToServer(header, message)
+			}
+
+			// Go to next dialogue block, if defined
+			if (d.to) {
+				this.goToDialogueBlock(d.to)
 			}
 		},
 
@@ -371,9 +441,15 @@ const DialogueSystem = (function() {
 			if (nextId == null) {
 				return false
 			}
+			this.goToDialogueBlock(nextId)
+		},
+
+		// Go to a different dialogue block. Used for jumping to different parts of the dialogue tree.
+		goToDialogueBlock(id) {
+			stage = 0 // Reset stage
 			for (let i = 0; i < dialogueTree.length; i++) {
 				let block = dialogueTree[i]
-				if (block.id == nextId) { // Look for dialogue block with this id
+				if (block.id == id) { // Look for dialogue block with this id
 					let doStart = true
 					// Response is telling you to go to this block, so go to it no matter what
 					// if (block.condition && !checkCondition(block.condition)) {
@@ -387,6 +463,13 @@ const DialogueSystem = (function() {
 					}
 				}
 			}
+		},
+
+		// Set speaker of current dialogue block.
+		setSpeaker(name, icon=false) {
+			// icon: false = no icon, true = use icon of speakerNPC, string = custom icon
+			speaker = name
+			speakerIcon = icon
 		},
 
 		getOpen() {

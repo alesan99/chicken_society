@@ -1,11 +1,26 @@
 {
+  "furniture": [
+    "frame",
+    "lamp",
+    "room_blue",
+    "rug",
+    "table"
+  ],
+  "face": [
+    "cat_ears",
+    "sunglasses",
+    "toothpick",
+    "visors"
+  ],
   "body": [
-    "alesanaccessories",
-    "beefcakeaccessories",
+    "barista_accessories",
+    "beefcake_accessories",
+    "bud_accessories",
     "chains",
-    "petstupiduniform",
+    "petstupid_uniform",
     "scarf",
-    "silverchains"
+    "silver_chains",
+    "spike_choker"
   ],
   "pet": [
     "pillbug"
@@ -13,14 +28,7 @@
   "head": [
     "hoodie",
     "snapback",
-    "tophat"
-  ],
-  "furniture": [
-    "frame",
-    "lamp",
-    "room_blue",
-    "rug",
-    "table"
+    "top_hat"
   ],
   "face": [
     "catears",

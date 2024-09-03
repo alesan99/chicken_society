@@ -1,0 +1,11 @@
+{
+    "name": "Spiked Choker",
+    "description": "Punk. Goth. Emo. It can be whatever you want.",
+    "cost": 10,
+
+    "center": [
+        [63,58],
+        [88,46],
+        [62,55]
+    ]
+}
