@@ -12,7 +12,7 @@ function generateItemFileList() {
 	// Get directory free of the items folder
 	getDirectoryTree(path.join(__dirname, "../website/assets/items"))
 		.then((tree) => {
-			// Re structure least to be easier to use
+			// Re structure list to be easier to use
 			const itemList = {};
 			for (let v of tree.items) {
 				if (typeof v === "object") {
@@ -30,7 +30,14 @@ function generateItemFileList() {
 					itemList[category] = list;
 				}
 			}
-			fs.writeFileSync(path.join(__dirname, "../website/assets/items/list.json"), JSON.stringify(itemList, null, 2));
+			// Sort the keys so items.json is the same if nothing has changed (for git)
+			const sortedItemList = {};
+			const sortedKeys = Object.keys(itemList).sort();
+			for (let key of sortedKeys) {
+				sortedItemList[key] = itemList[key];
+			}
+			let jsonStr = JSON.stringify(sortedItemList, null, 2);
+			fs.writeFileSync(path.join(__dirname, "../website/assets/items/list.json"), jsonStr);
 		})
 		.catch((error) => {
 			console.log("Error", error)
