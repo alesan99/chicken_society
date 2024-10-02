@@ -16,6 +16,7 @@
     "express-session": "^1.17.3",
     "json5": "^2.2.3",
     "mysql2": "^3.9.1",
+    "pdfjs-dist": "^4.6.82",
     "socket.io": "^4.7.2",
     "socket.io-msgpack-parser": "^3.0.2",
     "sql.js": "^1.8.0"

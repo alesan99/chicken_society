@@ -98,8 +98,7 @@
         // Default dialogue
         {
           text: ["-"],
-          speaker: "Test",
-          to: "study_in_violet_ask",
+          speaker: "PLACEHOLDER"
         },
       ],
     },

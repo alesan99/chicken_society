@@ -12,6 +12,13 @@ import AudioSystem from "./engine/audio.js"
 import {checkCondition} from "./area.js"
 import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js"
 import { canvasWidth, canvasHeight } from "./engine/render.js"
+import { ctx } from "./engine/canvas.js"
+
+import * as pdfjsLib from "./lib/pdf.min.mjs"
+// set worker src
+pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.min.js';
+// set canvas
+// pdfjsLib.GlobalWorkerOptions.workerPort = new Worker('./pdf.worker.min.js');
 
 const DialogueSystem = (function() {
 	let open = false // Dialogue is open?
@@ -37,6 +44,14 @@ const DialogueSystem = (function() {
 	let responseButtons = [] // List of response buttons / text fields
 
 	let serverMessage = false // This message will be built and sent to the server. Used for interacting with server through dialogue.
+
+	// Books
+	let bookPages = 1
+	let bookPage = 0 // Current page number of book
+	let bookPDF = false
+	let bookLoaded = false
+	let bookCanvas1 = false
+	let bookCanvas2 = false
 
 	const functions = {
 		// Start new dialogue conversation
@@ -158,30 +173,20 @@ const DialogueSystem = (function() {
 				} else if (dialogueType == "book") {
 					let x = 184
 					let y = 41
-					let padding = 30 // Padding between text and page
 
-					let pageLines = 14 // How many lines per page
+					// Render bookCanvas directly
+					if (bookLoaded) {
+						DRAW.setColor(255,255,255,1.0)
+						ctx.drawImage(bookCanvas1, x, y)
+						ctx.drawImage(bookCanvas2, x+680/2, y)
 
-					DRAW.setColor(255,255,255,1.0)
-					DRAW.image(IMG.book, null, x, y)
-
-					DRAW.setColor(0,0,0,1.0)
-					DRAW.setFont(FONT.caption)
-					
-					// Draw first set of line on left page
-					for (let i=0; i < Math.min(currentTextWrap.length, pageLines); i++) {
-						let s = currentTextWrap[i]
-						DRAW.text(s, x + padding, y + padding + i*30)
-					}
-					// Draw second set of lines on right page
-					for (let i=0; i < Math.min(currentTextWrap.length-pageLines, pageLines); i++) {
-						let s = currentTextWrap[i+pageLines]
-						DRAW.text(s, x + 680/2 + padding, y + padding + i*30)
+						// Page numbers
+						DRAW.setColor(0,0,0,1.0)
+						DRAW.setFont(FONT.caption)
+						DRAW.text(bookPage+1, canvasWidth/2-680/4, y + 446, "center")
+						DRAW.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center")
 					}
 
-					// Page numbers
-					DRAW.text((stage+1)*2-1, canvasWidth/2-680/4, y + 446, "center")
-					DRAW.text((stage+1)*2, canvasWidth/2+680/4, y + 446, "center")
 				}
 			}
 		},
@@ -189,28 +194,30 @@ const DialogueSystem = (function() {
 		update(dt) {
 			if (open) {
 				// Text animations
-				if (dialogueProgress < currentText.length) {
-					dialogueTimer += 30*dt
-					dialogueProgress = Math.min(Math.floor(dialogueTimer), currentText.length)
-				} else {
-					// Continue prompt arrow movement
-					promptTimer = (promptTimer + 2*dt)%1
+				if (dialogueType === false) {
+					if (dialogueProgress < currentText.length) {
+						dialogueTimer += 30*dt
+						dialogueProgress = Math.min(Math.floor(dialogueTimer), currentText.length)
+					} else {
+						// Continue prompt arrow movement
+						promptTimer = (promptTimer + 2*dt)%1
 
-					// Ask for responses
-					if (dialogueProgress >= currentText.length) {
-						// Dialogue has finished presenting
-						if (dialogueData.responses && stage >= dialogueData.text.length-1 && !awaitingResponse) {
-							// Await response
-							this.requestResponse(dialogueData.responses)
+						// Ask for responses
+						if (dialogueProgress >= currentText.length) {
+							// Dialogue has finished presenting
+							if (dialogueData.responses && stage >= dialogueData.text.length-1 && !awaitingResponse) {
+								// Await response
+								this.requestResponse(dialogueData.responses)
+							}
 						}
 					}
-				}
 
-				// Update response buttons
-				if (awaitingResponse) {
-					for (let i = 0; i < responseButtons.length; i++) {
-						let button = responseButtons[i]
-						button.update(dt)
+					// Update response buttons
+					if (awaitingResponse) {
+						for (let i = 0; i < responseButtons.length; i++) {
+							let button = responseButtons[i]
+							button.update(dt)
+						}
 					}
 				}
 			}
@@ -276,60 +283,132 @@ const DialogueSystem = (function() {
 		},
 
 		next() {
-			if (dialogueProgress < currentText.length) {
-				// dialogue is not finished presenting, skip
-				dialogueProgress = currentText.length
-			} else if (dialogueData.responses && stage >= dialogueData.text.length-1) {
-				// Await response, if applicable
-				this.requestResponse(dialogueData.responses)
-			} else {
-				// go to next dialogue line
-				stage += 1
-				if (dialogueData.randomDialogue) {
-					// Random dialogue has only one stage
-					this.finish()
-					return
-				} if (stage >= dialogueData.text.length) {
-					// No more dialogue lines, finish dialogue
-					this.finish()
-					return
+			if (dialogueType === false) {
+				// Normal dialogue
+				if (dialogueProgress < currentText.length) {
+					// dialogue is not finished presenting, skip
+					dialogueProgress = currentText.length
+				} else if (dialogueData.responses && stage >= dialogueData.text.length-1) {
+					// Await response, if applicable
+					this.requestResponse(dialogueData.responses)
+				} else {
+					// go to next dialogue line
+					stage += 1
+					if (dialogueData.randomDialogue) {
+						// Random dialogue has only one stage
+						this.finish()
+						return
+					} if (stage >= dialogueData.text.length) {
+						// No more dialogue lines, finish dialogue
+						this.finish()
+						return
+					}
+					
+					this.startText(stage)
 				}
-				
-				this.startText(stage)
+			} else if (dialogueType == "book") {
+				// Book
+				if (bookLoaded) {
+					bookPage += 2
+					if (bookPage >= bookPages) {
+						// No more pages, finish dialogue
+						this.finish()
+						return
+					} else {
+						this.loadBookPage(bookPage)
+					}
+				}
 			}
 		},
 
 		startText(i) {
-			if (dialogueData.randomDialogue) {
-				// Random dialogue has only one stage, pick any to start at
-				i = Math.floor(Math.random()*dialogueData.text.length)
-			}
-			// Dialogue text animation
-			currentText = dialogueData.text[i]
-			DRAW.setFont(FONT.caption)
-			currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2) // Wrap text
-			dialogueProgress = 0
-			dialogueTimer = 0
-			// Speaker
-			if (dialogueData.speaker != null) {
-				this.setSpeaker(dialogueData.speaker)
-			} else {
-				this.setSpeaker(defaultSpeaker) // Reset to default
-			}
 			// Dialogue type
 			let type = dialogueData.type
-			if (type) {
+			console.log(`Starting dialogue block ${dialogueData.id} with type ${type}`)
+			if (!type) {
+				if (dialogueData.randomDialogue) {
+					// Random dialogue has only one stage, pick any to start at
+					i = Math.floor(Math.random()*dialogueData.text.length)
+				}
+				// Dialogue text animation
+				currentText = dialogueData.text[i]
+				DRAW.setFont(FONT.caption)
+				currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2) // Wrap text
+				dialogueProgress = 0
+				dialogueTimer = 0
+				// Speaker
+				if (dialogueData.speaker != null) {
+					this.setSpeaker(dialogueData.speaker)
+				} else {
+					this.setSpeaker(defaultSpeaker) // Reset to default
+				}
+				dialogueType = false
+			} else {
 				dialogueType = type
 				if (type == "book") {
-					// start book
-					currentTextWrap = DRAW.wrapText(currentText, 680/2 - 30*2) // Wrap text for one page of the book
-					pageNumber = 0
-					console.log(currentText, i)
-					dialogueProgress = currentText.length
+					// Make a new 680x460 canvas for the pdf
+					bookCanvas1 = document.createElement('canvas');
+					bookCanvas1.width = 340;
+					bookCanvas1.height = 460;
+					bookCanvas2 = document.createElement('canvas');
+					bookCanvas2.width = 340;
+					bookCanvas2.height = 460;
+
+					bookLoaded = false
+					bookPage = 0
+
+					// Load PDF
+					let filePath = dialogueData.file
+					pdfjsLib.getDocument({url: "./assets/" + filePath}).promise.then((pdf) => {
+						bookPDF = pdf
+						bookPages = pdf.numPages
+
+						this.loadBookPage(bookPage)
+					}).catch((error) => {
+						console.error("Error loading PDF document:", error);
+					});
 				}
-			} else {
-				dialogueType = false
 			}
+		},
+
+		loadBookPage(pageNo) {
+			bookLoaded = false
+
+			let bookCtx1 = bookCanvas1.getContext('2d');
+			let bookCtx2 = bookCanvas2.getContext('2d');
+
+			let x = 0
+
+			// Load left page
+			bookPDF.getPage(pageNo+1).then((page) => {
+				var transform = [1.0, 0, 0, 1.0, 0, 0];
+				var desiredWidth = 340;
+				var viewport = page.getViewport({ scale: 1.0, });
+				var scale = desiredWidth / viewport.width;
+				var scaledViewport = page.getViewport({ scale: scale, });
+				var renderContext1 = {
+					canvasContext: bookCtx1,
+					transform: transform,
+					viewport: scaledViewport
+				};
+				var renderContext2 = {
+					canvasContext: bookCtx2,
+					transform: transform,
+					viewport: scaledViewport
+				};
+				page.render(renderContext1); // Render left page
+				
+				// Load right page
+				bookPDF.getPage(pageNo+2).then((page2) => {
+					page2.render(renderContext2); // Render right page
+				}).catch((error) => {
+					console.error(`Error loading page 2`, error);
+				});
+				bookLoaded = true
+
+			}).catch((error) => {
+				console.error(`Error loading page 1`, error);
+			});
 		},
 
 		finish() {
