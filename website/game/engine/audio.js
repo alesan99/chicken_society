@@ -37,6 +37,19 @@ const AudioSystem = (function() {
 			currentMusic = src;
 		},
 
+		setMusicPosition(time) {
+			if (currentMusic) {
+				currentMusic.seek(time);
+			}
+		},
+
+		getMusicPosition() {
+			if (currentMusic) {
+				return currentMusic.seek();
+			}
+			return 0;
+		},
+
 		stopMusic() {
 			if (currentMusic) {
 				currentMusic.stop();

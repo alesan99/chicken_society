@@ -15,7 +15,7 @@ import { DRAW } from "./main.js"
 
 import { canvasWidth, canvasHeight } from "./engine/canvas.js"
 import { RenderImage } from "./engine/render.js"
-import { IMG, SFX, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js"
+import { IMG, SFX, FONT, MUSIC, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js"
 import { SpatialHash, updatePhysics, drawPhysics } from "./physics.js"
 import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js"
 
@@ -62,6 +62,8 @@ const World = class {
 
 		this.areaName = "???" // Neat name for Area
 		this.areaMapLocation = false // [x, y] location to be displayed in map menu
+		this.areaMusic = false // Music to play in area
+		this.areaMusicPosition = 0 // Where music left off
 
 		// Initialize Physics world
 		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
@@ -196,6 +198,27 @@ const World = class {
 			})
 		}, ownerId, data)
 		})
+	}
+
+	playMusic(music, position = 0) {
+		if (music) {
+			if (MUSIC[music]) {
+				AudioSystem.playMusic(MUSIC[music])
+				// Seek to the specified position if provided
+				if (position > 0) {
+					MUSIC[music].seek(position);
+				}
+			} else {
+				console.log("Music not found: " + music)
+			}
+		} else {
+			AudioSystem.stopMusic()
+		}
+	}
+
+	returnToArea() {
+		// Return to area after minigame
+		this.playMusic(this.areaMusic, this.areaMusicPosition)
 	}
 
 	// Register an object as part of the physics world
@@ -537,6 +560,10 @@ const World = class {
 	}
 }
 
-import { WORLD} from "./main.js"
+const setDebugPhysics = (enabled) => {
+	DEBUGPHYSICS = enabled
+}
 
-export { World, PHYSICSWORLD, OBJECTS, CHARACTER, PLAYER, PLAYER_CONTROLLER, NPCS, PARTICLES, CHAT, DEBUGPHYSICS, MINIGAME }
+import { WORLD } from "./main.js"
+
+export { World, PHYSICSWORLD, OBJECTS, CHARACTER, PLAYER, PLAYER_CONTROLLER, NPCS, PARTICLES, CHAT, DEBUGPHYSICS, MINIGAME, setDebugPhysics }

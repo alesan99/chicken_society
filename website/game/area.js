@@ -12,7 +12,6 @@ import {addItem, removeNuggets} from "./savedata.js"
 import QuestSystem from "./quests.js"
 import DialogueSystem from "./dialogue.js"
 import Transition from "./transition.js"
-import { MUSIC } from "./assets.js"
 import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js"
 
 
@@ -26,15 +25,9 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 	world.areaMapLocation = data.mapLocation || false
 
 	// Load music
-	if (data.music) {
-		if (MUSIC[data.music]) {
-			AudioSystem.playMusic(MUSIC[data.music])
-		} else {
-			console.log("Music not found: " + data.music)
-		}
-	} else {
-		AudioSystem.stopMusic()
-	}
+	world.areaMusic = data.music
+	world.playMusic(data.music)
+
 	// Load area walls
 	// Go through each polygon & make wall
 	if (data.walls) {
@@ -101,6 +94,8 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 							removeNuggets(trig.cost)
 						}
 
+						AudioSystem.fadeOutMusic(1)
+						world.areaMusicPosition = AudioSystem.getMusicPosition()
 						PLAYER_CONTROLLER.stop()
 						PLAYER.static = true // Don't let player move
 						Transition.start("wipeLeft", "out", 0.8, null, () => {

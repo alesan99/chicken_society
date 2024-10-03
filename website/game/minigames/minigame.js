@@ -80,6 +80,7 @@ class MinigameState {
 			}
 			PLAYER.static = false
 			setState(WORLD) // Go back to world
+			WORLD.returnToArea()
 			Transition.start("wipeRight", "in", 0.8, null, null)
 		})
 	}

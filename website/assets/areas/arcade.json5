@@ -1,6 +1,7 @@
 {
 	"name": "Arcade",
 	"mapLocation": [261, 196],
+	"music": "chickendisco",
 
 	"walls": [
 		[0,576, 209,346, 209,399, 83,576],

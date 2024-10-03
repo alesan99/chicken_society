@@ -419,8 +419,22 @@ Worm = class {
 		this.moveTime = 0.3
 
 		this.dir = "down"
+
+		// Pause after eating letters
+		this.eating = false
+		this.eatingTimer = 0
+		this.eatingTime = 0.4
 	}
 	update(dt) {
+		// Eating
+		if (this.eating) {
+			this.eatingTimer -= dt
+			if (this.eatingTimer <= 0) {
+				this.eating = false
+			}
+			return
+		}
+
 		// Moving
 		this.moveTimer += dt
 		if (this.moveTimer >= this.moveTime) {
@@ -449,6 +463,9 @@ Worm = class {
 				// Eat letter
 				this.addSegment(cell, nx, ny)
 				this.game.addLetters()
+
+				this.eating = true
+				this.eatingTimer = this.eatingTime
 			}
 		}
 	}

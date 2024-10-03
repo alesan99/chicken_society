@@ -324,7 +324,6 @@ const DialogueSystem = (function() {
 		startText(i) {
 			// Dialogue type
 			let type = dialogueData.type
-			console.log(`Starting dialogue block ${dialogueData.id} with type ${type}`)
 			if (!type) {
 				if (dialogueData.randomDialogue) {
 					// Random dialogue has only one stage, pick any to start at

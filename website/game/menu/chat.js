@@ -8,7 +8,7 @@ import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js"
 import {ItemGrid} from "../gui/itemgrid.js"
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
 import {openMenu, closeMenu, getOpenMenu} from "../state.js"
-import {PLAYER, PLAYER_CONTROLLER, DEBUGPHYSICS} from "../world.js"
+import {PLAYER, PLAYER_CONTROLLER, DEBUGPHYSICS, setDebugPhysics} from "../world.js"
 import QuestSystem from "../quests.js"
 import Transition from "../transition.js"
 import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js"
@@ -120,7 +120,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					}
 					break
 				case "/debug": // Debug physics
-					DEBUGPHYSICS = !DEBUGPHYSICS
+					setDebugPhysics(!DEBUGPHYSICS)
 					break
 				case "/notify": // Create notification
 					Notify.new(arg)

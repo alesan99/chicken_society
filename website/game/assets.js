@@ -60,6 +60,7 @@ function loadGameAssets() {
 	SPRITE.dust = new Sprite(IMG.particle, 2,1, 64,64, 0,65, 1,1)
 
 	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a")
+	MUSIC.chickendisco = AudioSystem.newMusic("assets/music/chickendisco.mp3")
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg")
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg")
