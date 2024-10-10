@@ -185,6 +185,9 @@ const DialogueSystem = (function() {
 						DRAW.setFont(FONT.caption)
 						DRAW.text(bookPage+1, canvasWidth/2-680/4, y + 446, "center")
 						DRAW.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center")
+
+						// Page turn arrow
+						DRAW.text("<")
 					}
 
 				}
@@ -239,9 +242,23 @@ const DialogueSystem = (function() {
 			}
 
 			// Continue
-			if (key == " ") {
-				this.next()
-				return true
+			if (dialogueType === false) {
+				// Next dialogue
+				if (key == " ") {
+					this.next()
+					return true
+				}
+			} else if (dialogueType == "book") {
+				// Next book page
+				if (key == " " || key == "ArrowRight") {
+					// Next page
+					this.changeBookPage("next")
+					return true
+				} else if (key == "ArrowLeft") {
+					// Go back a page
+					this.changeBookPage("back")
+					return true
+				}
 			}
 			return true
 		},
@@ -261,7 +278,23 @@ const DialogueSystem = (function() {
 				}
 			}
 
-			this.next()
+			// Continue
+			if (dialogueType === false) {
+				// Next dialogue
+				this.next()
+				return true
+			} else if (dialogueType == "book") {
+				// Next book page
+				if (x > canvasWidth/2) {
+					// Next page
+					this.changeBookPage("next")
+					return true
+				} else if (x < canvasWidth/2) {
+					// Go back a page
+					this.changeBookPage("back")
+					return true
+				}
+			}
 			return true
 		},
 
@@ -306,18 +339,6 @@ const DialogueSystem = (function() {
 					
 					this.startText(stage)
 				}
-			} else if (dialogueType == "book") {
-				// Book
-				if (bookLoaded) {
-					bookPage += 2
-					if (bookPage >= bookPages) {
-						// No more pages, finish dialogue
-						this.finish()
-						return
-					} else {
-						this.loadBookPage(bookPage)
-					}
-				}
 			}
 		},
 
@@ -344,33 +365,64 @@ const DialogueSystem = (function() {
 				dialogueType = false
 			} else {
 				dialogueType = type
+				// Load book pop-up
 				if (type == "book") {
-					// Make a new 680x460 canvas for the pdf
-					bookCanvas1 = document.createElement('canvas');
-					bookCanvas1.width = 340;
-					bookCanvas1.height = 460;
-					bookCanvas2 = document.createElement('canvas');
-					bookCanvas2.width = 340;
-					bookCanvas2.height = 460;
-
-					bookLoaded = false
-					bookPage = 0
-
-					// Load PDF
-					let filePath = dialogueData.file
-					pdfjsLib.getDocument({url: "./assets/" + filePath}).promise.then((pdf) => {
-						bookPDF = pdf
-						bookPages = pdf.numPages
-
-						this.loadBookPage(bookPage)
-					}).catch((error) => {
-						console.error("Error loading PDF document:", error);
-					});
+					this.loadBook(dialogueData.file)
 				}
 			}
 		},
 
+		loadBook(filePath) {
+			// Make a new 680x460 canvas for the pdf
+			bookCanvas1 = document.createElement('canvas');
+			bookCanvas1.width = 340;
+			bookCanvas1.height = 460;
+			bookCanvas2 = document.createElement('canvas');
+			bookCanvas2.width = 340;
+			bookCanvas2.height = 460;
+
+			bookLoaded = false
+			bookPage = 0
+
+			// Load PDF
+			pdfjsLib.getDocument({url: "./assets/" + filePath}).promise.then((pdf) => {
+				bookPDF = pdf
+				bookPages = pdf.numPages
+
+				this.loadBookPage(bookPage)
+			}).catch((error) => {
+				console.error("Error loading PDF document:", error);
+			});
+		},
+
+		changeBookPage(dir) {
+			if (!bookLoaded) {
+				// Book is still loading
+				return false
+			}
+
+			if (dir == "next") {
+				bookPage += 2
+			} else if (dir == "back") {
+				if (bookPage <= 0) {
+					// Can't go back any further
+					return false
+				}
+				bookPage -= 2
+			}
+
+			if (bookPage >= bookPages) {
+				// No more pages, finish dialogue
+				this.finish()
+			} else {
+				this.loadBookPage(bookPage)
+			}
+			return true
+		},
+
 		loadBookPage(pageNo) {
+			// (Actually loads a pair of pages)
+			// (May get changed in the future to allow for non-book pdfs)
 			bookLoaded = false
 
 			let bookCtx1 = bookCanvas1.getContext('2d');
@@ -380,17 +432,17 @@ const DialogueSystem = (function() {
 
 			// Load left page
 			bookPDF.getPage(pageNo+1).then((page) => {
-				var transform = [1.0, 0, 0, 1.0, 0, 0];
-				var desiredWidth = 340;
-				var viewport = page.getViewport({ scale: 1.0, });
-				var scale = desiredWidth / viewport.width;
-				var scaledViewport = page.getViewport({ scale: scale, });
-				var renderContext1 = {
+				let transform = [1.0, 0, 0, 1.0, 0, 0];
+				let desiredWidth = 340;
+				let viewport = page.getViewport({ scale: 1.0, });
+				let scale = desiredWidth / viewport.width;
+				let scaledViewport = page.getViewport({ scale: scale, });
+				let renderContext1 = {
 					canvasContext: bookCtx1,
 					transform: transform,
 					viewport: scaledViewport
 				};
-				var renderContext2 = {
+				let renderContext2 = {
 					canvasContext: bookCtx2,
 					transform: transform,
 					viewport: scaledViewport
@@ -402,11 +454,13 @@ const DialogueSystem = (function() {
 					page2.render(renderContext2); // Render right page
 				}).catch((error) => {
 					console.error(`Error loading page 2`, error);
+					this.finish()
 				});
-				bookLoaded = true
+				bookLoaded = true // book is done loading when at least one page is loaded
 
 			}).catch((error) => {
 				console.error(`Error loading page 1`, error);
+				this.finish()
 			});
 		},
 
