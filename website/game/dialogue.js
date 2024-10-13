@@ -13,6 +13,7 @@ import {checkCondition} from "./area.js"
 import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js"
 import { canvasWidth, canvasHeight } from "./engine/render.js"
 import { ctx } from "./engine/canvas.js"
+import {getMousePos, checkMouseInside} from "./engine/input.js"
 
 import * as pdfjsLib from "./lib/pdf.min.mjs"
 // set worker src
@@ -171,11 +172,11 @@ const DialogueSystem = (function() {
 						}
 					}
 				} else if (dialogueType == "book") {
-					let x = 184
+					let x = canvasWidth/2 - 680/2
 					let y = 41
 
-					// Render bookCanvas directly
 					if (bookLoaded) {
+						// Render book canvases directly
 						DRAW.setColor(255,255,255,1.0)
 						ctx.drawImage(bookCanvas1, x, y)
 						ctx.drawImage(bookCanvas2, x+680/2, y)
@@ -187,7 +188,18 @@ const DialogueSystem = (function() {
 						DRAW.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center")
 
 						// Page turn arrow
-						DRAW.text("<")
+						let [mouseX, mouseY] = getMousePos()
+						if (checkMouseInside(x, y, 680, 460)) {
+							if (mouseX < canvasWidth/2) {
+								DRAW.text("<", canvasWidth/2 - 680/4 - 150, y + 446, "center")
+							} else {
+								DRAW.text(">", canvasWidth/2 + 680/4 + 150, y + 446, "center")
+							}
+						}
+
+						// Draw book texture
+						DRAW.setColor(255,255,255,1)
+						DRAW.image(IMG.book, null, x-1, y-1)
 					}
 
 				}
