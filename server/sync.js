@@ -135,6 +135,9 @@ function listenToClient(socket) {
 						let contents = args[1];
 						handleClientMessage(socket.id, header, contents)
 						break;
+					case "jump":
+						actionsToSend.push(action)
+						break;
 				}
 			}
 			socket.to(`area:${playerData.area}`).emit("action", socket.id, actionsToSend);

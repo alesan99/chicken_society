@@ -119,6 +119,9 @@ MENUS["chatMenu"] = new class extends Menu {
 						QuestSystem.progress(arg, Number(arg2) || 0, Number(arg3) || 1)
 					}
 					break
+				case "/jump":
+					PLAYER.jump(Number(arg2) || 0)
+					break
 				case "/debug": // Debug physics
 					setDebugPhysics(!DEBUGPHYSICS)
 					break

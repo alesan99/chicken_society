@@ -41,6 +41,8 @@ export default class Character extends PhysicsObject {
 			(-this.w/2), 0-bevel
 		)
 
+		this.z = 0 //(visual distance from ground)
+
 		this.active = true
 		this.static = false
 		this.setPosition(null,null)
@@ -54,6 +56,8 @@ export default class Character extends PhysicsObject {
 
 		this.sx = 0 // Speed x
 		this.sy = 0 // Speed y
+		this.sz = 0 // Speed z
+		this.zgravity = 1800 // Gravity
 
 		this.health = 1.0
 		this.statusEffects = [] // List of status effect objects
@@ -143,6 +147,18 @@ export default class Character extends PhysicsObject {
 			}
 		}
 
+		// Jumping
+		if (this.z != 0 || this.sz != 0) {
+			this.z = this.z + this.sz*dt
+			this.sz = this.sz + this.zgravity*dt
+
+			// Land on ground
+			if (this.z > 0) {
+				this.z = 0
+				this.sz = 0
+			}
+		}
+
 		// Update Animation
 		if (this.walking != this.oldwalking) {
 			if (this.walking) { // Walk if moving
@@ -188,6 +204,9 @@ export default class Character extends PhysicsObject {
 			DRAW.setColor(255,255,255,1.0)
 			DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1)
 		}
+
+		// Jumping
+		drawY += this.z
 
 		// Chicken and accessories
 		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "left")) { // Held item
@@ -515,6 +534,15 @@ export default class Character extends PhysicsObject {
 			muzzleX += 32
 		}
 		PARTICLES.push(new Particle(muzzleX, muzzleY, IMG.particle, SPRITE.gunshot, [0,1], 0.05))
+	}
+
+	// Jump
+	jump(dist) {
+		if (dist == 0) {dist = 500}
+		this.sz = -dist
+		if (this == PLAYER) {
+			NETPLAY.sendAction("jump", dist)
+		}
 	}
 
 	// Collision

@@ -317,7 +317,12 @@ Netplay = class {
 							chicken.startStatusEffect(args[0], args[1])
 							break;
 						case "shoot":
+							// args = [nx, ny]
 							chicken.shoot(args[0], args[1])
+							break;
+						case "jump":
+							// args = [jumpHeight]
+							chicken.jump(args[0])
 							break;
 					}
 				}
