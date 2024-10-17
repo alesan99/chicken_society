@@ -120,7 +120,7 @@ MENUS["chatMenu"] = new class extends Menu {
 					}
 					break
 				case "/jump":
-					PLAYER.jump(Number(arg2) || 0)
+					PLAYER.jump(Number(arg) || 0)
 					break
 				case "/debug": // Debug physics
 					setDebugPhysics(!DEBUGPHYSICS)

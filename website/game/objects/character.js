@@ -543,6 +543,13 @@ export default class Character extends PhysicsObject {
 		if (this == PLAYER) {
 			NETPLAY.sendAction("jump", dist)
 		}
+
+		// High jumps should cause dust clouds
+		if (dist > 1000) {
+			PARTICLES.push(new Particle(this.x-20, this.y-4, IMG.particle, SPRITE.dust, [0,1], 0.1))
+			PARTICLES.push(new Particle(this.x, this.y, IMG.particle, SPRITE.dust, [0,1], 0.1))
+			PARTICLES.push(new Particle(this.x+20, this.y-4, IMG.particle, SPRITE.dust, [0,1], 0.1))
+		}
 	}
 
 	// Collision
