@@ -154,8 +154,7 @@ export default class Character extends PhysicsObject {
 
 			// Land on ground
 			if (this.z > 0) {
-				this.z = 0
-				this.sz = 0
+				this.land()
 			}
 		}
 
@@ -550,6 +549,12 @@ export default class Character extends PhysicsObject {
 			PARTICLES.push(new Particle(this.x, this.y, IMG.particle, SPRITE.dust, [0,1], 0.1))
 			PARTICLES.push(new Particle(this.x+20, this.y-4, IMG.particle, SPRITE.dust, [0,1], 0.1))
 		}
+	}
+
+	land() {
+		// Land on ground after a jump
+		this.sz = 0
+		this.z = 0
 	}
 
 	// Collision

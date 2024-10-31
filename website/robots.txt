@@ -1,0 +1,26 @@
+# Allow Googlebot (Google Search)
+User-agent: Googlebot
+Disallow:
+
+# Allow Bingbot (Bing Search)
+User-agent: Bingbot
+Disallow:
+
+# Allow Slurp (Yahoo Search)
+User-agent: Slurp
+Crawl-delay: 10
+Disallow:
+
+# Allow DuckDuckBot (DuckDuckGo)
+User-agent: DuckDuckBot
+Crawl-delay: 10
+Disallow:
+
+# Set a crawl delay for Yandex (Russian search engine)
+User-agent: Yandex
+Crawl-delay: 10
+Disallow:
+
+# Disallow all other user agents
+User-agent: *
+Disallow: /
