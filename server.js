@@ -15,7 +15,10 @@ const app = express();
 const http = require("http"); // Used to start server
 const server = http.createServer(app);
 const { Worker } = require('worker_threads'); // Allow multi-threading
+const rateLimit = require('express-rate-limit'); // Limit requests to server
+const path = require("path"); // Used to build paths
 
+// Session; used for user data
 const sessionMiddleware = session({
 	secret: Math.random().toString(36).substring(2), // TODO: Use a library for this
 	resave: true,
@@ -24,6 +27,15 @@ const sessionMiddleware = session({
 });
   
 app.use(sessionMiddleware);
+
+// Rate limiter; helps stop exessive requests to server
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 5000, // Limit each IP to 5000 requests per windowMs
+    message: 'Too many requests from this IP, please try again after 10 minutes'
+});
+
+app.use(limiter);
 
 const { Server } = require("socket.io");
 const msgpack = require("socket.io-msgpack-parser"); // Import the socket.io-msgpack-parser module. If this crashes run "npm ci" again
@@ -37,7 +49,6 @@ module.exports = {
 };
 
 // Send HTML file when user connects to server
-const path = require("path"); // Import the "path" module.
 const { buildGame } = require("./server/build.js");
 buildGame();
 app.use(express.static(path.join(__dirname, "server/lib"))); //serve msgpack socket.io separately so it doesn't get loaded when running website locally.
