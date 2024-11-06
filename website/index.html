@@ -8,66 +8,85 @@
 	<link rel="icon" type="image/x-icon" href="./assets/favicon.png">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
+
 <nav>
-	<li id="home"><a href="#"><img src="./assets/logo.png"></a></li>
-	<li id="login-li">
-		<div class="loginContainer">
-			<form id="loginForm">
-				<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username"
-					maxlength="16" autocomplete="off" required />
-				<input id="password-field" class="login-stuff" type="text" placeholder="Password" name="password"
-					maxlength="16" autocomplete="off" required />
-				<button id="login" class="login-stuff" type="button">Login</button>
-			</form>
+	<ul id="navigation-bar-list">
+		<li id="home-link">
+			<div id="home">
+				<a href="#"><img src="./assets/logo.png" id="logo"></a>
+			</div>
+		</li>
+		<div id="dropdowns">
+			<li class="dropdown">
+				<button class="dropdown-button">Sign In</button>
+				<div class="dropdown-content">
+					<div class="loginContainer">
+						<form id="loginForm">
+							<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username" maxlength="16" autocomplete="off" required />
+							<input id="password-field" class="login-stuff" type="password" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
+							<button id="login-button" class="login-stuff" type="button">Login</button>
+						</form>
+					</div>
+				</div>
+			</li>
+			<li class="dropdown">
+				<button class="dropdown-button">Register</button>
+				<div class="dropdown-content">
+					<div class="loginContainer">
+						<form id="registerForm">
+							<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
+							<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
+							<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
+							<button id="register-button" class="register-stuff" type="button">Register</button>
+						</form>
+					</div>
+				</div>
+			</li>
 		</div>
-	</li>
-	<li id="login-li">
-		<div class="loginContainer">
-			<form id="registerForm">
-				<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
-				<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
-				<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
-				<button id="register" class="register-stuff" type="button">Register</button>
-			</form>
-	</li>
-	<script type="importmap">
-		{
-		  "imports": {
-		  }
-		}
-	</script>
+	</ul>
 </nav>
 
 <body>
-	<div class="game-container">
+	<div class="page-container">
 		<!-- changes the yellow solid line of the game canvas size -->
-		<div class="color-underlay">
+		<div class="game-container">
 			<!-- Canvas to render Game -->
 			<div id="canvasContainer">
 				<canvas id="gameCanvas" width="1024" height="576" oncontextmenu="return false;"></canvas>
 			</div>
-			<!-- User login stuff action="https://yourdomain.com/login" method="post"-->
 			<!-- Invisible text input used to force mobile devices to open keyboard -->
 			<input id="gameTextInput" type="text" maxlength="47" style="position:fixed;top:0;left:-200px" ;>
+
+			<!-- Footer -->
+			<div id="footer">
+				<p>© 2024 Goodest Software</p>
+			</div>
 		</div>
 	</div>
+
+	<!-- START THE GAME-->
+	<script type="importmap">
+		{
+		  "imports": {}
+		}
+	</script>
+	<script src="game/login.js"></script>
+	
 	<!-- Socket.IO v4.7.2 with Msgpack parser -->
 	<!-- May need to be updated whenever server's socket.io version is updated. -->
 	<script src="socket.io.msgpack.min.js"></script>
 	<!-- <script src="/socket.io/socket.io.js"></script> -->
-	<script src="game/lib/pdf.min.mjs" type="module"></script>
-	<script src="game/lib/pdf.worker.min.mjs" type="module"></script>
-
 
 	<!-- Libraries -->
 	<script src="game/lib/json5.index.min.js"></script>
 	<script src="game/lib/easing.js.min.js"></script>
 	<script src="game/lib/howler.core.js"></script>
+	<script src="game/lib/pdf.min.mjs" type="module"></script>
+	<script src="game/lib/pdf.worker.min.mjs" type="module"></script>
 
 	<!-- Run game code -->
 	<script src="game/engine/canvas.js" type="module"></script>
 
-	<script src="game/login.js"></script>
 	<script src="game/main.js" type="module"></script>
 </body>
 
