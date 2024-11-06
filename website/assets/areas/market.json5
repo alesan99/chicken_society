@@ -20,14 +20,14 @@
 			"h": 150,
 			"sound": "woosh"
 		},
-        "pldistrictEntrance": {
-			"to": "pldistrict",
-			"fromWarp": "pldistrictExit",
+        "pl_districtEntrance": {
+			"to": "pl_district",
+			"fromWarp": "pl_districtExit",
 			"facing": "down",
-			"x": 0,
-			"y": 0,
-			"w": 30,
-			"h": 300,
+			"x": 323,
+			"y": 178,
+			"w": 200,
+			"h": 40,
 			"sound": "woosh"
 		}
 	},
