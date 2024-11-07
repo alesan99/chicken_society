@@ -2,6 +2,7 @@
 
 // Get a reference to the canvas element
 var canvas = document.getElementById("gameCanvas")
+var canvasContainer = document.getElementById("canvasContainer")
 var ctx //canvas.getContext("2d")
 
 // Dimensions of canvas. Look at index.html to see actual dimensions
@@ -24,21 +25,25 @@ if (canvas.getContext) {
 // Function to resize the canvas based on the window size
 function resizeCanvas() {
 	// Get the current window dimensions & determine the scaling factor to fit the canvas within the window
-	const windowWidth = window.innerWidth
-	const windowHeight = window.innerHeight
+	const windowWidth = document.documentElement.clientWidth;
+    const windowHeight = document.documentElement.clientHeight;
 
 	// Scale the canvas to fit within the window - "-60" accounts for navigation bar height
-	canvasScale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), (windowHeight-65) / (canvasHeight+canvasPadding)))
+	canvasScale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), (windowHeight-80) / (canvasHeight+canvasPadding)))
 
 	// Set the canvas dimensions to fit within the window (using CSS)
 	canvas.style.width = `${canvasWidth * canvasScale}px`
 	canvas.style.height = `${canvasHeight * canvasScale}px`
+
+	canvasContainer.style.width = `${canvasWidth * canvasScale}px`
+	canvasContainer.style.height = `${canvasHeight * canvasScale}px`
 }
 
 // Initial canvas resize
 resizeCanvas()
 
 // Resize the canvas whenever the window size changes
-window.addEventListener('resize', resizeCanvas)
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', resizeCanvas);
 
 export {canvas, ctx, canvasWidth, canvasHeight}
