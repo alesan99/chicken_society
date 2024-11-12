@@ -9,13 +9,16 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
+<!-- Navigation Bar -->
 <nav>
 	<ul id="navigation-bar-list">
+		<!-- Chicken Society logo -->
 		<li id="home-link">
 			<div id="home">
 				<a href="#"><img src="./assets/logo.png" id="logo"></a>
 			</div>
 		</li>
+		<!-- Sign In and Register dropdowns -->
 		<div id="dropdowns">
 			<li class="dropdown">
 				<button class="dropdown-button">Sign In</button>
@@ -48,11 +51,10 @@
 
 <body>
 	<div class="page-container">
-		<!-- changes the yellow solid line of the game canvas size -->
-		<div class="game-container">
+		<div class="content-container">
 			<!-- Canvas to render Game -->
-			<div id="canvasContainer">
-				<canvas id="gameCanvas" width="1024" height="576" oncontextmenu="return false;"></canvas>
+			<div id="canvas-container">
+				<canvas id="game-canvas" width="1024" height="576" oncontextmenu="return false;"></canvas>
 			</div>
 			<!-- Invisible text input used to force mobile devices to open keyboard -->
 			<input id="gameTextInput" type="text" maxlength="47" style="position:fixed;top:0;left:-200px" ;>
@@ -66,9 +68,7 @@
 
 	<!-- START THE GAME-->
 	<script type="importmap">
-		{
-		  "imports": {}
-		}
+		{"imports": {}}
 	</script>
 	<script src="game/login.js"></script>
 	

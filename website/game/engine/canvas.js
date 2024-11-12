@@ -1,17 +1,16 @@
 // Render module; useful functions for rendering stuff onto the screen.
 
 // Get a reference to the canvas element
-var canvas = document.getElementById("gameCanvas")
-var canvasContainer = document.getElementById("canvasContainer")
+var canvas = document.getElementById("game-canvas")
+var canvasContainer = document.getElementById("canvas-container")
 var ctx //canvas.getContext("2d")
 
 // Dimensions of canvas. Look at index.html to see actual dimensions
 const canvasWidth = canvas.width; const canvasHeight = canvas.height
-const canvasPadding = 20
+const canvasPadding = 6
 var canvasScale = 1
 
-const container = document.getElementById("canvasContainer")
-container.style.width = canvasWidth + "px"
+canvasContainer.style.width = canvasWidth + "px" // Resize canvas container on load
 
 // Get the 2D rendering context for the canvas if supported by browser
 if (canvas.getContext) {
@@ -29,7 +28,8 @@ function resizeCanvas() {
     const windowHeight = document.documentElement.clientHeight;
 
 	// Scale the canvas to fit within the window - "-60" accounts for navigation bar height
-	canvasScale = Math.min(1.0, Math.min(windowWidth / (canvasWidth+canvasPadding), (windowHeight-80) / (canvasHeight+canvasPadding)))
+	canvasScale = Math.min(1.0, Math.min((windowWidth) / (canvasWidth+canvasPadding*2), (windowHeight-90) / (canvasHeight+canvasPadding*2)))
+	canvasScale = Math.max(0.25, canvasScale) // Minimum scale, so it doesn't get super tiny
 
 	// Set the canvas dimensions to fit within the window (using CSS)
 	canvas.style.width = `${canvasWidth * canvasScale}px`

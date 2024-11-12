@@ -19,7 +19,7 @@ body{
     align-items: center;
 }
 
-.game-container{
+.content-container{
 	/* Contains the game and page content. Centers everything. */
 	z-index: 998;
 	height: calc(100vh - 45px); /* -45px for nav bar*/
@@ -30,9 +30,10 @@ body{
     flex-direction: column;
     align-items: center; 
 	padding : 10px;
+    min-width : 200px;
 }
 
-#canvasContainer {
+#canvas-container {
 	/* Contains the game canvas */
 	/* Create black border around the canvas */
     margin-top: 0vh;
@@ -155,6 +156,11 @@ nav ul li {
 /* Show the dropdown content on hover */
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.dropdown:hover .dropdown-button,
+.dropdown:focus-within .dropdown-button {
+    background-color: #f9ddcc;
 }
 
 /* Login stuff */
