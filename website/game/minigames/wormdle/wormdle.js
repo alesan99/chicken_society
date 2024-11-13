@@ -203,16 +203,22 @@ MINIGAMES["wormdle"] = new class {
 			let wormWordStart = (Math.ceil(this.worm.letters.length/this.word.length)-1)*this.word.length
 			for (let i = 0; i < this.word.length; i++) {
 				let letter = this.worm.letters[i+wormWordStart]
+				let scale = 1.0
 				if (letter) {
 					let correct = this.getLetterCorrect(letter, i)
-					if (correct === 1) {
+					if (correct === 1) { // close
 						DRAW.setColor(255,174,89,1.0)
-					} else if (correct == 2) {
+					} else if (correct == 2) { // correct
 						DRAW.setColor(31,183,71,1.0)
-					} else {
+					} else { // incorrect
 						DRAW.setColor(76,75,78,1.0)
 					}
-					DRAW.rectangle(340 + 68*i, 444, 64, 64, "fill")
+					if (!this.worm.letters[i+wormWordStart+1]) { // animation
+						if (this.worm.eating && this.worm.eatingTimer > 0) {
+							scale = 1.0 - (this.worm.eatingTimer/this.worm.eatingTime)**2
+						}
+					}
+					DRAW.rectangle((340 + 68*i+32)-(32*scale), (444+32)-(32*scale), 64*scale, 64*scale, "fill")
 					DRAW.setColor(255,255,255,1.0)
 					// make letter uppercase
 					letter = letter.toUpperCase()

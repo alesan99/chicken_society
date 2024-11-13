@@ -12,6 +12,7 @@ import {PLAYER, PLAYER_CONTROLLER, DEBUGPHYSICS, setDebugPhysics} from "../world
 import QuestSystem from "../quests.js"
 import Transition from "../transition.js"
 import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js"
+import AudioSystem from "../engine/audio.js"
 
 MENUS["chatMenu"] = new class extends Menu {
 	//Initialize
@@ -127,6 +128,9 @@ MENUS["chatMenu"] = new class extends Menu {
 					break
 				case "/notify": // Create notification
 					Notify.new(arg)
+					break
+				case "/volume": // Set volume
+					AudioSystem.setVolume(Number(arg))
 					break
 			}
 		} else if (this.value.length > 0) {
