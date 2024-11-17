@@ -61,10 +61,15 @@ function loadGameAssets() {
 
 	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a")
 	MUSIC.chickendisco = AudioSystem.newMusic("assets/music/chickendisco.mp3")
+	MUSIC.chictoriassecret = AudioSystem.newMusic("assets/music/chicktoriasecret.mp3")
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg")
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg")
 	SFX.gun = AudioSystem.newSound("assets/sfx/gun.ogg")
+	SFX.cluck = []
+	for (let i=1; i<=6; i++) {
+		SFX.cluck.push(AudioSystem.newSound(`assets/sfx/chickenSoc_cluck_${i}.ogg`))
+	}
 
 	// CHAT MENU & HUD
 	IMG.nugget = new RenderImage("assets/nugget.png")

@@ -209,10 +209,27 @@ const DialogueSystem = (function() {
 		update(dt) {
 			if (open) {
 				// Text animations
-				if (dialogueType === false) {
+				if (dialogueType === false) { // normal dialogue
 					if (dialogueProgress < currentText.length) {
-						dialogueTimer += 30*dt
+						// Progress dialogue text character by character
+						let charSpeed = 30
+						let nextChar = currentText.charAt(dialogueProgress-1)
+						// pause for punctuation
+						if (nextChar == "." || nextChar == "!" || nextChar == "?") {
+							charSpeed = 5
+						} else if (nextChar == ",") {
+							charSpeed = 8
+						}
+						// progress text
+						dialogueTimer += charSpeed*dt
+						let oldDialogueProgress = dialogueProgress
 						dialogueProgress = Math.min(Math.floor(dialogueTimer), currentText.length)
+						// Play dialog sound
+						if (speakerNPC) {
+							if (dialogueProgress > oldDialogueProgress && dialogueProgress%8 == 1) {
+								AudioSystem.playSound(SFX.cluck[Math.random()*SFX.cluck.length|0])
+							}
+						}
 					} else {
 						// Continue prompt arrow movement
 						promptTimer = (promptTimer + 2*dt)%1
@@ -328,29 +345,27 @@ const DialogueSystem = (function() {
 		},
 
 		next() {
-			if (dialogueType === false) {
-				// Normal dialogue
-				if (dialogueProgress < currentText.length) {
-					// dialogue is not finished presenting, skip
-					dialogueProgress = currentText.length
-				} else if (dialogueData.responses && stage >= dialogueData.text.length-1) {
-					// Await response, if applicable
-					this.requestResponse(dialogueData.responses)
-				} else {
-					// go to next dialogue line
-					stage += 1
-					if (dialogueData.randomDialogue) {
-						// Random dialogue has only one stage
-						this.finish()
-						return
-					} if (stage >= dialogueData.text.length) {
-						// No more dialogue lines, finish dialogue
-						this.finish()
-						return
-					}
-					
-					this.startText(stage)
+			// Normal dialogue
+			if (dialogueProgress < currentText.length) {
+				// dialogue is not finished presenting, skip
+				dialogueProgress = currentText.length
+			} else if (dialogueData.responses && stage >= dialogueData.text.length-1) {
+				// Await response, if applicable
+				this.requestResponse(dialogueData.responses)
+			} else {
+				// go to next dialogue line
+				stage += 1
+				if (dialogueData.randomDialogue) {
+					// Random dialogue has only one stage
+					this.finish()
+					return
+				} if (stage >= dialogueData.text.length) {
+					// No more dialogue lines, finish dialogue
+					this.finish()
+					return
 				}
+				
+				this.startText(stage)
 			}
 		},
 

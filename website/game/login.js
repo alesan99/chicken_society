@@ -1,6 +1,6 @@
 const loginForm = document.getElementById("login-stuff");
-const loginButton = document.getElementById("login");
-const registerButton = document.getElementById("register");
+const loginButton = document.getElementById("login-button");
+const registerButton = document.getElementById("register-button");
 const registerForm = document.getElementById("register-stuff");
 loginButton.addEventListener("click", (e) => {
     e.preventDefault();
