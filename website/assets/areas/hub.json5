@@ -1,6 +1,7 @@
 {
 	"name": "Town Square",
 	"mapLocation": [261, 196],
+	"music": "welcometothesociety",
 
 	// Wall Collision
 	"walls": [
