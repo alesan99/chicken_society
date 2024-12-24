@@ -1,6 +1,7 @@
 {
   name: "Pet'stupid",
   mapLocation: [261, 196],
+  music: "wttspetstupidremix",
 
   walls: [
     [133, 276, 62, 576, 0, 576, 0, 276],
