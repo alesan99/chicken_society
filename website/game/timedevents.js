@@ -3,6 +3,8 @@
 // For example:
 // hub.json5 will be combined with the Christmas hub.json5. Anything with a shared name will be replaced by the Christmas version.
 
+import { loadJSON5 } from "./assets.js"
+
 const TimedEventsSystem = (function() {
 	let activeTimedEvents = []
 	

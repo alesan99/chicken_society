@@ -179,6 +179,23 @@
 			"minigameName": "wormdle",
 			"cost": 1
 		},
+		// Eggs Shooter Arcade Machine
+		"eggsMinigame": {
+			"x": 200,
+			"y": 418,
+			"shape": [-40,-30, 40,-30, 40,30, -40,30],
+
+			"clickable": [-69,-62, -38,-90, 11,-72, 12,-30, -26,-30],
+			"icon": {
+				"frame": 2,
+				"x": -20,
+				"y": -100
+			},
+
+			"action": "minigame",
+			"minigameName": "eggs",
+			"cost": 1
+		},
 		
 		// Claw Machine
 		"clawMachine": {
