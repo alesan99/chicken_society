@@ -48,6 +48,7 @@ import { MinigameState } from "./minigames/minigame.js"
 import {} from "./minigames/claw/claw.js"
 import {} from "./minigames/runner/runner.js"
 import {} from "./minigames/wormdle/wormdle.js"
+import {} from "./minigames/eggs/eggs.js"
 
 import { loadAreaFile } from "./area.js"
 import PetRaceSystem from "./petrace.js"
