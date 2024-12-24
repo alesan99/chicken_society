@@ -1,4 +1,9 @@
 {
+	"name": "Alleyway",
+	"mapLocation": false,
+	"music": "alleywaytrack",
+
+
 	"walls": [
 		[0, 0, 1024, 0, 1024, 261, 0, 261],
 
