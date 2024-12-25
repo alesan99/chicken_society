@@ -57,6 +57,7 @@ Netplay = class {
 		// This Client
 		this.connect()
 		this.id = socket.id // Socket ID
+		this.isConnected = true // Still connected to server
 
 		// Chicken syncing information
 		this.oldx = 0

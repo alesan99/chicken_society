@@ -60,7 +60,8 @@ function makeSaveData() {
 		},
 
 		highscores: {
-			runner: 0
+			runner: 0,
+			eggs: 0
 		}
 	}
 
