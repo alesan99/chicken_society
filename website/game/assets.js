@@ -64,6 +64,7 @@ function loadGameAssets() {
 	MUSIC.chictoriassecret = AudioSystem.newMusic("assets/music/chicktoriasecret.mp3")
 	MUSIC.welcometothesociety = AudioSystem.newMusic("assets/music/welcometothesociety.mp3")
 	MUSIC.wttspetstupidremix = AudioSystem.newMusic("assets/music/wttspetstupidremix.mp3")
+	MUSIC.alleywaytrack = AudioSystem.newMusic("assets/music/alleywaytrack.mp3")
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg")
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg")
