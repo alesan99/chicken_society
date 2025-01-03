@@ -1,0 +1,37 @@
+{
+	"name": "Sewer",
+	"mapLocation": false,
+	"music": "alleywaytrack",
+
+
+	"walls": [
+		[0, 576, 1024, 576, 1024, 600, 0, 600], // bottom of screen
+		[848,437, 913,48, 913,576, 841,491],
+		[582,225, 778,334, 778,394, 582,278],
+		[446,286, 493,288, 569,392, 508,392],
+		[508,399, 573,399, 600,576, 508,576]
+	],
+
+	"warps": {
+		"sewerExit": {
+			"to": "alleyway",
+			"fromWarp": "sewerEntrance",
+			"facing": "left",
+			"x": 810,
+			"y": 420,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"mafia_hideoutEntrance": {
+			"to": "mafia_hideout",
+			"fromWarp": "mafia_hideoutExit",
+			"facing": "down",
+			"x": 530,
+			"y": 263,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		}
+	}
+}
