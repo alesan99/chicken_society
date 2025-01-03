@@ -1,0 +1,11 @@
+{
+    "name": "Chickensas City Police Uniform",
+    "description": "Perfect for pigs who want to enforce the law!",
+    "cost": 100,
+
+    "center": [
+        [61,89],
+        [85,82],
+        [63,82]
+    ]
+}

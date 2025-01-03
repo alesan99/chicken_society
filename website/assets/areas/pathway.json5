@@ -59,10 +59,10 @@
         "marketEntrance": {
       "to": "market",
       "fromWarp": "marketExit",
-      "facing": "left",
-      "x": 809,
+      "facing": "down",
+      "x": 790,
       "y": 170,
-      "w": 400,
+      "w": 300,
       "h": 60,
 			"sound": "woosh"
     }

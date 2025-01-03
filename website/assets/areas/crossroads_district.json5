@@ -3,18 +3,30 @@
 	"mapLocation": false,
 
 	"walls": [
-		[0,576, 1024,576, 1024,600, 0,600] // bottom of screen
+		[0,576, 1024,576, 1024,600, 0,600], // bottom of screen
+		[0,296, 264,396, 0,526], // south factory
+		[-10,484, 0,484, 0,576, -10,576], // left wall
+		[1024,229, 1070,229, 1070,576, 1024,576], // right wall
+		// Back walls
+		[0,52, 344,52, 344,121, 0,121],
+		[311,27, 311,0, 521,0, 521,27],
+		[521,36, 980,94, 980,267, 528,191],
+		// Rubble
+		[461,199, 520,127, 724,226, 459,247], // left rubble
+		[761,233, 911,231, 903,311, 701,293], // middle rubble
+		[866,334, 1024,326, 1024,424, 860,398] // right rubble
+
 	],
 
 	"warps": {
 		"crossroads_districtExit": {
-			"to": "hub",
+			"to": "pl_district",
 			"fromWarp": "crossroads_districtEntrance",
-			"facing": "down",
-			"x": 20,
-			"y": 400,
-			"w": 40,
-			"h": 400,
+			"facing": "right",
+			"x": 173,
+			"y": 169,
+			"w": 20,
+			"h": 500,
 			"sound": "door"
 		}
 	},
@@ -24,12 +36,12 @@
 			"profile": {
 				"name": "Detective",
 				"color": "#FFFFFF",
-				"head": false,
+				"head": "police_hat",
 				"face": false,
-				"body": false
+				"body": "police_uniform"
 			},
 			"x": 830,
-			"y": 460,
+			"y": 440, 
 			"facing": "left",
 			"roamRadius": 5,
 			"speechBubble": [
@@ -84,6 +96,36 @@
 			],
 		}
 	},
+
+	"sprites": {
+		// Fire Animation
+		"explosionFire": {
+			"image": "crossroads-fire.png",
+			"framesx": 2,
+			"framesy": 1,
+			"anim": {
+				"frames": [0, 1],
+				"delay": 0.8
+			},
+			"w": 587,
+			"h": 455,
+
+			"x": 423,
+			"y": 0,
+		},
+		// South Factory layer
+		"factoryLayer": {
+			"image": "crossroads-overlay.png",
+			"framesx": 1,
+			"framesy": 1,
+			"w": 275,
+			"h": 400,
+			"x": 0,
+			"y": 0,
+			"worldy": 400
+		}
+	},
+
 
 	"triggers": {
 		"snake_skin": {

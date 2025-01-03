@@ -1,0 +1,11 @@
+{
+    "name": "Police Hat",
+    "description": "The perfect final accessory for any police officer.",
+    "cost": 20,
+
+    "center": [
+        [62,32],
+        [86,30],
+        [63,35]
+    ]
+}
