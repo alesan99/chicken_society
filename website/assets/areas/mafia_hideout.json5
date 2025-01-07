@@ -1,0 +1,120 @@
+{
+	"walls": [
+        [0,576, 1024,576, 1024,600, 0,600], // lower border
+		[81,193, 138,174, 244,183, 98,242], // left crates
+		[0,483, 249,483,249,576,0,576], // desk and lower crates
+		[260,471, 790,470, 836,576, 221,576], // water
+		//lower left wall
+		[0,310, 26,265, 31,340, 0,379], 
+		[-10,379, 0,340, 0,576, -10,576],
+		// back wall
+		[236,147, 790,122, 779,181, 242,190],
+		[612,166, 797,174, 795,222, 620,209],
+		// right wall
+		[846,68, 1024,266, 1024,367, 871,149],
+		[1030,330, 1030,576, 1024,576, 1024,330]
+	],
+
+	"warps": {
+		"mafia_hideoutExit": {
+			"to": "sewer",
+			"fromWarp": "mafia_hideoutEntrance",
+			"facing": "right",
+			"x": 29,
+			"y": 268,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"speakeasyEntrance_1": {
+			"to": "speakeasy",
+			"fromWarp": "speakeasyExit_1",
+			"facing": "down",
+			"x": 821,
+			"y": 96,
+			"w": 100,
+			"h": 30,
+			"sound": "woosh"
+		},
+	},
+
+	"sprites": {
+		"deskLayer": {
+			"image": "mafia_hideout_layer.png",
+			"w": 1024,
+			"h": 150,
+			"x": 0, 
+			"y": 426,
+			"worldy": 576 
+		}
+	},
+
+	"triggers": {
+		"invisibility_cloak": {
+			"x": 221,
+			"y": 68,
+			"shape": [0, 0, 30, 0, 30, 30, 0, 30],
+			"clickable": true,
+			"icon": { "frame": 1, "x": 15, "y": -10 },
+			"action": "dialogue",
+			"dialogue": [
+				{
+				"text": [
+					"An invisibility cloak, an essential tool for any covert operative.",
+					"It appears to be invisible.",
+				],
+				speaker: false
+				}
+			]
+		},
+		"maduovonna": {
+			"x": 452,
+			"y": 62,
+			"shape": [0, 0, 30, 0, 30, 30, 0, 30],
+			"clickable": true,
+			"icon": { "frame": 1, "x": 15, "y": -10 },
+			"action": "dialogue",
+			"dialogue": [
+				{
+				"text": [
+					"A marble statue of La Maduovonna. She is a central figure in Catholeggism and beloved by many members of the mafia.",
+				],
+				speaker: false
+				}
+			]
+		},
+		"curious_orb": {
+			"x": 675,
+			"y": 59,
+			"shape": [0, 0, 30, 0, 30, 30, 0, 30],
+			"clickable": true,
+			"icon": { "frame": 1, "x": 15, "y": -10 },
+			"action": "dialogue",
+			"dialogue": [
+				{
+				"text": [
+					"A most curious orb of unknown origin, discovered on the bottom of the harbor during building of the docks.",
+					"Investigation reveals that is a perfect sphere, and it seems to be made of glass. Taking a geiger counter to it shows a reading of 142 CPM.",
+				],
+				speaker: false
+				}
+			]
+		},
+		"mission_board": {
+			"x": 927,
+			"y": 123,
+			"shape": [0,0, 50,0, 50,75, 0,75],
+			"clickable": true,
+			"icon": { "frame": 1, "x": 15, "y": -10 },
+			"action": "dialogue",
+			"dialogue": [
+				{
+				"text": [
+					"A mission board full of missions for mafia agents. It seems none are applicable to a member of your level at the moment.",
+				],
+				speaker: false
+				}
+			]
+		}
+	}
+}
