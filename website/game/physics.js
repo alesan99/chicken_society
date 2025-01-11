@@ -14,6 +14,8 @@ function updatePhysics(objs, spatialHash, dt) {
 				listOfCollisions.clear()
 				a.DEBUGCOLLIDED = false
 
+				let oldx = a.x
+				let oldy = a.y
 				let nx = a.x
 				let ny = a.y
 
@@ -101,6 +103,14 @@ function updatePhysics(objs, spatialHash, dt) {
 							}
 						}
 					}
+				}
+
+				// Ignore calculated position if collision callback changed it
+				if (a.x != oldx) {
+					nx = a.x
+				}
+				if (a.y != oldy) {
+					ny = a.y
 				}
 
 				// Finally move to 'new' position

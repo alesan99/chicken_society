@@ -39,6 +39,8 @@ MINIGAMES["eggs"] = new class {
 			sy:0,
 			bx:0,
 			by:0,
+			bsx:0,
+			bsy:0,
 			dead:true,
 			score:SAVEDATA.highscores.eggs
 		} // Your data
@@ -79,7 +81,8 @@ MINIGAMES["eggs"] = new class {
 		this.spawnObject("wall", new Wall(this.world, this.screenx+this.screenw*0.3-24, this.screeny+this.screenh*0.2, 24, this.screenh*0.6))
 		
 		this.chicken = this.spawnObject("chicken", new EggChicken(this.world, this.screenx+this.screenw/2, this.screeny+this.screenh/2, true))
-		this.chicken.egg = this.spawnObject("egg", new EggShot(this.world))
+		this.chicken.egg = this.spawnObject("egg", new EggShot(this.world, this.chicken))
+		this.chicken.egg.makePrimary()
 	}
 
 	start() {
@@ -107,24 +110,45 @@ MINIGAMES["eggs"] = new class {
 			let obj = this.objects.chicken[id]
 			if (obj) {
 				if (data.dead) {
+					// Dead Chicken
 					obj.active = false
 					obj.olddead = true
 				} else {
+					// Alive Chicken
 					obj.olddead = false
 					obj.active = true
-					if ((data.x != obj.oldx) || (data.y != obj.oldy)) {
-						obj.x = data.x
-						obj.y = data.y
+					if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy)) {
+						obj.setPosition(data.x, data.y)
 						obj.oldx = data.x
 						obj.oldy = data.y
+						obj.sx = data.sx
+						obj.sy = data.sy
+						obj.oldsx = data.sx
+						obj.oldsy = data.sy
 					}
-					obj.sx = data.sx
-					obj.sy = data.sy
-
-					let egg = obj.egg
-					egg.x = data.bx
-					egg.y = data.by
 				}
+
+				// Egg Shot
+				let egg = obj.egg
+				if (data.bx != egg.oldx || data.by != egg.oldy || data.bsx != egg.sx || data.bsy != egg.sy) {
+					egg.setPosition(data.bx, data.by)
+					egg.oldx = data.bx
+					egg.oldy = data.by
+					egg.sx = data.bsx
+					egg.sy = data.bsy
+					egg.oldsx = data.bsx
+					egg.oldsy = data.bsy
+				}
+				if (egg.sx != 0 || egg.sy != 0) {
+					if (!egg.shot) {
+						egg.shoot()
+					}
+				} else {
+					if (egg.shot) {
+						egg.reset()
+					}
+				}
+				console.log(egg.sx, egg.sy)
 			}
 		}
 
@@ -141,10 +165,15 @@ MINIGAMES["eggs"] = new class {
 
 		// Update netplay data
 		if (this.chicken) {
+			this.data.dead = this.dead
 			this.data.x = Math.floor(this.chicken.x)
 			this.data.y = Math.floor(this.chicken.y)
 			this.data.sx = Math.floor(this.chicken.sx)
 			this.data.sy = Math.floor(this.chicken.sy)
+			this.data.bx = Math.floor(this.chicken.egg.x)
+			this.data.by = Math.floor(this.chicken.egg.y)
+			this.data.bsx = Math.floor(this.chicken.egg.sx)
+			this.data.bsy = Math.floor(this.chicken.egg.sy)
 		}
 
 		// Delete unused fences
@@ -201,17 +230,16 @@ MINIGAMES["eggs"] = new class {
 	addPlayer(id) {
 		// Spawn new chicken that doesn't do collision checks
 		let obj = this.spawnObject("chicken", new EggChicken(this.world, this.screenx+this.screenw/2, this.screeny+this.screenh/2, false), id)
-		obj.oldx = obj.x
-		obj.oldy = obj.y
-		obj.oldsx = 0
-		obj.oldsy = 0
 		obj.olddead = true
 
-		obj.egg = this.spawnObject("egg", new EggShot(this.world))
+		obj.egg = this.spawnObject("egg", new EggShot(this.world, obj), id)
+		obj.egg.parent = obj
 	}
 
 	removePlayer(id) {
-		delete this.objects["chicken"][id].egg
+		this.objects["egg"][id].destroy()
+		this.objects["chicken"][id].destroy()
+		delete this.objects["egg"][id]
 		delete this.objects["chicken"][id]
 	}
 
@@ -262,6 +290,10 @@ MINIGAMES["eggs"] = new class {
 	}
 
 	mouseClick(button, x, y) {
+		if (this.dead) {
+			return
+		}
+
 		if (button == 0) {
 			this.chicken.shoot(x, y)
 		}
@@ -276,6 +308,8 @@ EggChicken = class extends PhysicsObject {
 		super(spatialHash,x,y)
 		this.x = x
 		this.y = y
+		this.oldx = x
+		this.oldy = y
 		this.w = 40
 		this.h = 40
 
@@ -292,6 +326,8 @@ EggChicken = class extends PhysicsObject {
 		this.static = false
 		this.sx = 0
 		this.sy = 0
+		this.oldsx = this.sx
+		this.oldsy = this.sy
 		this.gravity = false
 
 		// player controls
@@ -398,16 +434,18 @@ Wall = class extends PhysicsObject {
 	}
 }
 EggShot = class extends PhysicsObject {
-	constructor(spatialHash) {
+	constructor(spatialHash, parent) {
 		let x = 0
 		let y = 0
 		super(spatialHash,x,y)
 		this.x = x
 		this.y = y
+		this.oldx = x
+		this.oldy = y
 		this.sx = 0
 		this.sy = 0
-		this.w = 10
-		this.h = 10
+		this.w = 20
+		this.h = 20
 
 		this.shape = new Shape(
 			-this.w/2,-this.h/2,
@@ -421,17 +459,37 @@ EggShot = class extends PhysicsObject {
 		this.gravity = false
 		this.speed = 400
 
-		this.shot = false
+		this.parent = parent
+
+		this.primary = false
+
+		this.reset()
+	}
+	makePrimary() {
+		this.isPrimary = true
 	}
 	startCollide(name,obj) {
-		if (name == "Wall") {
-			this.reset()
-		}
 	}
 	stopCollide(name,obj) {
 	}
 	collide(name, obj) {
+		if (!this.primary) {
+			return false
+		}
+
+		if (!this.shot) {
+			return false
+		}
+
+		if (name == "Wall") {
+			this.reset()
+			return false
+		}
+
 		if (name == "EggChicken") {
+			if (obj == this.parent) {
+				return false
+			}
 			return false
 		}
 		return true
@@ -443,10 +501,15 @@ EggShot = class extends PhysicsObject {
 		DRAW.rectangle(this.x-this.w/2, this.y-this.h/2, this.w, this.h)
 	}
 	shoot(x, y, angle) {
-		this.x = x
-		this.y = y
-		this.sx = Math.cos(angle)*this.speed
-		this.sy = Math.sin(angle)*this.speed
+		if (this.shot) {
+			return
+		}
+
+		if (x !== null && y !== null) {
+			this.setPosition(x,y)
+			this.sx = Math.cos(angle)*this.speed
+			this.sy = Math.sin(angle)*this.speed
+		}
 
 		this.active = true
 		this.static = false
@@ -454,6 +517,12 @@ EggShot = class extends PhysicsObject {
 		this.shot = true
 	}
 	reset() {
+		this.setPosition(0,0)
+
+		if (!this.shot) {
+			return false
+		}
+
 		this.active = false
 		this.static = true
 
@@ -461,6 +530,8 @@ EggShot = class extends PhysicsObject {
 		this.sy = 0
 
 		this.shot = false
+
+		return true
 	}
 }
 }
