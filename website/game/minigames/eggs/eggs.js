@@ -20,6 +20,7 @@ import {PhysicsObject} from "../../objects/objects.js"
 if (true) {
 let EggChicken
 let Wall
+let EggShot
 let minigame
 
 MINIGAMES["eggs"] = new class {
@@ -36,6 +37,8 @@ MINIGAMES["eggs"] = new class {
 			y:0,
 			sx:0,
 			sy:0,
+			bx:0,
+			by:0,
 			dead:true,
 			score:SAVEDATA.highscores.eggs
 		} // Your data
@@ -60,7 +63,8 @@ MINIGAMES["eggs"] = new class {
 		// Objects
 		this.objects = {
 			chicken: {},
-			wall: {}
+			wall: {},
+			egg: {}
 		}
 		this.world = new SpatialHash(canvasWidth, canvasHeight, canvasWidth/10)
 
@@ -73,7 +77,9 @@ MINIGAMES["eggs"] = new class {
 		this.spawnObject("wall", new Wall(this.world, this.screenx+this.screenw*0.7, this.screeny+this.screenh*0.2, 24, this.screenh*0.6))
 
 		this.spawnObject("wall", new Wall(this.world, this.screenx+this.screenw*0.3-24, this.screeny+this.screenh*0.2, 24, this.screenh*0.6))
+		
 		this.chicken = this.spawnObject("chicken", new EggChicken(this.world, this.screenx+this.screenw/2, this.screeny+this.screenh/2, true))
+		this.chicken.egg = this.spawnObject("egg", new EggShot(this.world))
 	}
 
 	start() {
@@ -114,6 +120,10 @@ MINIGAMES["eggs"] = new class {
 					}
 					obj.sx = data.sx
 					obj.sy = data.sy
+
+					let egg = obj.egg
+					egg.x = data.bx
+					egg.y = data.by
 				}
 			}
 		}
@@ -196,9 +206,12 @@ MINIGAMES["eggs"] = new class {
 		obj.oldsx = 0
 		obj.oldsy = 0
 		obj.olddead = true
+
+		obj.egg = this.spawnObject("egg", new EggShot(this.world))
 	}
 
 	removePlayer(id) {
+		delete this.objects["chicken"][id].egg
 		delete this.objects["chicken"][id]
 	}
 
@@ -249,6 +262,9 @@ MINIGAMES["eggs"] = new class {
 	}
 
 	mouseClick(button, x, y) {
+		if (button == 0) {
+			this.chicken.shoot(x, y)
+		}
 	}
 
 	exit() {
@@ -288,10 +304,16 @@ EggChicken = class extends PhysicsObject {
 		this.my = 0
 
 		this.speed = 200
+
+		// egg shot
+		this.egg = false
 	}
 	startCollide(name,obj) {
 	}
 	stopCollide(name,obj) {
+	}
+	collide(name, obj) {
+		return true
 	}
 	update(dt) {
 		if (this.dead) {
@@ -330,9 +352,21 @@ EggChicken = class extends PhysicsObject {
 			}
 		}
 	}
-	draw(x) {
+	draw() {
 		DRAW.setColor(255,255,255,1.0)
 		DRAW.rectangle(this.x-this.w/2, this.y-this.h/2, this.w, this.h)
+	}
+	shoot(tx, ty) {
+		if (this.dead) {
+			return false
+		}
+
+		if (this.egg.shot) {
+			return false
+		}
+
+		let angle = Math.atan2(ty-this.y, tx-this.x)
+		this.egg.shoot(this.x, this.y, angle)
 	}
 }
 Wall = class extends PhysicsObject {
@@ -361,6 +395,72 @@ Wall = class extends PhysicsObject {
 	}
 	collide() {
 		return true
+	}
+}
+EggShot = class extends PhysicsObject {
+	constructor(spatialHash) {
+		let x = 0
+		let y = 0
+		super(spatialHash,x,y)
+		this.x = x
+		this.y = y
+		this.sx = 0
+		this.sy = 0
+		this.w = 10
+		this.h = 10
+
+		this.shape = new Shape(
+			-this.w/2,-this.h/2,
+			this.w/2,-this.h/2,
+			this.w/2,this.h/2,
+			-this.w/2,this.h/2
+		)
+
+		this.active = true
+		this.static = false
+		this.gravity = false
+		this.speed = 400
+
+		this.shot = false
+	}
+	startCollide(name,obj) {
+		if (name == "Wall") {
+			this.reset()
+		}
+	}
+	stopCollide(name,obj) {
+	}
+	collide(name, obj) {
+		if (name == "EggChicken") {
+			return false
+		}
+		return true
+	}
+	update(dt) {
+	}
+	draw() {
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.rectangle(this.x-this.w/2, this.y-this.h/2, this.w, this.h)
+	}
+	shoot(x, y, angle) {
+		this.x = x
+		this.y = y
+		this.sx = Math.cos(angle)*this.speed
+		this.sy = Math.sin(angle)*this.speed
+
+		this.active = true
+		this.static = false
+
+		this.shot = true
+	}
+	reset() {
+		this.active = false
+		this.static = true
+
+		this.sx = 0
+		this.sy = 0
+
+		this.shot = false
 	}
 }
 }
