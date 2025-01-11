@@ -22,6 +22,16 @@
 			"w": 30,
 			"h": 300,
 			"sound": "woosh"
+		},
+		"sewerEntrance": {
+			"to": "sewer",
+			"fromWarp": "sewerExit",
+			"facing": "left",
+			"x": 931,
+			"y": 369,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
 		}
 	},
 
@@ -153,22 +163,5 @@
 				"questSlotValue": 1
 			}
 		},
-		// Entrance to the sewers
-		"sewersystem": {
-			"x": 903,
-			"y": 348,
-			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
-			"clickable": true,
-			"icon": { "frame": 1, "x": 15, "y": -10 },
-			"action": "dialogue",
-			"dialogue": [
-				{
-					"text": [
-						"The entrance to the underground sewer system.",
-						"It appears to be locked."
-					]
-				}
-			]
-		}
 	}
 }
