@@ -16,6 +16,7 @@ import Shape from "../../shape.js"
 import AudioSystem from "../../engine/audio.js"
 import { SpatialHash, updatePhysics, drawPhysics } from "../../physics.js"
 import {PhysicsObject} from "../../objects/objects.js"
+import { getMousePos } from "../../engine/input.js"
 
 if (true) {
 let EggChicken
@@ -37,6 +38,7 @@ MINIGAMES["eggs"] = new class {
 			y:0,
 			sx:0,
 			sy:0,
+			a:0,
 			bx:0,
 			by:0,
 			bsx:0,
@@ -53,6 +55,11 @@ MINIGAMES["eggs"] = new class {
 		this.img = {}
 		this.sprite = {}
 		this.img.arcadeCabinet = new RenderImage("game/minigames/eggs/arcade_cabinet.png")
+		this.img.eggChicken = new RenderImage("game/minigames/eggs/egg_chicken.png")
+		this.sprite.eggChicken = new Sprite(this.img.eggChicken, 1,1, 64,64, 0,0, 0,0)
+		this.sprite.eggShot = new Sprite(this.img.eggChicken, 1,1, 24,24, 0,64, 0,0)
+
+		this.img.map = new RenderImage("game/minigames/eggs/map.png")
 
 		this.screenx = 172
 		this.screeny = 38
@@ -80,22 +87,18 @@ MINIGAMES["eggs"] = new class {
 
 		this.spawnObject("wall", new Wall(this.world, this.screenx+this.screenw*0.3-24, this.screeny+this.screenh*0.2, 24, this.screenh*0.6))
 		
-		this.chicken = this.spawnObject("chicken", new EggChicken(this.world, this.screenx+this.screenw/2, this.screeny+this.screenh/2, true))
+		this.chicken = this.spawnObject("chicken", new EggChicken(this.world, 0, 100, true))
+		this.chicken.dead = true
 		this.chicken.egg = this.spawnObject("egg", new EggShot(this.world, this.chicken))
 		this.chicken.egg.makePrimary()
 	}
 
 	start() {
-		this.chicken.active = true
-		this.chicken.static = false
-		this.chicken.dead = false
+		this.chicken.spawn()
 		this.dead = false
 	}
 
 	die() {
-		this.chicken.dead = true
-		this.chicken.active = false
-		this.chicken.static = true
 		this.dead = true
 	}
 
@@ -113,20 +116,23 @@ MINIGAMES["eggs"] = new class {
 					// Dead Chicken
 					obj.active = false
 					obj.olddead = true
+					obj.sx = 0
+					obj.sy = 0
 				} else {
 					// Alive Chicken
 					obj.olddead = false
 					obj.active = true
-					if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy)) {
-						obj.setPosition(data.x, data.y)
-						obj.oldx = data.x
-						obj.oldy = data.y
-						obj.sx = data.sx
-						obj.sy = data.sy
-						obj.oldsx = data.sx
-						obj.oldsy = data.sy
-					}
 				}
+				if ((data.x != obj.oldx) || (data.y != obj.oldy) || (data.sx != obj.oldsx) || (data.sy != obj.oldsy)) {
+					obj.setPosition(data.x, data.y)
+					obj.oldx = data.x
+					obj.oldy = data.y
+					obj.sx = data.sx
+					obj.sy = data.sy
+					obj.oldsx = data.sx
+					obj.oldsy = data.sy
+				}
+				obj.angle = data.a * (Math.PI/180)
 
 				// Egg Shot
 				let egg = obj.egg
@@ -148,7 +154,6 @@ MINIGAMES["eggs"] = new class {
 						egg.reset()
 					}
 				}
-				console.log(egg.sx, egg.sy)
 			}
 		}
 
@@ -170,38 +175,32 @@ MINIGAMES["eggs"] = new class {
 			this.data.y = Math.floor(this.chicken.y)
 			this.data.sx = Math.floor(this.chicken.sx)
 			this.data.sy = Math.floor(this.chicken.sy)
+			this.data.a = this.chicken.angle * (180/Math.PI)
 			this.data.bx = Math.floor(this.chicken.egg.x)
 			this.data.by = Math.floor(this.chicken.egg.y)
 			this.data.bsx = Math.floor(this.chicken.egg.sx)
 			this.data.bsy = Math.floor(this.chicken.egg.sy)
 		}
-
-		// Delete unused fences
-		// let keysToDelete = []
-		// let fences = this.objects["fence"]
-		// for (const [id, obj] of Object.entries(fences)) {
-		// 	if (obj.DELETED) {
-		// 		keysToDelete.push(id);
-		// 	}
-		// }
-		// keysToDelete.forEach(key => {
-		// 	delete fences[key];
-		// });
 	}
   
 	draw() {
-		// Background
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.rectangle(0,0,canvasWidth,canvasHeight)
+		// Map
+		DRAW.image(this.img.map, null, this.screenx, this.screeny)
 
-		// Arcade Cabinet overlay
-		DRAW.setColor(255,255,255,1.0)
-		DRAW.image(this.img.arcadeCabinet)
+		// Eggs
+		for (const [id, obj] of Object.entries(this.objects["egg"])) {
+			obj.draw()
+		}
+
+		// Chickens
+		for (const [id, obj] of Object.entries(this.objects["chicken"])) {
+			obj.draw()
+		}
 
 		// DEBUG physics
-		//if (DEBUGPHYSICS) {
+		if (DEBUGPHYSICS) {
 			drawPhysics(this.objects, this.world, 0, 0)
-		//}
+		}
 
 		// Dead / Haven't started
 		if (this.dead) {
@@ -212,6 +211,10 @@ MINIGAMES["eggs"] = new class {
 				DRAW.text("Press anything to spawn!",canvasWidth/2,420,"center",0,1,1)
 			}
 		}
+
+		// Arcade Cabinet overlay
+		DRAW.setColor(255,255,255,1.0)
+		DRAW.image(this.img.arcadeCabinet)
 	}
 
 	// Register an object as part of the physics world
@@ -247,10 +250,6 @@ MINIGAMES["eggs"] = new class {
 		if (this.dead) {
 			this.start()
 			return
-		}
-
-		if (key == "w") {
-			this.die()
 		}
 
 		// CONTROL CHICKEN
@@ -341,6 +340,12 @@ EggChicken = class extends PhysicsObject {
 
 		this.speed = 200
 
+		// Image
+		this.img = minigame.img.eggChicken
+		this.sprite = minigame.sprite.eggChicken
+
+		this.angle = 0
+
 		// egg shot
 		this.egg = false
 	}
@@ -349,12 +354,44 @@ EggChicken = class extends PhysicsObject {
 	stopCollide(name,obj) {
 	}
 	collide(name, obj) {
+		if (name == "EggShot") {
+			if (this.player && obj.parent != this) {
+				this.die()
+				return false
+			}
+		}
 		return true
+	}
+	spawn() {
+		this.setPosition(minigame.screenx+minigame.screenw/2, minigame.screeny+minigame.screenh/2)
+		this.active = true
+		this.static = false
+		this.dead = false
+		this.sx = 0
+		this.sy = 0
+	}
+	die() {
+		if (this.dead) {
+			return
+		}
+		this.setPosition(0, 100)
+		this.dead = true
+		this.active = false
+		this.static = true
+		this.sx = 0
+		this.sy = 0
+		minigame.die()
 	}
 	update(dt) {
 		if (this.dead) {
 			return
 		}
+		// Update angle
+		if (this.player) {
+			let [mx, my] = getMousePos()
+			this.angle = Math.atan2(my-this.y, mx-this.x) + Math.PI/2
+		}
+
 		// Player controls
 		if (this.player) {
 			this.mx = 0
@@ -389,8 +426,12 @@ EggChicken = class extends PhysicsObject {
 		}
 	}
 	draw() {
+		if (this.dead) {
+			return
+		}
+
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.rectangle(this.x-this.w/2, this.y-this.h/2, this.w, this.h)
+		DRAW.image(this.img, this.sprite.getFrame(0,0), this.x, this.y, this.angle, 1,1, 0.5,0.5)
 	}
 	shoot(tx, ty) {
 		if (this.dead) {
@@ -463,10 +504,14 @@ EggShot = class extends PhysicsObject {
 
 		this.primary = false
 
+		// Graphics
+		this.img = minigame.img.eggChicken
+		this.sprite = minigame.sprite.eggShot
+
 		this.reset()
 	}
 	makePrimary() {
-		this.isPrimary = true
+		this.primary = true
 	}
 	startCollide(name,obj) {
 	}
@@ -490,15 +535,19 @@ EggShot = class extends PhysicsObject {
 			if (obj == this.parent) {
 				return false
 			}
-			return false
+			this.reset()
+			return true
 		}
 		return true
 	}
 	update(dt) {
 	}
 	draw() {
+		if (!this.shot) {
+			return
+		}
 		DRAW.setColor(255,255,255,1.0)
-		DRAW.rectangle(this.x-this.w/2, this.y-this.h/2, this.w, this.h)
+		DRAW.image(this.img, this.sprite.getFrame(0,0), this.x, this.y, 0, 1,1, 0.5,0.5)
 	}
 	shoot(x, y, angle) {
 		if (this.shot) {
