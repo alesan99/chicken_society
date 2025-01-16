@@ -21,6 +21,7 @@ var WORLD
 import { setState, stateUpdate, stateDraw } from "./state.js"
 import Transition from "./transition.js"
 import Notify from "./gui/notification.js"
+import { handleUrl } from "./netplay/urls.js"
 
 // Initialize game and load assets
 function gameLoad() {
@@ -36,6 +37,9 @@ function gameLoad() {
 		setState(WORLD)
 
 		Transition.start("fade", "in", 0.2)
+
+		// Handle special URLs
+		handleUrl()
 	})
 }
 

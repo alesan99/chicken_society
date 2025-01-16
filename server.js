@@ -3,7 +3,8 @@
 // Stores the user"s information to a list
 // Recieves all players profile information and their characters current position
 // Sends out that information to all connnected clients so their games are all synced
-// NOT IMPLEMENTED: Storing user data to database, global events
+// Activates global timed events (like holiday celebrations)
+// NOT IMPLEMENTED: Storing user data to database
 
 // Currently supports hosting the server locally and to current network
 
@@ -50,10 +51,14 @@ module.exports = {
 
 // Send HTML file when user connects to server
 const { buildGame } = require("./server/build.js");
+const { handleQuery } = require("./server/requests.js");
 buildGame();
 app.use(express.static(path.join(__dirname, "server/lib"))); //serve msgpack socket.io separately so it doesn't get loaded when running website locally.
 app.use(express.static(path.join(__dirname, "website"))); //serve static files from the "website" directory.
+// Handle GET Requests
+const {handleQuery} = require("./server/requests.js");
 app.get("/", (req, res) => {
+	handleQuery(res.query);
 	res.sendFile(path.join(__dirname, "website/index.html"));
 });
 
@@ -95,10 +100,6 @@ if (useDB) {
 		});
 	db.createPlayerTable(con);
 }
-
-// Handle GET Requests
-const {} = require("./server/requests.js");
-const { create } = require("domain");
 
 // Start server on port
 const localIPAddress = "localhost" // ipv4 //"10.104.58.91" // IPv4 or localhost
