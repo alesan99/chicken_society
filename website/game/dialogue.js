@@ -122,7 +122,8 @@ const DialogueSystem = (function() {
 							}
 						} else {
 							// Show mystery speaker
-							// TODO
+							DRAW.setColor(255,255,255,1)
+							DRAW.image(IMG.speakerIcon, null, x-140 +65, y +130, 0, 1, 1, 0.5, 1.0)
 						}
 
 						DRAW.setColor(255,255,255,1)

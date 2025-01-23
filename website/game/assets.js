@@ -52,6 +52,7 @@ function loadGameAssets() {
 	IMG.dialogue = new RenderImage("assets/dialogue.png")
 	SPRITE.dialogueBox = new Sprite(IMG.dialogue, 1,1, 550,160, 130,0)
 	SPRITE.dialogueIcon = new Sprite(IMG.dialogue, 1,1, 130,160, 0,0)
+	IMG.speakerIcon = new RenderImage("assets/speaker_icon.png")
 	IMG.book = new RenderImage("assets/book.png")
 	IMG.action = new RenderImage("assets/action.png")
 	SPRITE.action = new Sprite(IMG.action, 1,3, 120,50)
