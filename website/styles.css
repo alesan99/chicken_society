@@ -22,7 +22,7 @@ body{
 .content-container{
 	/* Contains the game and page content. Centers everything. */
 	z-index: 998;
-	height: calc(100vh - 45px); /* -45px for nav bar*/
+	height: calc(100vh - 30px); /* -40px for nav bar*/
 
 	background-color: rgb(255, 235, 208);
 	display: flex;
@@ -31,12 +31,15 @@ body{
     align-items: center; 
 	padding : 10px;
     min-width : 200px;
+    position: relative;
+    top: 30px;
 }
 
 #canvas-container {
 	/* Contains the game canvas */
 	/* Create black border around the canvas */
     margin-top: 0vh;
+    margin-bottom: 4px;
     z-index: 10000;
     max-width: 100%; /* Ensure the canvas never exceeds the width of the window */
     overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
@@ -219,6 +222,7 @@ form {
     color: #806649; /* Example background color */
     text-align: center; /* Center the footer content */
 	font-size: 12px;
+
 }
 
 /* Load fonts */

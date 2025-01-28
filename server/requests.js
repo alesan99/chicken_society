@@ -65,5 +65,11 @@ function getDirectoryTree(dPath) {
 	});
 }
 
+// Recieve payment confirmation
+app.post('/donation', (req, res) => {
+	const data = req.body;
+	console.log("Recieved donation: ", data);
+});
+
 module.exports = {
 };
