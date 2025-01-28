@@ -22,7 +22,7 @@ body{
 .content-container{
 	/* Contains the game and page content. Centers everything. */
 	z-index: 998;
-	height: calc(100vh - 30px); /* -40px for nav bar*/
+	height: calc(100vh - 40px); /* -40px for nav bar*/
 
 	background-color: rgb(255, 235, 208);
 	display: flex;
@@ -32,7 +32,7 @@ body{
 	padding : 10px;
     min-width : 200px;
     position: relative;
-    top: 30px;
+    top: 0px;
 }
 
 #canvas-container {
