@@ -193,11 +193,12 @@ function checkCondition(c) {
 				return true
 			}
 			return false
-		} else if (c.questActive === false) {
+		} else if (c.questActive != null) {
 			// Check if quest is not active
+			console.log(c.questActive)
 			let questActive = QuestSystem.getQuest(questName)
 			if (c.questActive === true && questActive) { // Quest must be active
-				return false
+				return true
 			} else if (c.questActive === false && !questActive) { // Quest must not be active
 				return true
 			}

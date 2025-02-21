@@ -23,22 +23,23 @@
 			"h": 300,
 			"sound": "woosh"
 		},
-		"sewerEntrance": {
-			"to": "sewer",
-			"fromWarp": "sewerExit",
-			"facing": "left",
-			"x": 931,
-			"y": 369,
-			"w": 30,
-			"h": 30,
-			"sound": "woosh"
-		}
+		// Disabled in favor of sewer cover below
+		// "sewerEntrance": {
+		// 	"to": "sewer",
+		// 	"fromWarp": "sewerExit",
+		// 	"facing": "left",
+		// 	"x": 931,
+		// 	"y": 369,
+		// 	"w": 30,
+		// 	"h": 30,
+		// 	"sound": "woosh"
+		// }
 	},
 
 	"NPCs": {
 		"dealer": {
 			"profile": {
-				"name": "???",
+				"name": "Addy Earl",
 				"color": "#285032",
 				"head": "hoodie",
 				"face": false,
@@ -163,5 +164,20 @@
 				"questSlotValue": 1
 			}
 		},
+		// Entrance to sewer
+		"sewer_cover": {
+			"condition": {
+				"quest": "mafia_welcome",
+				"questSlot": 0,
+				"questSlotValue": 1
+			},
+			"x": 935,
+			"y": 379,
+			"shape": [-30, -30, 30, -30, 30, 30, -30, 30],
+			"icon": true,
+			"clickable": true,
+			"action": "warp",
+			"area": "sewer",
+		}
 	}
 }

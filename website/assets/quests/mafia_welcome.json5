@@ -5,12 +5,35 @@
 
 	"progressDescription": [
 		"Meet your Capo.",
-		"Learn the secrets of the sewers.",
-		"Complete your first task." //steal eggs, chickpeas, pennywise sewer style
+		"Complete your first task.", //steal eggs, chickpeas, pennywise sewer style
+		"Learn the secrets of the sewers."
 	],
 
 	"progressStart": [0,0,0],
-	"progressFinish": [1,1,1],
+	"progressFinish": [1,1,2],
+
+
+	"progressEvents": [
+		false,
+		false,
+		{
+			// Visit Sewer to progress
+			"type": "area",
+			"area": "sewer",
+			"questSlotSet": 1,
+			"condition": {
+				"quest": "mafia_welcome",
+				"questSlot": 1,
+				"questSlotValue": 1
+			}
+		}
+	],
+
+	"progressDescriptionSlotRequirement": [
+		false,
+		false,
+		1
+	],
 
 	"reward": {
 		"nuggets": 100,

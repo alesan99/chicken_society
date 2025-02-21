@@ -9,6 +9,7 @@ import { loadJSON5, ITEMS } from "./assets.js"
 import { addNuggets, addItem } from "./savedata.js"
 import { MENUS } from "./menu.js"
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "./world.js"
+import {checkCondition} from "./area.js"
 
 const QuestSystem = (function() {
 	let questData = {}
@@ -110,7 +111,7 @@ const QuestSystem = (function() {
 				if (quest.progressEvents) {
 					for (let slot=0; slot < quest.progressEvents.length; slot++) {
 						let event = quest.progressEvents[slot]
-						if (event != false && event.type == type) {
+						if (event != false && event.type == type && (quest.condition == null || checkCondition(quest.condition))) {
 							// Quest is accepting event!
 							let doProgress = false
 							if (type == "minigame") {
@@ -202,7 +203,7 @@ const QuestSystem = (function() {
 			if (quest.progressEvents) {
 				for (let slot=0; slot < quest.progressEvents.length; slot++) {
 					let event = quest.progressEvents[slot]
-					if (event != false) {
+					if (event != false && (quest.condition == null || checkCondition(quest.condition))) {
 						let type = event.type
 						// Minigame highscore might've been reached before quest started
 						if (type == "minigameHighscore") {
