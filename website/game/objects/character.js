@@ -467,6 +467,11 @@ export default class Character extends PhysicsObject {
 	// Misc. Actions
 	// Shooting! Guns etc.
 	shoot(nx=0, ny=0) {
+		// Don't shoot if dead
+		if (this.getStatusEffect("dead")) {
+			return false
+		}
+
 		// Play gunshot sound
 		AudioSystem.playSound(SFX.gun)
 		// You, the player, shot a gun

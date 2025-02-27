@@ -37,12 +37,12 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.emoteMenuOpen = false
 
 		this.buttons = {}
-		this.buttons[0] = new Button(false, ()=>{this.emoteMenuOpen = !this.emoteMenuOpen; closeMenu()}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34) 
+		this.buttons[0] = new Button(false, ()=>{this.emoteMenuOpen = !this.emoteMenuOpen; closeMenu()}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34, "Emotes") 
 		this.buttons[1] = new Button(false, ()=>{this.enter()}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, 661,535, 34,34) 
-		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34) 
-		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34)
-		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34)
-		this.buttons[5] = new Button(false, ()=>{if (getOpenMenu() != "questsMenu") {openMenu("questsMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,5),SPRITE.chatButton.getFrame(1,5),SPRITE.chatButton.getFrame(2,5)]}, 813,535, 34,34) 
+		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34, "Inventory") 
+		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34, "Map")
+		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34, "Connected Players")
+		this.buttons[5] = new Button(false, ()=>{if (getOpenMenu() != "questsMenu") {openMenu("questsMenu")} else {closeMenu()}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,5),SPRITE.chatButton.getFrame(1,5),SPRITE.chatButton.getFrame(2,5)]}, 813,535, 34,34, "Quests") 
 
 		this.notifications = { // A red dot that appears by buttons
 			quest: false

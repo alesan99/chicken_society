@@ -1,9 +1,10 @@
 import { DRAW, CURSOR } from "../main.js"
 import { FONT } from "../assets.js"
 import { getMousePos } from "../engine/input.js"
+import { ToolTip } from "./tooltip.js"
 
 class Button {
-	constructor(label="", action=()=>{}, graphic, x=0, y=0, w, h) { //in px, label is text on button, action is function to call when clicked  
+	constructor(label="", action=()=>{}, graphic, x=0, y=0, w, h, tooltip=null) { //in px, label is text on button, action is function to call when clicked  
 		this.visible = true;
 		this.label = label;
 		this.labelJustify = "center";
@@ -41,6 +42,10 @@ class Button {
 		this.held = false;
 		this.selected = false;
 		this.disabled = false;
+
+		if (tooltip) {
+			this.tooltip = new ToolTip(tooltip, this.x+this.w/2, this.y, this);
+		}
 	}
 
 	checkMouseInside(){
@@ -60,9 +65,17 @@ class Button {
 		if (this.hover) {
 			CURSOR.on = true; // Show finger cursor
 		}
+
+		if (this.tooltip) {
+			this.tooltip.update(dt);
+		}
 	}
 
 	click(button, x, y){
+		if (this.tooltip) {
+			this.tooltip.click();
+		}
+
 		this.hover = this.checkMouseInside();
 		if (this.hover) {//this should only click if you're hovering over the button
 			this.held = true
@@ -132,6 +145,10 @@ class Button {
 			} else if (this.labelJustify == "right") {
 				DRAW.text(this.label, this.x+this.w-10, this.y+this.h/2+7, this.labelJustify)
 			}
+		}
+
+		if (this.tooltip) {
+			this.tooltip.draw();
 		}
 	}
 }
