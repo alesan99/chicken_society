@@ -1,6 +1,7 @@
 {
 	"name": "Racetrack",
 	"mapLocation": false,
+	"music": "genericoutdoors",
 
 	"walls": [
 		[0, 576, 1024, 576, 1024, 600, 0, 600],

@@ -1,4 +1,8 @@
 {
+	"name": "Power & Light District",
+  	"mapLocation": false,
+  	"music": "pldistrictsong",
+
 	// Wall Collision
 	"walls": [
 		// Buildings in the back

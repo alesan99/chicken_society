@@ -1,6 +1,7 @@
 {
 	"name": "Neighborhood",
 	"mapLocation": [161, 116],
+	"music": "genericoutdoors",
 
 	"walls": [
 		[0, 576, 1024, 576, 1024, 600, 0, 600],

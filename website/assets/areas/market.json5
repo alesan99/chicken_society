@@ -1,4 +1,8 @@
 {
+	"name": "River Market",
+	"mapLocation": false,
+	"music": "markettrack", 
+
 	"walls": [
         [0,564, 0,517, 1024,517, 1024,564],
         [0,197, 0,56, 1024,5, 1024,197],
