@@ -21,7 +21,7 @@ let dir_lookup = {up: 2, down: 0, left: 1, right: 1}
 
 export default class Character extends PhysicsObject {
 	//Initialize: spatialHash, x pos, y pos, width, height
-	constructor (spatialHash, x, y, profile, area) {
+	constructor (spatialHash, x, y, profile, area, id) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x || 0
@@ -49,6 +49,7 @@ export default class Character extends PhysicsObject {
 
 		// Properties
 		this.image = IMG.chicken
+		this.id = id
 		this.updateProfile(profile)
 		this.speed = 200 //Speed (px/sec)
 		this.controller = false //Is it being controlled?
@@ -322,7 +323,13 @@ export default class Character extends PhysicsObject {
 			}
 			if (this.pet) {
 				let i = Math.random()
-				OBJECTS["Pet"][i] = new Pet(this.spatialHash, profile.pet, this.x, this.y, this)
+				let petProfile // get pet profile from savedata or client data (not ideal)
+				if (this.controller == PLAYER_CONTROLLER) {
+					petProfile = SAVEDATA.profile.pet
+				} else if (this.id != null && this.id in NETPLAY.playerList) {
+					petProfile = NETPLAY.playerList[this.id].pet
+				}
+				OBJECTS["Pet"][i] = new Pet(this.spatialHash, profile.pet, this.x, this.y, this, petProfile)
 				this.petObj = OBJECTS["Pet"][i]
 			}
 		}

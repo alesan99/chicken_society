@@ -59,7 +59,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				isActive = checkCondition(npc.condition)
 			}
 			if (isActive) {
-				OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area)
+				OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area, null)
 				NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, {shop: npc.shop, dialogue: npc.dialogue}, npc.image)
 				NPCS[name].condition = npc.condition
 			}
