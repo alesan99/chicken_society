@@ -30,7 +30,6 @@ export class ToolTip {
 			let [mx, my] = getMousePos()
 			if (this.object.checkMouseInside(mx, my) && (mx == this.oldmx || my == this.oldmy)) {
 				this.hoverTimer += dt
-				console.log(this.hoverTimer)
 				if (this.hoverTimer >= this.hoverTime) {
 					this.visible = true
 				}

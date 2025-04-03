@@ -51,7 +51,6 @@ module.exports = {
 
 // Send HTML file when user connects to server
 const { buildGame } = require("./server/build.js");
-const { handleQuery } = require("./server/requests.js");
 buildGame();
 app.use(express.static(path.join(__dirname, "server/lib"))); //serve msgpack socket.io separately so it doesn't get loaded when running website locally.
 app.use(express.static(path.join(__dirname, "website"))); //serve static files from the "website" directory.
