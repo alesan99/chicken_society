@@ -19,7 +19,7 @@ import {openMenu, closeMenu, getOpenMenu} from "../state.js"
 
 export default class Pet extends PhysicsObject {
 	//Initialize: pet id (item id), x pos, y pos, 'owner' object to follow
-	constructor (spatialHash, id, x, y, owner) {
+	constructor (spatialHash, id, x, y, owner, profile) {
 		// Collision
 		super(spatialHash,x,y)
 		this.x = x
@@ -39,7 +39,9 @@ export default class Pet extends PhysicsObject {
 
 		// Pet data
 		this.id = id
-		this.updateProfile(SAVEDATA.pet)
+		if (profile) {
+			this.updateProfile(profile)
+		}
 		this.owner = owner
 		this.maxSpeed = 180
 		this.speed = this.maxSpeed

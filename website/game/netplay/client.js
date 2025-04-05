@@ -40,7 +40,7 @@ Netplay = class {
 		this.timeOut = 10000 // Give up sending an important message after this amount of time (sec.)
 
 		// Other Clients (lets call them players)
-		// Format (as of 4/3/2024):
+		// Format (as of 3/18/2025):
 		/* {
 			id: playerData.id,
 			state: playerData.state,
@@ -48,7 +48,13 @@ Netplay = class {
 			area: playerData.area,
 			profile: playerData.profile,
 			name: playerData.name,
-			chicken: playerData.chicken
+			chicken: playerData.chicken,
+			pet: {
+				name
+				happiness
+				health
+				hunger
+			}
 		} */
 		this.playerList = {}
 
@@ -263,6 +269,7 @@ Netplay = class {
 		let playerData = this.playerList[id]
 		if (playerData != null) {
 			// Update player's pet
+			playerData.pet = profile
 			if (CHARACTER[id] != null) {
 				let chicken = CHARACTER[id]
 				if (chicken.petObj) {

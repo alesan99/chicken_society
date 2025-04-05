@@ -82,7 +82,7 @@ const World = class {
 		// Initialize all characters
 		NPCS = {}
 		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area)
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area, 0)
 		
 		PLAYER = CHARACTER[0]
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
@@ -543,7 +543,7 @@ const World = class {
 		let chicken = playerData.chicken
 		if (playerData.area == PLAYER.area || (this.areaOwner && playerData.area == `${PLAYER.area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
 			if (!CHARACTER[id]) {
-				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area)
+				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area, id)
 				CHARACTER[id].area = playerData.area
 				//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
 			}

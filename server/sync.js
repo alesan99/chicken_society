@@ -397,6 +397,7 @@ function cleanPlayerData(playerData) {
 
 		profile: playerData.profile,
 		name: playerData.name,
+		pet: playerData.pet,
 
 		chicken: playerData.chicken
 	}
