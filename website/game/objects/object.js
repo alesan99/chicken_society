@@ -18,8 +18,8 @@ export default class PhysicsObject {
 
 		// Spatial Hash location
 		this.spatialHash = spatialHash
-		this.cellx = 0
-		this.celly = 0
+		this.cellx = 99 // Lazy fix: Force a cell update
+		this.celly = 99
 		this.cellw = 0
 		this.cellh = 0
 	}
