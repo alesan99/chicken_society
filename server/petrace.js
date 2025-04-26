@@ -31,7 +31,7 @@ class PetRaceClass {
 			return false;
 		}
 		
-		// Don't add if 
+		// Don't add if
 		if (!force && this.playersJoined.includes(id)) {
 			io.to(id).emit("notify", "You can't join again.", 8);
 			return false;
@@ -65,7 +65,7 @@ class PetRaceClass {
 	}
 
 	removePet(id) {
-		delete this.pets[id]
+		delete this.pets[id];
 	}
 
 	placeBet(id, amount, petNo) {
@@ -90,8 +90,8 @@ class PetRaceClass {
 	start() {
 		// Add random pets if there isn't enough
 		if (this.pets.length < this.maxPets) {
-			let pets = ["pillbug"]
-			let names = ["Subject #312", "Subject #882", "Subject #910", "Subject #808"]
+			let pets = ["pillbug"];
+			let names = ["Subject #312", "Subject #882", "Subject #910", "Subject #808"];
 			for (let i = this.pets.length; i < this.maxPets; i++) {
 				// Pick random name
 				let pet = pets[Math.floor(Math.random() * pets.length)];
@@ -114,7 +114,7 @@ class PetRaceClass {
 			this.waitTimer -= dt;
 			// Notify players that race is about to start
 			if (this.waitTimer < 5 && !(oldWaitTimer < 5)) {
-				io.to(`area:${this.area}`).emit("notify", `The race will start in 5 seconds!`, 5);
+				io.to(`area:${this.area}`).emit("notify", "The race will start in 5 seconds!", 5);
 			}
 			// Start
 			if (this.waitTimer <= 0) {
@@ -146,15 +146,15 @@ class PetRaceClass {
 						pet.speedChangeTimer = 0;
 						pet.speedChangeTime = Math.random() * 1.5 + 0.5;
 						pet.speed = Math.random() * 9 * (1 + pet.drive*0.1);
-						// If pet is lazy, 
+						// If pet is lazy,
 						if (pet.drive <= 0.1) {
-							let roll = Math.random()
+							let roll = Math.random();
 							if (roll < 0.1) {
 								pet.speed = 0;
 							}
 						}
 					}
-				};
+				}
 				pet.sy = pet.sy + 98 * dt; // Gravity
 				// Actually move pet
 				pet.x = pet.x + pet.speed * dt; // Horizontal movement

@@ -9,7 +9,7 @@ export default defineConfig([
 	{ files: ["**/*.{js,mjs,cjs}"], plugins: { js }, extends: ["js/recommended"] },
 
 	// Server config
-	{ files: ["server/**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.node, sourceType: "commonjs" } },
+	{ files: ["server/**/*.{js,mjs,cjs}", "server.js"], languageOptions: { globals: globals.node, sourceType: "commonjs" } },
 
 	// Website config
 	{ files: ["**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.browser } },
@@ -17,11 +17,14 @@ export default defineConfig([
 
 	// Style rules
 	{
+		files: ["**/*.{js,mjs,cjs}"],
 		plugins: {
 			"@stylistic/js": stylisticJs
 		},
 		rules: {
-			"no-unused-vars": "warn",
+			"no-unused-vars": "off",
+			"no-constant-condition": "off",
+			"no-prototype-builtins": "off",
 			"@stylistic/js/semi": ["error", "always"],
 			"@stylistic/js/indent": ["error", "tab"],
 			"@stylistic/js/quotes": ["error", "double"],
@@ -29,5 +32,16 @@ export default defineConfig([
 			"@stylistic/js/no-trailing-spaces": ["warn", { skipBlankLines: true }],
 			"@stylistic/js/no-floating-decimal": "warn",
 		},
+	},
+
+	// Ignore
+	{
+		ignores: [
+			"./server/lib/socket.io.msgpack.min.js",
+			"./website/game/lib/howler.core.js",
+			"./website/game/lib/json5.index.min.js",
+			"./website/game/lib/pdf.min.mjs",
+			"./website/game/lib/pdf.worker.min.mjs",
+		]
 	},
 ]);

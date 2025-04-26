@@ -1,82 +1,82 @@
 // Dialogue System
 // NOT the speech bubbles that apeear when when you first talk to an NPC
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js"
-import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "./assets.js"
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "./savedata.js"
-import {openMenu, closeMenu, getOpenMenu} from "./state.js"
-import {PLAYER, PLAYER_CONTROLLER} from "./world.js"
-import QuestSystem from "./quests.js"
-import Transition from "./transition.js"
-import AudioSystem from "./engine/audio.js"
-import {checkCondition} from "./area.js"
-import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js"
-import { canvasWidth, canvasHeight } from "./engine/render.js"
-import { ctx } from "./engine/canvas.js"
-import {getMousePos, checkMouseInside} from "./engine/input.js"
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "./assets.js";
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "./savedata.js";
+import {openMenu, closeMenu, getOpenMenu} from "./state.js";
+import {PLAYER, PLAYER_CONTROLLER} from "./world.js";
+import QuestSystem from "./quests.js";
+import Transition from "./transition.js";
+import AudioSystem from "./engine/audio.js";
+import {checkCondition} from "./area.js";
+import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js";
+import { canvasWidth, canvasHeight } from "./engine/render.js";
+import { ctx } from "./engine/canvas.js";
+import {getMousePos, checkMouseInside} from "./engine/input.js";
 
-import * as pdfjsLib from "./lib/pdf.min.mjs"
+import * as pdfjsLib from "./lib/pdf.min.mjs";
 // set worker src
-pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.worker.min.js";
 // set canvas
 // pdfjsLib.GlobalWorkerOptions.workerPort = new Worker('./pdf.worker.min.js');
 
 const DialogueSystem = (function() {
-	let open = false // Dialogue is open?
-	let stage = 0 // Stage in dialogue sequence
+	let open = false; // Dialogue is open?
+	let stage = 0; // Stage in dialogue sequence
 
-	let dialogueTree = false
-	let dialogueData = false
+	let dialogueTree = false;
+	let dialogueData = false;
 
-	let promptTimer = 0
+	let promptTimer = 0;
 
-	let dialogueProgress = 0
-	let dialogueTimer = 0
-	let currentText = ""
-	let currentTextWrap = []
-	let defaultSpeaker = false
-	let speaker = false // Speaker name string
-	let speakerIcon = false // Speaker icon name
-	let speakerNPC = false // NPC object of speaker
+	let dialogueProgress = 0;
+	let dialogueTimer = 0;
+	let currentText = "";
+	let currentTextWrap = [];
+	let defaultSpeaker = false;
+	let speaker = false; // Speaker name string
+	let speakerIcon = false; // Speaker icon name
+	let speakerNPC = false; // NPC object of speaker
 
-	let dialogueType = false // Type of dialogue display. False = normal, "book" = book with pages
+	let dialogueType = false; // Type of dialogue display. False = normal, "book" = book with pages
 
-	let awaitingResponse = false // Continue once reponse is chosen
-	let responseButtons = [] // List of response buttons / text fields
+	let awaitingResponse = false; // Continue once reponse is chosen
+	let responseButtons = []; // List of response buttons / text fields
 
-	let serverMessage = false // This message will be built and sent to the server. Used for interacting with server through dialogue.
+	let serverMessage = false; // This message will be built and sent to the server. Used for interacting with server through dialogue.
 
 	// Books
-	let bookPages = 1
-	let bookPage = 0 // Current page number of book
-	let bookPDF = false
-	let bookLoaded = false
-	let bookCanvas1 = false
-	let bookCanvas2 = false
+	let bookPages = 1;
+	let bookPage = 0; // Current page number of book
+	let bookPDF = false;
+	let bookLoaded = false;
+	let bookCanvas1 = false;
+	let bookCanvas2 = false;
 
 	const functions = {
 		// Start new dialogue conversation
 		start(dialogueTreeData, speakerName=false, npc=false) {
-			open = true
-			stage = 0 // Stage of current dialogue block
-			dialogueTree = dialogueTreeData // List of dialogue blocks (not really a tree structurally)
-			defaultSpeaker = speakerName // Default speaker name
-			speakerNPC = npc // NPC object of speaker
-			this.setSpeaker(speakerName, true) // Defauly name of speaker for a dialogue block
+			open = true;
+			stage = 0; // Stage of current dialogue block
+			dialogueTree = dialogueTreeData; // List of dialogue blocks (not really a tree structurally)
+			defaultSpeaker = speakerName; // Default speaker name
+			speakerNPC = npc; // NPC object of speaker
+			this.setSpeaker(speakerName, true); // Defauly name of speaker for a dialogue block
 
-			serverMessage = false // Reset server message
+			serverMessage = false; // Reset server message
 
 			// Look for which dialogue block to start with
 			for (let i = 0; i < dialogueTree.length; i++) {
 				if (dialogueTree[i].condition) { // conditional block
 					if (checkCondition(dialogueTree[i].condition)) {
-						dialogueData = dialogueTree[i]
-						break
+						dialogueData = dialogueTree[i];
+						break;
 					}
 				} else {
 					// No condition, so always select this one
-					dialogueData = dialogueTree[i]
-					break
+					dialogueData = dialogueTree[i];
+					break;
 				}
 			}
 
@@ -93,114 +93,114 @@ const DialogueSystem = (function() {
 			// },
 			// {...}] // More dialogue blocks
 
-			this.startText(0)
+			this.startText(0);
 
-			PLAYER_CONTROLLER.stop() // Stop player from moving
+			PLAYER_CONTROLLER.stop(); // Stop player from moving
 		},
 
 		draw() {
 			if (open) {
 				// Darken surroundings
-				DRAW.setColor(0,0,0,0.2)
-				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill")
+				DRAW.setColor(0,0,0,0.2);
+				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
 
 				// Dialogue Box
 				if (dialogueType === false) {
-					let x = 240
-					let y = 340
+					let x = 240;
+					let y = 340;
 
 					if (speaker) {
 						// Move dialogue box to the right and draw speaker on the left
-						x = x + 65
+						x = x + 65;
 						// Draw speaker icon
 						if (speakerNPC) {
-							DRAW.setColor(255,255,255,1)
+							DRAW.setColor(255,255,255,1);
 							if (speakerNPC.icon) {
-								DRAW.image(icon, 0, x-140, y)
+								DRAW.image(icon, 0, x-140, y);
 							} else {
-								speakerNPC.draw(x-140 +65, y +150, "down")
+								speakerNPC.draw(x-140 +65, y +150, "down");
 							}
 						} else {
 							// Show mystery speaker
-							DRAW.setColor(255,255,255,1)
-							DRAW.image(IMG.speakerIcon, null, x-140 +65, y +130, 0, 1, 1, 0.5, 1.0)
+							DRAW.setColor(255,255,255,1);
+							DRAW.image(IMG.speakerIcon, null, x-140 +65, y +130, 0, 1, 1, 0.5, 1.0);
 						}
 
-						DRAW.setColor(255,255,255,1)
-						DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y)
+						DRAW.setColor(255,255,255,1);
+						DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y);
 						
 						// Draw speaker name
-						DRAW.setColor(0,0,0,1)
-						DRAW.setFont(FONT.caption)
+						DRAW.setColor(0,0,0,1);
+						DRAW.setFont(FONT.caption);
 						if (DRAW.getTextWidth(speaker) > 128) {
 							// Shrink text if name is long for name container
-							DRAW.setFont(FONT.nametag)
+							DRAW.setFont(FONT.nametag);
 						}
-						DRAW.text(speaker, x-140 + 65, y+153, "center")
+						DRAW.text(speaker, x-140 + 65, y+153, "center");
 					}
 
 					// Dialogue box
-					DRAW.setColor(255,255,255,1)
-					DRAW.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y)
-					DRAW.setColor(0,0,0,1)
-					DRAW.setFont(FONT.caption)
+					DRAW.setColor(255,255,255,1);
+					DRAW.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y);
+					DRAW.setColor(0,0,0,1);
+					DRAW.setFont(FONT.caption);
 
-					let charStart = 0 // Character index from line break
+					let charStart = 0; // Character index from line break
 					for (let i=0; i < currentTextWrap.length; i++) {
-						let s = currentTextWrap[i]
+						let s = currentTextWrap[i];
 						if (dialogueProgress < charStart + s.length) {
-							s = s.substring(0, dialogueProgress - charStart)
+							s = s.substring(0, dialogueProgress - charStart);
 						}
-						DRAW.text(s, x + 30, y + 40 + i*30)
+						DRAW.text(s, x + 30, y + 40 + i*30);
 
 						if (s.length != currentTextWrap[i].length) {
 							// line has been cut, don't continue to the next one
-							break
+							break;
 						}
-						charStart += s.length
+						charStart += s.length;
 					}
 
 					if (awaitingResponse) {
 						// Draw response buttons
 						for (let i = 0; i < responseButtons.length; i++) {
-							let button = responseButtons[i]
-							button.draw()
+							let button = responseButtons[i];
+							button.draw();
 						}
 					} else {
 						if (dialogueProgress >= currentText.length) {
 							// Draw continue prompt
-							DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134)
+							DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134);
 						}
 					}
 				} else if (dialogueType == "book") {
-					let x = canvasWidth/2 - 680/2
-					let y = 41
+					let x = canvasWidth/2 - 680/2;
+					let y = 41;
 
 					if (bookLoaded) {
 						// Render book canvases directly
-						DRAW.setColor(255,255,255,1.0)
-						ctx.drawImage(bookCanvas1, x, y)
-						ctx.drawImage(bookCanvas2, x+680/2, y)
+						DRAW.setColor(255,255,255,1.0);
+						ctx.drawImage(bookCanvas1, x, y);
+						ctx.drawImage(bookCanvas2, x+680/2, y);
 
 						// Page numbers
-						DRAW.setColor(0,0,0,1.0)
-						DRAW.setFont(FONT.caption)
-						DRAW.text(bookPage+1, canvasWidth/2-680/4, y + 446, "center")
-						DRAW.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center")
+						DRAW.setColor(0,0,0,1.0);
+						DRAW.setFont(FONT.caption);
+						DRAW.text(bookPage+1, canvasWidth/2-680/4, y + 446, "center");
+						DRAW.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center");
 
 						// Page turn arrow
-						let [mouseX, mouseY] = getMousePos()
+						let [mouseX, mouseY] = getMousePos();
 						if (checkMouseInside(x, y, 680, 460)) {
 							if (mouseX < canvasWidth/2) {
-								DRAW.text("<", canvasWidth/2 - 680/4 - 150, y + 446, "center")
+								DRAW.text("<", canvasWidth/2 - 680/4 - 150, y + 446, "center");
 							} else {
-								DRAW.text(">", canvasWidth/2 + 680/4 + 150, y + 446, "center")
+								DRAW.text(">", canvasWidth/2 + 680/4 + 150, y + 446, "center");
 							}
 						}
 
 						// Draw book texture
-						DRAW.setColor(255,255,255,1)
-						DRAW.image(IMG.book, null, x-1, y-1)
+						DRAW.setColor(255,255,255,1);
+						DRAW.image(IMG.book, null, x-1, y-1);
 					}
 
 				}
@@ -213,34 +213,34 @@ const DialogueSystem = (function() {
 				if (dialogueType === false) { // normal dialogue
 					if (dialogueProgress < currentText.length) {
 						// Progress dialogue text character by character
-						let charSpeed = 30
-						let nextChar = currentText.charAt(dialogueProgress-1)
+						let charSpeed = 30;
+						let nextChar = currentText.charAt(dialogueProgress-1);
 						// pause for punctuation
 						if (nextChar == "." || nextChar == "!" || nextChar == "?") {
-							charSpeed = 5
+							charSpeed = 5;
 						} else if (nextChar == ",") {
-							charSpeed = 8
+							charSpeed = 8;
 						}
 						// progress text
-						dialogueTimer += charSpeed*dt
-						let oldDialogueProgress = dialogueProgress
-						dialogueProgress = Math.min(Math.floor(dialogueTimer), currentText.length)
+						dialogueTimer += charSpeed*dt;
+						let oldDialogueProgress = dialogueProgress;
+						dialogueProgress = Math.min(Math.floor(dialogueTimer), currentText.length);
 						// Play dialog sound
 						if (speakerNPC) {
 							if (dialogueProgress > oldDialogueProgress && dialogueProgress%8 == 1) {
-								AudioSystem.playSound(SFX.cluck[Math.random()*SFX.cluck.length|0])
+								AudioSystem.playSound(SFX.cluck[Math.random()*SFX.cluck.length|0]);
 							}
 						}
 					} else {
 						// Continue prompt arrow movement
-						promptTimer = (promptTimer + 2*dt)%1
+						promptTimer = (promptTimer + 2*dt)%1;
 
 						// Ask for responses
 						if (dialogueProgress >= currentText.length) {
 							// Dialogue has finished presenting
 							if (dialogueData.responses && stage >= dialogueData.text.length-1 && !awaitingResponse) {
 								// Await response
-								this.requestResponse(dialogueData.responses)
+								this.requestResponse(dialogueData.responses);
 							}
 						}
 					}
@@ -248,8 +248,8 @@ const DialogueSystem = (function() {
 					// Update response buttons
 					if (awaitingResponse) {
 						for (let i = 0; i < responseButtons.length; i++) {
-							let button = responseButtons[i]
-							button.update(dt)
+							let button = responseButtons[i];
+							button.update(dt);
 						}
 					}
 				}
@@ -258,15 +258,15 @@ const DialogueSystem = (function() {
 
 		keyPress(key) {
 			if (!open) {
-				return false
+				return false;
 			}
 
 			if (awaitingResponse) {
 				// Test click on all buttons
 				for (let i = 0; i < responseButtons.length; i++) {
-					let b = responseButtons[i]
+					let b = responseButtons[i];
 					if (b.keyPress(key)) {
-						return true
+						return true;
 					}
 				}
 			}
@@ -275,35 +275,35 @@ const DialogueSystem = (function() {
 			if (dialogueType === false) {
 				// Next dialogue
 				if (key == " ") {
-					this.next()
-					return true
+					this.next();
+					return true;
 				}
 			} else if (dialogueType == "book") {
 				// Next book page
 				if (key == " " || key == "ArrowRight") {
 					// Next page
-					this.changeBookPage("next")
-					return true
+					this.changeBookPage("next");
+					return true;
 				} else if (key == "ArrowLeft") {
 					// Go back a page
-					this.changeBookPage("back")
-					return true
+					this.changeBookPage("back");
+					return true;
 				}
 			}
-			return true
+			return true;
 		},
 	
 		mouseClick(button, x, y) {
 			if (!open) {
-				return false
+				return false;
 			}
 
 			if (awaitingResponse) {
 				// Test click on all buttons
 				for (let i = 0; i < responseButtons.length; i++) {
-					let b = responseButtons[i]
+					let b = responseButtons[i];
 					if (b.click(button, x, y)) {
-						return true
+						return true;
 					}
 				}
 			}
@@ -311,113 +311,113 @@ const DialogueSystem = (function() {
 			// Continue
 			if (dialogueType === false) {
 				// Next dialogue
-				this.next()
-				return true
+				this.next();
+				return true;
 			} else if (dialogueType == "book") {
 				// Next book page
 				if (x > canvasWidth/2) {
 					// Next page
-					this.changeBookPage("next")
-					return true
+					this.changeBookPage("next");
+					return true;
 				} else if (x < canvasWidth/2) {
 					// Go back a page
-					this.changeBookPage("back")
-					return true
+					this.changeBookPage("back");
+					return true;
 				}
 			}
-			return true
+			return true;
 		},
 
 		mouseRelease(button, x, y) {
 			if (!open) {
-				return false
+				return false;
 			}
 
 			if (awaitingResponse) {
 				// Release click
 				for (let i = 0; i < responseButtons.length; i++) {
-					let b = responseButtons[i]
+					let b = responseButtons[i];
 					if (b.clickRelease(button, x, y)) {
-						return true
+						return true;
 					}
 				}
 			}
-			return false
+			return false;
 		},
 
 		next() {
 			// Normal dialogue
 			if (dialogueProgress < currentText.length) {
 				// dialogue is not finished presenting, skip
-				dialogueProgress = currentText.length
+				dialogueProgress = currentText.length;
 			} else if (dialogueData.responses && stage >= dialogueData.text.length-1) {
 				// Await response, if applicable
-				this.requestResponse(dialogueData.responses)
+				this.requestResponse(dialogueData.responses);
 			} else {
 				// go to next dialogue line
-				stage += 1
+				stage += 1;
 				if (dialogueData.randomDialogue) {
 					// Random dialogue has only one stage
-					this.finish()
-					return
+					this.finish();
+					return;
 				} if (stage >= dialogueData.text.length) {
 					// No more dialogue lines, finish dialogue
-					this.finish()
-					return
+					this.finish();
+					return;
 				}
 				
-				this.startText(stage)
+				this.startText(stage);
 			}
 		},
 
 		startText(i) {
 			// Dialogue type
-			let type = dialogueData.type
+			let type = dialogueData.type;
 			if (!type) {
 				if (dialogueData.randomDialogue) {
 					// Random dialogue has only one stage, pick any to start at
-					i = Math.floor(Math.random()*dialogueData.text.length)
+					i = Math.floor(Math.random()*dialogueData.text.length);
 				}
 				// Dialogue text animation
-				currentText = dialogueData.text[i]
-				DRAW.setFont(FONT.caption)
-				currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2) // Wrap text
-				dialogueProgress = 0
-				dialogueTimer = 0
+				currentText = dialogueData.text[i];
+				DRAW.setFont(FONT.caption);
+				currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2); // Wrap text
+				dialogueProgress = 0;
+				dialogueTimer = 0;
 				// Speaker
 				if (dialogueData.speaker != null) {
-					this.setSpeaker(dialogueData.speaker)
+					this.setSpeaker(dialogueData.speaker);
 				} else {
-					this.setSpeaker(defaultSpeaker) // Reset to default
+					this.setSpeaker(defaultSpeaker); // Reset to default
 				}
-				dialogueType = false
+				dialogueType = false;
 			} else {
-				dialogueType = type
+				dialogueType = type;
 				// Load book pop-up
 				if (type == "book") {
-					this.loadBook(dialogueData.file)
+					this.loadBook(dialogueData.file);
 				}
 			}
 		},
 
 		loadBook(filePath) {
 			// Make a new 680x460 canvas for the pdf
-			bookCanvas1 = document.createElement('canvas');
+			bookCanvas1 = document.createElement("canvas");
 			bookCanvas1.width = 340;
 			bookCanvas1.height = 460;
-			bookCanvas2 = document.createElement('canvas');
+			bookCanvas2 = document.createElement("canvas");
 			bookCanvas2.width = 340;
 			bookCanvas2.height = 460;
 
-			bookLoaded = false
-			bookPage = 0
+			bookLoaded = false;
+			bookPage = 0;
 
 			// Load PDF
 			pdfjsLib.getDocument({url: "./assets/" + filePath}).promise.then((pdf) => {
-				bookPDF = pdf
-				bookPages = pdf.numPages
+				bookPDF = pdf;
+				bookPages = pdf.numPages;
 
-				this.loadBookPage(bookPage)
+				this.loadBookPage(bookPage);
 			}).catch((error) => {
 				console.error("Error loading PDF document:", error);
 			});
@@ -426,37 +426,37 @@ const DialogueSystem = (function() {
 		changeBookPage(dir) {
 			if (!bookLoaded) {
 				// Book is still loading
-				return false
+				return false;
 			}
 
 			if (dir == "next") {
-				bookPage += 2
+				bookPage += 2;
 			} else if (dir == "back") {
 				if (bookPage <= 0) {
 					// Can't go back any further
-					return false
+					return false;
 				}
-				bookPage -= 2
+				bookPage -= 2;
 			}
 
 			if (bookPage >= bookPages) {
 				// No more pages, finish dialogue
-				this.finish()
+				this.finish();
 			} else {
-				this.loadBookPage(bookPage)
+				this.loadBookPage(bookPage);
 			}
-			return true
+			return true;
 		},
 
 		loadBookPage(pageNo) {
 			// (Actually loads a pair of pages)
 			// (May get changed in the future to allow for non-book pdfs)
-			bookLoaded = false
+			bookLoaded = false;
 
-			let bookCtx1 = bookCanvas1.getContext('2d');
-			let bookCtx2 = bookCanvas2.getContext('2d');
+			let bookCtx1 = bookCanvas1.getContext("2d");
+			let bookCtx2 = bookCanvas2.getContext("2d");
 
-			let x = 0
+			let x = 0;
 
 			// Load left page
 			bookPDF.getPage(pageNo+1).then((page) => {
@@ -481,145 +481,145 @@ const DialogueSystem = (function() {
 				bookPDF.getPage(pageNo+2).then((page2) => {
 					page2.render(renderContext2); // Render right page
 				}).catch((error) => {
-					console.error(`Error loading page 2`, error);
-					this.finish()
+					console.error("Error loading page 2", error);
+					this.finish();
 				});
-				bookLoaded = true // book is done loading when at least one page is loaded
+				bookLoaded = true; // book is done loading when at least one page is loaded
 
 			}).catch((error) => {
-				console.error(`Error loading page 1`, error);
-				this.finish()
+				console.error("Error loading page 1", error);
+				this.finish();
 			});
 		},
 
 		finish() {
-			open = false
+			open = false;
 
-			let d = dialogueData
+			let d = dialogueData;
 
 			// Do any actions defined for the end of the dialogue
 			// Start a quest
 			if (d.startQuest) {
-				QuestSystem.start(d.startQuest)
+				QuestSystem.start(d.startQuest);
 			}
 
 			// Quest progress from talking
 			if (d.quest) {
 				if (d.questSlotAdd) {
-					QuestSystem.progress(d.quest, d.questSlot, d.questSlotAdd)
+					QuestSystem.progress(d.quest, d.questSlot, d.questSlotAdd);
 				} else if (d.questSlotSet) {
-					QuestSystem.setProgress(d.quest, d.questSlot, d.questSlotSet)
+					QuestSystem.setProgress(d.quest, d.questSlot, d.questSlotSet);
 				}
 			}
 
 			// Give item
 			if (d.giveItem) {
-				addItem(d.giveItem)
+				addItem(d.giveItem);
 			}
 
 			// Send a message to the server
 			if (d.sendServerMessage) {
-				let header = d.serverMessageHeader
-				let message = serverMessage
-				NETPLAY.sendMessageToServer(header, message)
+				let header = d.serverMessageHeader;
+				let message = serverMessage;
+				NETPLAY.sendMessageToServer(header, message);
 			}
 
 			// Go to next dialogue block, if defined
 			if (d.to) {
-				this.goToDialogueBlock(d.to)
+				this.goToDialogueBlock(d.to);
 			}
 		},
 
 		// Show respnonse buttons
 		requestResponse(allResponses) {
 			if (awaitingResponse) {
-				return false
+				return false;
 			}
-			awaitingResponse = true
-			responseButtons = []
+			awaitingResponse = true;
+			responseButtons = [];
 
 			// Check which responses are available
-			let responses = []
+			let responses = [];
 			for (let i = 0; i < allResponses.length; i++) {
-				let r = allResponses[i]
-				let doAdd = true
+				let r = allResponses[i];
+				let doAdd = true;
 				if (r.condition) { // If response has condition, condition must be fulfilled
 					if (!checkCondition(r.condition)) {
-						doAdd = false
+						doAdd = false;
 					}
 				}
 				if (doAdd) {
-					responses.push(r)
+					responses.push(r);
 				}
 			}
 
 			// Create response buttons
-			let x = 240
+			let x = 240;
 			if (speaker) {
 				// Draw speaker name
-				x = x + 65
+				x = x + 65;
 			}
-			let y = 340
-			let w = 550
-			let n = responses.length
-			let padding = 10
-			let spacing = 10
+			let y = 340;
+			let w = 550;
+			let n = responses.length;
+			let padding = 10;
+			let spacing = 10;
 			for (let i = 0; i < n; i++) {
-				let r = responses[i]
+				let r = responses[i];
 				if (r.type) { // Type any response
-					let textField = new TextField(r.text, (text)=>{this.response(r, text)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
-					responseButtons.push(textField)
+					let textField = new TextField(r.text, (text)=>{this.response(r, text);}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35);
+					responseButtons.push(textField);
 				} else { // Preset response
-					let button = new Button(r.text, ()=>{this.response(r, r.to)}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35)
-					responseButtons.push(button)
+					let button = new Button(r.text, ()=>{this.response(r, r.to);}, null, x + ((w-padding*2)/n)*i + spacing/2 + padding, y + 100 + 10, ((w-padding*2)/n)-spacing, 35);
+					responseButtons.push(button);
 				}
 			}
 		},
 
 		// Jump to next dialogue block depending on response
 		response(response, nextId) {
-			awaitingResponse = false
-			responseButtons = []
+			awaitingResponse = false;
+			responseButtons = [];
 
 			// Add to current server message being built
 			if (response.addToServerMessage != null) {
 				// console.log(`Adding to server message: ${response.addToServerMessage}`)
-				let messageAddition = response.addToServerMessage
+				let messageAddition = response.addToServerMessage;
 				// Check if serverMessage is an array (not object), otherwise don't do anything
 				if (Array.isArray(serverMessage)) {
-					serverMessage.push(messageAddition)
+					serverMessage.push(messageAddition);
 				} else {
 					// console.log("[Dialogue] Attempted to add to server message, but message hasn't been started yet.")
-					serverMessage = [messageAddition]
+					serverMessage = [messageAddition];
 				}
 			}
 
 			// Finish dialogue block
-			this.finish()
+			this.finish();
 
 			// Start next dialogue block
 			if (nextId == null) {
-				return false
+				return false;
 			}
-			this.goToDialogueBlock(nextId)
+			this.goToDialogueBlock(nextId);
 		},
 
 		// Go to a different dialogue block. Used for jumping to different parts of the dialogue tree.
 		goToDialogueBlock(id) {
-			stage = 0 // Reset stage
+			stage = 0; // Reset stage
 			for (let i = 0; i < dialogueTree.length; i++) {
-				let block = dialogueTree[i]
+				let block = dialogueTree[i];
 				if (block.id == id) { // Look for dialogue block with this id
-					let doStart = true
+					let doStart = true;
 					// Response is telling you to go to this block, so go to it no matter what
 					// if (block.condition && !checkCondition(block.condition)) {
 					// 	doStart = false
 					// }
 					if (doStart) {
-						open = true // Open dialogue menu again
-						dialogueData = dialogueTree[i]
-						this.startText(0)
-						return true
+						open = true; // Open dialogue menu again
+						dialogueData = dialogueTree[i];
+						this.startText(0);
+						return true;
 					}
 				}
 			}
@@ -628,15 +628,15 @@ const DialogueSystem = (function() {
 		// Set speaker of current dialogue block.
 		setSpeaker(name, icon=false) {
 			// icon: false = no icon, true = use icon of speakerNPC, string = custom icon
-			speaker = name
-			speakerIcon = icon
+			speaker = name;
+			speakerIcon = icon;
 		},
 
 		getOpen() {
-			return open
+			return open;
 		}
 	};
 	
-return functions; })()
+	return functions; })();
 
 export default DialogueSystem;

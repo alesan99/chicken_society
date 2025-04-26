@@ -2,14 +2,14 @@
 // SaveData: Stores all player data & game progress, including private data (Excluding login information)
 // Profile: Stores only chicken information; this is information that's always accessible to other players
 
-import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js"
-import {SAVEDATA} from "./main.js"
-import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS, CHAT } from "./world.js"
-import QuestSystem from "./quests.js"
-import AudioSystem from "./engine/audio.js"
-import DialogueSystem from "./dialogue.js"
-import Transition from "./transition.js"
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "./items.js"
+import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js";
+import {SAVEDATA} from "./main.js";
+import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS, CHAT } from "./world.js";
+import QuestSystem from "./quests.js";
+import AudioSystem from "./engine/audio.js";
+import DialogueSystem from "./dialogue.js";
+import Transition from "./transition.js";
+import {requestItem, compareItems, clearItems, useItem, adoptPet} from "./items.js";
 
 function makeSaveData() {
 	let saveData = {
@@ -63,9 +63,9 @@ function makeSaveData() {
 			runner: 0,
 			eggs: 0
 		}
-	}
+	};
 
-	return saveData
+	return saveData;
 }
 
 function makeProfile() {
@@ -94,7 +94,7 @@ function makeProfile() {
 		"Sussex",
 		"Princess lay A",
 		"Bitchass Jessica"
-	]
+	];
 
 	let profile = {
 		name: defaultNames[Math.floor(Math.random()*defaultNames.length)],
@@ -109,9 +109,9 @@ function makeProfile() {
 		item: false,
 
 		pet: false
-	}
+	};
 	
-	return profile
+	return profile;
 }
 
 function makePetData() {
@@ -124,7 +124,7 @@ function makePetData() {
 		age: 0, // in days
 		lastUpdate: 0, // timestamp of last update
 		disease: false
-	}
+	};
 }
 
 // Saving SaveData
@@ -137,7 +137,7 @@ function saveSaveData(saveData) {
 	
 	// Store the JSON string in localStorage
 	localStorage.setItem("guestSaveData", jsonString);
-	console.log("saved SaveData to localStorage at 'guestSaveData'")
+	console.log("saved SaveData to localStorage at 'guestSaveData'");
 }
 
 function loadSaveData(saveData) {
@@ -148,59 +148,59 @@ function loadSaveData(saveData) {
 	const storedJsonString = localStorage.getItem("guestSaveData");
 
 	if (!storedJsonString) {
-		console.log("could not get localStorage data at 'guestSaveData'")
-		return false
+		console.log("could not get localStorage data at 'guestSaveData'");
+		return false;
 	}
 	
 	// Parse the JSON string back into a JavaScript object
 	const retrievedObject = JSON.parse(storedJsonString);
 	// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
 
-	QuestSystem.initialize() // Reload quests
+	QuestSystem.initialize(); // Reload quests
 
-	console.log("loaded SaveData from localStorage at 'guestSaveData'")
-	console.log(retrievedObject)
-	return retrievedObject
+	console.log("loaded SaveData from localStorage at 'guestSaveData'");
+	console.log(retrievedObject);
+	return retrievedObject;
 }
 
 function replaceObjectValues(objectTo, objectFrom) {
 	// Replace all values in objectTo with values from objectFrom
 	// This is only needed because
 	for (const key in objectFrom) {
-		objectTo[key] = objectFrom[key]
+		objectTo[key] = objectFrom[key];
 	}
 }
 
 // Functions for modifying save data:
 // Remove nugget currency.
 function removeNuggets(nuggets) {
-	SAVEDATA.nuggets -= nuggets
+	SAVEDATA.nuggets -= nuggets;
 
 	// Play nugget animation in HUD
 	if (CHAT) {
-		CHAT.nuggetCounter(-nuggets)
+		CHAT.nuggetCounter(-nuggets);
 	}
 	// Quest progression
-	QuestSystem.event("nuggets", SAVEDATA.nuggets)
+	QuestSystem.event("nuggets", SAVEDATA.nuggets);
 }
 
 function addNuggets(nuggets) {
-	SAVEDATA.nuggets += nuggets
+	SAVEDATA.nuggets += nuggets;
 
 	// Play nugget animation in HUD
 	if (CHAT) {
-		CHAT.nuggetCounter(nuggets)
+		CHAT.nuggetCounter(nuggets);
 	}
 	// Quest progression
-	QuestSystem.event("nuggets", SAVEDATA.nuggets)
+	QuestSystem.event("nuggets", SAVEDATA.nuggets);
 }
 
 function spendNuggets(cost) {
 	if (SAVEDATA.nuggets >= cost) {
-		removeNuggets(cost)
-		return true
+		removeNuggets(cost);
+		return true;
 	} else {
-		return false
+		return false;
 	}
 }
 
@@ -208,87 +208,87 @@ function spendNuggets(cost) {
 function addItem(id, type, count=1) {
 	if (!type) {
 		// Item category not specified, look for it
-		type = getItemCategory(id)
+		type = getItemCategory(id);
 	}
 	if (!SAVEDATA.items[type][id]) {
-		SAVEDATA.items[type][id] = 0
+		SAVEDATA.items[type][id] = 0;
 	}
-	SAVEDATA.items[type][id] += count
+	SAVEDATA.items[type][id] += count;
 }
 
 function removeItem(id, type, count=1) {
 	if (!type) {
 		// Item category not specified, look for it
-		type = getItemCategory(id)
+		type = getItemCategory(id);
 	}
 	if (!SAVEDATA.items[type][id]) {
-		return false
+		return false;
 	}
-	SAVEDATA.items[type][id] -= count
+	SAVEDATA.items[type][id] -= count;
 	if (SAVEDATA.items[type][id] <= 0) {
-		delete SAVEDATA.items[type][id]
+		delete SAVEDATA.items[type][id];
 	}
 }
 
 function getItemCategory(id) {
 	for (const cat in ITEMS) {
 		if (ITEMS[cat][id]) {
-			return cat
+			return cat;
 		}
 	}
-	return "item"
+	return "item";
 }
 
 function getItemData(id, type) {
 	// Get item data
-	let category
+	let category;
 	if (type) {
-		category = type
+		category = type;
 	} else {
-		category = getItemCategory(id)
+		category = getItemCategory(id);
 	}
 
-	return ITEMS[category][id]
+	return ITEMS[category][id];
 }
 
 function getItem(id, type) {
 	// Get number of owned items
-	let category
+	let category;
 	if (type) {
-		category = type
+		category = type;
 	} else {
-		category = getItemCategory(id)
+		category = getItemCategory(id);
 	}
 	if (category && SAVEDATA.items[category][id]) {
-		return SAVEDATA.items[category][id]
+		return SAVEDATA.items[category][id];
 	} else {
-		return false
+		return false;
 	}
 }
 
 // Chicken Coop Furniture
 function placeFurniture(itemId, x, y, dir="down") {
 	// Add to list of furniture in player's coop
-	SAVEDATA.coop.furniture.push({id: itemId, x: x, y: y, dir: dir})
+	SAVEDATA.coop.furniture.push({id: itemId, x: x, y: y, dir: dir});
 }
 
 function removeFurniture(itemId, x, y) {
 	// Look for furniture in savedata that matches the given furniture info
 	for (let i=0; i<SAVEDATA.coop.furniture.length; i++) {
 		if (SAVEDATA.coop.furniture[i].id == itemId && SAVEDATA.coop.furniture[i].x == x && SAVEDATA.coop.furniture[i].y == y) {
-			SAVEDATA.coop.furniture.splice(i, 1)
-			return true
+			SAVEDATA.coop.furniture.splice(i, 1);
+			return true;
 		}
 	}
-	return false
+	return false;
 }
 
 // Color storage methods
 function RGBtoHEX(r, g, b) {
 	// Convert each RGB component to a two-digit hexadecimal value
-	const hexR = r.toString(16).padStart(2, '0');
-	const hexG = g.toString(16).padStart(2, '0');
-	const hexB = b.toString(16).padStart(2, '0');
+	const hexR = r.toString(16).padStart(2, "0");
+	const hexG = g.toString(16).padStart(2, "0");
+	const hexB = b.toString(16).padStart(2, "0");
 
 	// Combine the hexadecimal values to form the final color code
 	const hexColor = `#${hexR}${hexG}${hexB}`;
@@ -309,4 +309,4 @@ function HEXtoRGB(hex) {
 	return [red, green, blue];
 }
 
-export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues}
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues};

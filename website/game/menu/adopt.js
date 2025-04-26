@@ -1,79 +1,79 @@
 // Adopt prompt
 // Tells you that equipping a pet will overwrite your current pet
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js"
-import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js"
-import {canvasWidth, canvasHeight} from "../engine/render.js"
-import {Menu, MENUS} from "../menu.js"
-import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js"
-import {ItemGrid} from "../gui/itemgrid.js"
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js"
-import {openMenu, closeMenu, getOpenMenu} from "../state.js"
-import {PLAYER, PLAYER_CONTROLLER} from "../world.js"
-import QuestSystem from "../quests.js"
-import Transition from "../transition.js"
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js"
+import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
+import {canvasWidth, canvasHeight} from "../engine/render.js";
+import {Menu, MENUS} from "../menu.js";
+import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
+import {ItemGrid} from "../gui/itemgrid.js";
+import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
+import {openMenu, closeMenu, getOpenMenu} from "../state.js";
+import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
+import QuestSystem from "../quests.js";
+import Transition from "../transition.js";
+import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 
 MENUS["adoptMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {
-		super(287,198, 450,180)
+		super(287,198, 450,180);
 	}
 
 	load (targetPet) {
-		this.openTimer = 0
+		this.openTimer = 0;
 
 		// Pet to be adopted
-		this.targetPet = targetPet
-		this.petName = ""
+		this.targetPet = targetPet;
+		this.petName = "";
 
 		// Buttons
-		this.buttons = {}
-		this.buttons["close"] = new Button("✖", ()=>{closeMenu()}, null, 694,212, 32,32)
+		this.buttons = {};
+		this.buttons["close"] = new Button("✖", ()=>{closeMenu();}, null, 694,212, 32,32);
 
-		this.buttons["cancel"] = new Button("Cancel", ()=>{openMenu("customization")}, null, 340,332, 120,32)
-		this.buttons["confirm"] = new Button("Confirm", ()=>{closeMenu(); adoptPet(this.targetPet, this.petName)}, null, 560,332, 120,32)
+		this.buttons["cancel"] = new Button("Cancel", ()=>{openMenu("customization");}, null, 340,332, 120,32);
+		this.buttons["confirm"] = new Button("Confirm", ()=>{closeMenu(); adoptPet(this.targetPet, this.petName);}, null, 560,332, 120,32);
 
-		this.buttons["name"] = new TextField(this.petName, (text)=>{this.petName = text}, null, 380,290, 200,32)
+		this.buttons["name"] = new TextField(this.petName, (text)=>{this.petName = text;}, null, 380,290, 200,32);
 	}
 	
 	mouseClick(button, x, y) {
-		super.mouseClick(button, x, y)
+		super.mouseClick(button, x, y);
 		if (!MENUS["chatMenu"].checkMouseInside()) {
 			// Disable clicking anywhere else, except for chat hud
-			return true
+			return true;
 		}
 	}
 
 	mouseRelease(button, x, y) {
-		return super.mouseRelease(button, x, y)
+		return super.mouseRelease(button, x, y);
 	}
 	
 	draw() {
 		// Window
-		let scale = 1
+		let scale = 1;
 		if (this.openTimer < 1) {
-			scale = easing("easeOutBack", this.openTimer)
+			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.popup, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5)
+		DRAW.image(IMG.popup, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 
 		// Text
-		DRAW.setColor(112, 50, 16, scale)
-		DRAW.setFont(FONT.caption)
-		DRAW.text("Adopt new pet?", 512, 234, "center")
+		DRAW.setColor(112, 50, 16, scale);
+		DRAW.setFont(FONT.caption);
+		DRAW.text("Adopt new pet?", 512, 234, "center");
 		
-		DRAW.text("This will ERASE your current pet's memory.", 310, 275, "left")
+		DRAW.text("This will ERASE your current pet's memory.", 310, 275, "left");
 
 		
-		DRAW.text("Name:", 310, 312, "left")
+		DRAW.text("Name:", 310, 312, "left");
 
 		// Render all buttons
-		this.drawButtons()
+		this.drawButtons();
 	}
 
 	update(dt) {
-		this.openTimer = Math.min(1, this.openTimer + 4*dt)
+		this.openTimer = Math.min(1, this.openTimer + 4*dt);
 
-		this.updateButtons(dt)
+		this.updateButtons(dt);
 	}
-}()
+}();

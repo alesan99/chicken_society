@@ -15,8 +15,8 @@ const session = require("express-session");
 const app = express();
 const http = require("http"); // Used to start server
 const server = http.createServer(app);
-const { Worker } = require('worker_threads'); // Allow multi-threading
-const rateLimit = require('express-rate-limit'); // Limit requests to server
+const { Worker } = require("worker_threads"); // Allow multi-threading
+const rateLimit = require("express-rate-limit"); // Limit requests to server
 const path = require("path"); // Used to build paths
 
 // Session; used for user data
@@ -31,9 +31,9 @@ app.use(sessionMiddleware);
 
 // Rate limiter; helps stop exessive requests to server
 const limiter = rateLimit({
-    windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 5000, // Limit each IP to 5000 requests per windowMs
-    message: 'Too many requests from this IP, please try again after 10 minutes'
+	windowMs: 10 * 60 * 1000, // 10 minutes
+	max: 5000, // Limit each IP to 5000 requests per windowMs
+	message: "Too many requests from this IP, please try again after 10 minutes"
 });
 
 app.use(limiter);
@@ -62,13 +62,13 @@ app.get("/", (req, res) => {
 });
 
 // Handle logins
-require("./server/login.js")
+require("./server/login.js");
 
 // Set up client syncing
 io.engine.use(sessionMiddleware);
 const {listenToClient, serverLoop} = require("./server/sync.js");
 
-io.on("connection", (socket) => {listenToClient(socket)});
+io.on("connection", (socket) => {listenToClient(socket);});
 
 // User data database
 useDB = false;
@@ -90,22 +90,22 @@ if (useDB) {
 			con.query(createTableQuery, (createError) => {
 				if (createError) {
 				}
-				console.log('User table created');
-				});
-				}
-				else {
-					console.log('User table already exists');
-				}m
-		});
+				console.log("User table created");
+			});
+		}
+		else {
+			console.log("User table already exists");
+		}m;
+	});
 	db.createPlayerTable(con);
 }
 
 // Start server on port
-const localIPAddress = "localhost" // ipv4 //"10.104.58.91" // IPv4 or localhost
-const port = 3000
+const localIPAddress = "localhost"; // ipv4 //"10.104.58.91" // IPv4 or localhost
+const port = 3000;
 server.listen(port, localIPAddress, () => {
-	console.log(`Server is running on http://${localIPAddress}:${port}`)
-})
+	console.log(`Server is running on http://${localIPAddress}:${port}`);
+});
 
 // Start game loop
 let lastUpdateTime = Date.now();

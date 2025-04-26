@@ -1,10 +1,10 @@
-import { DRAW, CURSOR } from "../main.js"
-import { FONT } from "../assets.js"
-import { getMousePos } from "../engine/input.js"
-import { ToolTip } from "./tooltip.js"
+import { DRAW, CURSOR } from "../main.js";
+import { FONT } from "../assets.js";
+import { getMousePos } from "../engine/input.js";
+import { ToolTip } from "./tooltip.js";
 
 class Button {
-	constructor(label="", action=()=>{}, graphic, x=0, y=0, w, h, tooltip=null) { //in px, label is text on button, action is function to call when clicked  
+	constructor(label="", action=()=>{}, graphic, x=0, y=0, w, h, tooltip=null) { //in px, label is text on button, action is function to call when clicked
 		this.visible = true;
 		this.label = label;
 		this.labelJustify = "center";
@@ -58,7 +58,7 @@ class Button {
 	update(dt){
 		if (this.disabled) {
 			// Don't update if button is disabled
-			return false
+			return false;
 		}
 
 		this.hover = this.checkMouseInside();
@@ -78,8 +78,8 @@ class Button {
 
 		this.hover = this.checkMouseInside();
 		if (this.hover) {//this should only click if you're hovering over the button
-			this.held = true
-			return true // ignore all other buttons
+			this.held = true;
+			return true; // ignore all other buttons
 		}
 	}
 	clickRelease(button, x, y){
@@ -94,19 +94,19 @@ class Button {
 	draw(){
 		if (!this.visible) {
 			// Don't render if button was specified to be not visible
-			return false
+			return false;
 		}
 
 		if (this.image) {
 			// Render image for button
-			let frame = 0
+			let frame = 0;
 			if (this.held == true){
-				frame = 2
+				frame = 2;
 			} else if (this.hover == true){
-				frame = 1
+				frame = 1;
 			}
-			DRAW.setColor(255,255,255,1)
-			DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
+			DRAW.setColor(255,255,255,1);
+			DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
 		} else {
 			// Render button with basic rectangles if no image was provided
 			if (this.disabled == true) {
@@ -122,8 +122,8 @@ class Button {
 			}
 			
 			DRAW.rectangle(this.x, this.y, this.w, this.h);
-			DRAW.setColor(168, 85, 38, 1)
-			DRAW.setLineWidth(2)
+			DRAW.setColor(168, 85, 38, 1);
+			DRAW.setLineWidth(2);
 			DRAW.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
 
 			DRAW.setColor(255,255,255, 0.4);
@@ -132,18 +132,18 @@ class Button {
 
 		if (this.icon) {
 			// Icon
-			DRAW.setColor(255,255,255,1)
-			DRAW.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5)
+			DRAW.setColor(255,255,255,1);
+			DRAW.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
 		} else if (this.label) {
 			// Label
-			DRAW.setFont(FONT.guiLabel)
-			DRAW.setColor(this.textColor[0], this.textColor[1], this.textColor[2],1)
+			DRAW.setFont(FONT.guiLabel);
+			DRAW.setColor(this.textColor[0], this.textColor[1], this.textColor[2],1);
 			if (this.labelJustify == "center") {
-				DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify)
+				DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify);
 			} else if (this.labelJustify == "left") {
-				DRAW.text(this.label, this.x+10, this.y+this.h/2+7, this.labelJustify)
+				DRAW.text(this.label, this.x+10, this.y+this.h/2+7, this.labelJustify);
 			} else if (this.labelJustify == "right") {
-				DRAW.text(this.label, this.x+this.w-10, this.y+this.h/2+7, this.labelJustify)
+				DRAW.text(this.label, this.x+this.w-10, this.y+this.h/2+7, this.labelJustify);
 			}
 		}
 
@@ -157,16 +157,16 @@ class Button {
 // Lets you type text
 class TextField extends Button {
 	constructor(text="", textAction=(text)=>{}, graphic, x=0, y=0, w, h) {
-		super("", ()=>{}, null, x, y, w, h)
+		super("", ()=>{}, null, x, y, w, h);
 
-		this.textAction = textAction
+		this.textAction = textAction;
 
-		this.text = text // text being edited
-		this.typing = false // can user type?
+		this.text = text; // text being edited
+		this.typing = false; // can user type?
 
-		this.cursor = text.length // index of where to edit texxt
+		this.cursor = text.length; // index of where to edit texxt
 
-		this.blinkTimer = 0 // blinking cursor animation
+		this.blinkTimer = 0; // blinking cursor animation
 	}
 
 	draw() {
@@ -179,70 +179,70 @@ class TextField extends Button {
 		}
 		
 		DRAW.rectangle(this.x, this.y, this.w, this.h);
-		DRAW.setColor(90,90,110, 1)
-		DRAW.setLineWidth(2)
+		DRAW.setColor(90,90,110, 1);
+		DRAW.setLineWidth(2);
 		DRAW.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
 
 		DRAW.setColor(255,255,255, 0.4);
 		DRAW.line(this.x+3, this.y+this.h-4, this.x+this.w-3, this.y+this.h-4); // Highlight
 
 		// Text input
-		DRAW.setFont(FONT.guiLabel)
-		DRAW.setColor(10,10,14,1)
-		let text = this.text
+		DRAW.setFont(FONT.guiLabel);
+		DRAW.setColor(10,10,14,1);
+		let text = this.text;
 
-		DRAW.text(text, this.x+10, this.y+this.h/2+7, "left")
+		DRAW.text(text, this.x+10, this.y+this.h/2+7, "left");
 		
 		// Cursor
 		if (this.typing && this.blinkTimer < 0.5) {
 			// Show cursor only when typing
-			let cursorX = this.x + 10 + DRAW.getTextWidth(text.slice(0, this.cursor)) - 2
-			DRAW.text("|", cursorX, this.y+this.h/2+5, "left")
+			let cursorX = this.x + 10 + DRAW.getTextWidth(text.slice(0, this.cursor)) - 2;
+			DRAW.text("|", cursorX, this.y+this.h/2+5, "left");
 		}
 	}
 
 	update(dt) {
-		this.blinkTimer = (this.blinkTimer + dt)%1
-		super.update(dt)
+		this.blinkTimer = (this.blinkTimer + dt)%1;
+		super.update(dt);
 	}
 
 	keyPress(key) {
 		if (key == "Enter") {
 			// Enter text
 			if (this.textAction) {
-				this.textAction(this.text)
-				this.typing = false
+				this.textAction(this.text);
+				this.typing = false;
 			}
-			return true
+			return true;
 		} else if (key == "Backspace") {
 			// Remove text (from cursor location)
 			if (this.text.length > 0 && this.cursor > 0) {
-				this.text = this.text.slice(0, this.cursor-1) + this.text.slice(this.cursor)
-				this.cursor = Math.max(0, this.cursor - 1)
-				this.blinkTimer = 0
+				this.text = this.text.slice(0, this.cursor-1) + this.text.slice(this.cursor);
+				this.cursor = Math.max(0, this.cursor - 1);
+				this.blinkTimer = 0;
 			}
 
-			return true
+			return true;
 		} else if (key == "ArrowLeft") {
 			// Move cursor left
-			this.cursor = Math.max(0, this.cursor - 1)
-			this.blinkTimer = 0
+			this.cursor = Math.max(0, this.cursor - 1);
+			this.blinkTimer = 0;
 		} else if (key == "ArrowRight") {
 			// Move cursor right
-			this.cursor = Math.min(this.text.length, this.cursor + 1)
-			this.blinkTimer = 0
+			this.cursor = Math.min(this.text.length, this.cursor + 1);
+			this.blinkTimer = 0;
 		} else if (key.length === 1) {
 			// Add text
-			DRAW.setFont(FONT.guiLabel)
-			let textWidth = DRAW.getTextWidth(this.text + key)
+			DRAW.setFont(FONT.guiLabel);
+			let textWidth = DRAW.getTextWidth(this.text + key);
 			if (textWidth < this.w-20) { // Only add character if it fits within box
 				// Insert character at cursor location
-				this.text = this.text.slice(0, this.cursor) + key + this.text.slice(this.cursor)
+				this.text = this.text.slice(0, this.cursor) + key + this.text.slice(this.cursor);
 
-				this.cursor = this.cursor + 1
-				this.blinkTimer = 0
+				this.cursor = this.cursor + 1;
+				this.blinkTimer = 0;
 			}
-			return true
+			return true;
 		}
 	}
 
@@ -251,50 +251,50 @@ class TextField extends Button {
 	}
 	
 	click() {
-		super.click()
+		super.click();
 		if (this.hover) {
-			this.typing = true
-			this.blinkTimer = 0
+			this.typing = true;
+			this.blinkTimer = 0;
 
 			// Find cursor location
-			this.cursor = this.text.length
-			let [mouseX, mouseY] = getMousePos()
-			let mouseRX = mouseX - this.x - 10 // Relative x
-			let text = this.text
-			DRAW.setFont(FONT.guiLabel)
-			let segW = 0 // Width of current segment (left-to-right)
+			this.cursor = this.text.length;
+			let [mouseX, mouseY] = getMousePos();
+			let mouseRX = mouseX - this.x - 10; // Relative x
+			let text = this.text;
+			DRAW.setFont(FONT.guiLabel);
+			let segW = 0; // Width of current segment (left-to-right)
 			for (let i=0; i<=text.length; i++) {
 				// Okay, we go through every single letter of the text in the box
-				let charW = DRAW.getTextWidth(text[i])
-				segW += charW
+				let charW = DRAW.getTextWidth(text[i]);
+				segW += charW;
 				// At each letter, we see if the mouse is behind the middle point of the letter
 				// If it is, the cursor is put behind that letter
 				// Otherwise, the next letter will perform the same check
 				if (mouseRX < (segW-(charW/2))) {
-					this.cursor = i
-					break
+					this.cursor = i;
+					break;
 				}
 			}
-			return true
+			return true;
 		} else {
 			if (this.typing && this.textAction) {
-				this.textAction(this.text)
+				this.textAction(this.text);
 			}
-			this.typing = false
+			this.typing = false;
 		}
 	}
 
 	clickRelease() {
-		super.clickRelease()
+		super.clickRelease();
 		if (this.hover) {
 
 		} else {
 			// Lazy hack
 			// Allows field to be unselected when a different button is pressed
 			if (this.typing && this.textAction) {
-				this.textAction(this.text)
+				this.textAction(this.text);
 			}
-			this.typing = false
+			this.typing = false;
 		}
 	}
 }
@@ -311,8 +311,8 @@ class ScrollBar {
 
 		this.buttonSize = this.w;
 		this.scrollStep = scrollStep;
-		this.upButton = new Button("⮝", ()=>{this.scrollButton(-this.scrollStep)}, null, this.x, this.y, this.buttonSize, this.buttonSize);
-		this.downButton = new Button("⮟", ()=>{this.scrollButton(this.scrollStep)}, null, this.x, this.y+this.h-this.buttonSize, this.buttonSize, this.buttonSize);
+		this.upButton = new Button("⮝", ()=>{this.scrollButton(-this.scrollStep);}, null, this.x, this.y, this.buttonSize, this.buttonSize);
+		this.downButton = new Button("⮟", ()=>{this.scrollButton(this.scrollStep);}, null, this.x, this.y+this.h-this.buttonSize, this.buttonSize, this.buttonSize);
 
 		this.barOriginY = this.y+this.buttonSize;
 		this.barTotalRange = this.h-this.buttonSize*2;
@@ -320,7 +320,7 @@ class ScrollBar {
 		this.barClickX = 0;
 		this.barClickY = 0;
 
-		this.scroll = 0
+		this.scroll = 0;
 
 		this.updateRange(min, max, window);
 	}
@@ -363,10 +363,10 @@ class ScrollBar {
 			let [mouseX, mouseY] = getMousePos();
 			this.barClickY = mouseY-this.bar.y;
 		}
-		return this.upButton.click() || this.downButton.click()
+		return this.upButton.click() || this.downButton.click();
 	}
 	clickRelease(button, x, y){
-		return this.upButton.clickRelease() || this.downButton.clickRelease() || this.bar.clickRelease()
+		return this.upButton.clickRelease() || this.downButton.clickRelease() || this.bar.clickRelease();
 	}
 	mouseScroll(dy){
 		if (dy > 0) {
@@ -484,4 +484,4 @@ class ColorSlider {
 	}
 }
 
-export {Button, TextField, ScrollBar, ColorSlider}
+export {Button, TextField, ScrollBar, ColorSlider};

@@ -9,15 +9,15 @@ function loginPlayer(player, db_Id) {
 		loginQueries(player);
 	} else {
 		console.log("Session does not belong to a player.");
-		return false
+		return false;
 	}
 }
 function loginQueries(player) {
 	const con = require("../db/create_db.js").initializeDB(true);
-	const selectQuery = 'SELECT * FROM Player WHERE player_id = ?';
+	const selectQuery = "SELECT * FROM Player WHERE player_id = ?";
 	con.query(selectQuery, [player.accountId], (selectErr, selectResults) => {
 		if (selectErr) {
-			console.error('Error querying the database:', selectErr);
+			console.error("Error querying the database:", selectErr);
 		} else {
 			if (selectResults.length > 0) {
 				console.log("Player data found");
@@ -33,5 +33,5 @@ function loginQueries(player) {
 	con.end();
 }
 module.exports = {
-    loginPlayer
+	loginPlayer
 };

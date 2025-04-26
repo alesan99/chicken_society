@@ -70,12 +70,12 @@ function listenToClient(socket) {
 			},
 		};
 
-		socket.join(`area:${playerList[socket.id].area}`) // Listen for events in area
+		socket.join(`area:${playerList[socket.id].area}`); // Listen for events in area
 
 		// Send -this- client a list of all players
-		socket.emit("playerList", cleanPlayerList(playerList))
+		socket.emit("playerList", cleanPlayerList(playerList));
 		// Send everyone else just a new entry to their player list
-		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerList[socket.id]))
+		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerList[socket.id]));
 
 		// Send this player all the timed events
 		sendTimedEvents(socket.id);
@@ -99,49 +99,49 @@ function listenToClient(socket) {
 
 			// Let every player in the area know this information (excluding sender)
 			socket.to(`area:${playerData.area}`).emit("chicken", socket.id, x, y, sx, sy);
-		};
+		}
 	});
 
 	socket.on("action", (actions) => {
 		// Actions: an array of [string, array]
 		let playerData = playerList[socket.id];
 		if (playerData) {
-			let actionsToSend = []
+			let actionsToSend = [];
 			for (i in actions) {
 				// Handle individual actions
-				let action = actions[i]
-				let name = action[0]
-				let args = action[1]
+				let action = actions[i];
+				let name = action[0];
+				let args = action[1];
 				switch(name) {
-					// Player emoted
-					case "emote":
-						actionsToSend.push(action)
-						break;
+				// Player emoted
+				case "emote":
+					actionsToSend.push(action);
+					break;
 					// Player got a status effect
-					case "statusEffect":
-						actionsToSend.push(action)
-						// args = [name, timer]
-						let effect = {
-							name: args[0],
-							timer: args[1]
-						}
-						playerData.chicken.statusEffects.push(effect)
-						break
-					case "shoot":
-						actionsToSend.push(action)
-						break;
-					case "message":
-						let header = args[0];
-						let contents = args[1];
-						handleClientMessage(socket.id, header, contents)
-						break;
-					case "jump":
-						actionsToSend.push(action)
-						break;
+				case "statusEffect":
+					actionsToSend.push(action);
+					// args = [name, timer]
+					let effect = {
+						name: args[0],
+						timer: args[1]
+					};
+					playerData.chicken.statusEffects.push(effect);
+					break;
+				case "shoot":
+					actionsToSend.push(action);
+					break;
+				case "message":
+					let header = args[0];
+					let contents = args[1];
+					handleClientMessage(socket.id, header, contents);
+					break;
+				case "jump":
+					actionsToSend.push(action);
+					break;
 				}
 			}
 			socket.to(`area:${playerData.area}`).emit("action", socket.id, actionsToSend);
-		};
+		}
 	});
 
 	// Recieve chat message and send out to everyone
@@ -150,7 +150,7 @@ function listenToClient(socket) {
 		if (playerData) {
 			// TODO: Word filter
 			socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
-		};
+		}
 	});
 
 	// Player changed their own profile, update
@@ -181,14 +181,14 @@ function listenToClient(socket) {
 			let rawArea = area; // Area before server-specific modifications
 			if (area == "coop") {
 				// Make each player's coop a unique room
-				area = `coop:${ownerId}`
+				area = `coop:${ownerId}`;
 			}
 			playerData.area = area;
 
 			// Leave old area
-			socket.leave(`area:${oldArea}`)
+			socket.leave(`area:${oldArea}`);
 			// Join new area
-			socket.join(`area:${area}`)
+			socket.join(`area:${area}`);
 
 			socket.broadcast.emit("area", socket.id, area); // Let everyone know
 
@@ -199,11 +199,11 @@ function listenToClient(socket) {
 					// Send other player position
 					io.to(socket.id).emit("chicken", id, data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy);
 					// Send misc. other player state info.
-					let actions = []
+					let actions = [];
 					// status effects
 					if (data.chicken.statusEffects.length > 0) {
 						for (const effect of data.chicken.statusEffects) {
-							actions.push(["statusEffect", [effect.name, effect.timer]])
+							actions.push(["statusEffect", [effect.name, effect.timer]]);
 						}
 					}
 					io.to(socket.id).emit("action", id, actions);
@@ -212,16 +212,16 @@ function listenToClient(socket) {
 
 			// TODO: Don't copy paste code
 			// This player has not been updating others on their position/state
-			let data = playerData
-			let id = socket.id
+			let data = playerData;
+			let id = socket.id;
 			// Send other player position
 			socket.broadcast.emit("chicken", id, data.chicken.x, data.chicken.y, data.chicken.sx, data.chicken.sy);
 			// Send misc. other player state info.
-			let actions = []
+			let actions = [];
 			// status effects
 			if (data.chicken.statusEffects.length > 0) {
 				for (const effect of data.chicken.statusEffects) {
-					actions.push(["statusEffect", [effect.name, effect.timer]])
+					actions.push(["statusEffect", [effect.name, effect.timer]]);
 				}
 			}
 			socket.broadcast.emit("action", id, actions);
@@ -231,18 +231,18 @@ function listenToClient(socket) {
 	// Player disconnected; Tell all players that someone disconnected
 	socket.on("disconnect", () => {
 		if (!playerList[socket.id]) {
-			return false
+			return false;
 		}
 		if (playerList[socket.id].minigame) {
 			// Remove from minigame
-			let minigameName = playerList[socket.id].minigame
-			let minigameData = minigameList[minigameName]
+			let minigameName = playerList[socket.id].minigame;
+			let minigameData = minigameList[minigameName];
 			if (minigameName && minigameData) {
-				socket.leave(`minigame:${minigameName}`)
+				socket.leave(`minigame:${minigameName}`);
 				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
-				delete minigameData.players[socket.id]
+				delete minigameData.players[socket.id];
 			} else {
-				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
+				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`);
 			}
 		}
 		delete playerList[socket.id];
@@ -255,7 +255,7 @@ function listenToClient(socket) {
 		let playerData = playerList[socket.id];
 
 		if (!playerData) {
-			return false
+			return false;
 		}
 
 		if (minigameName) {
@@ -269,9 +269,9 @@ function listenToClient(socket) {
 					highscores: [[10, "Pro Gamer"],[0,"---"],[0,"---"]]
 				};
 			}
-			let minigameData = minigameList[minigameName]
+			let minigameData = minigameList[minigameName];
 
-			playerList[socket.id].minigame = minigameName
+			playerList[socket.id].minigame = minigameName;
 
 			minigameData.players[socket.id] = true; // connected
 			minigameData.data[socket.id] = {}; // what is their minigame like?
@@ -281,9 +281,9 @@ function listenToClient(socket) {
 				role = "player";
 			} else {
 				role = "host";
-				minigameData.host = socket.id
+				minigameData.host = socket.id;
 			}
-			socket.join(`minigame:${minigameName}`)
+			socket.join(`minigame:${minigameName}`);
 			socket.emit("minigameRole", role, minigameData.players);
 			socket.emit("minigameHighscores", minigameData.highscores);
 
@@ -298,16 +298,16 @@ function listenToClient(socket) {
 		} else {
 			// Left minigame
 			// Remove from minigame
-			let minigameName = playerList[socket.id].minigame
-			let minigameData = minigameList[minigameName]
+			let minigameName = playerList[socket.id].minigame;
+			let minigameData = minigameList[minigameName];
 			if (minigameName && minigameData) {
-				socket.leave(`minigame:${minigameName}`)
+				socket.leave(`minigame:${minigameName}`);
 				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
-				delete minigameData.players[socket.id]
+				delete minigameData.players[socket.id];
 			} else {
-				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`)
+				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`);
 			}
-			playerList[socket.id].minigame = false
+			playerList[socket.id].minigame = false;
 		}
 		callback({
 			status: "ok"
@@ -318,22 +318,22 @@ function listenToClient(socket) {
 		// Recieving only CHANGED minigame data
 		let playerData = playerList[socket.id];
 		if (!playerData) {
-			return false
+			return false;
 		}
 		
 		if (!minigameName) {
-			console.log(`Error: ${playerData.name}'s minigame doesn't exist`)
-			return false
+			console.log(`Error: ${playerData.name}'s minigame doesn't exist`);
+			return false;
 		}
 
-		let minigameData = minigameList[minigameName]
+		let minigameData = minigameList[minigameName];
 
 		if (minigameData && minigameData.data) { // Check if minigame has been loaded by server
 			// Find changes & store new data
-			let data = minigameData.data[socket.id]
+			let data = minigameData.data[socket.id];
 			for (const [key, value] of Object.entries(newData)) {
 				if (data[key] != value) {
-					data[key] = value
+					data[key] = value;
 				}
 			}
 			// Send -changed- data to players
@@ -341,8 +341,8 @@ function listenToClient(socket) {
 			// Look for new highscore?
 			if (newData.score) {
 				if ((!minigameData.highscores[0]) || (data.score > minigameData.highscores[2][0])) {
-					console.log(`New Highscore in ${minigameName}!`, data.score, playerData.name)
-					minigameData.highscores.push([data.score, playerData.name])
+					console.log(`New Highscore in ${minigameName}!`, data.score, playerData.name);
+					minigameData.highscores.push([data.score, playerData.name]);
 					minigameData.highscores.sort((a, b) => b[0] - a[0]);
 					minigameData.highscores = minigameData.highscores.slice(0, 3); // Limit to 3 highscores
 					// Send new highscore list to everyone
@@ -370,7 +370,7 @@ function listenToClient(socket) {
 			data = {
 				theme: false,
 				furniture: []
-			}
+			};
 		}
 		// Confirm a successful connection to client
 		callback(data);
@@ -380,11 +380,11 @@ function listenToClient(socket) {
 // All the playerData in playerList gets sent to clients.
 // This function compiles only the necessary data to send to clients.
 function cleanPlayerList(playerList) {
-	let cleanedPlayerList = {}
+	let cleanedPlayerList = {};
 	for (const [id, playerData] of Object.entries(playerList)) {
-		cleanedPlayerList[id] = cleanPlayerData(playerData)
+		cleanedPlayerList[id] = cleanPlayerData(playerData);
 	}
-	return cleanedPlayerList
+	return cleanedPlayerList;
 }
 
 function cleanPlayerData(playerData) {
@@ -400,7 +400,7 @@ function cleanPlayerData(playerData) {
 		pet: playerData.pet,
 
 		chicken: playerData.chicken
-	}
+	};
 }
 
 // Get current player data (from playerList) from session ID
@@ -408,11 +408,11 @@ function cleanPlayerData(playerData) {
 function getPlayerFromSession(sessionId) {
 	for (const [id, player] of Object.entries(playerList)) {
 		if (player.sessionId == sessionId) {
-			return player
+			return player;
 		}
 	}
-	console.log(`No player with session ID ${sessionId}`)
-	return false
+	console.log(`No player with session ID ${sessionId}`);
+	return false;
 }
 
 // // Log in player
@@ -438,12 +438,12 @@ function serverLoop(dt) {
 	// Update player predictions
 	for (const [id, playerData] of Object.entries(playerList)) {
 		// Update status effect timer predictions
-		let statusEffects = playerData.chicken.statusEffects
+		let statusEffects = playerData.chicken.statusEffects;
 		for (let i = statusEffects.length-1; i >= 0; i--) {
-			let effect = statusEffects[i]
-			effect.timer -= dt
+			let effect = statusEffects[i];
+			effect.timer -= dt;
 			if (effect.timer <= 0) {
-				statusEffects.splice(i, 1)
+				statusEffects.splice(i, 1);
 			}
 		}
 	}
@@ -459,7 +459,7 @@ function serverLoop(dt) {
 	}
 
 	// Pet race
-	PetRace.update(dt)
+	PetRace.update(dt);
 }
 
 function sendTimedEvents(id) {
