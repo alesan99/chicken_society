@@ -1,0 +1,47 @@
+{
+	"name": "Burghert's Lair",
+	"mapLocation": false,
+	"music": false,
+
+
+	"walls": [
+		[0,259, 279,259, 274,292, 0,566],
+
+		[285,205, 774,205, 774,283, 285,283], 
+
+        [815,293, 980,293, 980,384, 878,384],
+
+		[947,468, 1024,468, 1024,566, 980,513],
+
+        [747,326, 812,328, 860,373, 792,374],
+
+        [0,576, 1024,576, 1024,600, 0,600]
+	],
+
+    	"warps": {
+		"burghertsLairExit": {
+			"to": "hub",
+			"fromWarp": "burghertsLairEntrance",
+			"facing": "left",
+			"x": 952,
+			"y": 416,
+			"w": 20,
+			"h": 60,
+			"sound": "door"
+		}
+	},
+
+    	"sprites": {
+		// Layer: Suspicious Box of Radiation
+		"factoryLayer": {
+			"image": "burghertslair_layer.png",
+			"framesx": 1,
+			"framesy": 1,
+			"w": 160,
+			"h": 160,
+			"x": 740,
+			"y": 225,
+			"worldy": 331
+		}
+	},
+}
