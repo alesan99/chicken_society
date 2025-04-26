@@ -16,7 +16,7 @@ function generateItemFileList() {
 			const itemList = {};
 			for (let v of tree.items) {
 				if (typeof v === "object") {
-					let category
+					let category;
 					for (let key in v) {
 						category = key;
 					}
@@ -40,8 +40,8 @@ function generateItemFileList() {
 			fs.writeFileSync(path.join(__dirname, "../website/assets/items/list.json"), jsonStr);
 		})
 		.catch((error) => {
-			console.log("Error", error)
-		});;
+			console.log("Error", error);
+		});
 }
 
 // Function to read a directory and build a tree
@@ -56,31 +56,31 @@ function getDirectoryTree(dPath) {
 				} else {
 					const files = await fs.promises.readdir(directoryPath);
 
-				const tree = {
-					[path.basename(directoryPath)]: [],
-				};
+					const tree = {
+						[path.basename(directoryPath)]: [],
+					};
 
-				const childPromises = files.map(async (file) => {
-					const filePath = path.join(directoryPath, file);
-					const stats = await fs.promises.stat(filePath);
+					const childPromises = files.map(async (file) => {
+						const filePath = path.join(directoryPath, file);
+						const stats = await fs.promises.stat(filePath);
 
-					if (stats.isDirectory()) {
+						if (stats.isDirectory()) {
 						// If its a directory, recursively call this function
-						const subTree = await getDirectoryTree(filePath);
-						tree[path.basename(directoryPath)].push(subTree);
-					} else {
-						tree[path.basename(directoryPath)].push(file);
-					}
-				});
+							const subTree = await getDirectoryTree(filePath);
+							tree[path.basename(directoryPath)].push(subTree);
+						} else {
+							tree[path.basename(directoryPath)].push(file);
+						}
+					});
 
-				// Wait for all child promises to resolve
-				await Promise.all(childPromises);
+					// Wait for all child promises to resolve
+					await Promise.all(childPromises);
 			
-				resolve(tree);
-			};
-		} catch (err) {
-			reject(err);
-		}
+					resolve(tree);
+				}
+			} catch (err) {
+				reject(err);
+			}
 		});
 	});
 }

@@ -21,5 +21,12 @@
     "socket.io": "^4.7.2",
     "socket.io-msgpack-parser": "^3.0.2",
     "sql.js": "^1.8.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@eslint/json": "^0.12.0",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0"
   }
 }

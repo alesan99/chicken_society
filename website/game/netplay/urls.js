@@ -1,12 +1,12 @@
-import {addItem, getItem, getItemData} from "../savedata.js"
-import Notify from "../gui/notification.js"
+import {addItem, getItem, getItemData} from "../savedata.js";
+import Notify from "../gui/notification.js";
 
 // Activate events based on special URLs
 export function handleUrl() {
 	const params = new URLSearchParams(window.location.search);
 
 	// Get item from url /?t=<item>
-	const encodedItems = params.get('t');
+	const encodedItems = params.get("t");
 	if (encodedItems) {
 		// The item will be encoded in base64
 		const itemsString = atob(encodedItems);
@@ -25,11 +25,11 @@ export function handleUrl() {
 			}
 		}
 		if (addedItems > 1) {
-			Notify.new(`Thanks for joining! \n You got some free goodies!`, 15);
+			Notify.new("Thanks for joining! \n You got some free goodies!", 15);
 		}
 	}
 
 	// Remove params the url
 	const newUrl = window.location.origin + window.location.pathname;
-    window.history.replaceState({}, document.title, newUrl);
+	window.history.replaceState({}, document.title, newUrl);
 }

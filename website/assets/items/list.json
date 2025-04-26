@@ -5,10 +5,10 @@
     "bud_accessories",
     "chains",
     "petstupid_uniform",
+    "police_uniform",
     "scarf",
     "silver_chains",
-    "spike_choker",
-    "police_uniform"
+    "spike_choker"
   ],
   "face": [
     "cat_ears",
@@ -25,9 +25,9 @@
   ],
   "head": [
     "hoodie",
+    "police_hat",
     "snapback",
-    "top_hat",
-    "police_hat"
+    "top_hat"
   ],
   "item": [
     "beer",

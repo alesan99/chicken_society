@@ -3,16 +3,16 @@
 // For example:
 // hub.json5 will be combined with the Christmas hub.json5. Anything with a shared name will be replaced by the Christmas version.
 
-import { loadJSON5 } from "./assets.js"
+import { loadJSON5 } from "./assets.js";
 
 const TimedEventsSystem = (function() {
-	let activeTimedEvents = []
+	let activeTimedEvents = [];
 	
 	const functions = {
 		// Start new dialogue conversation
 		setActiveTimedEvents(events) {
 			// Events: list of event string names
-			activeTimedEvents = events
+			activeTimedEvents = events;
 		},
 
 		injectTimedEvents(filename, data) {
@@ -20,12 +20,12 @@ const TimedEventsSystem = (function() {
 			return new Promise((resolve) => {
 				// Load timed event data
 				// And resolve promise once all jsons were loaded
-				let queued = activeTimedEvents.length
+				let queued = activeTimedEvents.length;
 				if (queued <= 0) { // Nothing in queue
-					resolve(data)
+					resolve(data);
 				}
 				for (let i = 0; i < activeTimedEvents.length; i++) {
-					let timedEvent = activeTimedEvents[i]
+					let timedEvent = activeTimedEvents[i];
 					if (true) { // Does this timed event modify this area?
 						loadJSON5(`assets/timedevents/${timedEvent}/${filename}.json5`, (timedEventData) => {
 							// Start injecting data
@@ -33,38 +33,38 @@ const TimedEventsSystem = (function() {
 								if (data[key] && typeof data[key] === "object") {
 									// Merge objects
 									for (let subKey in timedEventData[key]) {
-										data[key][subKey] = timedEventData[key][subKey]
+										data[key][subKey] = timedEventData[key][subKey];
 									}
 								} else {
 									// Replace data
-									data[key] = timedEventData[key]
+									data[key] = timedEventData[key];
 								}
 							}
 	
 							// Resolve promise once all timed events are loaded
-							queued--
+							queued--;
 							if (queued <= 0) {
-								resolve(data)
+								resolve(data);
 							}
 						},
 						() => {
 							// Error loading timed event
-							queued--
+							queued--;
 							if (queued <= 0) {
-								resolve(data)
+								resolve(data);
 							}
-						})
+						});
 					} else {
-						queued--
+						queued--;
 						if (queued <= 0) {
-							resolve(data)
+							resolve(data);
 						}
 					}
 				}
-			})
+			});
 		}
 	};
 	
-return functions; })()
+	return functions; })();
 
 export default TimedEventsSystem;

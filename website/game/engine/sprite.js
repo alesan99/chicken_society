@@ -1,6 +1,6 @@
 //Sprite object; Takes in an image with multiple frames and splits it up to render just one frame
 
-import { DRAW } from "../main.js"
+import { DRAW } from "../main.js";
 
 class Sprite {
 	/**
@@ -17,14 +17,14 @@ class Sprite {
 	 * @param {Number} sepy - Vertical separation between frames in pixels
 	 */
 	constructor (img, fx=1, fy=1, w, h, ox=0, oy=0, sepx=0, sepy=0) {
-		this.img = img
-		this.w = w
-		this.h = h
-		this.frame = []
+		this.img = img;
+		this.w = w;
+		this.h = h;
+		this.frame = [];
 		for (let y = 0; y < fy; y++) { // Rows
-			this.frame[y] = []
+			this.frame[y] = [];
 			for (let x = 0; x < fx; x++) { // Columns
-				this.frame[y][x] = [x*(w+sepx)+ox, y*(h+sepy)+oy, w, h] // x, y, w, h
+				this.frame[y][x] = [x*(w+sepx)+ox, y*(h+sepy)+oy, w, h]; // x, y, w, h
 			}
 		}
 	}
@@ -36,7 +36,7 @@ class Sprite {
 	 * @returns {Array} - [x, y, w, h]
 	 */
 	getFrame (x=0, y=0) {
-		return this.frame[y][x]
+		return this.frame[y][x];
 	}
 }
 
@@ -50,50 +50,50 @@ class Animation {
 	 * @param {*} fy - The starting frame y
 	 */
 	constructor (sprite, fx=0, fy=0) {
-		this.sprite = sprite
-		this.framex = fx || 0
-		this.framey = fy || 0
+		this.sprite = sprite;
+		this.framex = fx || 0;
+		this.framey = fy || 0;
 
 		// Animation
-		this.playing = false
-		this.frames = false
-		this.animLength = 0
-		this.timer = 0
-		this.delay = 0
+		this.playing = false;
+		this.frames = false;
+		this.animLength = 0;
+		this.timer = 0;
+		this.delay = 0;
 	}
 
 	/**
 	 * Update the current animation, if any.
-	 * @param {Number} dt - Time elapsed since last frame in seconds 
+	 * @param {Number} dt - Time elapsed since last frame in seconds
 	 */
 	update (dt) {
 		if (this.playing) {
 			// Update animation
-			let delay = this.delay
+			let delay = this.delay;
 			if (delay.isArray) { // If array of delays, set to the current delay
-				delay = delay[this.animFrameNum || 0]
+				delay = delay[this.animFrameNum || 0];
 			}
 
 			// this.timer = (this.timer + (1/delay)*dt)%(this.animLength)
-			this.timer += dt
+			this.timer += dt;
 			while (this.timer > delay) {
-				this.timer -= delay
+				this.timer -= delay;
 
-				this.animFrameNum += 1 // position in the animation, not the actual frame number
+				this.animFrameNum += 1; // position in the animation, not the actual frame number
 
 				// Check if animation finished if it shouldn't loop
 				if ((this.stopFrame != null) && this.animFrameNum >= (this.animLength)) {
-					this.setFrame(this.stopFrame, null)
-					this.timer = 0
-					this.playing = false
-					break
+					this.setFrame(this.stopFrame, null);
+					this.timer = 0;
+					this.playing = false;
+					break;
 				} else {
 					// Update frame
-					this.animFrameNum = this.animFrameNum%this.animLength // Loop animation
-					this.setFrame(this.frames[this.animFrameNum], null)
+					this.animFrameNum = this.animFrameNum%this.animLength; // Loop animation
+					this.setFrame(this.frames[this.animFrameNum], null);
 
 					if (delay.isArray) { // If array of delays, set to the current delay
-						delay = delay[this.animFrameNum || 0]
+						delay = delay[this.animFrameNum || 0];
 					}
 				}
 			}
@@ -106,16 +106,16 @@ class Animation {
 	 * @param {Number} [dont_loop=null] - (Optional) Frame to set to after animation is done
 	 */
 	playAnimation (frames, delay, dont_loop) {
-		this.playing = true
-		this.frames = frames
-		this.animLength = frames.length
+		this.playing = true;
+		this.frames = frames;
+		this.animLength = frames.length;
 
-		this.timer = 0
-		this.delay = delay
-		this.animFrameNum = 0
-		this.setFrame(this.frames[this.animFrameNum], null)
+		this.timer = 0;
+		this.delay = delay;
+		this.animFrameNum = 0;
+		this.setFrame(this.frames[this.animFrameNum], null);
 
-		this.stopFrame = dont_loop
+		this.stopFrame = dont_loop;
 	}
 
 	/**
@@ -124,9 +124,9 @@ class Animation {
 	 * @param {Number} fy - (Optional) Frame y to set to
 	 */
 	stopAnimation (fx, fy) {
-		this.playing = false
+		this.playing = false;
 		if ((fx != null) || (fy != null)) {
-			this.setFrame(fx, fy)
+			this.setFrame(fx, fy);
 		}
 	}
 
@@ -137,10 +137,10 @@ class Animation {
 	 */
 	setFrame (fx, fy) {
 		if (fx != null) {
-			this.framex = fx
+			this.framex = fx;
 		}
 		if (fy != null) {
-			this.framey = fy
+			this.framey = fy;
 		}
 	}
 
@@ -151,8 +151,8 @@ class Animation {
 	 * @returns {Array} - [x, y, w, h]
 	 */
 	getFrame (offsetx=0 , offsety=0) {
-		let sprite_frame = this.sprite.frame[this.framey+offsety][this.framex+offsetx]
-		return sprite_frame
+		let sprite_frame = this.sprite.frame[this.framey+offsety][this.framex+offsetx];
+		return sprite_frame;
 	}
 }
 
@@ -168,24 +168,24 @@ class DrawableSprite {
 	 * @param {Number} [worldy=null] - Verticaly position in world. Used to simulate depth.
 	 */
 	constructor (sprite, anim, drawx, drawy, worldy) {
-		this.sprite = sprite
-		this.anim = anim
-		this.drawx = drawx // Position on screen
-		this.drawy = drawy
-		this.y = worldy || this.drawx // Position in world
-		this.visible = true
+		this.sprite = sprite;
+		this.anim = anim;
+		this.drawx = drawx; // Position on screen
+		this.drawy = drawy;
+		this.y = worldy || this.drawx; // Position in world
+		this.visible = true;
 	}
 
 	/**
 	 * Draw the sprite to the screen.
 	 */
 	draw () {
-		let anim = this.sprite.getFrame(0,0)
+		let anim = this.sprite.getFrame(0,0);
 		if (this.anim) {
-			anim = this.anim.getFrame(0,0)
+			anim = this.anim.getFrame(0,0);
 		}
-		DRAW.image(this.sprite.img, anim, this.drawx, this.drawy)
+		DRAW.image(this.sprite.img, anim, this.drawx, this.drawy);
 	}
 }
 
-export { Sprite, Animation, DrawableSprite }
+export { Sprite, Animation, DrawableSprite };

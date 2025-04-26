@@ -1,100 +1,99 @@
-// World state; Displays a location, has moving characters with collision. 
-var PHYSICSWORLD
-var OBJECTS
-var CHARACTER
-var PLAYER
-var PLAYER_CONTROLLER
-var NPCS
-var PARTICLES
-var CHAT
-var OBJECTS
-var DEBUGPHYSICS = false
-var MINIGAME
+// World state; Displays a location, has moving characters with collision.
+var PHYSICSWORLD;
+var OBJECTS;
+var CHARACTER;
+var PLAYER;
+var PLAYER_CONTROLLER;
+var NPCS;
+var PARTICLES;
+var CHAT;
+var DEBUGPHYSICS = false;
+var MINIGAME;
 
-import { DRAW } from "./main.js"
+import { DRAW } from "./main.js";
 
-import { canvasWidth, canvasHeight } from "./engine/canvas.js"
-import { RenderImage } from "./engine/render.js"
-import { IMG, SFX, FONT, MUSIC, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js"
-import { SpatialHash, updatePhysics, drawPhysics } from "./physics.js"
-import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js"
+import { canvasWidth, canvasHeight } from "./engine/canvas.js";
+import { RenderImage } from "./engine/render.js";
+import { IMG, SFX, FONT, MUSIC, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js";
+import { SpatialHash, updatePhysics, drawPhysics } from "./physics.js";
+import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects/objects.js";
 
-import { PROFILE, SAVEDATA } from "./main.js"
+import { PROFILE, SAVEDATA } from "./main.js";
 
-import QuestSystem from "./quests.js"
+import QuestSystem from "./quests.js";
 
-import AudioSystem from "./engine/audio.js"
-import Transition from "./transition.js"
-import DialogueSystem from "./dialogue.js"
-import LoadingScreen from "./loading.js"
-import TimedEventsSystem from "./timedevents.js"
-import { checkCondition } from "./area.js"
-import { getMousePos } from "./engine/input.js"
-import Coop from "./coop.js"
-import { NETPLAY } from "./main.js"
-import { MENUS } from "./menu.js"
+import AudioSystem from "./engine/audio.js";
+import Transition from "./transition.js";
+import DialogueSystem from "./dialogue.js";
+import LoadingScreen from "./loading.js";
+import TimedEventsSystem from "./timedevents.js";
+import { checkCondition } from "./area.js";
+import { getMousePos } from "./engine/input.js";
+import Coop from "./coop.js";
+import { NETPLAY } from "./main.js";
+import { MENUS } from "./menu.js";
 
-import {} from "./menu/chat.js"
-import {} from "./menu/emote.js"
-import {} from "./menu/customization.js"
-import {} from "./menu/map.js"
-import {} from "./menu/users.js"
-import {} from "./menu/quests.js"
-import {} from "./menu/shop.js"
-import {} from "./menu/pet.js"
-import {} from "./menu/adopt.js"
+import {} from "./menu/chat.js";
+import {} from "./menu/emote.js";
+import {} from "./menu/customization.js";
+import {} from "./menu/map.js";
+import {} from "./menu/users.js";
+import {} from "./menu/quests.js";
+import {} from "./menu/shop.js";
+import {} from "./menu/pet.js";
+import {} from "./menu/adopt.js";
 
-import { MinigameState } from "./minigames/minigame.js"
-import {} from "./minigames/claw/claw.js"
-import {} from "./minigames/runner/runner.js"
-import {} from "./minigames/wormdle/wormdle.js"
-import {} from "./minigames/eggs/eggs.js"
+import { MinigameState } from "./minigames/minigame.js";
+import {} from "./minigames/claw/claw.js";
+import {} from "./minigames/runner/runner.js";
+import {} from "./minigames/wormdle/wormdle.js";
+import {} from "./minigames/eggs/eggs.js";
 
-import { loadAreaFile } from "./area.js"
-import PetRaceSystem from "./petrace.js"
+import { loadAreaFile } from "./area.js";
+import PetRaceSystem from "./petrace.js";
 
 const World = class {
 	constructor (area="hub") {
-		this.name = "world"
+		this.name = "world";
 
 		// Area information
-		this.area = area //Area name
-		this.oldArea = area //Where did the player just come from? (Think warps)
+		this.area = area; //Area name
+		this.oldArea = area; //Where did the player just come from? (Think warps)
 
-		this.areaName = "???" // Neat name for Area
-		this.areaMapLocation = false // [x, y] location to be displayed in map menu
-		this.areaMusic = false // Music to play in area
-		this.areaMusicPosition = 0 // Where music left off
+		this.areaName = "???"; // Neat name for Area
+		this.areaMapLocation = false; // [x, y] location to be displayed in map menu
+		this.areaMusic = false; // Music to play in area
+		this.areaMusicPosition = 0; // Where music left off
 
 		// Initialize Physics world
-		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100)
+		PHYSICSWORLD = new SpatialHash(canvasWidth, canvasHeight, 100);
 
 		// Load Quests
-		QuestSystem.initialize()
+		QuestSystem.initialize();
 
 		// Physics objects
-		OBJECTS = {}
-		OBJECTS["Character"] = {}
-		OBJECTS["Pet"] = {}
+		OBJECTS = {};
+		OBJECTS["Character"] = {};
+		OBJECTS["Pet"] = {};
 
-		PARTICLES = []
+		PARTICLES = [];
 
 		// Initialize all characters
-		NPCS = {}
-		CHARACTER = OBJECTS["Character"] //shorthand
-		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area, 0)
+		NPCS = {};
+		CHARACTER = OBJECTS["Character"]; //shorthand
+		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area, 0);
 		
-		PLAYER = CHARACTER[0]
-		PLAYER_CONTROLLER = new Player(CHARACTER[0]) // Initialize Player controller
+		PLAYER = CHARACTER[0];
+		PLAYER_CONTROLLER = new Player(CHARACTER[0]); // Initialize Player controller
 
 		// HUD
-		CHAT = MENUS["chatMenu"]
-		CHAT.load()
+		CHAT = MENUS["chatMenu"];
+		CHAT.load();
 
 		// Minigames
-		MINIGAME = new MinigameState()
+		MINIGAME = new MinigameState();
 
-		this.loadArea(area) // Actually load area
+		this.loadArea(area); // Actually load area
 	}
 
 	load () {
@@ -106,63 +105,63 @@ const World = class {
 	loadArea (area="hub", fromWarp, endFunc, ownerId=false, data) {
 		// Owner of area
 		if (area == "coop" && ownerId == false) {
-			ownerId = NETPLAY.id
+			ownerId = NETPLAY.id;
 		}
 
 		// Let server know player is moving
-		NETPLAY.sendArea(area, ownerId)
+		NETPLAY.sendArea(area, ownerId);
 
-		this.oldArea = this.area
-		this.area = area
+		this.oldArea = this.area;
+		this.area = area;
 
-		this.areaOwner = ownerId
+		this.areaOwner = ownerId;
 
 		// Transport player to new area
-		PLAYER.area = this.area
-		PLAYER_CONTROLLER.reset(canvasWidth*0.5, canvasHeight*0.6, "down")
+		PLAYER.area = this.area;
+		PLAYER_CONTROLLER.reset(canvasWidth*0.5, canvasHeight*0.6, "down");
 		
 		// Clear any uneeded objects
 		for (const [name, npc] of Object.entries(NPCS)) {
 			// Delete all NPCs
-			delete NPCS[name]
-			delete OBJECTS["Character"][name]
+			delete NPCS[name];
+			delete OBJECTS["Character"][name];
 		}
-		OBJECTS["Warp"] = {}
-		OBJECTS["Trigger"] = {}
-		OBJECTS["Wall"] = {}
-		OBJECTS["Wall"].dontUpdate = true
-		OBJECTS["Furniture"] = {}
-		PHYSICSWORLD.clear()
+		OBJECTS["Warp"] = {};
+		OBJECTS["Trigger"] = {};
+		OBJECTS["Wall"] = {};
+		OBJECTS["Wall"].dontUpdate = true;
+		OBJECTS["Furniture"] = {};
+		PHYSICSWORLD.clear();
 
-		this.findPlayersInArea(this.area)
+		this.findPlayersInArea(this.area);
 
-		PARTICLES = []
+		PARTICLES = [];
 
 		// Load Chicken Coop
 		if (this.area == "coop") {
 			// Furniture
 			if (this.areaOwner == NETPLAY.id) {
 				// Load your own furniture
-				data = SAVEDATA.coop
-				Coop.load(data.furniture, this.areaOwner)
+				data = SAVEDATA.coop;
+				Coop.load(data.furniture, this.areaOwner);
 			} else {
 				// Load other player's furniture
-				console.log("Loading coop furniture", data)
-				Coop.load(data.furniture, this.areaOwner)
+				console.log("Loading coop furniture", data);
+				Coop.load(data.furniture, this.areaOwner);
 			}
 		}
 
 		// Area graphics
 		if (this.area == "coop" && data.theme) {
 			// Custom coop background
-			BACKGROUND[this.area] = new RenderImage(`assets/areas/${data.theme}.png`)
+			BACKGROUND[this.area] = new RenderImage(`assets/areas/${data.theme}.png`);
 		} else {
 			// Normal Area background
-			BACKGROUND[this.area] = new RenderImage(`assets/areas/${this.area}.png`)
+			BACKGROUND[this.area] = new RenderImage(`assets/areas/${this.area}.png`);
 		}
-		BACKGROUNDIMG[this.area] = {}
-		BACKGROUNDSPRITE[this.area] = {}
-		BACKGROUNDANIM[this.area] = {}
+		BACKGROUNDIMG[this.area] = {};
+		BACKGROUNDSPRITE[this.area] = {};
+		BACKGROUNDANIM[this.area] = {};
 
 		// Load Area data
 		//TimedEventsSystem.setActiveTimedEvents(["christmas", "midnight", "sunday"])
@@ -170,90 +169,90 @@ const World = class {
 			// Inject special timed event area data, if any
 			TimedEventsSystem.injectTimedEvents(`areas/${this.area}`, data).then(newData => {
 				// After all jsons have been read, finally load the area
-				loadAreaFile(newData, this, fromWarp, endFunc)
-			})
-		})
+				loadAreaFile(newData, this, fromWarp, endFunc);
+			});
+		});
 
 		// Progress Quests
-		QuestSystem.event("area", area) // Progress quests that look for areas
+		QuestSystem.event("area", area); // Progress quests that look for areas
 
 		// End loading screen
-		LoadingScreen.start(() => {})
+		LoadingScreen.start(() => {});
 	}
 
 	warpToArea (area, fromWarp, character, ownerId, data) {
 		if (character == undefined) {
-			character = PLAYER
+			character = PLAYER;
 		}
-		AudioSystem.fadeOutMusic(1)
-		PLAYER.static = true // Don't let player move when in the process of warping
-		PLAYER_CONTROLLER.stop()
+		AudioSystem.fadeOutMusic(1);
+		PLAYER.static = true; // Don't let player move when in the process of warping
+		PLAYER_CONTROLLER.stop();
 		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
 			// Display black screen while area is loading...
-			Transition.start("loading", "in", 100, null, null)
+			Transition.start("loading", "in", 100, null, null);
 			// Actually start loading Area
 			WORLD.loadArea(area, fromWarp, () => {
 				// Transition in once loading is done
 				Transition.start("iris", "in", 0.4, [character.x, character.y-40], () => {
-					PLAYER.static = false // Let player move after transition is done
-			})
-		}, ownerId, data)
-		})
+					PLAYER.static = false; // Let player move after transition is done
+				});
+			}, ownerId, data);
+		});
 	}
 
 	playMusic(music, position = 0) {
 		if (music) {
 			if (MUSIC[music]) {
-				AudioSystem.playMusic(MUSIC[music])
+				AudioSystem.playMusic(MUSIC[music]);
 				// Seek to the specified position if provided
 				if (position > 0) {
 					MUSIC[music].seek(position);
 				}
 			} else {
-				console.log("Music not found: " + music)
+				console.log("Music not found: " + music);
 			}
 		} else {
-			AudioSystem.stopMusic()
+			AudioSystem.stopMusic();
 		}
 	}
 
 	returnToArea() {
 		// Return to area after minigame
-		this.playMusic(this.areaMusic, this.areaMusicPosition)
+		this.playMusic(this.areaMusic, this.areaMusicPosition);
 	}
 
 	// Register an object as part of the physics world
 	spawnObject(name, obj, id) {
 		if (id === undefined) {
-			id = 0
+			id = 0;
 			while (OBJECTS[name].hasOwnProperty(id.toString())) {
-				id++
+				id++;
 			}
 		}
-		OBJECTS[name][id] = obj
-		return obj
+		OBJECTS[name][id] = obj;
+		return obj;
 	}
 
 	update (dt) {
 		// Area update
 		if (this.area == "coop") {
-			Coop.update(dt)
+			Coop.update(dt);
 		}
 
 		// Update objects
-		PLAYER_CONTROLLER.update(dt)
+		PLAYER_CONTROLLER.update(dt);
 		for (const [id, obj] of Object.entries(NPCS)) {
-			obj.update(dt)
+			obj.update(dt);
 		}
 		for (const [name, objList] of Object.entries(OBJECTS)) {
-			let keysToDelete
+			let keysToDelete;
 			for (const [id, obj] of Object.entries(objList)) {
 				if (obj.update) {
-					obj.update(dt)
+					obj.update(dt);
 				}
 				// Remove deleted objects
 				if (obj.DELETED) {
-					if (!keysToDelete) { keysToDelete = [] }
+					if (!keysToDelete) { keysToDelete = []; }
 					keysToDelete.push(id);
 				}
 			}
@@ -263,308 +262,308 @@ const World = class {
 				});
 			}
 		}
-		updatePhysics(OBJECTS, PHYSICSWORLD, dt)
+		updatePhysics(OBJECTS, PHYSICSWORLD, dt);
 
-		NETPLAY.update(dt)
+		NETPLAY.update(dt);
 
 		// Particles
 		// PARTICLES is an array, NOT an object
 		for (let i = PARTICLES.length-1; i >= 0; i--) {
-			let particle = PARTICLES[i]
-			particle.update(dt)
+			let particle = PARTICLES[i];
+			particle.update(dt);
 			if (particle.DELETED) {
-				PARTICLES.splice(i, 1)
+				PARTICLES.splice(i, 1);
 			}
 		}
 
 		// Pet race
 		if (this.area == "racetrack") {
-			PetRaceSystem.update(dt)
+			PetRaceSystem.update(dt);
 		}
 		
 		// Dialogue box
-		DialogueSystem.update(dt)
+		DialogueSystem.update(dt);
 
 		// Background element animations
 		for (const [i, anim] of Object.entries(BACKGROUNDANIM[this.area])) {
-			anim.update(dt)
+			anim.update(dt);
 		}
 
 		// HUD
-		CHAT.update(dt)
+		CHAT.update(dt);
 	}
 
 	draw () {
 		// Background
-		DRAW.setColor(255,255,255)
-		DRAW.image(BACKGROUND[this.area], null, 0, 0) //sprite
+		DRAW.setColor(255,255,255);
+		DRAW.image(BACKGROUND[this.area], null, 0, 0); //sprite
 
 		// Draw objects in the correct order
-		let drawQueue = []
+		let drawQueue = [];
 
 		// Background elements
 		for (const [i, sprite] of Object.entries(BACKGROUNDSPRITE[this.area])) {
 			if (sprite.visible) {
-				let isActive = true // Is it disabled
+				let isActive = true; // Is it disabled
 				if (sprite.condition) {
-					isActive = checkCondition(sprite.condition)
+					isActive = checkCondition(sprite.condition);
 				}
 
 				if (isActive) {
-					drawQueue.push(sprite)
+					drawQueue.push(sprite);
 				}
 			}
 		}
 
 		// Pet race
 		if (this.area == "racetrack") {
-			PetRaceSystem.draw()
+			PetRaceSystem.draw();
 		}
 
 		// Draw objects
 		for (const [id, obj] of Object.entries(CHARACTER)) {
-			drawQueue.push(obj)
+			drawQueue.push(obj);
 		}
 		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
-			drawQueue.push(obj)
+			drawQueue.push(obj);
 		}
 		for (const [id, obj] of Object.entries(OBJECTS["Furniture"])) {
 			if (obj.rug) {
-				obj.draw() // Always render rugs first (under everything)
+				obj.draw(); // Always render rugs first (under everything)
 			} else {
-				drawQueue.push(obj)
+				drawQueue.push(obj);
 			}
 		}
 		drawQueue.sort((a, b) => a.y - b.y);
 		for (let i = 0; i < drawQueue.length; i++) {
 			const obj = drawQueue[i];
-			obj.draw()
+			obj.draw();
 		}
 
 		// Particles
 		for (const [id, obj] of Object.entries(PARTICLES)) {
-			obj.draw()
+			obj.draw();
 		}
 
 		// Draw player movement cursor
-		PLAYER_CONTROLLER.draw()
+		PLAYER_CONTROLLER.draw();
 
 		// Area Overlay
 		if (this.area == "coop") {
-			Coop.draw()
+			Coop.draw();
 		}
 
 		// NPC how speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
-			obj.draw()
+			obj.draw();
 		}
 
 		// Show action bubble above clickable elements like NPCs
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
-			obj.draw()
+			obj.draw();
 		}
 
 		// Draw object overlays
 		for (let i = 0; i < drawQueue.length; i++) {
 			const obj = drawQueue[i];
 			if (obj.drawOver) {
-				obj.drawOver()
+				obj.drawOver();
 			}
 		}
 
 		// Dialogue box
-		DialogueSystem.draw()
+		DialogueSystem.draw();
 
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
-			drawPhysics(OBJECTS, PHYSICSWORLD)
+			drawPhysics(OBJECTS, PHYSICSWORLD);
 
 			// Display click triggers
-			DRAW.setColor(120,0,80,1.0)
-			DRAW.setLineWidth(3)
+			DRAW.setColor(120,0,80,1.0);
+			DRAW.setLineWidth(3);
 			for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 				if (obj.clickable) {
-					DRAW.push()
-					DRAW.translate(obj.x, obj.y)
-					DRAW.polygon(obj.clickShape.v, "line")
-					DRAW.pop()
+					DRAW.push();
+					DRAW.translate(obj.x, obj.y);
+					DRAW.polygon(obj.clickShape.v, "line");
+					DRAW.pop();
 				}
 			}
 
 			// Display Corrdinates
-			let [mouseX, mouseY] = getMousePos()
-			DRAW.setColor(255,255,255,1.0)
-			DRAW.setFont(FONT.caption, 4)
-			DRAW.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, mouseX+10, mouseY+20)
+			let [mouseX, mouseY] = getMousePos();
+			DRAW.setColor(255,255,255,1.0);
+			DRAW.setFont(FONT.caption, 4);
+			DRAW.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, mouseX+10, mouseY+20);
 		}
 
 		// HUD
-		CHAT.draw()
+		CHAT.draw();
 	}
 
 	// Received keyboard input
 	keyPress(key, code) {
 		// Do not do anything while transitioning
 		if (Transition.playing()) {
-			return true
+			return true;
 		}
 
 		// Dialogue
 		if (DialogueSystem.keyPress(key)) {
-			return true
+			return true;
 		}
 
 		// Area
 		if (this.area == "coop") {
 			if (Coop.keyPress(key)) {
-				return true
+				return true;
 			}
 		}
 
 		// Control Player
-		PLAYER_CONTROLLER.keyPress(key)
+		PLAYER_CONTROLLER.keyPress(key);
 		
-		CHAT.keyPress(key)
+		CHAT.keyPress(key);
 	}
 	keyRelease(key, code) {
 		// Area
 		if (this.area == "coop") {
 			if (Coop.keyRelease(key)) {
-				return true
+				return true;
 			}
 		}
 
 		// Control Player
-		PLAYER_CONTROLLER.keyRelease(key)
+		PLAYER_CONTROLLER.keyRelease(key);
 	}
 
 	// Recieved mouse input
 	mouseClick(button, x, y) {
 		// Do not click while transitioning
 		if (Transition.playing()) {
-			return true
+			return true;
 		}
 
 		// Chat Menu
 		if (CHAT.mouseClick(button, x, y)) {
-			return true
+			return true;
 		}
 
 		// Dialogue
 		if (DialogueSystem.mouseClick(button, x, y)) {
-			return true
+			return true;
 		}
 		
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.click(button, x, y)) {
-				return true
+				return true;
 			}
 		}
 
 		// Area
 		if (this.area == "coop") {
 			if (Coop.mouseClick(button, x, y)) {
-				return true
+				return true;
 			}
 		}
 
 		// Pet interaction
 		for (const [id, obj] of Object.entries(OBJECTS["Pet"])) {
 			if (obj.click(button, x, y)) {
-				return true
+				return true;
 			}
 		}
 		
 		// Click on click triggers
 		for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 			if (obj.click && obj.click(button, x, y)) {
-				return true
+				return true;
 			}
 		}
 
 		// Control player by dragging mouse button on screen
-		PLAYER_CONTROLLER.mouseClick(button, x, y)
+		PLAYER_CONTROLLER.mouseClick(button, x, y);
 	}
 
 	mouseRelease(button, x, y) {
-		CHAT.mouseRelease(button, x, y)
+		CHAT.mouseRelease(button, x, y);
 
 		// Dialogue
 		if (DialogueSystem.mouseRelease(button, x, y)) {
-			return true
+			return true;
 		}
 
 		// NPC speechBubble responses
 		for (const [id, obj] of Object.entries(NPCS)) {
 			if (obj.clickRelease(button, x, y)) {
-				return true
+				return true;
 			}
 		}
 		
 		// Area
 		if (this.area == "coop") {
 			if (Coop.mouseRelease(button, x, y)) {
-				return true
+				return true;
 			}
 		}
 
 		// Player
-		PLAYER_CONTROLLER.mouseRelease(button, x, y)
+		PLAYER_CONTROLLER.mouseRelease(button, x, y);
 	}
 
 	mouseScroll(dy) {
 		// Area
 		if (this.area == "coop") {
-			Coop.mouseScroll(dy)
+			Coop.mouseScroll(dy);
 		}
 	}
 
 	findPlayersInArea(area) {
 		// Find all players that are in an area and add an object for them
-		let players = []
+		let players = [];
 		if (!NETPLAY.playerList) {
-			return []
+			return [];
 		}
 		for (const [id, playerData] of Object.entries(NETPLAY.playerList)) {
 			if (playerData.area == area || (this.areaOwner && playerData.area == `${area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
-				this.addPlayerToArea(id, playerData)
-				players.push(playerData)
+				this.addPlayerToArea(id, playerData);
+				players.push(playerData);
 			} else {
-				this.removePlayerFromArea(id)
+				this.removePlayerFromArea(id);
 			}
 		}
-		return players
+		return players;
 	}
 
 	addPlayerToArea(id, playerData) {
 		// When a player join an area, create a character object for them
 		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
-		let chicken = playerData.chicken
+		let chicken = playerData.chicken;
 		if (playerData.area == PLAYER.area || (this.areaOwner && playerData.area == `${PLAYER.area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
 			if (!CHARACTER[id]) {
-				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area, id)
-				CHARACTER[id].area = playerData.area
+				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area, id);
+				CHARACTER[id].area = playerData.area;
 				//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
 			}
 		} else { // Player is not in your area
-			this.removePlayerFromArea(id)
+			this.removePlayerFromArea(id);
 		}
 	}
 
 	removePlayerFromArea(id) {
 		// Remove player object
 		if (CHARACTER[id]) {
-			CHARACTER[id].destroy()
-			delete CHARACTER[id]
+			CHARACTER[id].destroy();
+			delete CHARACTER[id];
 		}
 	}
-}
+};
 
 const setDebugPhysics = (enabled) => {
-	DEBUGPHYSICS = enabled
-}
+	DEBUGPHYSICS = enabled;
+};
 
-import { WORLD } from "./main.js"
+import { WORLD } from "./main.js";
 
-export { World, PHYSICSWORLD, OBJECTS, CHARACTER, PLAYER, PLAYER_CONTROLLER, NPCS, PARTICLES, CHAT, DEBUGPHYSICS, MINIGAME, setDebugPhysics }
+export { World, PHYSICSWORLD, OBJECTS, CHARACTER, PLAYER, PLAYER_CONTROLLER, NPCS, PARTICLES, CHAT, DEBUGPHYSICS, MINIGAME, setDebugPhysics };

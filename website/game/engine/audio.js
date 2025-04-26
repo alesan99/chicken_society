@@ -4,10 +4,10 @@
 // Asset loading
 
 const AudioSystem = (function() {
-	let currentMusic = false
+	let currentMusic = false;
 
-	let sounds = []
-	let music = []
+	let sounds = [];
+	let music = [];
 	
 	const functions = {
 		newMusic(path) {
@@ -77,10 +77,10 @@ const AudioSystem = (function() {
 		},
 
 		setVolume(vol) {
-			Howler.volume(vol)
+			Howler.volume(vol);
 		}
 	};
 	
-	return functions; })()
+	return functions; })();
 
 export default AudioSystem;
