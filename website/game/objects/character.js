@@ -141,9 +141,8 @@ export default class Character extends PhysicsObject {
 		// TODO: Remove?
 		if (this.controller != PLAYER_CONTROLLER) {
 			// Update other clients
-			if ((this.sx == false && this.sy == false) != true) {
-
-			} else {
+			if (this.sx == false && this.sy == false) {
+				// not moving
 				this.walking = false;
 			}
 		}
@@ -501,7 +500,7 @@ export default class Character extends PhysicsObject {
 			}
 			NETPLAY.sendAction("shoot", nx, ny);
 		// Other player shot a gun, see if you, the player, got hit
-		} else {
+		// } else {
 		}
 		// Check which chickens are in the line of fire
 		let closestDist = Infinity;

@@ -7,7 +7,6 @@ var PLAYER_CONTROLLER;
 var NPCS;
 var PARTICLES;
 var CHAT;
-var OBJECTS;
 var DEBUGPHYSICS = false;
 var MINIGAME;
 

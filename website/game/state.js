@@ -118,4 +118,17 @@ function getOpenMenu() {
 	return false;
 }
 
-export {setState, getState, stateUpdate, stateDraw, stateKeyPress, stateKeyRelease, stateMouseClick, stateMouseRelease, stateScroll, openMenu, closeMenu, getOpenMenu};
+export {
+	setState,
+	getState,
+	stateUpdate,
+	stateDraw,
+	stateKeyPress,
+	stateKeyRelease,
+	stateMouseClick,
+	stateMouseRelease,
+	stateScroll,
+	openMenu,
+	closeMenu,
+	getOpenMenu
+};

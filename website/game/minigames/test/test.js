@@ -1,3 +1,10 @@
+// Example minigame
+
+import { MINIGAMES } from "../minigame.js";
+import { DRAW, SAVEDATA } from "../../main.js";
+import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS } from "../../assets.js";
+import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js";
+
 MINIGAMES["test"] = new class {
 	constructor() {
 		

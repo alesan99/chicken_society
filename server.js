@@ -71,7 +71,7 @@ const {listenToClient, serverLoop} = require("./server/sync.js");
 io.on("connection", (socket) => {listenToClient(socket);});
 
 // User data database
-useDB = false;
+const useDB = false;
 if (useDB) {
 	const db = require("./server/db/create_db.js");
 	const con = db.initializeDB();
@@ -95,7 +95,7 @@ if (useDB) {
 		}
 		else {
 			console.log("User table already exists");
-		}m;
+		}
 	});
 	db.createPlayerTable(con);
 }

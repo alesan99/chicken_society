@@ -17,6 +17,7 @@ import { canvasWidth, canvasHeight } from "../engine/render.js";
 import {Furniture} from "../objects/objects.js";
 import { getMousePos } from "../engine/input.js";
 import PetRaceSystem from "../petrace.js";
+import { MENUS } from "../menu.js";
 
 var Netplay;
 if (typeof io !== "undefined") { // Check if communication module was loaded (it isn't when testing the game)
@@ -179,7 +180,8 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 				this.newPlayerJoined = true; // New player! Let them know your information
 
 				// Add to connected player list, if open
-				if (getOpenMenu() == "usersMenu") {
+				let open_menu = getOpenMenu();
+				if (open_menu == "usersMenu") {
 					MENUS[open_menu].generateConnectedPlayersList();
 				}
 			}
@@ -192,7 +194,8 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 				delete this.playerList[id];
 			
 				// Add to connected player list, if open
-				if (getOpenMenu() == "usersMenu") {
+				let open_menu = getOpenMenu();
+				if (open_menu == "usersMenu") {
 					MENUS[open_menu].generateConnectedPlayersList();
 				}
 			}

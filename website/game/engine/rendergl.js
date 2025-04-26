@@ -1,5 +1,7 @@
 // Rendering functions for a 'webgl' canvas.
 
+import { ctx, canvasWidth, canvasHeight } from "./canvas.js";
+
 class Render {
 	constructor (canvas) {
 		this.c = false;
@@ -165,7 +167,7 @@ class Render {
 	// Draw primitives
 	rectangle(x, y, w, h, fill) {
 		if (fill == "line") {
-			var vertices = [
+			let vertices = [
 				x, y,
 				x, y + h,
 				x + w, y + h,
@@ -178,7 +180,7 @@ class Render {
 			this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_DRAW);
 			this.c.drawArrays(this.c.LINE_STRIP, 0, 5);
 		} else {
-			var vertices = [
+			let vertices = [
 				x, y,
 				x, y + h,
 				x + w, y,

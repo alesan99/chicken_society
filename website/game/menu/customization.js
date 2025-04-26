@@ -63,7 +63,7 @@ MENUS["customization"] = new class extends Menu {
 		);
 		this.buttons["colorHue"].renderColors = false;
 		this.buttons["colorSat"] = new ColorSlider(328,360+12, 140,12, this.sat, 0, 0.9,
-			(value)=>{ return this.HSVtoRGB(hue, value, val); }, // get color at value
+			(value)=>{ return this.HSVtoRGB(0, value, 0); }, // get color at value
 			(value)=>{ // Change value
 				this.sat = value;
 				this.colorSel = this.HSVtoRGB(this.hue, this.sat, this.val);
@@ -74,7 +74,7 @@ MENUS["customization"] = new class extends Menu {
 		);
 		this.buttons["colorSat"].renderColors = false;
 		this.buttons["colorVal"] = new ColorSlider(328,360+12+12, 140,12, this.val, 0.2, 1,
-			(value)=>{ return this.HSVtoRGB(hue, sat, value); }, // get color at value
+			(value)=>{ return this.HSVtoRGB(0, 0, value); }, // get color at value
 			(value)=>{ // Change value
 				this.val = value;
 				this.colorSel = this.HSVtoRGB(this.hue, this.sat, this.val);

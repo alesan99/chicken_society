@@ -238,7 +238,7 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.nuggetTimer = 1;
 	}
 
-	notification(type, enable=True) {
+	notification(type, enable=true) {
 		this.notifications[type] = enable;
 	}
 }();

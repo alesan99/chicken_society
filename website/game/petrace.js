@@ -6,7 +6,7 @@ import { conditionsUpdate } from "./area.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, ITEMS } from "./assets.js";
 import { addNuggets, addItem } from "./savedata.js";
 import { MENUS } from "./menu.js";
-import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "./world.js";
+import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, CHARACTER } from "./world.js";
 import { NETPLAY } from "./main.js";
 import { canvasWidth, canvasHeight } from "./engine/render.js";
 import AudioSystem from "./engine/audio.js";

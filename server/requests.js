@@ -4,7 +4,7 @@ const fs = require("fs"); // File system
 const path = require("path");
 
 // Send directory tree if requested at url "localhost:3000/getDirectoryTree"
-directoryTree = {}; // Build directory tree
+let directoryTree = {}; // Build directory tree
 getDirectoryTree("./website")
 	.then((tree) => {
 		directoryTree = tree;

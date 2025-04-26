@@ -23,6 +23,7 @@ export default defineConfig([
 		},
 		rules: {
 			"no-unused-vars": "off",
+			"no-empty": "warn",
 			"no-constant-condition": "off",
 			"no-prototype-builtins": "off",
 			"@stylistic/js/semi": ["error", "always"],

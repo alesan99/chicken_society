@@ -126,7 +126,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				};
 			} else if (action == "item") {
 				// Give item
-				addItem(d.item);
+				addItem(trig.item);
 			}
 
 			OBJECTS["Trigger"][name].action = func;

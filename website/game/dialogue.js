@@ -115,8 +115,8 @@ const DialogueSystem = (function() {
 						// Draw speaker icon
 						if (speakerNPC) {
 							DRAW.setColor(255,255,255,1);
-							if (speakerNPC.icon) {
-								DRAW.image(icon, 0, x-140, y);
+							if (speakerIcon) {
+								DRAW.image(speakerIcon, 0, x-140, y);
 							} else {
 								speakerNPC.draw(x-140 +65, y +150, "down");
 							}

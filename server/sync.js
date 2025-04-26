@@ -3,7 +3,7 @@ const {io, playerList} = require("../server.js");
 const {TimedEvents} = require("./timedevents.js");
 const {PetRaceClass} = require("./petrace.js");
 
-PetRace = new PetRaceClass();
+const PetRace = new PetRaceClass();
 
 // Minigame data
 var minigameList = {
@@ -107,7 +107,7 @@ function listenToClient(socket) {
 		let playerData = playerList[socket.id];
 		if (playerData) {
 			let actionsToSend = [];
-			for (i in actions) {
+			for (let i in actions) {
 				// Handle individual actions
 				let action = actions[i];
 				let name = action[0];
@@ -118,7 +118,7 @@ function listenToClient(socket) {
 					actionsToSend.push(action);
 					break;
 					// Player got a status effect
-				case "statusEffect":
+				case "statusEffect": {
 					actionsToSend.push(action);
 					// args = [name, timer]
 					let effect = {
@@ -127,14 +127,16 @@ function listenToClient(socket) {
 					};
 					playerData.chicken.statusEffects.push(effect);
 					break;
+				}
 				case "shoot":
 					actionsToSend.push(action);
 					break;
-				case "message":
+				case "message": {
 					let header = args[0];
 					let contents = args[1];
 					handleClientMessage(socket.id, header, contents);
 					break;
+				}
 				case "jump":
 					actionsToSend.push(action);
 					break;
@@ -482,8 +484,8 @@ function handleClientMessage(id, header, contents) {
 		PetRace.addPet(id, pet, petName);
 	} else if (header == "petRace:bet") {
 		//console.log(playerData.name, "wants to bet on a pet in the pet race.");
-		amount = contents[0];
-		petNo = contents[1];
+		let amount = contents[0];
+		let petNo = contents[1];
 		PetRace.placeBet(id, amount, petNo);
 	}
 	// PetRace.status(); // debug console print

@@ -17,6 +17,7 @@ import { vec2Unit } from "../lib/vec2.js";
 import {PhysicsObject,Character,Player,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
+import {checkCondition} from "../area.js";
 
 export default class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
