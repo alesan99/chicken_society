@@ -34,15 +34,20 @@ MENUS["chatMenu"] = new class extends Menu {
 
 		this.buttons = {};
 		this.buttons[0] = new Button(false, ()=>{this.emoteMenuOpen = !this.emoteMenuOpen; closeMenu();}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34, "Emotes");
+		this.buttons[0].name = "emotes";
 		this.buttons[1] = new Button(false, ()=>{this.enter();}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, 661,535, 34,34);
-		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34, "Inventory");
+		this.buttons[1].name = "send";
+		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 699,535, 34,34, "Quests");
+		this.buttons[2].name = "customization";
 		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34, "Map");
+		this.buttons[3].name = "map";
 		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34, "Connected Players");
+		this.buttons[4].name = "users";
 		this.buttons[5] = new Button(false, ()=>{if (getOpenMenu() != "questsMenu") {openMenu("questsMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,5),SPRITE.chatButton.getFrame(1,5),SPRITE.chatButton.getFrame(2,5)]}, 813,535, 34,34, "Quests");
+		this.buttons[5].name = "quests";
 
-		this.notifications = { // A red dot that appears by buttons
-			quest: false
-		};
+		// Button notifications (a red dot that appears by buttons)
+		this.notifications = [false,false,false,false,false,false];
 
 		this.textField = document.getElementById("gameTextInput");
 		this.textField.addEventListener("keydown", (event) => {
@@ -123,8 +128,11 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.drawButtons();
 
 		// Render notification dot
-		if (this.notifications.quest) {
-			DRAW.image(IMG.chat, SPRITE.notif.getFrame(1,0), this.buttons[5].x+this.buttons[5].w-3, this.buttons[5].y+3, 0, 1,1, 0.5,0.5);
+		for (let i = 0; i < this.notifications.length; i++) {
+			if (this.notifications[i]) {
+				let button = this.buttons[i];
+				DRAW.image(IMG.chat, SPRITE.notif.getFrame(1,0), button.x+button.w-3, button.y+3, 0, 1,1, 0.5,0.5);
+			}
 		}
 
 		// Display whats being typed
@@ -235,6 +243,11 @@ MENUS["chatMenu"] = new class extends Menu {
 	}
 
 	notification(type, enable=true) {
-		this.notifications[type] = enable;
+		for (const key in this.buttons) {
+			if (this.buttons[key].name === type) {
+				this.notifications[key] = enable;
+				break;
+			}
+		}
 	}
 }();

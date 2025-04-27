@@ -5,6 +5,7 @@
 import { ITEMS } from "./assets.js";
 import { SAVEDATA } from "./main.js";
 import { CHAT } from "./world.js";
+import { MENUS } from "./menu.js";
 import QuestSystem from "./quests.js";
 
 function makeSaveData() {
@@ -210,6 +211,9 @@ function addItem(id, type, count=1) {
 		SAVEDATA.items[type][id] = 0;
 	}
 	SAVEDATA.items[type][id] += count;
+
+	// New item notification
+	MENUS["chatMenu"].notification("customization", true);
 }
 
 function removeItem(id, type, count=1) {

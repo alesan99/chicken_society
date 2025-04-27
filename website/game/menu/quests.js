@@ -43,7 +43,7 @@ MENUS["questsMenu"] = new class extends Menu {
 		this.sortQuests(this.sorted);
 
 		// Disable quest menu notification
-		MENUS["chatMenu"].notification("quest", false);
+		MENUS["chatMenu"].notification("quests", false);
 	}
 
 	// Sort quests by completion

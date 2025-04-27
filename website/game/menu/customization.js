@@ -131,6 +131,9 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["allTab"].selected = true;
 
 		//this.buttons["pet"] = new Button("None", ()=>{}, null, 665,362, 100,32)
+
+		// Disable new item notification
+		MENUS["chatMenu"].notification("customization", false);
 	}
 
 	// Filter inventory for item grid
