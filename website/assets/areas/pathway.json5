@@ -14,8 +14,8 @@
 
   "warps": {
     "shellaveEntrance": {
-      "to": "shellave",
-      "fromWarp": "shellaveExit",
+      "to": "pathway", //future: "shellave",
+      "fromWarp": "pathwayEntrance", //future: "shellaveExit",
       "facing": "right",
       "x": 13,
       "y": 296,
@@ -47,8 +47,8 @@
     },
 
         "beachEntrance": {
-      "to": "beach",
-      "fromWarp": "beachExit",
+      "to": "pathway", //future: "beach",
+      "fromWarp": "pathwayEntrance", //future: "beachExit",
       "facing": "down",
       "x": 387,
       "y": 158,
