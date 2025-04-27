@@ -70,6 +70,7 @@ function loadGameAssets() {
 	MUSIC.markettrack = AudioSystem.newMusic("assets/music/rivermarkettrack.mp3");
 	MUSIC.crossroadstrack = AudioSystem.newMusic("assets/music/crossroadstrack.mp3");
 	MUSIC.pldistrictsong = AudioSystem.newMusic("assets/music/pldistrictsong.mp3");
+	MUSIC.thefunnychicken = AudioSystem.newMusic("assets/music/thefunnychicken.mp3");
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg");
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg");

@@ -5,7 +5,7 @@ import { MINIGAMES } from "../minigame.js";
 import { DRAW, SAVEDATA } from "../../main.js";
 import Notify from "../../gui/notification.js";
 import { conditionsUpdate } from "../../area.js";
-import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS } from "../../assets.js";
+import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS, MUSIC } from "../../assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../../savedata.js";
 import { MENUS } from "../../menu.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js";
@@ -74,11 +74,13 @@ if (true) {
 		}
 
 		start() {
-		// Start Running!
+			// Start Running!
 			this.started = true;
 			this.dead = false;
 			this.data.dead = false;
 			this.score = 0;
+			this.runningTime = 0;
+			this.musicUpdateTimer = 0;
 
 			// Reset player
 			this.chicken.dead = false;
@@ -94,10 +96,20 @@ if (true) {
 			this.timer = 1;
 			this.backgroundScroll = 0;
 			this.speed = 1;
+			AudioSystem.playMusic(MUSIC.thefunnychicken);
+		}
+
+		die() {
+			this.dead = true;
+			this.data.score = this.highscore;
+			this.started = false;
+			this.data.dead = true;
+			AudioSystem.stopMusic();
+			AudioSystem.playSound(SFX.cluck[3]);
 		}
 
 		update(dt) {
-		// Text animations
+			// Text animations
 			this.blinkAnim = (this.blinkAnim + dt) % 1;
 			this.scoreAnim = Math.max(0, this.scoreAnim - 7*dt);
 			if (this.dead) {
@@ -135,7 +147,7 @@ if (true) {
 
 			// DONT update anything else if game hasn't started
 			if (this.started == true) {
-			// Speed chicken up slowly and loop background
+				// Speed chicken up slowly and loop background
 				this.speed += 0.01*dt;
 				this.backgroundScroll = (this.backgroundScroll + this.chicken.sx*1.2*dt)%680;
 
@@ -160,6 +172,14 @@ if (true) {
 					this.spawnObject("fence", new Fence(this.world, this.chicken.x+1000, canvasHeight-200-30, type));
 					this.timer = Math.random()*1.8+0.8;
 				}
+
+				// Speed up the music the longer you run
+				this.runningTime += dt;
+				this.musicUpdateTimer += dt;
+				if (this.musicUpdateTimer > 3) {
+					AudioSystem.setMusicSpeed(1.0 + this.runningTime/(60*15));
+					this.musicUpdateTimer = 0;
+				};
 			}
 
 			// Update all objects
@@ -194,7 +214,7 @@ if (true) {
 		}
   
 		draw() {
-		// Background
+			// Background
 			DRAW.setColor(255,255,255,1.0);
 			DRAW.image(this.img.background, [0,0,680,340], 172, 38);
 			DRAW.image(this.img.background, [0,340,680,480-340], 172-this.backgroundScroll, 38+340);
@@ -330,13 +350,6 @@ if (true) {
 				this.highscore = this.score;
 				MINIGAME.newHighscore(this.score);
 			}
-		}
-
-		die() {
-			this.dead = true;
-			this.data.score = this.highscore;
-			this.started = false;
-			this.data.dead = true;
 		}
 
 		// Multiplayer

@@ -30,6 +30,7 @@ const AudioSystem = (function() {
 
 		playMusic(src) {
 			this.stopMusic();
+			src.rate(1.0);
 			src.volume(1.0); // Reset if it was faded (i wish i were faded)
 			src.play();
 			currentMusic = src;
@@ -46,6 +47,12 @@ const AudioSystem = (function() {
 				return currentMusic.seek();
 			}
 			return 0;
+		},
+
+		setMusicSpeed(speed) {
+			if (currentMusic) {
+				currentMusic.rate(Math.min(Math.max(speed, 0.1), 4.0));
+			}
 		},
 
 		stopMusic() {
