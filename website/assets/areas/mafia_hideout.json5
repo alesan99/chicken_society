@@ -27,8 +27,8 @@
 			"sound": "woosh"
 		},
 		"speakeasyEntrance_1": {
-			"to": "speakeasy",
-			"fromWarp": "speakeasyExit_1",
+			"to": "mafia_hideout", // future: "speakeasy",
+			"fromWarp": "mafia_hideoutEntrance", // future: "speakeasyExit_1",
 			"facing": "down",
 			"x": 821,
 			"y": 96,
