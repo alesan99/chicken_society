@@ -1,5 +1,6 @@
 // Item button grid; Imagine the inventory from minecraft
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
 import { getMousePos } from "../engine/input.js";
 import {Button, ScrollBar} from "./gui.js";
@@ -133,8 +134,8 @@ class ItemGrid {
 
 	draw(){
 		// Scroll bar
-		DRAW.setColor(168, 85, 38, 1);
-		DRAW.rectangle(this.x+this.w, this.y, 20, this.h, "fill");
+		Draw.setColor(168, 85, 38, 1);
+		Draw.rectangle(this.x+this.w, this.y, 20, this.h, "fill");
 		for (const button in this.buttons) {
 			this.buttons[button].draw();
 		}
@@ -142,17 +143,17 @@ class ItemGrid {
 		// Render grid
 		let [mouseX, mouseY] = getMousePos(); //returns x and y pos of mouse
 		
-		DRAW.setColor(242, 242, 242, 1); // Light color for other cells
-		DRAW.rectangle(this.x, this.y, this.w, this.h);
-		DRAW.setFont(FONT.guiLabel);
-		DRAW.setLineWidth(2);
+		Draw.setColor(242, 242, 242, 1); // Light color for other cells
+		Draw.rectangle(this.x, this.y, this.w, this.h);
+		Draw.setFont(FONT.guiLabel);
+		Draw.setLineWidth(2);
 		// grid lines
-		DRAW.setColor(220,220,230, 1.0);
+		Draw.setColor(220,220,230, 1.0);
 		for (let x = 1; x < this.gw; x++) {
-			DRAW.line(this.x + x*this.cw, this.y, this.x + x*this.cw, this.y + this.h);
+			Draw.line(this.x + x*this.cw, this.y, this.x + x*this.cw, this.y + this.h);
 		}
 		for (let y = 1; y < this.gh; y++) {
-			DRAW.line(this.x, this.y + y*this.ch, this.x + this.w, this.y + y*this.ch);
+			Draw.line(this.x, this.y + y*this.ch, this.x + this.w, this.y + y*this.ch);
 		}
 
 		// Render all grid cells
@@ -172,23 +173,23 @@ class ItemGrid {
 					let held = (this.held && this.overx === cx && this.overy === cy);
 					if (hover || held || selected) {
 						if (held) {
-							DRAW.setColor(165, 165, 175, 1); // Dark color for selected cell (while held)
+							Draw.setColor(165, 165, 175, 1); // Dark color for selected cell (while held)
 						} else if (hover) {
-							DRAW.setColor(208, 208, 238, 1); // Medium color for hovered cell
+							Draw.setColor(208, 208, 238, 1); // Medium color for hovered cell
 						} else if (this.list[i] && selected) {
 							if (selected == "gray") {
-								DRAW.setColor(200, 200, 200, 1); // Dark color for selected cell
+								Draw.setColor(200, 200, 200, 1); // Dark color for selected cell
 							} else {
-								DRAW.setColor(180, 190, 240, 1); // Dark color for selected cell
+								Draw.setColor(180, 190, 240, 1); // Dark color for selected cell
 							}
 						}
 						// Draw the cell
-						DRAW.rectangle(cellX, cellY, this.cw, this.ch);
+						Draw.rectangle(cellX, cellY, this.cw, this.ch);
 					}
 
 					// Draw the cell border
-					DRAW.setColor(140, 140, 160, 1);
-					DRAW.rectangle(cellX+1, cellY+1, this.cw-2, this.ch-2, "line");
+					Draw.setColor(140, 140, 160, 1);
+					Draw.rectangle(cellX+1, cellY+1, this.cw-2, this.ch-2, "line");
 
 					// Draw item in this cell
 					if (this.list[i]) {
@@ -199,14 +200,14 @@ class ItemGrid {
 							let scale = Math.min(1.0, 0.9*(this.cw/Math.max(sprite.w, sprite.h)));
 
 							if (image) {
-								DRAW.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5);
+								Draw.image(image, sprite.getFrame(0,0), cellX+this.cw/2, cellY+this.ch/2, 0, scale, scale, 0.5, 0.5);
 							}
 						}
 
 						// Count of item owned
 						if (this.showCount && SAVEDATA.items[itemType][this.list[i]] > 1) {
-							DRAW.setColor(0, 0, 0, 1);
-							DRAW.text(SAVEDATA.items[itemType][this.list[i]], cellX+this.cw-2, cellY+this.ch-2, "right");
+							Draw.setColor(0, 0, 0, 1);
+							Draw.text(SAVEDATA.items[itemType][this.list[i]], cellX+this.cw-2, cellY+this.ch-2, "right");
 						}
 					}
 				}
@@ -222,14 +223,14 @@ class ItemGrid {
 				let itemType = getItemCategory(this.list[i]);
 				if (itemType && ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
 					let name = ITEMS[itemType][this.list[i]].name;
-					let textWidth = Math.ceil(DRAW.getTextWidth(name));
-					DRAW.setColor(255,255,255, 0.75);
-					DRAW.rectangle(mouseX+20, mouseY, textWidth, 24, "fill");
-					DRAW.setColor(128,128,128, 0.75);
-					DRAW.setLineWidth(1);
-					DRAW.rectangle(mouseX+20+0.5, mouseY+0.5, textWidth-1, 24-1, "line");
-					DRAW.setColor(0, 0, 0, 1);
-					DRAW.text(name, mouseX+20, mouseY+18, "left");
+					let textWidth = Math.ceil(Draw.getTextWidth(name));
+					Draw.setColor(255,255,255, 0.75);
+					Draw.rectangle(mouseX+20, mouseY, textWidth, 24, "fill");
+					Draw.setColor(128,128,128, 0.75);
+					Draw.setLineWidth(1);
+					Draw.rectangle(mouseX+20+0.5, mouseY+0.5, textWidth-1, 24-1, "line");
+					Draw.setColor(0, 0, 0, 1);
+					Draw.text(name, mouseX+20, mouseY+18, "left");
 				}
 			}
 		}

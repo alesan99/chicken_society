@@ -1,16 +1,22 @@
-// Main Game Loop; This is the first file that initializes the game.
-import {canvas, ctx} from "./engine/canvas.js";
+/*
+	Main Game Loop
+	This is the first file that runs.
+*/
+import {canvas, ctx, Draw} from "./engine/canvas.js";
+if (!ctx) {
+	// Could not initialize the canvas, game is not playable.
+	throw new Error("Canvas not supported");
+}
+
 import AudioSystem from "./engine/audio.js";
 import Netplay from "./netplay/client.js";
 var NETPLAY;
 var CURSOR = {on: false, cursor: "auto"};
 
-import { makeSaveData } from "./savedata.js";
+import { applySettings, makeSaveData } from "./savedata.js";
 var SAVEDATA = makeSaveData();
+applySettings();
 var PROFILE = SAVEDATA.profile;
-
-import { Render } from "./engine/render.js";
-var DRAW = {};
 
 import { loadGameAssets } from "./assets.js";
 import LoadingScreen from "./loading.js";
@@ -25,7 +31,6 @@ import { handleUrl } from "./netplay/urls.js";
 
 // Initialize game and load assets
 function gameLoad() {
-	DRAW = new Render(ctx);
 	loadGameAssets();
 
 	LoadingScreen.start(() => {
@@ -81,8 +86,8 @@ function gameDraw() {
 
 	// Clear
 	// Note: The canvas is no longer cleared. It is safe to assume there will always be a background covering up the last frame
-	// DRAW.clear(0,0,0,1)
-	DRAW.push();
+	// Draw.clear(0,0,0,1)
+	Draw.push();
 
 	stateDraw();
 
@@ -90,17 +95,17 @@ function gameDraw() {
 	Transition.draw();
 
 	// Display FPS
-	// DRAW.setColor(255,255,255,1.0)
-	// DRAW.setFont(FONT.caption)
-	// DRAW.text(Math.round(FPS) + " FPS",0,20)
+	// Draw.setColor(255,255,255,1.0)
+	// Draw.setFont(FONT.caption)
+	// Draw.text(Math.round(FPS) + " FPS",0,20)
 
-	DRAW.pop();
+	Draw.pop();
 }
 
 // Run game loop
 gameLoad();
 let lastTimestamp = 0;
-var FPS;
+let FPS;
 function gameLoop(timestamp) {
 	const dt = Math.min((timestamp - lastTimestamp) / 1000, 1/15); // Delta time; should be capped (currently at 15FPS)
 	FPS = 1/((timestamp - lastTimestamp) / 1000);
@@ -113,4 +118,4 @@ function gameLoop(timestamp) {
 }
 requestAnimationFrame(gameLoop);
 
-export { PROFILE, SAVEDATA, CURSOR, DRAW, NETPLAY, WORLD };
+export { PROFILE, SAVEDATA, CURSOR, Draw, NETPLAY, WORLD };

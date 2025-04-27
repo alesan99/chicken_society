@@ -1,19 +1,13 @@
 //Trigger; Whenever the player is over this area, it can activate an action like a speechBubble or a quest progression
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import Shape from "../shape.js";
-import { canvasWidth, canvasHeight } from "../engine/render.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, PARTICLES } from "../world.js";
-import { Animation } from "../engine/sprite.js";
-import QuestSystem from "../quests.js";
 import DialogueSystem from "../dialogue.js";
 import AudioSystem from "../engine/audio.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 import { getMousePos } from "../engine/input.js";
-import { vec2Unit } from "../lib/vec2.js";
 import {PhysicsObject,Character,Player,NPC,Pet,Wall,Warp,Furniture,Particle} from "./objects.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 
@@ -104,13 +98,13 @@ export default class Trigger extends PhysicsObject {
 		}
 		// Show an icon if trigger is ready to be activated
 		if ((this.actionIconFrame !== false) && ((this.actionReady || this.mouseOver) && this.activated == false)) {
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(IMG.action, SPRITE.action.getFrame(0,this.actionIconFrame), this.x+this.actionIconX, this.y+this.actionIconY, 0, 1,1, 0.5,1);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(IMG.action, SPRITE.action.getFrame(0,this.actionIconFrame), this.x+this.actionIconX, this.y+this.actionIconY, 0, 1,1, 0.5,1);
 			// Frame #2 is for spending nuggets, so display nugget cost
 			if (this.actionIconFrame == 2) {
-				DRAW.setFont(FONT.caption);
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.text(this.actionIconText, this.x+this.actionIconX+18, this.y+this.actionIconY-22, "center");
+				Draw.setFont(FONT.caption);
+				Draw.setColor(0,0,0,1.0);
+				Draw.text(this.actionIconText, this.x+this.actionIconX+18, this.y+this.actionIconY-22, "center");
 			}
 		}
 		this.displayIcon = (this.actionReady || this.mouseOver);

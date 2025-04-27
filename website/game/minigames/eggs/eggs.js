@@ -2,18 +2,16 @@
 // 2D competitive shooter. Shoot other chickens with your eggs, OR DIE
 
 import { MINIGAMES } from "../minigame.js";
-import { DRAW, SAVEDATA } from "../../main.js";
-import Notify from "../../gui/notification.js";
-import { conditionsUpdate } from "../../area.js";
+import { SAVEDATA } from "../../main.js";
+import { Draw } from "../../engine/canvas.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS } from "../../assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../../savedata.js";
-import { MENUS } from "../../menu.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js";
 import { NETPLAY } from "../../main.js";
-import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js";
+import { RenderImage } from "../../engine/render.js";
+import { canvasWidth, canvasHeight } from "../../engine/canvas.js";
 import { Sprite, Animation } from "../../engine/sprite.js";
 import Shape from "../../shape.js";
-import AudioSystem from "../../engine/audio.js";
 import { SpatialHash, updatePhysics, drawPhysics } from "../../physics.js";
 import {PhysicsObject} from "../../objects/objects.js";
 import { getMousePos } from "../../engine/input.js";
@@ -262,7 +260,7 @@ if (true) {
   
 		draw() {
 		// Map
-			DRAW.image(this.img.map, null, this.screenx, this.screeny);
+			Draw.image(this.img.map, null, this.screenx, this.screeny);
 
 			// Eggs
 			for (const [id, obj] of Object.entries(this.objects["egg"])) {
@@ -275,9 +273,9 @@ if (true) {
 			
 				// Can't spawn regions
 				if (this.spawning) {
-					DRAW.setColor(128,20,0,1.0);
-					DRAW.setLineWidth(3);
-					DRAW.circle(obj.x, obj.y, 120, "line");
+					Draw.setColor(128,20,0,1.0);
+					Draw.setLineWidth(3);
+					Draw.circle(obj.x, obj.y, 120, "line");
 				}
 			}
 
@@ -288,36 +286,36 @@ if (true) {
 
 			// Dead / Haven't started
 			if (this.spawning) {
-				DRAW.setFont(FONT.pixel);
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.text("Click a spot to spawn!",canvasWidth/2,100,"center",0,1,1);
+				Draw.setFont(FONT.pixel);
+				Draw.setColor(0,0,0,1.0);
+				Draw.text("Click a spot to spawn!",canvasWidth/2,100,"center",0,1,1);
 				if (this.spawnValid) {
-					DRAW.setColor(255,255,255,1.0);
+					Draw.setColor(255,255,255,1.0);
 				} else {
-					DRAW.setColor(245,40,0,1.0);
+					Draw.setColor(245,40,0,1.0);
 				}
-				DRAW.setLineWidth(3);
-				DRAW.circle(this.spawnX, this.spawnY, 20, "line");
+				Draw.setLineWidth(3);
+				Draw.circle(this.spawnX, this.spawnY, 20, "line");
 			} else if (this.dead) {
-				DRAW.setFont(FONT.pixel);
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.text("Egg Hunters",canvasWidth/2,240,"center",0,3,3);
+				Draw.setFont(FONT.pixel);
+				Draw.setColor(0,0,0,1.0);
+				Draw.text("Egg Hunters",canvasWidth/2,240,"center",0,3,3);
 				if (this.blinkAnim > 0.5) {
-					DRAW.text("Insert x1 nugget to start!",canvasWidth/2,420,"center",0,1,1);
+					Draw.text("Insert x1 nugget to start!",canvasWidth/2,420,"center",0,1,1);
 				}
 			} else {
 				if (this.someoneSpawning) {
 					if (this.blinkAnim > 0.5) {
-						DRAW.setFont(FONT.pixel);
-						DRAW.setColor(0,0,0,1.0);
-						DRAW.text("Someone is getting ready to spawn!",canvasWidth/2,100,"center",0,1,1);
+						Draw.setFont(FONT.pixel);
+						Draw.setColor(0,0,0,1.0);
+						Draw.text("Someone is getting ready to spawn!",canvasWidth/2,100,"center",0,1,1);
 					}
 				}
 			}
 
 			// Arcade Cabinet overlay
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(this.img.arcadeCabinet);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(this.img.arcadeCabinet);
 		}
 
 		// Register an object as part of the physics world
@@ -547,7 +545,7 @@ if (true) {
 				return;
 			}
 
-			DRAW.setColor(255,255,255,1.0);
+			Draw.setColor(255,255,255,1.0);
 			// Legs
 			if (this.sx !== 0 || this.sy !== 0) {
 				let legS1 = this.legSprite.getFrame(0,0);
@@ -556,16 +554,16 @@ if (true) {
 					legS1 = this.legSprite.getFrame(1,0);
 					legS2 = this.legSprite.getFrame(0,0);
 				}
-				DRAW.image(this.img, legS1, this.x, this.y, this.angle, 1,1, 1,0.5-Math.sin(this.walkAnim*Math.PI*2)*0.3);
-				DRAW.image(this.img, legS2, this.x, this.y, this.angle, 1,1, 0,0.5+Math.sin(this.walkAnim*Math.PI*2)*0.3);
+				Draw.image(this.img, legS1, this.x, this.y, this.angle, 1,1, 1,0.5-Math.sin(this.walkAnim*Math.PI*2)*0.3);
+				Draw.image(this.img, legS2, this.x, this.y, this.angle, 1,1, 0,0.5+Math.sin(this.walkAnim*Math.PI*2)*0.3);
 			}
 			// Chicken
-			DRAW.image(this.img, this.sprite.getFrame(0,0), this.x, this.y, this.angle, 1,1, 0.5,0.5);
+			Draw.image(this.img, this.sprite.getFrame(0,0), this.x, this.y, this.angle, 1,1, 0.5,0.5);
 			// Name
 			if (this.id !== false) {
-				DRAW.setFont(FONT.pixel);
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.text(NETPLAY.playerList[this.id].name, this.x, this.y-40, "center", 0, 0.5,0.5);
+				Draw.setFont(FONT.pixel);
+				Draw.setColor(0,0,0,1.0);
+				Draw.text(NETPLAY.playerList[this.id].name, this.x, this.y-40, "center", 0, 0.5,0.5);
 			}
 		}
 		shoot(tx, ty) {
@@ -687,8 +685,8 @@ if (true) {
 			if (!this.shot) {
 				return;
 			}
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(this.img, this.sprite.getFrame(0,0), this.x, this.y, 0, 1,1, 0.5,0.5);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(this.img, this.sprite.getFrame(0,0), this.x, this.y, 0, 1,1, 0.5,0.5);
 		}
 		shoot(x, y, angle) {
 			if (this.shot) {

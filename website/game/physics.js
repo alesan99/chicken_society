@@ -1,6 +1,6 @@
 // Collision & physics system
 
-import { DRAW } from "./main.js";
+import { Draw } from "./engine/canvas.js";
 import { FONT } from "./assets.js";
 import { vec2Dot } from "./lib/vec2.js";
 
@@ -276,36 +276,36 @@ class SpatialHash {
 // Debug draw all hitboxes
 function drawPhysics(objs, spatialHash, offsetX, offsetY) {
 	// Draw Spatial Hash
-	DRAW.setColor(0,0,0,0.5);
-	DRAW.setFont(FONT.caption);
-	DRAW.setLineWidth(1);
+	Draw.setColor(0,0,0,0.5);
+	Draw.setFont(FONT.caption);
+	Draw.setLineWidth(1);
 	for (let x = 0; x <= spatialHash.cw; x++) {
 		for (let y = 0; y <= spatialHash.ch; y++) {
 			let cellSize = spatialHash.cellSize;
-			DRAW.polygon([x*cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize+cellSize, x*cellSize,y*cellSize+cellSize], "line");
-			DRAW.text(spatialHash.getCell(x, y).size,x*cellSize+cellSize/2,y*cellSize+cellSize/2);
+			Draw.polygon([x*cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize+cellSize, x*cellSize,y*cellSize+cellSize], "line");
+			Draw.text(spatialHash.getCell(x, y).size,x*cellSize+cellSize/2,y*cellSize+cellSize/2);
 		}
 	}
 	// Draw hitboxes
 	for (const [name, objsList] of Object.entries(objs)) { // Look through list of object types
 		for (const [i, a] of Object.entries(objsList)) { // Look at each object
 			if (typeof a === "object") {
-				DRAW.push();
-				DRAW.translate(a.x, a.y);
+				Draw.push();
+				Draw.translate(a.x, a.y);
 	
 				// Draw object's shape and bounding box
-				DRAW.setColor(0,0,80,1.0);
+				Draw.setColor(0,0,80,1.0);
 				if (a.DEBUGCOLLIDED == true) { // Turn red if currently colliding
-					DRAW.setColor(255,0,0,1.0);
+					Draw.setColor(255,0,0,1.0);
 				}
-				DRAW.setLineWidth(1);
-				DRAW.rectangle(a.shape.x1-offsetX, a.shape.y1-offsetY, a.shape.w, a.shape.h, "line");
-				DRAW.setLineWidth(2);
-				DRAW.polygon(a.shape.v, "line");
+				Draw.setLineWidth(1);
+				Draw.rectangle(a.shape.x1-offsetX, a.shape.y1-offsetY, a.shape.w, a.shape.h, "line");
+				Draw.setLineWidth(2);
+				Draw.polygon(a.shape.v, "line");
 	
-				DRAW.circle(0, 0, 3, "fill"); // Object center (Shape's origin)
+				Draw.circle(0, 0, 3, "fill"); // Object center (Shape's origin)
 	
-				DRAW.pop();
+				Draw.pop();
 			}
 		}
 	}

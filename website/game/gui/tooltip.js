@@ -1,4 +1,4 @@
-import { DRAW, CURSOR } from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import { IMG, FONT } from "../assets.js";
 import { getMousePos } from "../engine/input.js";
 
@@ -12,8 +12,8 @@ export class ToolTip {
 		this.font = FONT.description;
 		this.x = x;
 		this.y = y - 2;
-		DRAW.setFont(this.font);
-		this.w = DRAW.getTextWidth(this.text, this.font);
+		Draw.setFont(this.font);
+		this.w = Draw.getTextWidth(this.text, this.font);
 		this.h = 20;
 		this.visible = false;
 
@@ -48,12 +48,12 @@ export class ToolTip {
 			return;
 		}
 		let w = this.w+6;
-		DRAW.setColor(255, 255, 255, 1.0);
-		DRAW.image(IMG.tooltip, null, this.x, this.y, 0, w/64, 1, 0.5, 1.0);
-		// DRAW.rectangle(this.x-w/2, this.y-h, w, h, "fill")
-		DRAW.setColor(60, 60, 60, 1.0);
-		DRAW.setFont(this.font);
-		DRAW.text(this.text, this.x, this.y-5, "center");
+		Draw.setColor(255, 255, 255, 1.0);
+		Draw.image(IMG.tooltip, null, this.x, this.y, 0, w/64, 1, 0.5, 1.0);
+		// Draw.rectangle(this.x-w/2, this.y-h, w, h, "fill")
+		Draw.setColor(60, 60, 60, 1.0);
+		Draw.setFont(this.font);
+		Draw.text(this.text, this.x, this.y-5, "center");
 	}
 
 	click() {

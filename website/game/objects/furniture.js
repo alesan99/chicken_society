@@ -1,19 +1,8 @@
 //Furniture
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
-import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
+import { Draw } from "../engine/canvas.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import Shape from "../shape.js";
-import { canvasWidth, canvasHeight } from "../engine/render.js";
-import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "../world.js";
-import { Animation } from "../engine/sprite.js";
-import QuestSystem from "../quests.js";
-import DialogueSystem from "../dialogue.js";
-import AudioSystem from "../engine/audio.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
-import { getMousePos } from "../engine/input.js";
-import { vec2Unit } from "../lib/vec2.js";
 import {PhysicsObject,Character,Player,NPC,Pet,Trigger,Wall,Warp,Particle} from "./objects.js";
 import Coop from "../coop.js";
 
@@ -78,20 +67,20 @@ export default class Furniture extends PhysicsObject {
 		if (this.dir == "left") {
 			flip = -1;
 		}
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(this.image, this.sprite.getFrame(0,this.dir_lookup[this.dir]), this.x, this.y-this.tabletopOffset, 0, flip, 1.0, this.center[this.dir_lookup[this.dir]][0]/this.sprite.w, this.center[this.dir_lookup[this.dir]][1]/this.sprite.h);
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(this.image, this.sprite.getFrame(0,this.dir_lookup[this.dir]), this.x, this.y-this.tabletopOffset, 0, flip, 1.0, this.center[this.dir_lookup[this.dir]][0]/this.sprite.w, this.center[this.dir_lookup[this.dir]][1]/this.sprite.h);
 
 		// Draw footprint when moving
 		if (this.moving) {
-			DRAW.push();
-			DRAW.translate(this.x, this.y);
+			Draw.push();
+			Draw.translate(this.x, this.y);
 			if (!Coop.getFurniturePlaceable(this.id)) {
-				DRAW.setColor(195,0,0,0.25);
+				Draw.setColor(195,0,0,0.25);
 			} else {
-				DRAW.setColor(10,50,195,0.25);
+				Draw.setColor(10,50,195,0.25);
 			}
-			DRAW.polygon(this.shape.v, "fill");
-			DRAW.pop();
+			Draw.polygon(this.shape.v, "fill");
+			Draw.pop();
 		}
 	}
 

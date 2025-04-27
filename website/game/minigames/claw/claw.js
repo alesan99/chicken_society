@@ -2,18 +2,14 @@
 // Move claw to left, attempt to grab prize
 
 import { MINIGAMES } from "../minigame.js";
-import { DRAW, SAVEDATA } from "../../main.js";
-import Notify from "../../gui/notification.js";
-import { conditionsUpdate } from "../../area.js";
+import { Draw } from "../../engine/canvas.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, ITEMS } from "../../assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../../savedata.js";
-import { MENUS } from "../../menu.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js";
-import { NETPLAY } from "../../main.js";
-import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js";
+import { RenderImage } from "../../engine/render.js";
+import { canvasWidth, canvasHeight } from "../../engine/canvas.js";
 import { Sprite, Animation } from "../../engine/sprite.js";
 import Shape from "../../shape.js";
-import AudioSystem from "../../engine/audio.js";
 import { SpatialHash, updatePhysics, drawPhysics } from "../../physics.js";
 import {PhysicsObject} from "../../objects/objects.js";
 
@@ -129,13 +125,13 @@ if (true) {
   
 		draw() {
 		// Background
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(this.img.background, null, 0,0);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(this.img.background, null, 0,0);
 
 			// Instructions
-			DRAW.setColor(0,0,0,1.0);
-			DRAW.setFont(FONT.caption);
-			DRAW.text("1 Nugget per play.", 100, 80);
+			Draw.setColor(0,0,0,1.0);
+			Draw.setFont(FONT.caption);
+			Draw.text("1 Nugget per play.", 100, 80);
 
 			// Prizes
 			for (const [id, obj] of Object.entries(this.objects["Prize"])) {
@@ -342,12 +338,12 @@ if (true) {
 		stopCollide(name,obj) {
 		}
 		draw(x) {
-			DRAW.setColor(255,255,255,1.0);
+			Draw.setColor(255,255,255,1.0);
 			let frame = 0;
 			if (this.grabbed || this.grabTimer > 4) {
 				frame = 1;
 			}
-			DRAW.image(minigame.img.claw, minigame.sprite.claw.getFrame(frame), this.x, this.y, 0, 1,1, 0.5,0);
+			Draw.image(minigame.img.claw, minigame.sprite.claw.getFrame(frame), this.x, this.y, 0, 1,1, 0.5,0);
 		}
 	};
 	Prize = class extends PhysicsObject {
@@ -420,10 +416,10 @@ if (true) {
 			this.destroy();
 		}
 		draw() {
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(minigame.img.prize, this.sprite, this.x, this.y, this.rotation, 1,1, 0.5,0.5);
-		//DRAW.setColor(200,150,0,1.0)
-		//DRAW.circle(this.x,this.y, this.w/2, "fill")
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(minigame.img.prize, this.sprite, this.x, this.y, this.rotation, 1,1, 0.5,0.5);
+		//Draw.setColor(200,150,0,1.0)
+		//Draw.circle(this.x,this.y, this.w/2, "fill")
 		}
 		collide(name,obj,nx,ny) {
 			if (ny < 0 && this.sy > 0) {

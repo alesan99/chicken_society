@@ -1,4 +1,4 @@
-import {addItem, getItem, getItemData} from "../savedata.js";
+import { addItem, getItem, getItemData } from "../savedata.js";
 import Notify from "../gui/notification.js";
 
 // Activate events based on special URLs

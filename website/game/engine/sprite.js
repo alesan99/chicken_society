@@ -1,6 +1,6 @@
 //Sprite object; Takes in an image with multiple frames and splits it up to render just one frame
 
-import { DRAW } from "../main.js";
+import { Draw } from "../engine/canvas.js";
 
 class Sprite {
 	/**
@@ -184,7 +184,7 @@ class DrawableSprite {
 		if (this.anim) {
 			anim = this.anim.getFrame(0,0);
 		}
-		DRAW.image(this.sprite.img, anim, this.drawx, this.drawy);
+		Draw.image(this.sprite.img, anim, this.drawx, this.drawy);
 	}
 }
 

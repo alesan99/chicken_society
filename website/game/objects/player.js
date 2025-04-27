@@ -1,20 +1,9 @@
 //Player object, listens to inputs to control another object
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
-import Shape from "../shape.js";
-import { canvasWidth, canvasHeight } from "../engine/render.js";
-import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "../world.js";
-import { Animation } from "../engine/sprite.js";
-import QuestSystem from "../quests.js";
-import DialogueSystem from "../dialogue.js";
-import AudioSystem from "../engine/audio.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 import { getMousePos } from "../engine/input.js";
 import { vec2Unit } from "../lib/vec2.js";
-import {PhysicsObject,Character,NPC,Pet,Trigger,Wall,Warp,Furniture,Particle} from "./objects.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 
 export default class Player {
@@ -99,14 +88,14 @@ export default class Player {
 	// Draw movement cursor
 	draw() {
 		if (this.target) {
-			DRAW.setColor(255, 255, 255, 1.0);
+			Draw.setColor(255, 255, 255, 1.0);
 			let x = this.targetX;
 			let y = this.targetY;
 			let scale = 0.8;
 			if (this.mouseHold) {
 				scale = 1.0;
 			}
-			DRAW.image(IMG.moveCursor, null, x, y, 0, scale, scale, 0.5, 0.5);
+			Draw.image(IMG.moveCursor, null, x, y, 0, scale, scale, 0.5, 0.5);
 		}
 	}
 

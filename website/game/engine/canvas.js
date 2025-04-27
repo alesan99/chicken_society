@@ -1,14 +1,19 @@
-// Render module; useful functions for rendering stuff onto the screen.
+/*
+	Canvas rendering setup
+	This file prepares the html canvas for rendering.
+*/
+import { Render } from "./render.js";
 
 // Get a reference to the canvas element
-var canvas = document.getElementById("game-canvas");
-var canvasContainer = document.getElementById("canvas-container");
-var ctx; //canvas.getContext("2d")
+const canvas = document.getElementById("game-canvas");
+const canvasContainer = document.getElementById("canvas-container");
+let ctx; //canvas.getContext("2d")
 
 // Dimensions of canvas. Look at index.html to see actual dimensions
-const canvasWidth = canvas.width; const canvasHeight = canvas.height;
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
 const canvasPadding = 6;
-var canvasScale = 1;
+let canvasScale = 1;
 
 canvasContainer.style.width = canvasWidth + "px"; // Resize canvas container on load
 
@@ -20,6 +25,9 @@ if (canvas.getContext) {
 } else {
 	alert("Canvas is not supported in your browser.");
 }
+
+// Link the canvas to the renderer
+const Draw = new Render(ctx, canvasWidth, canvasHeight);
 
 // Function to resize the canvas based on the window size
 function resizeCanvas() {
@@ -48,4 +56,4 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
 
-export {canvas, ctx, canvasWidth, canvasHeight};
+export {canvas, ctx, canvasWidth, canvasHeight, Draw};

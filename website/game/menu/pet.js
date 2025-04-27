@@ -1,17 +1,14 @@
 // Pet menu; Shows your pet's status
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
-import {canvasWidth, canvasHeight} from "../engine/render.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
 import {ItemGrid} from "../gui/itemgrid.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
-import QuestSystem from "../quests.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 
 MENUS["petMenu"] = new class extends Menu {
 	//Initialize
@@ -94,26 +91,26 @@ MENUS["petMenu"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 		
 		// Pet
 		this.pet.draw(360,340,"down");
 
 		// Pet Status
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.text(`Feeling ${this.petMood}.`, 476, 184, "left");
-		DRAW.text("Health:", 476, 224, "left");
-		DRAW.text("Food:", 476, 254, "left");
-		DRAW.text("Feed: ", 476, 304, "left");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.setColor(112, 50, 16, scale);
+		Draw.text(`Feeling ${this.petMood}.`, 476, 184, "left");
+		Draw.text("Health:", 476, 224, "left");
+		Draw.text("Food:", 476, 254, "left");
+		Draw.text("Feed: ", 476, 304, "left");
 
-		DRAW.setColor(240, 240, 240, scale);
-		DRAW.rectangle(566, 228-20, 200, 20);
-		DRAW.rectangle(566, 258-20, 200, 20);
-		DRAW.setColor(20, 200, 20, scale);
-		DRAW.rectangle(566, 228-20+1, 200*(this.pet.health), 18);
-		DRAW.rectangle(566, 258-20+1, 200*(this.pet.hunger), 18);
+		Draw.setColor(240, 240, 240, scale);
+		Draw.rectangle(566, 228-20, 200, 20);
+		Draw.rectangle(566, 258-20, 200, 20);
+		Draw.setColor(20, 200, 20, scale);
+		Draw.rectangle(566, 228-20+1, 200*(this.pet.health), 18);
+		Draw.rectangle(566, 258-20+1, 200*(this.pet.hunger), 18);
 
 		// Render all buttons
 		this.drawButtons();

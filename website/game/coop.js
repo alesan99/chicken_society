@@ -1,19 +1,13 @@
 // TODO: Visit other player's coops
 // TODO: Wallpapers
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {Draw} from "./engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "./assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture} from "./savedata.js";
-import {openMenu, closeMenu, getOpenMenu} from "./state.js";
 import {OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD} from "./world.js";
-import QuestSystem from "./quests.js";
-import Transition from "./transition.js";
-import AudioSystem from "./engine/audio.js";
-import {checkCondition} from "./area.js";
-import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js";
-import { canvasWidth, canvasHeight } from "./engine/render.js";
 import {Furniture} from "./objects/objects.js";
-import { getMousePos } from "./engine/input.js";
+import {getMousePos} from "./engine/input.js";
 
 const Coop = (function() {
 	// Chicken Coop Furniture
@@ -78,11 +72,11 @@ const Coop = (function() {
 		draw() {
 			// Moving furniture?
 			if (this.furniture) {
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.setFont(FONT.caption);
-				DRAW.text("Rotate Furniture with Scroll Wheel or E key", 10, 30);
-				DRAW.text("Place Furniture with Left Click", 10, 50);
-				DRAW.text("Remove Furniture with Right Click", 10, 70);
+				Draw.setColor(0,0,0,1.0);
+				Draw.setFont(FONT.caption);
+				Draw.text("Rotate Furniture with Scroll Wheel or E key", 10, 30);
+				Draw.text("Place Furniture with Left Click", 10, 50);
+				Draw.text("Remove Furniture with Right Click", 10, 70);
 			}
 		},
 

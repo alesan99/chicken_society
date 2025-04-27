@@ -10,9 +10,7 @@ var CHAT;
 var DEBUGPHYSICS = false;
 var MINIGAME;
 
-import { DRAW } from "./main.js";
-
-import { canvasWidth, canvasHeight } from "./engine/canvas.js";
+import { canvasWidth, canvasHeight, Draw } from "./engine/canvas.js";
 import { RenderImage } from "./engine/render.js";
 import { IMG, SFX, FONT, MUSIC, loadJSON5, BACKGROUND, BACKGROUNDIMG, BACKGROUNDANIM, BACKGROUNDSPRITE } from "./assets.js";
 import { SpatialHash, updatePhysics, drawPhysics } from "./physics.js";
@@ -42,6 +40,7 @@ import {} from "./menu/quests.js";
 import {} from "./menu/shop.js";
 import {} from "./menu/pet.js";
 import {} from "./menu/adopt.js";
+import {} from "./menu/settings.js";
 
 import { MinigameState } from "./minigames/minigame.js";
 import {} from "./minigames/claw/claw.js";
@@ -295,8 +294,8 @@ const World = class {
 
 	draw () {
 		// Background
-		DRAW.setColor(255,255,255);
-		DRAW.image(BACKGROUND[this.area], null, 0, 0); //sprite
+		Draw.setColor(255,255,255);
+		Draw.image(BACKGROUND[this.area], null, 0, 0); //sprite
 
 		// Draw objects in the correct order
 		let drawQueue = [];
@@ -379,22 +378,22 @@ const World = class {
 			drawPhysics(OBJECTS, PHYSICSWORLD);
 
 			// Display click triggers
-			DRAW.setColor(120,0,80,1.0);
-			DRAW.setLineWidth(3);
+			Draw.setColor(120,0,80,1.0);
+			Draw.setLineWidth(3);
 			for (const [id, obj] of Object.entries(OBJECTS["Trigger"])) {
 				if (obj.clickable) {
-					DRAW.push();
-					DRAW.translate(obj.x, obj.y);
-					DRAW.polygon(obj.clickShape.v, "line");
-					DRAW.pop();
+					Draw.push();
+					Draw.translate(obj.x, obj.y);
+					Draw.polygon(obj.clickShape.v, "line");
+					Draw.pop();
 				}
 			}
 
 			// Display Corrdinates
 			let [mouseX, mouseY] = getMousePos();
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.setFont(FONT.caption, 4);
-			DRAW.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, mouseX+10, mouseY+20);
+			Draw.setColor(255,255,255,1.0);
+			Draw.setFont(FONT.caption, 4);
+			Draw.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, mouseX+10, mouseY+20);
 		}
 
 		// HUD

@@ -2,14 +2,12 @@
 // SaveData: Stores all player data & game progress, including private data (Excluding login information)
 // Profile: Stores only chicken information; this is information that's always accessible to other players
 
-import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js";
-import {SAVEDATA} from "./main.js";
-import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS, CHAT } from "./world.js";
+import { ITEMS } from "./assets.js";
+import { SAVEDATA } from "./main.js";
+import { CHAT } from "./world.js";
+import { MENUS } from "./menu.js";
 import QuestSystem from "./quests.js";
 import AudioSystem from "./engine/audio.js";
-import DialogueSystem from "./dialogue.js";
-import Transition from "./transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "./items.js";
 
 function makeSaveData() {
 	let saveData = {
@@ -62,6 +60,13 @@ function makeSaveData() {
 		highscores: {
 			runner: 0,
 			eggs: 0
+		},
+
+		// Settings
+		settings: {
+			volume: 0.25,
+			musicVolume: 1.0,
+			sfxVolume: 1.0
 		}
 	};
 
@@ -214,6 +219,9 @@ function addItem(id, type, count=1) {
 		SAVEDATA.items[type][id] = 0;
 	}
 	SAVEDATA.items[type][id] += count;
+
+	// New item notification
+	MENUS["chatMenu"].notification("customization", true);
 }
 
 function removeItem(id, type, count=1) {
@@ -309,4 +317,12 @@ function HEXtoRGB(hex) {
 	return [red, green, blue];
 }
 
-export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues};
+function applySettings() {
+	AudioSystem.setVolume(
+		SAVEDATA.settings.volume,
+		SAVEDATA.settings.musicVolume,
+		SAVEDATA.settings.sfxVolume
+	);
+}
+
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues, applySettings};

@@ -70,6 +70,7 @@ function loadGameAssets() {
 	MUSIC.markettrack = AudioSystem.newMusic("assets/music/rivermarkettrack.mp3");
 	MUSIC.crossroadstrack = AudioSystem.newMusic("assets/music/crossroadstrack.mp3");
 	MUSIC.pldistrictsong = AudioSystem.newMusic("assets/music/pldistrictsong.mp3");
+	MUSIC.thefunnychicken = AudioSystem.newMusic("assets/music/thefunnychicken.mp3");
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg");
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg");
@@ -84,8 +85,8 @@ function loadGameAssets() {
 	IMG.ammo = new RenderImage("assets/hud/ammo.png");
 	IMG.chat = new RenderImage("assets/hud/chat.png");
 	IMG.chatMessage = new RenderImage("assets/chat_message.png");
-	SPRITE.chat = new Sprite(IMG.chat, 1,1, 660,51);
-	SPRITE.chatButton = new Sprite(IMG.chat, 3,6, 36,36, 0,51);
+	SPRITE.chat = new Sprite(IMG.chat, 1,1, 693,51);
+	SPRITE.chatButton = new Sprite(IMG.chat, 3,7, 36,36, 0,51);
 	SPRITE.notif = new Sprite(IMG.chat, 2,1, 18,18, 108,51);
 	IMG.emoteMenu = new RenderImage("assets/gui/emote.png");
 	SPRITE.emoteButton = new Sprite(IMG.emoteMenu, 3,7, 36,36, 0,110);

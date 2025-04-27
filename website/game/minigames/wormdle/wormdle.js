@@ -2,20 +2,12 @@
 // Like Wordle, but with Snake gameplay
 
 import { MINIGAMES } from "../minigame.js";
-import { DRAW, SAVEDATA } from "../../main.js";
+import { Draw } from "../../engine/canvas.js";
 import Notify from "../../gui/notification.js";
-import { conditionsUpdate } from "../../area.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS } from "../../assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../../savedata.js";
-import { MENUS } from "../../menu.js";
-import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js";
-import { NETPLAY } from "../../main.js";
-import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js";
-import { Sprite, Animation } from "../../engine/sprite.js";
-import Shape from "../../shape.js";
-import AudioSystem from "../../engine/audio.js";
-import { SpatialHash, updatePhysics, drawPhysics } from "../../physics.js";
-import {PhysicsObject} from "../../objects/objects.js";
+import { RenderImage } from "../../engine/render.js";
+import { canvasWidth, canvasHeight } from "../../engine/canvas.js";
 
 if (true) {
 	let Grid;
@@ -129,24 +121,24 @@ if (true) {
   
 		draw() {
 		// Background
-			DRAW.setColor(34,31,37,1.0);
-			DRAW.rectangle(0,0,canvasWidth,canvasHeight, "fill");
+			Draw.setColor(34,31,37,1.0);
+			Draw.rectangle(0,0,canvasWidth,canvasHeight, "fill");
 
 			// Grid
 			// Draw cells
-			DRAW.setColor(0,0,0,1.0);
-			DRAW.setFont(FONT.big);
+			Draw.setColor(0,0,0,1.0);
+			Draw.setFont(FONT.big);
 			for (let x = 0; x < this.gridW; x++) {
 				for (let y = 0; y < this.gridH; y++) {
 					let cell = this.grid.getCell(x, y);
 					if (typeof cell == "string") {
 						let letter = cell;
-						DRAW.setColor(255,255,255,1.0);
-						DRAW.rectangle(this.gridX+x*this.gridSize, this.gridY+y*this.gridSize, this.gridSize, this.gridSize, "fill");
-						DRAW.setColor(0,0,0,1.0);
+						Draw.setColor(255,255,255,1.0);
+						Draw.rectangle(this.gridX+x*this.gridSize, this.gridY+y*this.gridSize, this.gridSize, this.gridSize, "fill");
+						Draw.setColor(0,0,0,1.0);
 						// make letter uppercase
 						letter = letter.toUpperCase();
-						DRAW.text(letter, this.gridX+x*this.gridSize+this.gridSize/2, this.gridY+y*this.gridSize+this.gridSize/2+15, "center");
+						Draw.text(letter, this.gridX+x*this.gridSize+this.gridSize/2, this.gridY+y*this.gridSize+this.gridSize/2+15, "center");
 					}
 				}
 			}
@@ -155,47 +147,47 @@ if (true) {
 				for (let i = 0; i < this.worm.segs.length; i++) {
 					let seg = this.worm.segs[i];
 					let letter = this.worm.letters[i];
-					DRAW.setColor(76,75,78,1.0);
-					DRAW.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize, this.gridSize, "fill");
+					Draw.setColor(76,75,78,1.0);
+					Draw.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize, this.gridSize, "fill");
 					if (i == this.worm.segs.length-1) {
 					// Show movement
-						DRAW.setColor(96,95,98,1.0);
+						Draw.setColor(96,95,98,1.0);
 						if (this.worm.dir == "right") {
-							DRAW.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), this.gridSize, "fill");
+							Draw.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), this.gridSize, "fill");
 						} else if (this.worm.dir == "left") {
-							DRAW.rectangle(this.gridX+seg[0]*this.gridSize+(1-this.worm.moveTimer/this.worm.moveTime)*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), this.gridSize, "fill");
+							Draw.rectangle(this.gridX+seg[0]*this.gridSize+(1-this.worm.moveTimer/this.worm.moveTime)*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), this.gridSize, "fill");
 						} else if (this.worm.dir == "down") {
-							DRAW.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), "fill");
+							Draw.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), "fill");
 						} else if (this.worm.dir == "up") {
-							DRAW.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize+(1-this.worm.moveTimer/this.worm.moveTime)*this.gridSize, this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), "fill");
+							Draw.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize+(1-this.worm.moveTimer/this.worm.moveTime)*this.gridSize, this.gridSize, this.gridSize*(this.worm.moveTimer/this.worm.moveTime), "fill");
 						}
 					}
 					if (letter) {
 						let li = Math.floor(i/this.word.length)*this.word.length + i%this.word.length;
 						let correct = this.getLetterCorrect(letter, i%this.word.length);
 						if (correct === 1) {
-							DRAW.setColor(255,174,89,1.0);
+							Draw.setColor(255,174,89,1.0);
 						} else if (correct == 2) {
-							DRAW.setColor(31,183,71,1.0);
+							Draw.setColor(31,183,71,1.0);
 						} else {
-							DRAW.setColor(76,75,78,1.0);
+							Draw.setColor(76,75,78,1.0);
 						}
-						DRAW.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize, this.gridSize, "fill");
-						DRAW.setColor(255,255,255,1.0);
+						Draw.rectangle(this.gridX+seg[0]*this.gridSize, this.gridY+seg[1]*this.gridSize, this.gridSize, this.gridSize, "fill");
+						Draw.setColor(255,255,255,1.0);
 						// make letter uppercase
 						letter = letter.toUpperCase();
-						DRAW.text(letter, this.gridX+seg[0]*this.gridSize+this.gridSize/2, this.gridY+seg[1]*this.gridSize+this.gridSize/2+15, "center");
+						Draw.text(letter, this.gridX+seg[0]*this.gridSize+this.gridSize/2, this.gridY+seg[1]*this.gridSize+this.gridSize/2+15, "center");
 					}
 				}
 			}
 			// Grid lines
-			DRAW.setColor(0,0,0,1.0);
-			DRAW.setLineWidth(2);
+			Draw.setColor(0,0,0,1.0);
+			Draw.setLineWidth(2);
 			for (let x = 0; x <= this.gridW; x++) {
-				DRAW.line(this.gridX+x*this.gridSize, this.gridY, this.gridX+x*this.gridSize, this.gridY+this.gridH*this.gridSize);
+				Draw.line(this.gridX+x*this.gridSize, this.gridY, this.gridX+x*this.gridSize, this.gridY+this.gridH*this.gridSize);
 			}
 			for (let y = 0; y <= this.gridH; y++) {
-				DRAW.line(this.gridX, this.gridY+y*this.gridSize, this.gridX+this.gridW*this.gridSize, this.gridY+y*this.gridSize);
+				Draw.line(this.gridX, this.gridY+y*this.gridSize, this.gridX+this.gridW*this.gridSize, this.gridY+y*this.gridSize);
 			}
 
 			// Word
@@ -207,51 +199,51 @@ if (true) {
 					if (letter) {
 						let correct = this.getLetterCorrect(letter, i);
 						if (correct === 1) { // close
-							DRAW.setColor(255,174,89,1.0);
+							Draw.setColor(255,174,89,1.0);
 						} else if (correct == 2) { // correct
-							DRAW.setColor(31,183,71,1.0);
+							Draw.setColor(31,183,71,1.0);
 						} else { // incorrect
-							DRAW.setColor(76,75,78,1.0);
+							Draw.setColor(76,75,78,1.0);
 						}
 						if (!this.worm.letters[i+wormWordStart+1]) { // animation
 							if (this.worm.eating && this.worm.eatingTimer > 0) {
 								scale = 1.0 - (this.worm.eatingTimer/this.worm.eatingTime)**2;
 							}
 						}
-						DRAW.rectangle((340 + 68*i+32)-(32*scale), (444+32)-(32*scale), 64*scale, 64*scale, "fill");
-						DRAW.setColor(255,255,255,1.0);
+						Draw.rectangle((340 + 68*i+32)-(32*scale), (444+32)-(32*scale), 64*scale, 64*scale, "fill");
+						Draw.setColor(255,255,255,1.0);
 						// make letter uppercase
 						letter = letter.toUpperCase();
-						DRAW.text(letter, 372 + 68*i, 492, "center");
+						Draw.text(letter, 372 + 68*i, 492, "center");
 					}
-					DRAW.setColor(0,0,0,1.0);
-					DRAW.rectangle(340 + 68*i, 444, 64, 64, "line");
+					Draw.setColor(0,0,0,1.0);
+					Draw.rectangle(340 + 68*i, 444, 64, 64, "line");
 				}
 			}
 
 			// Dead
 			if (this.worm && this.worm.died) {
-				DRAW.setColor(0,0,0,0.5);
-				DRAW.rectangle(0,0,canvasWidth,canvasHeight, "fill");
-				DRAW.setColor(255,255,255,1.0);
-				DRAW.setFont(FONT.big);
-				DRAW.text("You Died LOL", canvasWidth/2, canvasHeight/2, "center");
+				Draw.setColor(0,0,0,0.5);
+				Draw.rectangle(0,0,canvasWidth,canvasHeight, "fill");
+				Draw.setColor(255,255,255,1.0);
+				Draw.setFont(FONT.big);
+				Draw.text("You Died LOL", canvasWidth/2, canvasHeight/2, "center");
 			} else if (this.won) {
-				DRAW.setColor(0,0,0,0.5);
-				DRAW.rectangle(0,0,canvasWidth,canvasHeight, "fill");
-				DRAW.setColor(255,255,255,1.0);
-				DRAW.setFont(FONT.big);
-				DRAW.text("You Won!", canvasWidth/2, canvasHeight/2, "center");
+				Draw.setColor(0,0,0,0.5);
+				Draw.rectangle(0,0,canvasWidth,canvasHeight, "fill");
+				Draw.setColor(255,255,255,1.0);
+				Draw.setFont(FONT.big);
+				Draw.text("You Won!", canvasWidth/2, canvasHeight/2, "center");
 			} else if (!this.started) {
-				DRAW.setColor(255,255,255,1.0);
-				DRAW.setFont(FONT.big);
-				DRAW.text("Press any key to start", canvasWidth/2, canvasHeight/2, "center");
-				DRAW.text("WORMDLE", canvasWidth/2, 490, "center");
+				Draw.setColor(255,255,255,1.0);
+				Draw.setFont(FONT.big);
+				Draw.text("Press any key to start", canvasWidth/2, canvasHeight/2, "center");
+				Draw.text("WORMDLE", canvasWidth/2, 490, "center");
 			}
 
 			// Arcade Cabinet
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(this.img.arcadeCabinet, null, 0, 0);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(this.img.arcadeCabinet, null, 0, 0);
 		}
 
 		addLetters() {

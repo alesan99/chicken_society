@@ -1,12 +1,10 @@
 // Behavior for items (Clothing, consumables, furniture, etc.)
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, makePetData} from "./savedata.js";
 import {openMenu, closeMenu, getOpenMenu} from "./state.js";
 import {PLAYER, PLAYER_CONTROLLER} from "./world.js";
-import QuestSystem from "./quests.js";
-import Transition from "./transition.js";
 import Coop from "./coop.js";
 import DialogueSystem from "./dialogue.js";
 

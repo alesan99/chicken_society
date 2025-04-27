@@ -1,17 +1,19 @@
 // Rendering functions for a '2d' canvas.
 
-import { ctx, canvasWidth, canvasHeight } from "./canvas.js";
-
 class Render {
 	/**
 	 * Creates a wrapper for rendering to a canvas.
 	 * @param {*} canvas  - HTML5 2D rendering context (canvas.getContext("2d"))
+	 * @param {number} width - Width of the canvas in pixels
+	 * @param {number} height - Height of the canvas in pixels
 	 */
-	constructor (canvas) {
+	constructor (canvas, width, height) {
 		this.c = false;
 		if (canvas) {
 			this.setCanvas(canvas);
 		}
+		this.width = width;
+		this.height = height;
 
 		this.color = [255,255,255,1];
 		this.font = false;
@@ -35,7 +37,7 @@ class Render {
 	 */
 	clear(r,g,b,a=1.0) {
 		this.c.fillStyle = `rgb(${r},${g},${b})`;
-		this.c.clearRect(0, 0, canvasWidth, canvasHeight);
+		this.c.clearRect(0, 0, this.width, this.height);
 	}
 
 	/**
@@ -322,7 +324,7 @@ class Render {
 	 * @param {number} thickness - Line thickness in pixels
 	 */
 	setLineWidth(thickness) {
-		ctx.lineWidth = thickness;
+		this.c.lineWidth = thickness;
 	}
 
 	// Transform //
@@ -442,4 +444,4 @@ class RenderFont {
 	}
 }
 
-export { Render, RenderImage, RenderFont, canvasWidth, canvasHeight };
+export { Render, RenderImage, RenderFont };

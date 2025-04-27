@@ -1,17 +1,13 @@
 //Customize Player Menu; Menu with options to modify player profile and customize chicken
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
-import {canvasWidth, canvasHeight} from "../engine/render.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
 import {ItemGrid} from "../gui/itemgrid.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
-import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
-import QuestSystem from "../quests.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 
 MENUS["shop"] = new class extends Menu {
 	//Initialize
@@ -92,8 +88,8 @@ MENUS["shop"] = new class extends Menu {
 					this.selectedItemType = itemType;
 					if (ITEMS[itemType][itemId]) { // Make sure item has been loaded
 						if (ITEMS[itemType][itemId].description) {
-							DRAW.setFont(FONT.description);
-							this.selectedItemDescription = DRAW.wrapText(ITEMS[itemType][itemId].description, 200); // Pre-wrap text for performance
+							Draw.setFont(FONT.description);
+							this.selectedItemDescription = Draw.wrapText(ITEMS[itemType][itemId].description, 200); // Pre-wrap text for performance
 						} else {
 							this.selectedItemDescription = false;
 						}
@@ -335,19 +331,19 @@ MENUS["shop"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 
 		// Text
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.text(this.name, 520, 142, "center");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.text(this.name, 520, 142, "center");
 
 		// Item information
 		if (this.selectedItem) {
 			let item = ITEMS[this.selectedItemType][this.selectedItem];
 			if (item) { // Make sure item has been loaded
 				// Name
-				DRAW.text(item.name, 563, 210, "left");
+				Draw.text(item.name, 563, 210, "left");
 	
 				let nuggetsCost = item.cost; // Default item cost
 				let itemCost = false;
@@ -370,7 +366,7 @@ MENUS["shop"] = new class extends Menu {
 
 				let costY = 388;
 				if (nuggetsCost) { // Display nuggets cost
-					DRAW.text(`${nuggetsCost} Nuggets`, 764, costY, "right");
+					Draw.text(`${nuggetsCost} Nuggets`, 764, costY, "right");
 					costY -= 25;
 				}
 				// Display items cost
@@ -378,7 +374,7 @@ MENUS["shop"] = new class extends Menu {
 					for (let itemId in itemCost) {
 						let item = getItemData(itemId);
 						if (item) {
-							DRAW.text(`${itemCost[itemId]} ${item.name}(s)`, 764, costY, "right");
+							Draw.text(`${itemCost[itemId]} ${item.name}(s)`, 764, costY, "right");
 							costY -= 25;
 						}
 					}
@@ -386,20 +382,20 @@ MENUS["shop"] = new class extends Menu {
 
 				// Display how many of this item you own
 				if (SAVEDATA.items[this.selectedItemType][this.selectedItem]) {
-					DRAW.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, costY, "right");
+					Draw.text(`Owned: ${SAVEDATA.items[this.selectedItemType][this.selectedItem]}`, 764, costY, "right");
 				}
 	
 				// Description
-				DRAW.setColor(152, 80, 46, scale);
-				DRAW.setFont(FONT.description);
+				Draw.setColor(152, 80, 46, scale);
+				Draw.setFont(FONT.description);
 				if (this.selectedItemDescription) {
 					for (let i = 0; i < this.selectedItemDescription.length; i++) {
-						DRAW.text(this.selectedItemDescription[i], 563, 242 + i * 20, "left");
+						Draw.text(this.selectedItemDescription[i], 563, 242 + i * 20, "left");
 					}
 				}
 			}
 		} else {
-			DRAW.text("Select an item.", 563, 210, "left");
+			Draw.text("Select an item.", 563, 210, "left");
 		}
 
 		// Render all buttons

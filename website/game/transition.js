@@ -1,7 +1,6 @@
 // Transitions; Cover the entire screen with an animation, when the animation ends it calls a given function
 
-import { canvasWidth, canvasHeight } from "./engine/render.js";
-import { DRAW } from "./main.js";
+import { canvasWidth, canvasHeight, Draw } from "./engine/canvas.js";
 
 const Transition = (function() {
 
@@ -43,14 +42,14 @@ const Transition = (function() {
 				switch (currentTransition) {
 				// Loading Screen; just a black screen
 				case "loading":
-					DRAW.setColor(0, 0, 0, 1.0);
-					DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
+					Draw.setColor(0, 0, 0, 1.0);
+					Draw.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
 					break;
 				// Fade; Slowly Fades
 				case "fade":
 					t2 = easing("easeOutCubic", t);
-					DRAW.setColor(0, 0, 0, t2);
-					DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
+					Draw.setColor(0, 0, 0, t2);
+					Draw.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
 					break;
 				// Wipe; Screen Wipe
 				case "wipeRight":
@@ -58,25 +57,25 @@ const Transition = (function() {
 					if (direction == "in") {
 						t2 = easing("easeOutQuad", t);
 					}
-					DRAW.setColor(0, 0, 0, 1.0);
-					DRAW.rectangle(0, 0, canvasWidth*t2, canvasHeight, "fill");
+					Draw.setColor(0, 0, 0, 1.0);
+					Draw.rectangle(0, 0, canvasWidth*t2, canvasHeight, "fill");
 					break;
 				case "wipeLeft":
 					t2 = 1-easing("easeInQuad", t);
 					if (direction == "in") {
 						t2 = 1-easing("easeOutQuad", t);
 					}
-					DRAW.setColor(0, 0, 0, 1.0);
-					DRAW.rectangle(canvasWidth*t2, 0, canvasWidth-canvasWidth*t2, canvasHeight, "fill");
+					Draw.setColor(0, 0, 0, 1.0);
+					Draw.rectangle(canvasWidth*t2, 0, canvasWidth-canvasWidth*t2, canvasHeight, "fill");
 					break;
 				// Iris; Black circle closes  around a point
 				case "iris":
 					t2 = easing("easeOutCubic", t);
-					DRAW.setColor(0, 0, 0, 1);
-					//DRAW.rectangle(0, 0, 1024, 580, "fill")
+					Draw.setColor(0, 0, 0, 1);
+					//Draw.rectangle(0, 0, 1024, 580, "fill")
 
-					DRAW.setLineWidth(t2*canvasWidth*2);
-					DRAW.circle(properties[0], properties[1], canvasWidth, "line");
+					Draw.setLineWidth(t2*canvasWidth*2);
+					Draw.circle(properties[0], properties[1], canvasWidth, "line");
 					break;
 				}
 			}

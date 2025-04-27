@@ -2,6 +2,7 @@
 const {io, playerList} = require("../server.js");
 const {TimedEvents} = require("./timedevents.js");
 const {PetRaceClass} = require("./petrace.js");
+const {hasBadWords} = require("./filter.js");
 
 const PetRace = new PetRaceClass();
 
@@ -150,7 +151,11 @@ function listenToClient(socket) {
 	socket.on("chat", (text) => {
 		let playerData = playerList[socket.id];
 		if (playerData) {
-			// TODO: Word filter
+			// Word filter
+			if (hasBadWords(text)) {
+				return false;
+			}
+			// Text looks good, send
 			socket.broadcast.emit("chat", socket.id, text); // Use this to exlude the sender
 		}
 	});
@@ -160,7 +165,12 @@ function listenToClient(socket) {
 		let playerData = playerList[socket.id];
 		if (playerData) {
 			playerData.profile = profile;
-			playerData.name = profile.name;
+			let name = profile.name;
+			if (hasBadWords(name)) { // Word filter
+				name = "Chicken";
+				profile.name = name;
+			}
+			playerData.name = name;
 			socket.broadcast.emit("updateProfile", socket.id, profile);
 		}
 	});

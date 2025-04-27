@@ -1,15 +1,13 @@
 // Rendering functions for a 'webgl' canvas.
 
-import { ctx, canvasWidth, canvasHeight } from "./canvas.js";
-
 class Render {
-	constructor (canvas) {
+	constructor (canvas, width, height) {
 		this.c = false;
 		if (canvas) {
 			this.setCanvas(canvas);
 		}
-		this.w = canvasWidth;
-		this.h = canvasHeight;
+		this.w = width;
+		this.h = height;
 
 		this.color = [1,1,1,1];
 		this.font = false;
@@ -72,7 +70,7 @@ class Render {
 		// Create buffer
 		this.vertexBuffer = this.c.createBuffer();
 		this.textureCoordBuffer = this.c.createBuffer();
-		//this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(this.verts), this.c.STATIC_DRAW);
+		//this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(this.verts), this.c.STATIC_renderer);
 
 		// Define the values for u_canvasWidth and u_canvasHeight
 		this.c.uniform1f(this.c.getUniformLocation(this.shaderProgram, "u_canvasWidth"), this.w);
@@ -95,9 +93,9 @@ class Render {
 
 		this.clear(0, 0, 0, 1.0);
 
-		// Draw the rectangle
+		// renderer the rectangle
 		//this.setColor(255,0,0,1.0)
-		//this.c.drawArrays(this.c.TRIANGLE_STRIP, 0, 4);
+		//this.c.rendererArrays(this.c.TRIANGLE_STRIP, 0, 4);
 	}
 
 	isPowerOf2(value) {
@@ -114,13 +112,13 @@ class Render {
 		this.c.clear(this.c.COLOR_BUFFER_BIT);
 	}
 
-	// Set color of next thing that will be drawn
+	// Set color of next thing that will be renderern
 	setColor(r,g,b,a=1.0) {
 		this.color = [r/255.0,g/255.0,b/255.0,a];
 		this.c.uniform4fv(this.c.getUniformLocation(this.shaderProgram, "u_color"), this.color);
 	}
 
-	// Draw image
+	// renderer image
 	image(img, anim, x = 0, y = 0, r = 0, sx = 1, sy = 1, ox = 0, oy = 0) {
 		//this.c.bindTexture(this.c.TEXTURE_2D, imageTexture);
 
@@ -150,21 +148,21 @@ class Render {
 		];
 		this.c.uniform1i(this.useTextureUniform, 1); // Use texture
 		this.c.bindBuffer(this.c.ARRAY_BUFFER, this.vertexBuffer);
-		this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_DRAW);
+		this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_renderer);
 		this.c.bindBuffer(this.c.ARRAY_BUFFER, this.textureCoordBuffer);
-		this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(textureCoordinates), this.c.STATIC_DRAW);
+		this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(textureCoordinates), this.c.STATIC_renderer);
 		
 		this.c.activeTexture(this.c.TEXTURE0);
 		this.c.bindTexture(this.c.TEXTURE_2D, img.texture);
 		this.c.uniform1i(this.c.getUniformLocation(this.shaderProgram, "u_sampler"), 0);
 
-		this.c.drawArrays(this.c.TRIANGLE_STRIP, 0, 4);
+		this.c.rendererArrays(this.c.TRIANGLE_STRIP, 0, 4);
 
 		// temporarily render rectangle
 		//this.rectangle(x-qw*ox*sx, y-qh*oy*sy, qw*sx, qh*sy, "fill");
 	}
 
-	// Draw primitives
+	// renderer primitives
 	rectangle(x, y, w, h, fill) {
 		if (fill == "line") {
 			let vertices = [
@@ -177,8 +175,8 @@ class Render {
 
 			this.c.uniform1i(this.useTextureUniform, 0); // Don't use texture
 			this.c.bindBuffer(this.c.ARRAY_BUFFER, this.vertexBuffer);
-			this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_DRAW);
-			this.c.drawArrays(this.c.LINE_STRIP, 0, 5);
+			this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_renderer);
+			this.c.rendererArrays(this.c.LINE_STRIP, 0, 5);
 		} else {
 			let vertices = [
 				x, y,
@@ -189,8 +187,8 @@ class Render {
 
 			this.c.uniform1i(this.useTextureUniform, 0); // Don't use texture
 			this.c.bindBuffer(this.c.ARRAY_BUFFER, this.vertexBuffer);
-			this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_DRAW);
-			this.c.drawArrays(this.c.TRIANGLE_STRIP, 0, 4);
+			this.c.bufferData(this.c.ARRAY_BUFFER, new Float32Array(vertices), this.c.STATIC_renderer);
+			this.c.rendererArrays(this.c.TRIANGLE_STRIP, 0, 4);
 		}
 	}
 
@@ -202,7 +200,7 @@ class Render {
 
 	}
 	
-	// Draw polygon given [x,y,x,y,...], fill ("fill" or "line")
+	// renderer polygon given [x,y,x,y,...], fill ("fill" or "line")
 	polygon(points, fill) {
 
 	}
@@ -248,6 +246,11 @@ class Render {
 	}
 }
 
+let renderer;
+function setRenderer(rendererObject) {
+	renderer = rendererObject;
+}
+
 class RenderImage {
 	constructor (src, asyncFunc) {
 		this.image = new Image();
@@ -256,37 +259,37 @@ class RenderImage {
 		this.w = 1;
 		this.h = 1;
 
-		this.texture = DRAW.c.createTexture();
-		DRAW.c.bindTexture(DRAW.c.TEXTURE_2D, this.texture);
+		this.texture = renderer.c.createTexture();
+		renderer.c.bindTexture(renderer.c.TEXTURE_2D, this.texture);
 		const level = 0;
-		const internalFormat = DRAW.c.RGBA;
+		const internalFormat = renderer.c.RGBA;
 		const width = 1;
 		const height = 1;
 		const border = 0;
-		const srcFormat = DRAW.c.RGBA;
-		const srcType = DRAW.c.UNSIGNED_BYTE;
+		const srcFormat = renderer.c.RGBA;
+		const srcType = renderer.c.UNSIGNED_BYTE;
 		const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
-		DRAW.c.texImage2D(DRAW.c.TEXTURE_2D, level, internalFormat,
+		renderer.c.texImage2D(renderer.c.TEXTURE_2D, level, internalFormat,
 			width, height, border, srcFormat, srcType,
 			pixel);
 
 		this.image.onload = () => {
-			DRAW.c.bindTexture(DRAW.c.TEXTURE_2D, this.texture);
-			DRAW.c.texImage2D(DRAW.c.TEXTURE_2D, level, internalFormat,
+			renderer.c.bindTexture(renderer.c.TEXTURE_2D, this.texture);
+			renderer.c.texImage2D(renderer.c.TEXTURE_2D, level, internalFormat,
 				srcFormat, srcType, this.image);
 		
 			// WebGL1 has different requirements for power of 2 images
 			// vs non power of 2 images so check if the image is a
 			// power of 2 in both dimensions.
-			// if (DRAW.isPowerOf2(image.width) && DRAW.isPowerOf2(image.height)) {
+			// if (renderer.isPowerOf2(image.width) && renderer.isPowerOf2(image.height)) {
 			//    // Yes, it's a power of 2. Generate mips.
-			//    DRAW.c.generateMipmap(DRAW.c.TEXTURE_2D);
+			//    renderer.c.generateMipmap(renderer.c.TEXTURE_2D);
 			// } else {
 			// No, it's not a power of 2. Turn off mips and set
 			// wrapping to clamp to edge
-			DRAW.c.texParameteri(DRAW.c.TEXTURE_2D, DRAW.c.TEXTURE_WRAP_S, DRAW.c.CLAMP_TO_EDGE);
-			DRAW.c.texParameteri(DRAW.c.TEXTURE_2D, DRAW.c.TEXTURE_WRAP_T, DRAW.c.CLAMP_TO_EDGE);
-			DRAW.c.texParameteri(DRAW.c.TEXTURE_2D, DRAW.c.TEXTURE_MIN_FILTER, DRAW.c.LINEAR);
+			renderer.c.texParameteri(renderer.c.TEXTURE_2D, renderer.c.TEXTURE_WRAP_S, renderer.c.CLAMP_TO_EDGE);
+			renderer.c.texParameteri(renderer.c.TEXTURE_2D, renderer.c.TEXTURE_WRAP_T, renderer.c.CLAMP_TO_EDGE);
+			renderer.c.texParameteri(renderer.c.TEXTURE_2D, renderer.c.TEXTURE_MIN_FILTER, renderer.c.LINEAR);
 			//}
 
 			this.w = this.image.width;
@@ -319,3 +322,5 @@ class RenderFont {
 		this.size = size || 20;
 	}
 }
+
+export { Render, RenderImage, RenderFont, setRenderer };

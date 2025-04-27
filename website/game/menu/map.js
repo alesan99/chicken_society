@@ -1,17 +1,11 @@
 // Map menu; Displays map and allows quick travel (?)
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
-import {canvasWidth, canvasHeight} from "../engine/render.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
-import {ItemGrid} from "../gui/itemgrid.js";
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
-import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
-import QuestSystem from "../quests.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 
 MENUS["mapMenu"] = new class extends Menu {
 	//Initialize
@@ -55,25 +49,25 @@ MENUS["mapMenu"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 
 		// Map itself
-		DRAW.setColor(255, 255, 255, scale);
-		DRAW.image(IMG.map, SPRITE.map.getFrame(0,0), this.x+this.mapX, this.y+this.mapY);
+		Draw.setColor(255, 255, 255, scale);
+		Draw.image(IMG.map, SPRITE.map.getFrame(0,0), this.x+this.mapX, this.y+this.mapY);
 		if (WORLD.areaMapLocation) {
 			let l = WORLD.areaMapLocation;
-			DRAW.image(IMG.map, SPRITE.mapIcons.getFrame(Math.floor(this.iconAnimationTimer),0), this.x+this.mapX+l[0], this.y+this.mapY+l[1], 0, 1,1, 0.5,0.5);
+			Draw.image(IMG.map, SPRITE.mapIcons.getFrame(Math.floor(this.iconAnimationTimer),0), this.x+this.mapX+l[0], this.y+this.mapY+l[1], 0, 1,1, 0.5,0.5);
 		}
 
 		// Map Border
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setLineWidth(2);
-		DRAW.rectangle(this.x+this.mapX+1, this.y+this.mapY+1, SPRITE.map.w-2, SPRITE.map.h-2, "line");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setLineWidth(2);
+		Draw.rectangle(this.x+this.mapX+1, this.y+this.mapY+1, SPRITE.map.w-2, SPRITE.map.h-2, "line");
 
 		// Text
-		DRAW.setColor(255,255,255, scale);
-		DRAW.setFont(FONT.caption, 3);
-		DRAW.text(WORLD.areaName, 512, 152, "center");
+		Draw.setColor(255,255,255, scale);
+		Draw.setFont(FONT.caption, 3);
+		Draw.text(WORLD.areaName, 512, 152, "center");
 
 		// Render all buttons
 		this.drawButtons();

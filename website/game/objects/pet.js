@@ -1,19 +1,12 @@
 // Pet object; Follows player.
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {NETPLAY, CURSOR} from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import Shape from "../shape.js";
-import { canvasWidth, canvasHeight } from "../engine/render.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "../world.js";
 import { Animation } from "../engine/sprite.js";
-import QuestSystem from "../quests.js";
-import DialogueSystem from "../dialogue.js";
-import AudioSystem from "../engine/audio.js";
-import Transition from "../transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
 import { getMousePos } from "../engine/input.js";
-import { vec2Unit } from "../lib/vec2.js";
 import {PhysicsObject,Character,Player,NPC,Trigger,Wall,Warp,Furniture,Particle} from "./objects.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 
@@ -202,16 +195,16 @@ export default class Pet extends PhysicsObject {
 			return false;
 		}
 
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.shadow, null, drawX, drawY, 0, this.scale, this.scale, 0.5, 1);
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.shadow, null, drawX, drawY, 0, this.scale, this.scale, 0.5, 1);
 
 		// Pet graphic
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY, 0, this.flip*this.scale, this.scale, 0.5, 1);
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(this.image, this.anim.getFrame(), drawX, drawY, 0, this.flip*this.scale, this.scale, 0.5, 1);
 
 		// Name
-		DRAW.setFont(FONT.nametag, 3);
-		DRAW.text(this.name, drawX, Math.floor(drawY)+20, "center");
+		Draw.setFont(FONT.nametag, 3);
+		Draw.text(this.name, drawX, Math.floor(drawY)+20, "center");
 	}
 
 	checkMouseOver() {

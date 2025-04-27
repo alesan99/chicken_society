@@ -64,7 +64,7 @@ const QuestSystem = (function() {
 						if (!quest.hidden) {
 							Notify.new(quest.description, 8);
 							Notify.new("You started the quest: " + quest.name, 8);
-							MENUS["chatMenu"].notification("quest", true);
+							MENUS["chatMenu"].notification("quests", true);
 						}
 						// Save default progress
 						// TODO: There should be a SaveData function for this, saving progress will be more complicated when the database is implemented
