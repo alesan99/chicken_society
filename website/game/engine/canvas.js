@@ -6,7 +6,8 @@ var canvasContainer = document.getElementById("canvas-container");
 var ctx; //canvas.getContext("2d")
 
 // Dimensions of canvas. Look at index.html to see actual dimensions
-const canvasWidth = canvas.width; const canvasHeight = canvas.height;
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
 const canvasPadding = 6;
 var canvasScale = 1;
 

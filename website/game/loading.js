@@ -2,7 +2,7 @@
 
 import { DRAW } from "./main.js";
 import { IMG, SPRITE } from "./assets.js";
-import { canvasWidth, canvasHeight } from "./engine/render.js";
+import { canvasWidth, canvasHeight } from "./engine/canvas.js";
 
 const LoadingScreen = (function() {
 	// Loading

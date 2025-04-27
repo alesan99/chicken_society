@@ -2,15 +2,11 @@
 
 import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
-import {canvasWidth, canvasHeight} from "../engine/render.js";
+import {canvasWidth, canvasHeight} from "../engine/canvas.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
-import {ItemGrid} from "../gui/itemgrid.js";
-import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {PLAYER, PLAYER_CONTROLLER, DEBUGPHYSICS, setDebugPhysics} from "../world.js";
-import Transition from "../transition.js";
-import AudioSystem from "../engine/audio.js";
 import {executeCommand} from "../commands.js";
 
 MENUS["chatMenu"] = new class extends Menu {

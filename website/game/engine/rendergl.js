@@ -1,15 +1,13 @@
 // Rendering functions for a 'webgl' canvas.
 
-import { ctx, canvasWidth, canvasHeight } from "./canvas.js";
-
 class Render {
-	constructor (canvas) {
+	constructor (canvas, width, height) {
 		this.c = false;
 		if (canvas) {
 			this.setCanvas(canvas);
 		}
-		this.w = canvasWidth;
-		this.h = canvasHeight;
+		this.w = width;
+		this.h = height;
 
 		this.color = [1,1,1,1];
 		this.font = false;

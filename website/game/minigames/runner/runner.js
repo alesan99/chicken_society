@@ -10,7 +10,8 @@ import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, re
 import { MENUS } from "../../menu.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js";
 import { NETPLAY } from "../../main.js";
-import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js";
+import { RenderImage } from "../../engine/render.js";
+import { canvasWidth, canvasHeight } from "../../engine/canvas.js";
 import { Sprite, Animation } from "../../engine/sprite.js";
 import Shape from "../../shape.js";
 import AudioSystem from "../../engine/audio.js";

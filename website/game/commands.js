@@ -1,9 +1,7 @@
 import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
-import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "./savedata.js";
 import {PLAYER, PLAYER_CONTROLLER, DEBUGPHYSICS, setDebugPhysics, MINIGAME} from "./world.js";
 import QuestSystem from "./quests.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "./items.js";
 import AudioSystem from "./engine/audio.js";
 import Notify from "./gui/notification.js";
 import {setState} from "./state.js";

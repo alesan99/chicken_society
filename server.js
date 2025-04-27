@@ -89,6 +89,8 @@ if (useDB) {
 			)`;
 			con.query(createTableQuery, (createError) => {
 				if (createError) {
+					console.error("Error creating user table:", createError);
+					return;
 				}
 				console.log("User table created");
 			});

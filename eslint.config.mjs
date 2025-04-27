@@ -1,8 +1,10 @@
 import js from "@eslint/js";
 import globals from "globals";
 import json from "@eslint/json";
+/*eslint-disable import/no-unresolved*/
 import { defineConfig } from "eslint/config";
 import stylisticJs from "@stylistic/eslint-plugin-js";
+import importPlugin from "eslint-plugin-import";
 
 export default defineConfig([
 	// General config
@@ -19,7 +21,8 @@ export default defineConfig([
 	{
 		files: ["**/*.{js,mjs,cjs}"],
 		plugins: {
-			"@stylistic/js": stylisticJs
+			"@stylistic/js": stylisticJs,
+			"import": importPlugin,
 		},
 		rules: {
 			"no-unused-vars": "off",
@@ -32,6 +35,10 @@ export default defineConfig([
 			"@stylistic/js/no-extra-semi": "warn",
 			"@stylistic/js/no-trailing-spaces": ["warn", { skipBlankLines: true }],
 			"@stylistic/js/no-floating-decimal": "warn",
+			"import/no-unresolved": "error",
+			"import/named": "error",
+			"import/default": "error",
+			"import/namespace": "error",
 		},
 	},
 

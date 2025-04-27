@@ -1,5 +1,5 @@
 // Main Game Loop; This is the first file that initializes the game.
-import {canvas, ctx} from "./engine/canvas.js";
+import {canvas, ctx, canvasWidth, canvasHeight} from "./engine/canvas.js";
 import AudioSystem from "./engine/audio.js";
 import Netplay from "./netplay/client.js";
 var NETPLAY;
@@ -25,7 +25,7 @@ import { handleUrl } from "./netplay/urls.js";
 
 // Initialize game and load assets
 function gameLoad() {
-	DRAW = new Render(ctx);
+	DRAW = new Render(ctx, canvasWidth, canvasHeight);
 	loadGameAssets();
 
 	LoadingScreen.start(() => {

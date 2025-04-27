@@ -3,7 +3,7 @@
 import { MINIGAMES } from "../minigame.js";
 import { DRAW, SAVEDATA } from "../../main.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS } from "../../assets.js";
-import { canvasWidth, canvasHeight, RenderImage } from "../../engine/render.js";
+import { canvasWidth, canvasHeight } from "../../engine/canvas.js";
 
 if (true) { // Set local scope
 

@@ -1,6 +1,6 @@
 // Transitions; Cover the entire screen with an animation, when the animation ends it calls a given function
 
-import { canvasWidth, canvasHeight } from "./engine/render.js";
+import { canvasWidth, canvasHeight } from "./engine/canvas.js";
 import { DRAW } from "./main.js";
 
 const Transition = (function() {

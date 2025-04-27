@@ -286,9 +286,7 @@ class TextField extends Button {
 
 	clickRelease() {
 		super.clickRelease();
-		if (this.hover) {
-
-		} else {
+		if (!this.hover) {
 			// Lazy hack
 			// Allows field to be unselected when a different button is pressed
 			if (this.typing && this.textAction) {

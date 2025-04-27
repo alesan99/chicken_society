@@ -1,7 +1,5 @@
 // Audio system
-// Controls music playback
-
-// Asset loading
+// Controls music playback and manages audio assets
 
 const AudioSystem = (function() {
 	let currentMusic = false;

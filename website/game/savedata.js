@@ -2,14 +2,10 @@
 // SaveData: Stores all player data & game progress, including private data (Excluding login information)
 // Profile: Stores only chicken information; this is information that's always accessible to other players
 
-import {IMG, SPRITE, ANIM, FONT, ITEMS} from "./assets.js";
-import {SAVEDATA} from "./main.js";
-import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS, CHAT } from "./world.js";
+import { ITEMS } from "./assets.js";
+import { SAVEDATA } from "./main.js";
+import { CHAT } from "./world.js";
 import QuestSystem from "./quests.js";
-import AudioSystem from "./engine/audio.js";
-import DialogueSystem from "./dialogue.js";
-import Transition from "./transition.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "./items.js";
 
 function makeSaveData() {
 	let saveData = {
