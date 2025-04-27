@@ -6,6 +6,10 @@ const AudioSystem = (function() {
 
 	let sounds = [];
 	let music = [];
+
+	let masterVolume = 1.0;
+	let musicVolume = 1.0;
+	let sfxVolume = 1.0;
 	
 	const functions = {
 		newMusic(path) {
@@ -31,7 +35,7 @@ const AudioSystem = (function() {
 		playMusic(src) {
 			this.stopMusic();
 			src.rate(1.0);
-			src.volume(1.0); // Reset if it was faded (i wish i were faded)
+			src.volume(musicVolume); // Reset if it was faded (i wish i were faded)
 			src.play();
 			currentMusic = src;
 		},
@@ -51,7 +55,7 @@ const AudioSystem = (function() {
 
 		setMusicSpeed(speed) {
 			if (currentMusic) {
-				currentMusic.rate(Math.min(Math.max(speed, 0.1), 4.0));
+				currentMusic.rate(Math.min(Math.max(speed, 0.5), 4.0));
 			}
 		},
 
@@ -63,6 +67,7 @@ const AudioSystem = (function() {
 		},
 
 		playSound(src) {
+			src.volume(sfxVolume);
 			src.play();
 		},
 
@@ -70,9 +75,9 @@ const AudioSystem = (function() {
 			src.stop();
 		},
 
-		fadeOutMusic(time=1) {
+		fadeOutMusic(time=0.5) {
 			if (currentMusic) {
-				currentMusic.fade(1.0, 0.0, 500);
+				currentMusic.fade(musicVolume, 0.0, time*1000);
 			}
 		},
 
@@ -81,8 +86,15 @@ const AudioSystem = (function() {
 			// TODO: Stop all sound effects
 		},
 
-		setVolume(vol) {
+		setVolume(vol, musicVol, sfxVol) {
 			Howler.volume(vol);
+			masterVolume = vol;
+			if (musicVol !== undefined) {
+				musicVolume = musicVol;
+			}
+			if (sfxVol !== undefined) {
+				sfxVolume = sfxVol;
+			}
 		}
 	};
 	

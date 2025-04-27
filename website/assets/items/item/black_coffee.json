@@ -10,7 +10,7 @@
         [30,30]
     ],
 
-    "statusEffect": "caffinated",
+    "statusEffect": "caffeinated",
     "statusEffectChance": 1.0,
     "statusEffectDuration": 60.0,
 

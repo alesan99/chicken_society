@@ -7,6 +7,7 @@ import { SAVEDATA } from "./main.js";
 import { CHAT } from "./world.js";
 import { MENUS } from "./menu.js";
 import QuestSystem from "./quests.js";
+import AudioSystem from "./engine/audio.js";
 
 function makeSaveData() {
 	let saveData = {
@@ -59,6 +60,13 @@ function makeSaveData() {
 		highscores: {
 			runner: 0,
 			eggs: 0
+		},
+
+		// Settings
+		settings: {
+			volume: 0.25,
+			musicVolume: 1.0,
+			sfxVolume: 1.0
 		}
 	};
 
@@ -309,4 +317,12 @@ function HEXtoRGB(hex) {
 	return [red, green, blue];
 }
 
-export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues};
+function applySettings() {
+	AudioSystem.setVolume(
+		SAVEDATA.settings.volume,
+		SAVEDATA.settings.musicVolume,
+		SAVEDATA.settings.sfxVolume
+	);
+}
+
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues, applySettings};

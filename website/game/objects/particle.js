@@ -2,7 +2,7 @@
 // This is a small little animation that briefly appears in the world
 // This can be something like a gunshot or dust cloud
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import { Animation } from "../engine/sprite.js";
 
 export default class Particle {
@@ -28,7 +28,7 @@ export default class Particle {
 
 	draw() {
 		// Draw the particle
-		DRAW.image(this.image, this.anim.getFrame(), this.x,this.y, 0, 1,1, 0.5,0.5);
+		Draw.image(this.image, this.anim.getFrame(), this.x,this.y, 0, 1,1, 0.5,0.5);
 	}
 
 	destroy() {

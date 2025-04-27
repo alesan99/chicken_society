@@ -1,6 +1,7 @@
 // Users menu; Displays all connected users
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
@@ -121,10 +122,10 @@ MENUS["usersMenu"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 
-		DRAW.setColor(255,255,255, scale);
-		DRAW.rectangle(this.listX, this.listY, this.listW, this.listH, 1.0, 0, 0, 0, 0.5);
+		Draw.setColor(255,255,255, scale);
+		Draw.rectangle(this.listX, this.listY, this.listW, this.listH, 1.0, 0, 0, 0, 0.5);
 		
 		// Draw list
 		let displayStart = Math.floor(this.listScroll);
@@ -146,35 +147,35 @@ MENUS["usersMenu"] = new class extends Menu {
 
 			// Selection?
 			if (this.listSelection == i) {
-				DRAW.setColor(220,220,240, scale);
-				DRAW.rectangle(this.listX, y, this.listW, this.listEntryH, "fill");
+				Draw.setColor(220,220,240, scale);
+				Draw.rectangle(this.listX, y, this.listW, this.listEntryH, "fill");
 			}
 			
 			// Seperator line
-			DRAW.setColor(220,220,230, scale);
-			DRAW.setLineWidth(2);
-			DRAW.line(this.listX, y+this.listEntryH, this.listX+this.listW, y+this.listEntryH);
+			Draw.setColor(220,220,230, scale);
+			Draw.setLineWidth(2);
+			Draw.line(this.listX, y+this.listEntryH, this.listX+this.listW, y+this.listEntryH);
 
 			// Name
-			DRAW.setFont(FONT.caption);
-			DRAW.setColor(0,0,0, scale);
-			DRAW.text(name, this.listX+10, y+this.listEntryH-4, "left");
+			Draw.setFont(FONT.caption);
+			Draw.setColor(0,0,0, scale);
+			Draw.text(name, this.listX+10, y+this.listEntryH-4, "left");
 		}
-		DRAW.setColor(244, 188, 105, 1.0); // Cover up scrolling past list window
-		//DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill") // Cover top
-		//DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill") // Cover bottom
-		DRAW.image(IMG.menu, [20,24, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH); // Cover top
-		DRAW.image(IMG.menu, [20,320, this.listW,this.listEntryH], this.listX, this.listY+this.listH); // Cover bottom
+		Draw.setColor(244, 188, 105, 1.0); // Cover up scrolling past list window
+		//Draw.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill") // Cover top
+		//Draw.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill") // Cover bottom
+		Draw.image(IMG.menu, [20,24, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH); // Cover top
+		Draw.image(IMG.menu, [20,320, this.listW,this.listEntryH], this.listX, this.listY+this.listH); // Cover bottom
 
 		// Text
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.text("Connected Players", this.x+20, this.y+35, "left");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.text("Connected Players", this.x+20, this.y+35, "left");
 
 		// Indent shadow
-		DRAW.setColor(80,80,120, scale*0.3);
-		DRAW.setLineWidth(4);
-		DRAW.line(this.listX+2,this.listY+this.listH, this.listX+2,this.listY+2, this.listX+this.listW,this.listY+2);
+		Draw.setColor(80,80,120, scale*0.3);
+		Draw.setLineWidth(4);
+		Draw.line(this.listX+2,this.listY+this.listH, this.listX+2,this.listY+2, this.listX+this.listW,this.listY+2);
 
 		// Render all buttons
 		this.drawButtons();

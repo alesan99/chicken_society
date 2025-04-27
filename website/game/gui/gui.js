@@ -1,4 +1,5 @@
-import { DRAW, CURSOR } from "../main.js";
+import { CURSOR } from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import { FONT } from "../assets.js";
 import { getMousePos } from "../engine/input.js";
 import { ToolTip } from "./tooltip.js";
@@ -105,45 +106,45 @@ class Button {
 			} else if (this.hover == true){
 				frame = 1;
 			}
-			DRAW.setColor(255,255,255,1);
-			DRAW.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
+			Draw.setColor(255,255,255,1);
+			Draw.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
 		} else {
 			// Render button with basic rectangles if no image was provided
 			if (this.disabled == true) {
-				DRAW.setColor(208,125,68,1); //darkest
+				Draw.setColor(208,125,68,1); //darkest
 			} else if (this.held == true){
-				DRAW.setColor(216,151,91,1); //dark
+				Draw.setColor(216,151,91,1); //dark
 			} else if (this.hover == true){
-				DRAW.setColor(248,222,187,1); //medium
+				Draw.setColor(248,222,187,1); //medium
 			} else if (this.selected == true){
-				DRAW.setColor(242,161,99,1); //dark
+				Draw.setColor(242,161,99,1); //dark
 			} else {
-				DRAW.setColor(242,199,140,1); //light
+				Draw.setColor(242,199,140,1); //light
 			}
 			
-			DRAW.rectangle(this.x, this.y, this.w, this.h);
-			DRAW.setColor(168, 85, 38, 1);
-			DRAW.setLineWidth(2);
-			DRAW.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
+			Draw.rectangle(this.x, this.y, this.w, this.h);
+			Draw.setColor(168, 85, 38, 1);
+			Draw.setLineWidth(2);
+			Draw.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
 
-			DRAW.setColor(255,255,255, 0.4);
-			DRAW.line(this.x+3, this.y+4, this.x+this.w-3, this.y+4); // Highlight
+			Draw.setColor(255,255,255, 0.4);
+			Draw.line(this.x+3, this.y+4, this.x+this.w-3, this.y+4); // Highlight
 		}
 
 		if (this.icon) {
 			// Icon
-			DRAW.setColor(255,255,255,1);
-			DRAW.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
+			Draw.setColor(255,255,255,1);
+			Draw.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
 		} else if (this.label) {
 			// Label
-			DRAW.setFont(FONT.guiLabel);
-			DRAW.setColor(this.textColor[0], this.textColor[1], this.textColor[2],1);
+			Draw.setFont(FONT.guiLabel);
+			Draw.setColor(this.textColor[0], this.textColor[1], this.textColor[2],1);
 			if (this.labelJustify == "center") {
-				DRAW.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify);
+				Draw.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify);
 			} else if (this.labelJustify == "left") {
-				DRAW.text(this.label, this.x+10, this.y+this.h/2+7, this.labelJustify);
+				Draw.text(this.label, this.x+10, this.y+this.h/2+7, this.labelJustify);
 			} else if (this.labelJustify == "right") {
-				DRAW.text(this.label, this.x+this.w-10, this.y+this.h/2+7, this.labelJustify);
+				Draw.text(this.label, this.x+this.w-10, this.y+this.h/2+7, this.labelJustify);
 			}
 		}
 
@@ -171,33 +172,33 @@ class TextField extends Button {
 
 	draw() {
 		if (this.held == true){
-			DRAW.setColor(214,214,230,1); //dark
+			Draw.setColor(214,214,230,1); //dark
 		} else if (this.hover == true){
-			DRAW.setColor(255,255,255,1); //medium
+			Draw.setColor(255,255,255,1); //medium
 		} else {
-			DRAW.setColor(245,245,246,1); //light
+			Draw.setColor(245,245,246,1); //light
 		}
 		
-		DRAW.rectangle(this.x, this.y, this.w, this.h);
-		DRAW.setColor(90,90,110, 1);
-		DRAW.setLineWidth(2);
-		DRAW.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
+		Draw.rectangle(this.x, this.y, this.w, this.h);
+		Draw.setColor(90,90,110, 1);
+		Draw.setLineWidth(2);
+		Draw.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
 
-		DRAW.setColor(255,255,255, 0.4);
-		DRAW.line(this.x+3, this.y+this.h-4, this.x+this.w-3, this.y+this.h-4); // Highlight
+		Draw.setColor(255,255,255, 0.4);
+		Draw.line(this.x+3, this.y+this.h-4, this.x+this.w-3, this.y+this.h-4); // Highlight
 
 		// Text input
-		DRAW.setFont(FONT.guiLabel);
-		DRAW.setColor(10,10,14,1);
+		Draw.setFont(FONT.guiLabel);
+		Draw.setColor(10,10,14,1);
 		let text = this.text;
 
-		DRAW.text(text, this.x+10, this.y+this.h/2+7, "left");
+		Draw.text(text, this.x+10, this.y+this.h/2+7, "left");
 		
 		// Cursor
 		if (this.typing && this.blinkTimer < 0.5) {
 			// Show cursor only when typing
-			let cursorX = this.x + 10 + DRAW.getTextWidth(text.slice(0, this.cursor)) - 2;
-			DRAW.text("|", cursorX, this.y+this.h/2+5, "left");
+			let cursorX = this.x + 10 + Draw.getTextWidth(text.slice(0, this.cursor)) - 2;
+			Draw.text("|", cursorX, this.y+this.h/2+5, "left");
 		}
 	}
 
@@ -233,8 +234,8 @@ class TextField extends Button {
 			this.blinkTimer = 0;
 		} else if (key.length === 1) {
 			// Add text
-			DRAW.setFont(FONT.guiLabel);
-			let textWidth = DRAW.getTextWidth(this.text + key);
+			Draw.setFont(FONT.guiLabel);
+			let textWidth = Draw.getTextWidth(this.text + key);
 			if (textWidth < this.w-20) { // Only add character if it fits within box
 				// Insert character at cursor location
 				this.text = this.text.slice(0, this.cursor) + key + this.text.slice(this.cursor);
@@ -261,11 +262,11 @@ class TextField extends Button {
 			let [mouseX, mouseY] = getMousePos();
 			let mouseRX = mouseX - this.x - 10; // Relative x
 			let text = this.text;
-			DRAW.setFont(FONT.guiLabel);
+			Draw.setFont(FONT.guiLabel);
 			let segW = 0; // Width of current segment (left-to-right)
 			for (let i=0; i<=text.length; i++) {
 				// Okay, we go through every single letter of the text in the box
-				let charW = DRAW.getTextWidth(text[i]);
+				let charW = Draw.getTextWidth(text[i]);
 				segW += charW;
 				// At each letter, we see if the mouse is behind the middle point of the letter
 				// If it is, the cursor is put behind that letter
@@ -347,8 +348,8 @@ class ScrollBar {
 	}
 	draw() {
 		// Scroll Range background
-		DRAW.setColor(168, 85, 38, 1);
-		DRAW.rectangle(this.x, this.y+this.buttonSize, this.w, this.h-this.buttonSize*2, "fill");
+		Draw.setColor(168, 85, 38, 1);
+		Draw.rectangle(this.x, this.y+this.buttonSize, this.w, this.h-this.buttonSize*2, "fill");
 
 		// Buttons
 		this.upButton.draw();
@@ -466,19 +467,19 @@ class ColorSlider {
 	draw() {
 		if (this.renderColors) {
 			// Background
-			DRAW.setColor(168, 85, 38, 1);
-			DRAW.rectangle(this.x, this.y, this.w, this.h, "fill");
+			Draw.setColor(168, 85, 38, 1);
+			Draw.rectangle(this.x, this.y, this.w, this.h, "fill");
 			// brute force a gradient
 			for (let i=0; i<this.w; i++) {
 				let color = this.colorFunc(i/this.w);
-				DRAW.setColor(color[0], color[1], color[2], 1);
-				DRAW.rectangle(this.x+i, this.y, 1, this.h, "fill");
+				Draw.setColor(color[0], color[1], color[2], 1);
+				Draw.rectangle(this.x+i, this.y, 1, this.h, "fill");
 			}
 		}
 
 		// Slider
-		DRAW.setColor(255,255,255,1);
-		DRAW.rectangle(this.x+this.w*this.value -2, this.y, 4, this.h, "line");
+		Draw.setColor(255,255,255,1);
+		Draw.rectangle(this.x+this.w*this.value -2, this.y, 4, this.h, "line");
 	}
 }
 

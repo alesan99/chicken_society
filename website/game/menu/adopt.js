@@ -1,12 +1,12 @@
 // Adopt prompt
 // Tells you that equipping a pet will overwrite your current pet
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
 import {Menu, MENUS} from "../menu.js";
-import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
-import {openMenu, closeMenu, getOpenMenu} from "../state.js";
-import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
+import {Button, TextField} from "../gui/gui.js";
+import {openMenu, closeMenu} from "../state.js";
+import {adoptPet} from "../items.js";
 
 MENUS["adoptMenu"] = new class extends Menu {
 	//Initialize
@@ -49,17 +49,17 @@ MENUS["adoptMenu"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.popup, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.image(IMG.popup, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 
 		// Text
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.text("Adopt new pet?", 512, 234, "center");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.text("Adopt new pet?", 512, 234, "center");
 		
-		DRAW.text("This will ERASE your current pet's memory.", 310, 275, "left");
+		Draw.text("This will ERASE your current pet's memory.", 310, 275, "left");
 
 		
-		DRAW.text("Name:", 310, 312, "left");
+		Draw.text("Name:", 310, 312, "left");
 
 		// Render all buttons
 		this.drawButtons();

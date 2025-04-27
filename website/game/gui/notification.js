@@ -1,7 +1,7 @@
 // Notification
 // A little popup that appears at the top of the screen
 
-import { DRAW } from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import { FONT } from "../assets.js";
 
 const Notify = (function() {
@@ -13,8 +13,8 @@ const Notify = (function() {
 	const notifyFunctions = {
 		// Create new notification
 		new(text, duration=3, color=[0,0,0]) {
-			DRAW.setFont(FONT.description);
-			let wrappedText = DRAW.wrapText(text, 300 - 6);
+			Draw.setFont(FONT.description);
+			let wrappedText = Draw.wrapText(text, 300 - 6);
 			notifications.push({
 				text: wrappedText,
 				lines: wrappedText.length,
@@ -48,7 +48,7 @@ const Notify = (function() {
 			if (notifications.length == 0) {
 				return;
 			}
-			DRAW.setFont(FONT.description);
+			Draw.setFont(FONT.description);
 
 			let x = 700;
 			let y = 0;
@@ -74,17 +74,17 @@ const Notify = (function() {
 				}
 
 				// Border
-				DRAW.setColor(255,255,255,0.8*a);
-				DRAW.rectangle(x, y, 300, notifHeight*notification.lines, "fill");
-				DRAW.setLineWidth(1.5);
-				DRAW.setColor(0,0,0,1.0*a);
-				DRAW.rectangle(x, y, 300, notifHeight*notification.lines, "line");
+				Draw.setColor(255,255,255,0.8*a);
+				Draw.rectangle(x, y, 300, notifHeight*notification.lines, "fill");
+				Draw.setLineWidth(1.5);
+				Draw.setColor(0,0,0,1.0*a);
+				Draw.rectangle(x, y, 300, notifHeight*notification.lines, "line");
 
 				// Text
-				DRAW.setColor(notification.color[0],notification.color[1],notification.color[2],1.0*a);
+				Draw.setColor(notification.color[0],notification.color[1],notification.color[2],1.0*a);
 
 				for (let line = 0; line < notification.lines; line++) {
-					DRAW.text(notification.text[line], x +3, y+line*30 + 25, "left");
+					Draw.text(notification.text[line], x +3, y+line*30 + 25, "left");
 				}
 				y += notification.lines*notifHeight;
 			}

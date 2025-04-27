@@ -1,4 +1,4 @@
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "./savedata.js";
 import {PLAYER, PLAYER_CONTROLLER, DEBUGPHYSICS, setDebugPhysics, MINIGAME} from "./world.js";
 import QuestSystem from "./quests.js";

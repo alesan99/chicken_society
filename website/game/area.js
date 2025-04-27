@@ -1,7 +1,7 @@
 // Area
 // logic that controls the background and elements of an area
 
-import { DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR } from "./main.js";
+import { SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR } from "./main.js";
 import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS } from "./world.js";
 import AudioSystem from "./engine/audio.js";
 import { BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM } from "./assets.js";

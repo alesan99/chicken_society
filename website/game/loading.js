@@ -1,6 +1,6 @@
 // Loading Screen
 
-import { DRAW } from "./main.js";
+import { Draw } from "./engine/canvas.js";
 import { IMG, SPRITE } from "./assets.js";
 import { canvasWidth, canvasHeight } from "./engine/canvas.js";
 
@@ -50,14 +50,14 @@ const LoadingScreen = (function() {
 
 		draw() {
 			// Black background
-			DRAW.setColor(0, 0, 0, 1.0);
-			DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
+			Draw.setColor(0, 0, 0, 1.0);
+			Draw.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
 
 			// Rocking egg
 			let rot = eggRotation*0.1;
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(IMG.loading, SPRITE.loading.getFrame(0,0), canvasWidth/2, canvasHeight/2+64, rot, 1,1, 0.5,1.0);
-			DRAW.setColor(255,255,255,1.0);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(IMG.loading, SPRITE.loading.getFrame(0,0), canvasWidth/2, canvasHeight/2+64, rot, 1,1, 0.5,1.0);
+			Draw.setColor(255,255,255,1.0);
 			// Crack
 			let frame = [...SPRITE.loading.getFrame(1,0)]; // copy cracking frame
 			// Find top left of rotated egg
@@ -68,12 +68,12 @@ const LoadingScreen = (function() {
 			let newx = Math.cos(angle+rot)*dist;
 			let newy = Math.sin(angle+rot)*dist;
 			frame[2] = frame[2]*(1-(loadingList.length/loadingListLength)); // slowly show egg cracking
-			DRAW.image(IMG.loading, frame, newx+canvasWidth/2, newy+canvasHeight/2+64, rot, 1,1, 0,0);
+			Draw.image(IMG.loading, frame, newx+canvasWidth/2, newy+canvasHeight/2+64, rot, 1,1, 0,0);
 
 			// Black background
 			if (fade < 1) {
-				DRAW.setColor(0, 0, 0, 1.0-fade);
-				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
+				Draw.setColor(0, 0, 0, 1.0-fade);
+				Draw.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
 			}
 		},
 

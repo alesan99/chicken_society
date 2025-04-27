@@ -1,7 +1,7 @@
 // Quests Menu
 // Lists out all active quests and their steps
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
@@ -153,8 +153,8 @@ MENUS["questsMenu"] = new class extends Menu {
 							let addi = i+1; // Where to add the next entry
 							// Add description
 							if (quest.description) {
-								DRAW.setFont(FONT.caption);
-								let wrappedText = DRAW.wrapText(quest.description, this.listW-20);
+								Draw.setFont(FONT.caption);
+								let wrappedText = Draw.wrapText(quest.description, this.listW-20);
 								for (let j=0; j<wrappedText.length; j++) {
 									let descriptionEntry = {
 										type: "description",
@@ -273,17 +273,17 @@ MENUS["questsMenu"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
-		DRAW.setColor(255,255,255, scale);
-		DRAW.rectangle(this.listX, this.listY, this.listW, this.listH, 1.0, 0, 0, 0, 0.5);
-		DRAW.setColor(180,180,200, scale);
-		DRAW.setLineWidth(4);
-		DRAW.line(this.listX+2,this.listY+this.listH, this.listX+2,this.listY+2, this.listX+this.listW,this.listY+2); // Indent shadow
+		Draw.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.setColor(255,255,255, scale);
+		Draw.rectangle(this.listX, this.listY, this.listW, this.listH, 1.0, 0, 0, 0, 0.5);
+		Draw.setColor(180,180,200, scale);
+		Draw.setLineWidth(4);
+		Draw.line(this.listX+2,this.listY+this.listH, this.listX+2,this.listY+2, this.listX+this.listW,this.listY+2); // Indent shadow
 
 		// Categories
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.text("Quests:", this.x+20, this.y+35, "left");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.text("Quests:", this.x+20, this.y+35, "left");
 
 		// Render list of quests
 		let firstEntryi = Math.floor(this.listScroll);
@@ -291,51 +291,51 @@ MENUS["questsMenu"] = new class extends Menu {
 			let entry = this.list[i];
 			let y = this.listY+this.listEntryH*i - this.listScroll*this.listEntryH;
 			// Seperator line
-			DRAW.setColor(220,220,230, scale);
-			DRAW.setLineWidth(2);
-			DRAW.line(this.listX+4, y+this.listEntryH, this.listX+this.listW, y+this.listEntryH);
+			Draw.setColor(220,220,230, scale);
+			Draw.setLineWidth(2);
+			Draw.line(this.listX+4, y+this.listEntryH, this.listX+this.listW, y+this.listEntryH);
 
 			// Entry contents
 			if (entry) {
 				if (entry.type == "quest") {
 					entry.button.draw();
 					// Draw Checkbox
-					DRAW.setColor(0, 0, 0, scale);
-					DRAW.setFont(FONT.caption);
-					DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line");
+					Draw.setColor(0, 0, 0, scale);
+					Draw.setFont(FONT.caption);
+					Draw.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line");
 					if (entry.complete) {
-						DRAW.text("✔", this.listX+this.listW-30+10, y+20, "center");
+						Draw.text("✔", this.listX+this.listW-30+10, y+20, "center");
 					}
 					if (entry.priority && !entry.complete) {
-						DRAW.text("(!)", this.listX+this.listW-55, y+19, "left");
+						Draw.text("(!)", this.listX+this.listW-55, y+19, "left");
 					}
 				} else if (entry.type == "description") {
-					DRAW.setColor(80, 80, 85, scale);
-					DRAW.setFont(FONT.caption);
-					DRAW.text(entry.text, this.listX+10, y+this.listEntryH-4, "left");
+					Draw.setColor(80, 80, 85, scale);
+					Draw.setFont(FONT.caption);
+					Draw.text(entry.text, this.listX+10, y+this.listEntryH-4, "left");
 				} else {
-					DRAW.setColor(0, 0, 0, scale);
-					DRAW.setFont(FONT.caption);
-					DRAW.text(`• ${entry.text}`, this.listX+10, y+this.listEntryH-4, "left"); // Bullet point & step
+					Draw.setColor(0, 0, 0, scale);
+					Draw.setFont(FONT.caption);
+					Draw.text(`• ${entry.text}`, this.listX+10, y+this.listEntryH-4, "left"); // Bullet point & step
 					if (entry.progress != null && entry.progressFinish != null) {
 						// Draw Checkbox
-						DRAW.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line");
+						Draw.rectangle(this.listX+this.listW-30, y+4, 20, 19, "line");
 						if (entry.progress >= entry.progressFinish) {
-							DRAW.text("✔", this.listX+this.listW-30+10, y+20, "center");
-							//DRAW.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
+							Draw.text("✔", this.listX+this.listW-30+10, y+20, "center");
+							//Draw.rectangle(this.listX+this.listW-30+2, y+4+2, 20-4, 19-4, "fill") // "Checkmark"
 						}
 						// Debug; display as string
-						//DRAW.text(entry.progress + "/" + entry.progressFinish, this.listX+this.listW-10, y+this.listEntryH-4, "right")
+						//Draw.text(entry.progress + "/" + entry.progressFinish, this.listX+this.listW-10, y+this.listEntryH-4, "right")
 					}
 				}
 			}
 		}
-		DRAW.setColor(244, 188, 105, 1.0); // Cover up scrolling past list window
-		//DRAW.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
-		//DRAW.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.menu, [20,51, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH); // Cover top of list
-		DRAW.image(IMG.menu, [20,317, this.listW,this.listEntryH], this.listX, this.listY+this.listH); // Cover bottom of list
+		Draw.setColor(244, 188, 105, 1.0); // Cover up scrolling past list window
+		//Draw.rectangle(this.listX, this.listY-this.listEntryH, this.listW, this.listEntryH, "fill")
+		//Draw.rectangle(this.listX, this.listY+this.listH, this.listW, this.listEntryH, "fill")
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.menu, [20,51, this.listW,this.listEntryH], this.listX, this.listY-this.listEntryH); // Cover top of list
+		Draw.image(IMG.menu, [20,317, this.listW,this.listEntryH], this.listX, this.listY+this.listH); // Cover bottom of list
 
 		// Render all buttons
 		this.drawButtons();

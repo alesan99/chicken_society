@@ -1,6 +1,6 @@
 //Emote menu; Press a button an player emotes
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
@@ -43,7 +43,7 @@ MENUS["emoteMenu"] = new class extends Menu {
 	
 	draw() {
 		// Window
-		DRAW.image(IMG.emoteMenu, [0,0,110,110], this.x, this.y);
+		Draw.image(IMG.emoteMenu, [0,0,110,110], this.x, this.y);
 
 		// Render all buttons
 		this.drawButtons();

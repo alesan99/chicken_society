@@ -1,6 +1,6 @@
 // Netplay module; Communicates with the server to allow multiplayer
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, CURSOR} from "../main.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture} from "../savedata.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {OBJECTS, PLAYER, PLAYER_CONTROLLER, CHARACTER, PHYSICSWORLD, CHAT} from "../world.js";

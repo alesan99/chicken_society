@@ -1,6 +1,7 @@
 //Character object, a 'chicken' with a collision box and the ability to move
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import { Draw } from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../savedata.js";
 import Shape from "../shape.js";
@@ -96,7 +97,7 @@ export default class Character extends PhysicsObject {
 		let speed = this.speed;
 		if (this.getStatusEffect("drowsy")) { // Walk slower
 			speed *= 0.8;
-		} else if (this.getStatusEffect("caffinated")) { // Walk faster
+		} else if (this.getStatusEffect("caffeinated")) { // Walk faster
 			speed *= 1.75;
 		} else if (this.getStatusEffect("drunk")) {  // Can't walk straight
 			let angle = 0.2*Math.sin(this.timer*2.0); // wobbly angle
@@ -196,8 +197,8 @@ export default class Character extends PhysicsObject {
 
 		// Shadow
 		if (!this.getStatusEffect("dead")) {
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1);
 		}
 
 		// Jumping
@@ -210,16 +211,16 @@ export default class Character extends PhysicsObject {
 		}
 
 		// Character image
-		DRAW.setColor(this.color[0],this.color[1],this.color[2],1.0);
-		DRAW.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1);
+		Draw.setColor(this.color[0],this.color[1],this.color[2],1.0);
+		Draw.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1);
 
-		DRAW.setColor(255,255,255,1.0);
+		Draw.setColor(255,255,255,1.0);
 		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
 			// Figure out the center of the body item to place it on the center of the chicken's 'neck'
 			this.drawItem(ITEMS.body[this.body], BODYOFFSET, drawX, drawY, dir, rot);
 		}
 
-		DRAW.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1); // Uncolored sprite
+		Draw.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1); // Uncolored sprite
 		
 		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
 			// Figure out the center of the face item to place it on the center of the chicken's face
@@ -246,24 +247,24 @@ export default class Character extends PhysicsObject {
 
 		let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w;
 		let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h;
-		DRAW.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, rot+CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY);
+		Draw.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, rot+CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY);
 	}
 
 	drawOver() {
 		// Nametag
-		DRAW.setFont(FONT.nametag, 3);
+		Draw.setFont(FONT.nametag, 3);
 		if (this.npc) {
-			DRAW.setColor(180,180,180,1);
+			Draw.setColor(180,180,180,1);
 		} else {
-			DRAW.setColor(255,255,255,1);
+			Draw.setColor(255,255,255,1);
 		}
-		DRAW.text(this.name, Math.floor(this.x), Math.min(canvasHeight-54, Math.floor(this.y)+20), "center");
+		Draw.text(this.name, Math.floor(this.x), Math.min(canvasHeight-54, Math.floor(this.y)+20), "center");
 
 		// Status Effects
 		for (let i = 0; i < this.statusEffects.length; i++) {
 			let effect = this.statusEffects[i];
 			let time = `${Math.floor(effect.timer/60)}:${Math.floor(effect.timer%60).toString().padStart(2, "0")}`;
-			DRAW.text(`(${effect.name} ${time})`, Math.floor(this.x), Math.min(canvasHeight-54+(i+1)*20, Math.floor(this.y)+20+(i+1)*20), "center");
+			Draw.text(`(${effect.name} ${time})`, Math.floor(this.x), Math.min(canvasHeight-54+(i+1)*20, Math.floor(this.y)+20+(i+1)*20), "center");
 		}
 
 		// Chat bubble
@@ -287,17 +288,17 @@ export default class Character extends PhysicsObject {
 			// Wiggle bubble
 			let flip = 1-Math.floor((this.bubbleTimer%1)*2)*2;
 			
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(IMG.speechBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(IMG.speechBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1);
 
 			// Render wrapped text so it fits into the bubble
-			DRAW.setFont(FONT.speechBubble);
-			DRAW.setColor(0,0,0,scale**2);
+			Draw.setFont(FONT.speechBubble);
+			Draw.setColor(0,0,0,scale**2);
 
 			let verticalSpacing = 18;
 			for (let line = 0; line < this.bubbleTextWrapped.length; line++) {
 				let textSegment = this.bubbleTextWrapped[line];
-				DRAW.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-(this.bubbleTextWrapped.length*verticalSpacing/2)-41, "center");
+				Draw.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-(this.bubbleTextWrapped.length*verticalSpacing/2)-41, "center");
 			}
 		}
 	}
@@ -348,8 +349,8 @@ export default class Character extends PhysicsObject {
 		this.bubbleTimer = 0;
 
 		// Wrap text so it fits in text bubble
-		DRAW.setFont(FONT.speechBubble);
-		this.bubbleTextWrapped = DRAW.wrapText(this.bubbleText, 156);
+		Draw.setFont(FONT.speechBubble);
+		this.bubbleTextWrapped = Draw.wrapText(this.bubbleText, 156);
 	}
 
 	// Play emote animation; will stop when player moves
@@ -390,7 +391,7 @@ export default class Character extends PhysicsObject {
 	// These affect the character's behavior
 	startStatusEffect(name, duration=1.0) {
 		// Status Effects:
-		// Caffinated (Any coffee)
+		// Caffeinated (Any coffee)
 		// Drunk (Beer, liquor)
 		// Quirked Up (Heroin)
 

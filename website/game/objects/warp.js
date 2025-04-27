@@ -1,6 +1,6 @@
 // Warp object; Moves player to a different location when touched.
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {WORLD} from "../main.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
 import Shape from "../shape.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "../world.js";

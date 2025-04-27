@@ -1,6 +1,7 @@
 //Customize Player Menu; Menu with options to modify player profile and customize chicken
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {SAVEDATA, PROFILE} from "../main.js";
+import {Draw} from "../engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
@@ -9,7 +10,7 @@ import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, re
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
 import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
-import { saveSaveData, loadSaveData } from "../savedata.js";
+import {saveSaveData, loadSaveData, applySettings} from "../savedata.js";
 
 MENUS["customization"] = new class extends Menu {
 	//Initialize
@@ -28,8 +29,12 @@ MENUS["customization"] = new class extends Menu {
 			let data = loadSaveData(SAVEDATA);
 			if (data) {
 				replaceObjectValues(SAVEDATA, data);
+				console.log(PROFILE, SAVEDATA.profile);
 				replaceObjectValues(PROFILE, SAVEDATA.profile);
 				PLAYER.updateProfile(PROFILE, "sendToServer");
+				this.buttons["name"].text = PROFILE.name;
+				applySettings();
+				// TODO: Move all this logic to savedata.js
 			}
 		}, null, 263,404, 100,32);
 		this.buttons["save"] = new Button("Save", ()=>{
@@ -104,8 +109,8 @@ MENUS["customization"] = new class extends Menu {
 				let item = ITEMS[itemType][itemId];
 				if (item) { // Make sure item has been loaded
 					if (item.description) {
-						DRAW.setFont(FONT.description);
-						this.selectedItemDescription = DRAW.wrapText(item.description, 300);
+						Draw.setFont(FONT.description);
+						this.selectedItemDescription = Draw.wrapText(item.description, 300);
 					}
 				}
 				if (useItem(itemId, itemType)) { // Set clothing item or use consumable
@@ -165,64 +170,64 @@ MENUS["customization"] = new class extends Menu {
 		if (this.openTimer < 1) {
 			scale = easing("easeOutBack", this.openTimer);
 		}
-		DRAW.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
+		Draw.image(IMG.menu, null, this.x+this.w*0.5, this.y+this.h*0.5, 0, scale, scale, 0.5, 0.5);
 
 		// Inventory
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.text("Inventory", 620, 142, "center");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.text("Inventory", 620, 142, "center");
 		// Item information
 		if (this.selectedItem) {
 			let item = ITEMS[this.selectedItemType][this.selectedItem];
 			if (item) { // Make sure item has been loaded
 				// Name
-				DRAW.text(item.name, 484, 378, "left");
+				Draw.text(item.name, 484, 378, "left");
 				// Description
-				DRAW.setColor(152, 80, 46, scale);
-				DRAW.setFont(FONT.description);
+				Draw.setColor(152, 80, 46, scale);
+				Draw.setFont(FONT.description);
 				if (this.selectedItemDescription) {
 					for (let i = 0; i < this.selectedItemDescription.length; i++) {
-						DRAW.text(this.selectedItemDescription[i], 484, 400 + i * 20, "left");
+						Draw.text(this.selectedItemDescription[i], 484, 400 + i * 20, "left");
 					}
 				}
 			}
 		}
 
 		// Text
-		DRAW.setColor(112, 50, 16, scale);
-		DRAW.setFont(FONT.caption);
-		DRAW.text("Color:", 265, 385, "left");
+		Draw.setColor(112, 50, 16, scale);
+		Draw.setFont(FONT.caption);
+		Draw.text("Color:", 265, 385, "left");
 
 		PLAYER.draw(360,340,"down");
 
 		// Color sliders
 		let slider = this.buttons["colorHue"];
-		DRAW.setColor(168, 85, 38, 1);
-		DRAW.setLineWidth(2);
-		DRAW.rectangle(slider.x-1, slider.y-1, slider.w+2, slider.h*3+2, "line");
+		Draw.setColor(168, 85, 38, 1);
+		Draw.setLineWidth(2);
+		Draw.rectangle(slider.x-1, slider.y-1, slider.w+2, slider.h*3+2, "line");
 		slider = this.buttons["colorHue"];
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,0), slider.x, slider.y);
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,3), slider.x, slider.y);
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,0), slider.x, slider.y);
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,3), slider.x, slider.y);
 		slider = this.buttons["colorSat"];
-		DRAW.setColor(this.hueColorSel[0], this.hueColorSel[1], this.hueColorSel[2],1.0);
-		DRAW.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,1), slider.x, slider.y);
-		DRAW.setColor(0,0,0,1.0-this.val);
-		DRAW.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,3), slider.x, slider.y);
+		Draw.setColor(this.hueColorSel[0], this.hueColorSel[1], this.hueColorSel[2],1.0);
+		Draw.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,1), slider.x, slider.y);
+		Draw.setColor(0,0,0,1.0-this.val);
+		Draw.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,3), slider.x, slider.y);
 		slider = this.buttons["colorVal"];
-		DRAW.setColor(this.hueColorSel[0], this.hueColorSel[1], this.hueColorSel[2],1.0);
-		DRAW.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
-		DRAW.setColor(255,255,255,1.0-this.sat);
-		DRAW.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,2), slider.x, slider.y);
-		DRAW.setColor(255,255,255,1.0);
-		DRAW.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,3), slider.x, slider.y);
+		Draw.setColor(this.hueColorSel[0], this.hueColorSel[1], this.hueColorSel[2],1.0);
+		Draw.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
+		Draw.setColor(255,255,255,1.0-this.sat);
+		Draw.rectangle(slider.x, slider.y, slider.w, slider.h, "fill");
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,2), slider.x, slider.y);
+		Draw.setColor(255,255,255,1.0);
+		Draw.image(IMG.colorSlider, SPRITE.colorSlider.getFrame(0,3), slider.x, slider.y);
 
 		// Render all buttons
 		this.drawButtons();

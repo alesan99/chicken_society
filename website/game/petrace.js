@@ -1,6 +1,7 @@
 // Client Pet Race code
 
-import { DRAW, SAVEDATA } from "./main.js";
+import { SAVEDATA } from "./main.js";
+import { Draw } from "./engine/canvas.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, ITEMS } from "./assets.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, CHARACTER } from "./world.js";
 import { NETPLAY } from "./main.js";
@@ -57,14 +58,14 @@ const PetRaceSystem = (function() {
 					let stateFrame = 0;
 
 					// Draw pet
-					DRAW.setColor(255,255,255,1.0);
-					DRAW.image(IMG.shadow, null, x, y, 0, 1,1, 0.5,1.0);
-					DRAW.setColor(0,0,0);
-					DRAW.image(img, sprite.getFrame(animationFrame,stateFrame), x, y + py, 0, 1,1, 0.5,1.0);
-					DRAW.setColor(255,255,255);
+					Draw.setColor(255,255,255,1.0);
+					Draw.image(IMG.shadow, null, x, y, 0, 1,1, 0.5,1.0);
+					Draw.setColor(0,0,0);
+					Draw.image(img, sprite.getFrame(animationFrame,stateFrame), x, y + py, 0, 1,1, 0.5,1.0);
+					Draw.setColor(255,255,255);
 					// Name
-					DRAW.setFont(FONT.nametag, 3);
-					DRAW.text(name, x, Math.floor(y + py)+20, "center");
+					Draw.setFont(FONT.nametag, 3);
+					Draw.text(name, x, Math.floor(y + py)+20, "center");
 				}
 			}
 		},

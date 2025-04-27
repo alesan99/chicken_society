@@ -1,6 +1,6 @@
 // Minigame state;
 // Runs a given minigame script while allowing the player to still chat and exit the game
-import { DRAW, SAVEDATA, WORLD } from "../main.js";
+import { SAVEDATA, WORLD } from "../main.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, CHAT, MINIGAME } from "../world.js";
 import { NETPLAY } from "../main.js";
 import QuestSystem from "../quests.js";

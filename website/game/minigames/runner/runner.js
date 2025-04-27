@@ -2,13 +2,12 @@
 // Control a chicken running to the right, jump over obstacles while the chicken slowly speeds up.
 
 import { MINIGAMES } from "../minigame.js";
-import { DRAW, SAVEDATA } from "../../main.js";
+import { SAVEDATA } from "../../main.js";
+import { Draw } from "../../engine/canvas.js";
 import Notify from "../../gui/notification.js";
-import { conditionsUpdate } from "../../area.js";
 import { IMG, SPRITE, ANIM, FONT, SFX, loadJSON5, loadJSON, ITEMS, MUSIC } from "../../assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "../../savedata.js";
-import { MENUS } from "../../menu.js";
-import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD, DEBUGPHYSICS, MINIGAME } from "../../world.js";
+import { DEBUGPHYSICS, MINIGAME } from "../../world.js";
 import { NETPLAY } from "../../main.js";
 import { RenderImage } from "../../engine/render.js";
 import { canvasWidth, canvasHeight } from "../../engine/canvas.js";
@@ -179,7 +178,7 @@ if (true) {
 				if (this.musicUpdateTimer > 3) {
 					AudioSystem.setMusicSpeed(1.0 + this.runningTime/(60*15));
 					this.musicUpdateTimer = 0;
-				};
+				}
 			}
 
 			// Update all objects
@@ -215,10 +214,10 @@ if (true) {
   
 		draw() {
 			// Background
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(this.img.background, [0,0,680,340], 172, 38);
-			DRAW.image(this.img.background, [0,340,680,480-340], 172-this.backgroundScroll, 38+340);
-			DRAW.image(this.img.background, [0,340,680,480-340], 172+680-this.backgroundScroll, 38+340);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(this.img.background, [0,0,680,340], 172, 38);
+			Draw.image(this.img.background, [0,340,680,480-340], 172-this.backgroundScroll, 38+340);
+			Draw.image(this.img.background, [0,340,680,480-340], 172+680-this.backgroundScroll, 38+340);
 		
 			let cameraX = this.chicken.x-270;
 
@@ -227,8 +226,8 @@ if (true) {
 			}
 
 			// Render all chickens
-			DRAW.setColor(255,255,255,0.5);
-			DRAW.setFont(FONT.pixel);
+			Draw.setColor(255,255,255,0.5);
+			Draw.setFont(FONT.pixel);
 			let offscreenRight = 0;
 			let offscreenLeft = 0;
 			for (const [id, obj] of Object.entries(this.objects["chicken"])) {
@@ -236,7 +235,7 @@ if (true) {
 				// Chicken
 					obj.draw(cameraX);
 					// Nametag
-					let textWidth = DRAW.getTextWidth(NETPLAY.playerList[id].name)*0.75;
+					let textWidth = Draw.getTextWidth(NETPLAY.playerList[id].name)*0.75;
 					let chickenX = obj.x-cameraX;
 					let nameTagX = Math.max(172+textWidth/2, Math.min(852-textWidth/2, chickenX));
 					if (chickenX != nameTagX) { // Show distance if off-screen
@@ -251,24 +250,24 @@ if (true) {
 								offscreenRight += 1;
 							}
 						}
-						DRAW.text(NETPLAY.playerList[id].name, nameTagX, nameTagY, "center", 0, 0.75,0.75);
-						DRAW.text(`${dist}m`, nameTagX, nameTagY+12, "center", 0, 0.75,0.75);
+						Draw.text(NETPLAY.playerList[id].name, nameTagX, nameTagY, "center", 0, 0.75,0.75);
+						Draw.text(`${dist}m`, nameTagX, nameTagY+12, "center", 0, 0.75,0.75);
 					} else {
-						DRAW.text(NETPLAY.playerList[id].name, nameTagX, obj.y-70, "center", 0, 0.75,0.75);
+						Draw.text(NETPLAY.playerList[id].name, nameTagX, obj.y-70, "center", 0, 0.75,0.75);
 					}
 				}
 			}
 		
-			DRAW.setColor(255,255,255,1);
+			Draw.setColor(255,255,255,1);
 			this.chicken.draw(cameraX); // Your chicken
 
 			// Arcade Cabinet overlay
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.image(this.img.arcadeCabinet);
+			Draw.setColor(255,255,255,1.0);
+			Draw.image(this.img.arcadeCabinet);
 
 			// Score
-			DRAW.setColor(255,255,255,1.0);
-			DRAW.setFont(FONT.pixel);
+			Draw.setColor(255,255,255,1.0);
+			Draw.setFont(FONT.pixel);
 			let scale = 1+easing("easeInQuad", this.scoreAnim)*0.1;
 			let highScale = 1;
 			if (this.scoreAnim > 1) {
@@ -277,46 +276,46 @@ if (true) {
 			if (this.score == this.highscore) {
 				highScale = scale;
 			}
-			DRAW.text("Highscore: " + this.highscore, 590,95, "left", 0, highScale,highScale);
-			DRAW.text("Score: " + this.score, 590,120, "left", 0, scale,scale);
+			Draw.text("Highscore: " + this.highscore, 590,95, "left", 0, highScale,highScale);
+			Draw.text("Score: " + this.score, 590,120, "left", 0, scale,scale);
 
 			// Start?
-			DRAW.setFont(FONT.pixel);
+			Draw.setFont(FONT.pixel);
 			if (this.dead) {
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.text("DIED",canvasWidth/2-4,240,"center",Math.sin(this.deadAnim)*0.2,2,2);
-				DRAW.text("DIED",canvasWidth/2+4,240,"center",Math.sin(this.deadAnim)*0.2,2,2);
-				DRAW.text("DIED",canvasWidth/2,240-4,"center",Math.sin(this.deadAnim)*0.2,2,2);
-				DRAW.text("DIED",canvasWidth/2,240+4,"center",Math.sin(this.deadAnim)*0.2,2,2);
-				DRAW.setColor(255,255,255,1.0);
-				DRAW.text("DIED",canvasWidth/2,240,"center",Math.sin(this.deadAnim)*0.2,2,2);
+				Draw.setColor(0,0,0,1.0);
+				Draw.text("DIED",canvasWidth/2-4,240,"center",Math.sin(this.deadAnim)*0.2,2,2);
+				Draw.text("DIED",canvasWidth/2+4,240,"center",Math.sin(this.deadAnim)*0.2,2,2);
+				Draw.text("DIED",canvasWidth/2,240-4,"center",Math.sin(this.deadAnim)*0.2,2,2);
+				Draw.text("DIED",canvasWidth/2,240+4,"center",Math.sin(this.deadAnim)*0.2,2,2);
+				Draw.setColor(255,255,255,1.0);
+				Draw.text("DIED",canvasWidth/2,240,"center",Math.sin(this.deadAnim)*0.2,2,2);
 				if (this.score == this.highscore) {
-					DRAW.text("New Highscore!",canvasWidth/2,canvasHeight/2+130,"center",0,2,2);
+					Draw.text("New Highscore!",canvasWidth/2,canvasHeight/2+130,"center",0,2,2);
 				}
 			} else if (this.started != true) {
-				DRAW.setColor(0,0,0,1.0);
-				DRAW.text("CHICKEN RUN",canvasWidth/2-4,240,"center",0,3,3);
-				DRAW.text("CHICKEN RUN",canvasWidth/2+4,240,"center",0,3,3);
-				DRAW.text("CHICKEN RUN",canvasWidth/2,240-4,"center",0,3,3);
-				DRAW.text("CHICKEN RUN",canvasWidth/2,240+4,"center",0,3,3);
-				DRAW.setColor(255,255,255,1.0);
-				DRAW.text("CHICKEN RUN",canvasWidth/2,240,"center",0,3,3);
+				Draw.setColor(0,0,0,1.0);
+				Draw.text("CHICKEN RUN",canvasWidth/2-4,240,"center",0,3,3);
+				Draw.text("CHICKEN RUN",canvasWidth/2+4,240,"center",0,3,3);
+				Draw.text("CHICKEN RUN",canvasWidth/2,240-4,"center",0,3,3);
+				Draw.text("CHICKEN RUN",canvasWidth/2,240+4,"center",0,3,3);
+				Draw.setColor(255,255,255,1.0);
+				Draw.text("CHICKEN RUN",canvasWidth/2,240,"center",0,3,3);
 				if (this.blinkAnim > 0.5) {
-					DRAW.text("Press anything to start!",canvasWidth/2,420,"center",0,1,1);
+					Draw.text("Press anything to start!",canvasWidth/2,420,"center",0,1,1);
 				}
 
 			
-				DRAW.text("Jump: Space or left click",200,480,"left",0,1,1);
-				DRAW.text("Duck: Shift or right click",200,500,"left",0,1,1);
+				Draw.text("Jump: Space or left click",200,480,"left",0,1,1);
+				Draw.text("Duck: Shift or right click",200,500,"left",0,1,1);
 			}
 			// Leaderboard
 			if (this.started != true) {
-				DRAW.setColor(255,255,255,1.0);
-				DRAW.text("Leaderboard", canvasWidth/2-140, 295, "left");
+				Draw.setColor(255,255,255,1.0);
+				Draw.text("Leaderboard", canvasWidth/2-140, 295, "left");
 				for (let i = 0; i < this.highscores.length; i++) {
 					let highscore = this.highscores[i][0];
 					let name = this.highscores[i][1];
-					DRAW.text(name + " - " + highscore, canvasWidth/2-140, 320 + i * 25, "left");
+					Draw.text(name + " - " + highscore, canvasWidth/2-140, 320 + i * 25, "left");
 				}
 			}
 
@@ -556,9 +555,9 @@ if (true) {
 			}
 		}
 		draw(x) {
-			DRAW.image(IMG.shadow, null, this.x-x, canvasHeight-200, 0, 0.8,1, 0.5,0.5);
+			Draw.image(IMG.shadow, null, this.x-x, canvasHeight-200, 0, 0.8,1, 0.5,0.5);
 
-			DRAW.image(minigame.img.chicken, this.anim.getFrame(), this.x-x, this.y, this.rotation, 1,1, 0.5,0.5);
+			Draw.image(minigame.img.chicken, this.anim.getFrame(), this.x-x, this.y, this.rotation, 1,1, 0.5,0.5);
 		}
 	};
 	Ground = class extends PhysicsObject {
@@ -647,12 +646,12 @@ if (true) {
 			}
 		}
 		draw(x) {
-			DRAW.setColor(255,255,255,1.0);
+			Draw.setColor(255,255,255,1.0);
 
 			if (this.type == "sign") {
-				DRAW.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.7,0.45);
+				Draw.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.7,0.45);
 			} else {
-				DRAW.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.5,0.70);
+				Draw.image(minigame.img.fence, minigame.sprite.fence.getFrame(this.frame), this.x-x, this.y, 0, 1,1, 0.5,0.70);
 			}
 		}
 		collide(name) {

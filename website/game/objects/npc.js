@@ -1,6 +1,6 @@
 //NPC object, controls the position of another object along with interactable dialouge
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {WORLD} from "../main.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "../assets.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "../world.js";
 import QuestSystem from "../quests.js";

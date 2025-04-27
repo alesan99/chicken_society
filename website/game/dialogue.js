@@ -1,7 +1,8 @@
 // Dialogue System
 // NOT the speech bubbles that apeear when when you first talk to an NPC
 
-import {DRAW, SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import {Draw} from "./engine/canvas.js";
 import {IMG, SPRITE, ANIM, FONT, SFX, ITEMS} from "./assets.js";
 import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem} from "./savedata.js";
 import {PLAYER, PLAYER_CONTROLLER} from "./world.js";
@@ -99,8 +100,8 @@ const DialogueSystem = (function() {
 		draw() {
 			if (open) {
 				// Darken surroundings
-				DRAW.setColor(0,0,0,0.2);
-				DRAW.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
+				Draw.setColor(0,0,0,0.2);
+				Draw.rectangle(0, 0, canvasWidth, canvasHeight, "fill");
 
 				// Dialogue Box
 				if (dialogueType === false) {
@@ -112,36 +113,36 @@ const DialogueSystem = (function() {
 						x = x + 65;
 						// Draw speaker icon
 						if (speakerNPC) {
-							DRAW.setColor(255,255,255,1);
+							Draw.setColor(255,255,255,1);
 							if (speakerIcon) {
-								DRAW.image(speakerIcon, 0, x-140, y);
+								Draw.image(speakerIcon, 0, x-140, y);
 							} else {
 								speakerNPC.draw(x-140 +65, y +150, "down");
 							}
 						} else {
 							// Show mystery speaker
-							DRAW.setColor(255,255,255,1);
-							DRAW.image(IMG.speakerIcon, null, x-140 +65, y +130, 0, 1, 1, 0.5, 1.0);
+							Draw.setColor(255,255,255,1);
+							Draw.image(IMG.speakerIcon, null, x-140 +65, y +130, 0, 1, 1, 0.5, 1.0);
 						}
 
-						DRAW.setColor(255,255,255,1);
-						DRAW.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y);
+						Draw.setColor(255,255,255,1);
+						Draw.image(IMG.dialogue, SPRITE.dialogueIcon.getFrame(0), x-140, y);
 						
 						// Draw speaker name
-						DRAW.setColor(0,0,0,1);
-						DRAW.setFont(FONT.caption);
-						if (DRAW.getTextWidth(speaker) > 128) {
+						Draw.setColor(0,0,0,1);
+						Draw.setFont(FONT.caption);
+						if (Draw.getTextWidth(speaker) > 128) {
 							// Shrink text if name is long for name container
-							DRAW.setFont(FONT.nametag);
+							Draw.setFont(FONT.nametag);
 						}
-						DRAW.text(speaker, x-140 + 65, y+153, "center");
+						Draw.text(speaker, x-140 + 65, y+153, "center");
 					}
 
 					// Dialogue box
-					DRAW.setColor(255,255,255,1);
-					DRAW.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y);
-					DRAW.setColor(0,0,0,1);
-					DRAW.setFont(FONT.caption);
+					Draw.setColor(255,255,255,1);
+					Draw.image(IMG.dialogue, SPRITE.dialogueBox.getFrame(0), x, y);
+					Draw.setColor(0,0,0,1);
+					Draw.setFont(FONT.caption);
 
 					let charStart = 0; // Character index from line break
 					for (let i=0; i < currentTextWrap.length; i++) {
@@ -149,7 +150,7 @@ const DialogueSystem = (function() {
 						if (dialogueProgress < charStart + s.length) {
 							s = s.substring(0, dialogueProgress - charStart);
 						}
-						DRAW.text(s, x + 30, y + 40 + i*30);
+						Draw.text(s, x + 30, y + 40 + i*30);
 
 						if (s.length != currentTextWrap[i].length) {
 							// line has been cut, don't continue to the next one
@@ -167,7 +168,7 @@ const DialogueSystem = (function() {
 					} else {
 						if (dialogueProgress >= currentText.length) {
 							// Draw continue prompt
-							DRAW.text(">", x + 490 + promptTimer*10 + 10, y + 134);
+							Draw.text(">", x + 490 + promptTimer*10 + 10, y + 134);
 						}
 					}
 				} else if (dialogueType == "book") {
@@ -176,29 +177,29 @@ const DialogueSystem = (function() {
 
 					if (bookLoaded) {
 						// Render book canvases directly
-						DRAW.setColor(255,255,255,1.0);
+						Draw.setColor(255,255,255,1.0);
 						ctx.drawImage(bookCanvas1, x, y);
 						ctx.drawImage(bookCanvas2, x+680/2, y);
 
 						// Page numbers
-						DRAW.setColor(0,0,0,1.0);
-						DRAW.setFont(FONT.caption);
-						DRAW.text(bookPage+1, canvasWidth/2-680/4, y + 446, "center");
-						DRAW.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center");
+						Draw.setColor(0,0,0,1.0);
+						Draw.setFont(FONT.caption);
+						Draw.text(bookPage+1, canvasWidth/2-680/4, y + 446, "center");
+						Draw.text(bookPage+2, canvasWidth/2+680/4, y + 446, "center");
 
 						// Page turn arrow
 						let [mouseX, mouseY] = getMousePos();
 						if (checkMouseInside(x, y, 680, 460)) {
 							if (mouseX < canvasWidth/2) {
-								DRAW.text("<", canvasWidth/2 - 680/4 - 150, y + 446, "center");
+								Draw.text("<", canvasWidth/2 - 680/4 - 150, y + 446, "center");
 							} else {
-								DRAW.text(">", canvasWidth/2 + 680/4 + 150, y + 446, "center");
+								Draw.text(">", canvasWidth/2 + 680/4 + 150, y + 446, "center");
 							}
 						}
 
 						// Draw book texture
-						DRAW.setColor(255,255,255,1);
-						DRAW.image(IMG.book, null, x-1, y-1);
+						Draw.setColor(255,255,255,1);
+						Draw.image(IMG.book, null, x-1, y-1);
 					}
 
 				}
@@ -378,8 +379,8 @@ const DialogueSystem = (function() {
 				}
 				// Dialogue text animation
 				currentText = dialogueData.text[i];
-				DRAW.setFont(FONT.caption);
-				currentTextWrap = DRAW.wrapText(currentText, 550 - 30*2); // Wrap text
+				Draw.setFont(FONT.caption);
+				currentTextWrap = Draw.wrapText(currentText, 550 - 30*2); // Wrap text
 				dialogueProgress = 0;
 				dialogueTimer = 0;
 				// Speaker

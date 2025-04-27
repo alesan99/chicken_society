@@ -24,21 +24,21 @@
     "table"
   ],
   "head": [
-    "hoodie",
     "police_hat",
+    "hoodie",
     "snapback",
     "top_hat"
   ],
   "item": [
     "beer",
-    "bullet",
     "black_coffee",
+    "bullet",
     "cannabis_seeds",
     "gun",
     "heroin",
     "kernels",
-    "seeds",
     "snake_book",
+    "seeds",
     "sunflower_seeds"
   ],
   "pet": [
