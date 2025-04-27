@@ -543,7 +543,7 @@ export default class Character extends PhysicsObject {
 	}
 
 	// Jump
-	jump(dist) {
+	jump(dist=500) {
 		if (dist == 0) {dist = 500;}
 		this.sz = -dist;
 		if (this == PLAYER) {

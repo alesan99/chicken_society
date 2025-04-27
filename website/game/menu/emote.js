@@ -18,11 +18,13 @@ MENUS["emoteMenu"] = new class extends Menu {
 		this.buttons = {};
 
 		this.buttons[1] = new Button(false, ()=>{PLAYER.emote("wave"); CHAT.emoteMenuOpen = false;},
-			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,0),SPRITE.emoteButton.getFrame(1,0),SPRITE.emoteButton.getFrame(2,0)]}, 211,432, 36,36);
+			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,0),SPRITE.emoteButton.getFrame(1,0),SPRITE.emoteButton.getFrame(2,0)]}, 211,419, 36,36);
 		this.buttons[2] = new Button(false, ()=>{PLAYER.emote("sit"); CHAT.emoteMenuOpen = false;},
-			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,1),SPRITE.emoteButton.getFrame(1,1),SPRITE.emoteButton.getFrame(2,1)]}, 194,467, 36,36);
+			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,1),SPRITE.emoteButton.getFrame(1,1),SPRITE.emoteButton.getFrame(2,1)]}, 184,450, 36,36);
 		this.buttons[3] = new Button(false, ()=>{PLAYER.emote("dance"); CHAT.emoteMenuOpen = false;},
-			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,2),SPRITE.emoteButton.getFrame(1,2),SPRITE.emoteButton.getFrame(2,2)]}, 233,467, 36,36);
+			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,2),SPRITE.emoteButton.getFrame(1,2),SPRITE.emoteButton.getFrame(2,2)]}, 243,450, 36,36);
+		this.buttons[4] = new Button(false, ()=>{PLAYER.jump(); CHAT.emoteMenuOpen = false;},
+			{image: IMG.emoteMenu, frames:[SPRITE.emoteButton.getFrame(0,3),SPRITE.emoteButton.getFrame(1,3),SPRITE.emoteButton.getFrame(2,3)]}, 211,481, 36,36);
 	}
 
 	keyPress(key) {
