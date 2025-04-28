@@ -17,7 +17,8 @@ const AudioSystem = (function() {
 			return new Howl({
 				src: [path],
 				loop: true,
-				html5: true
+				html5: true,
+				preload: "metadata",
 			});
 		},
 
