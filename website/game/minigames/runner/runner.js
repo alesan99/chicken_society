@@ -51,6 +51,7 @@ if (true) {
 			this.sprite = {};
 			this.img.chicken = new RenderImage("game/minigames/runner/rubberchicken.png");
 			this.sprite.chicken = new Sprite(this.img.chicken, 8,1, 128,128);
+			this.img.shadow = new RenderImage("game/minigames/runner/shadow.png");
 			this.img.arcadeCabinet = new RenderImage("game/minigames/runner/arcade_cabinet.png");
 			this.img.fence = new RenderImage("game/minigames/runner/fence.png");
 			this.sprite.fence = new Sprite(this.img.fence, 4,1, 64,160);
@@ -321,7 +322,7 @@ if (true) {
 
 			// DEBUG physics
 			if (DEBUGPHYSICS) {
-				drawPhysics(this.objects, this.world, cameraX, 0);
+				drawPhysics(Draw, this.objects, this.world, -cameraX, 0);
 			}
 		}
 
@@ -555,7 +556,7 @@ if (true) {
 			}
 		}
 		draw(x) {
-			Draw.image(IMG.shadow, null, this.x-x, canvasHeight-200, 0, 0.8,1, 0.5,0.5);
+			Draw.image(minigame.img.shadow, null, this.x-x, canvasHeight-200, 0, 1,1, 0.5,0.5);
 
 			Draw.image(minigame.img.chicken, this.anim.getFrame(), this.x-x, this.y, this.rotation, 1,1, 0.5,0.5);
 		}
@@ -630,7 +631,7 @@ if (true) {
 			this.setPosition(this.x, this.y);
 		}
 		update(dt) {
-			if (this.x < minigame.chicken.x-100) {
+			if (this.x < minigame.chicken.x-100-50) {
 				this.destroy();
 			} else if (this.x < minigame.chicken.x && this.passed != true) {
 				minigame.addPoint();

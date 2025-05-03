@@ -375,7 +375,7 @@ const World = class {
 
 		// DEBUG physics
 		if (DEBUGPHYSICS) {
-			drawPhysics(OBJECTS, PHYSICSWORLD);
+			drawPhysics(Draw, OBJECTS, PHYSICSWORLD);
 
 			// Display click triggers
 			Draw.setColor(120,0,80,1.0);

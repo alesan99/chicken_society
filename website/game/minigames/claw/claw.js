@@ -143,7 +143,7 @@ if (true) {
 
 			// DEBUG physics
 			if (DEBUGPHYSICS) {
-				drawPhysics(this.objects, this.world);
+				drawPhysics(Draw, this.objects, this.world);
 			}
 		}
 

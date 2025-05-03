@@ -1,6 +1,5 @@
 // Collision & physics system
 
-import { Draw } from "./engine/canvas.js";
 import { FONT } from "./assets.js";
 import { vec2Dot } from "./lib/vec2.js";
 
@@ -274,7 +273,7 @@ class SpatialHash {
 }
 
 // Debug draw all hitboxes
-function drawPhysics(objs, spatialHash, offsetX, offsetY) {
+function drawPhysics(Draw, objs, spatialHash, offsetX=0, offsetY=0) {
 	// Draw Spatial Hash
 	Draw.setColor(0,0,0,0.5);
 	Draw.setFont(FONT.caption);
@@ -282,8 +281,8 @@ function drawPhysics(objs, spatialHash, offsetX, offsetY) {
 	for (let x = 0; x <= spatialHash.cw; x++) {
 		for (let y = 0; y <= spatialHash.ch; y++) {
 			let cellSize = spatialHash.cellSize;
-			Draw.polygon([x*cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize, x*cellSize+cellSize,y*cellSize+cellSize, x*cellSize,y*cellSize+cellSize], "line");
-			Draw.text(spatialHash.getCell(x, y).size,x*cellSize+cellSize/2,y*cellSize+cellSize/2);
+			Draw.polygon([x*cellSize+offsetX,y*cellSize+offsetY, x*cellSize+cellSize+offsetX,y*cellSize+offsetY, x*cellSize+cellSize+offsetX,y*cellSize+cellSize+offsetY, x*cellSize+offsetX,y*cellSize+cellSize+offsetY], "line")
+			Draw.text(spatialHash.getCell(x, y).size,x*cellSize+cellSize/2+offsetX,y*cellSize+cellSize/2+offsetY);
 		}
 	}
 	// Draw hitboxes
@@ -291,7 +290,7 @@ function drawPhysics(objs, spatialHash, offsetX, offsetY) {
 		for (const [i, a] of Object.entries(objsList)) { // Look at each object
 			if (typeof a === "object") {
 				Draw.push();
-				Draw.translate(a.x, a.y);
+				Draw.translate(a.x+offsetX, a.y+offsetY);
 	
 				// Draw object's shape and bounding box
 				Draw.setColor(0,0,80,1.0);
@@ -299,7 +298,7 @@ function drawPhysics(objs, spatialHash, offsetX, offsetY) {
 					Draw.setColor(255,0,0,1.0);
 				}
 				Draw.setLineWidth(1);
-				Draw.rectangle(a.shape.x1-offsetX, a.shape.y1-offsetY, a.shape.w, a.shape.h, "line");
+				Draw.rectangle(a.shape.x1, a.shape.y1, a.shape.w, a.shape.h, "line");
 				Draw.setLineWidth(2);
 				Draw.polygon(a.shape.v, "line");
 	

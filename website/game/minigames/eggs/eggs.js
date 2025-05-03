@@ -281,7 +281,7 @@ if (true) {
 
 			// DEBUG physics
 			if (DEBUGPHYSICS) {
-				drawPhysics(this.objects, this.world, 0, 0);
+				drawPhysics(Draw, this.objects, this.world, 0, 0);
 			}
 
 			// Dead / Haven't started
