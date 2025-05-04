@@ -12,7 +12,7 @@ import {executeCommand} from "../commands.js";
 MENUS["chatMenu"] = new class extends Menu {
 	//Initialize
 	constructor () {
-		super(235,525, 660,51);
+		super(178,525, 693,51);
 	}
 
 	load() {
@@ -33,19 +33,19 @@ MENUS["chatMenu"] = new class extends Menu {
 		this.emoteMenuOpen = false;
 
 		this.buttons = {};
-		this.buttons[0] = new Button(false, ()=>{this.emoteMenuOpen = !this.emoteMenuOpen; closeMenu();}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, 216,535, 34,34, "Emotes");
+		this.buttons[0] = new Button(false, ()=>{this.emoteMenuOpen = !this.emoteMenuOpen; closeMenu();}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,0),SPRITE.chatButton.getFrame(1,0),SPRITE.chatButton.getFrame(2,0)]}, this.x+14,this.y+10, 34,34, "Emotes");
 		this.buttons[0].name = "emotes";
-		this.buttons[1] = new Button(false, ()=>{this.enter();}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, 661,535, 34,34, "Send");
+		this.buttons[1] = new Button(false, ()=>{this.enter();}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,1),SPRITE.chatButton.getFrame(1,1),SPRITE.chatButton.getFrame(2,1)]}, this.x+459,this.y+10, 34,34, "Send");
 		this.buttons[1].name = "send";
-		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,6),SPRITE.chatButton.getFrame(1,6),SPRITE.chatButton.getFrame(2,6)]}, 699,535, 34,34, "Inventory");
+		this.buttons[2] = new Button(false, ()=>{if (getOpenMenu() != "customization") {openMenu("customization");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,6),SPRITE.chatButton.getFrame(1,6),SPRITE.chatButton.getFrame(2,6)]}, this.x+497,this.y+10, 34,34, "Inventory");
 		this.buttons[2].name = "customization";
-		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, 737,535, 34,34, "Map");
+		this.buttons[3] = new Button(false, ()=>{if (getOpenMenu() != "mapMenu") {openMenu("mapMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,3),SPRITE.chatButton.getFrame(1,3),SPRITE.chatButton.getFrame(2,3)]}, this.x+535,this.y+10, 34,34, "Map");
 		this.buttons[3].name = "map";
-		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, 775,535, 34,34, "Connected Players");
+		this.buttons[4] = new Button(false, ()=>{if (getOpenMenu() != "usersMenu") {openMenu("usersMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,4),SPRITE.chatButton.getFrame(1,4),SPRITE.chatButton.getFrame(2,4)]}, this.x+573,this.y+10, 34,34, "Connected Players");
 		this.buttons[4].name = "users";
-		this.buttons[5] = new Button(false, ()=>{if (getOpenMenu() != "questsMenu") {openMenu("questsMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,5),SPRITE.chatButton.getFrame(1,5),SPRITE.chatButton.getFrame(2,5)]}, 813,535, 34,34, "Quests");
+		this.buttons[5] = new Button(false, ()=>{if (getOpenMenu() != "questsMenu") {openMenu("questsMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,5),SPRITE.chatButton.getFrame(1,5),SPRITE.chatButton.getFrame(2,5)]}, this.x+611,this.y+10, 34,34, "Quests");
 		this.buttons[5].name = "quests";
-		this.buttons[6] = new Button(false, ()=>{if (getOpenMenu() != "settingsMenu") {openMenu("settingsMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, 851,535, 34,34, "Settings");
+		this.buttons[6] = new Button(false, ()=>{if (getOpenMenu() != "settingsMenu") {openMenu("settingsMenu");} else {closeMenu();}}, {image: IMG.chat, frames:[SPRITE.chatButton.getFrame(0,2),SPRITE.chatButton.getFrame(1,2),SPRITE.chatButton.getFrame(2,2)]}, this.x+649,this.y+10, 34,34, "Settings");
 		this.buttons[6].name = "settings";
 
 		// Button notifications (a red dot that appears by buttons)
@@ -57,7 +57,7 @@ MENUS["chatMenu"] = new class extends Menu {
 				this.enter();
 			}
 		});
-		this.buttons[7] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0; this.textField.focus();}, {visible: false}, 255,534, 406,36);
+		this.buttons[7] = new Button(false, ()=>{this.open = true; this.typing = true; this.timer = 0; this.textField.focus();}, {visible: false}, this.x+53,this.y+9, 406,36);
 	}
 
 	enter() {
@@ -124,7 +124,7 @@ MENUS["chatMenu"] = new class extends Menu {
 	draw() {
 		// Placeholder graphic
 		Draw.setColor(255,255,255,1.0);
-		Draw.image(IMG.chat, SPRITE.chat.getFrame(0,0), 202, 525);
+		Draw.image(IMG.chat, SPRITE.chat.getFrame(0,0), this.x, this.y);
 
 		// Render all buttons
 		this.drawButtons();
@@ -147,7 +147,7 @@ MENUS["chatMenu"] = new class extends Menu {
 			if (this.timer <= 0.5) {
 				s += "|";
 			}
-			Draw.text(s, 262, canvasHeight-19, "left");
+			Draw.text(s, this.x+60, this.y+32, "left");
 		}
 
 		// Display chat messages
@@ -156,7 +156,7 @@ MENUS["chatMenu"] = new class extends Menu {
 			Draw.image(IMG.chatMessage, null, 212, 490);
 			Draw.setFont(FONT.caption);
 			Draw.setColor(0, 0, 0, 1);
-			Draw.text(this.messages[this.messages.length - 1], 226, 515, "left");
+			Draw.text(this.messages[this.messages.length - 1], this.x+24, this.y-10, "left");
 		}
 
 		// Emote Menu
@@ -169,9 +169,9 @@ MENUS["chatMenu"] = new class extends Menu {
 		Draw.image(IMG.nugget, null, 12, 526);
 		Draw.setFont(FONT.hud);
 		Draw.setColor(0,0,0,1.0);
-		Draw.text(displayString, 60, 556+4, "left");
+		Draw.text(displayString, 58, 556+4, "left");
 		Draw.setColor(255,255,255,1.0);
-		Draw.text(displayString, 60, 556, "left");
+		Draw.text(displayString, 58, 556, "left");
 		// Nugget animation when nuggets change
 		if (this.nuggetDiff) {
 			let diffText = `${this.nuggetDiff.toLocaleString()}`; // Show difference. Either in the form -10 or +10
