@@ -318,8 +318,8 @@ class ScrollBar {
 
 		this.buttonSize = this.w;
 		this.scrollStep = scrollStep;
-		this.upButton = new Button("⮝", ()=>{this.scrollButton(-this.scrollStep);}, null, this.x, this.y, this.buttonSize, this.buttonSize);
-		this.downButton = new Button("⮟", ()=>{this.scrollButton(this.scrollStep);}, null, this.x, this.y+this.h-this.buttonSize, this.buttonSize, this.buttonSize);
+		this.upButton = new Button("▲", ()=>{this.scrollButton(-this.scrollStep);}, null, this.x, this.y, this.buttonSize, this.buttonSize);
+		this.downButton = new Button("▼", ()=>{this.scrollButton(this.scrollStep);}, null, this.x, this.y+this.h-this.buttonSize, this.buttonSize, this.buttonSize);
 
 		this.barOriginY = this.y+this.buttonSize;
 		this.barTotalRange = this.h-this.buttonSize*2;
