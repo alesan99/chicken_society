@@ -16,6 +16,7 @@ import Shape from "../../shape.js";
 import AudioSystem from "../../engine/audio.js";
 import { SpatialHash, updatePhysics, drawPhysics } from "../../physics.js";
 import {PhysicsObject} from "../../objects/objects.js";
+import { Button } from "../../gui/gui.js";
 
 if (true) {
 	let RubberChicken;
@@ -56,6 +57,15 @@ if (true) {
 			this.img.fence = new RenderImage("game/minigames/runner/fence.png");
 			this.sprite.fence = new Sprite(this.img.fence, 4,1, 64,160);
 			this.img.background = new RenderImage("game/minigames/runner/background.png");
+			this.img.buttons = new RenderImage("game/minigames/runner/buttons.png");
+			this.sprite.buttons = new Sprite(this.img.buttons, 3,1, 100,100);
+
+			// On-screen controls
+			this.buttons = {};
+			this.buttons.jump = new Button("", () => {this.keyPress(" ");}, {image:this.img.buttons, frames:[this.sprite.buttons.getFrame(0,0),this.sprite.buttons.getFrame(1,0),this.sprite.buttons.getFrame(2,0)]}, canvasWidth-40-100,canvasHeight-290, 100,80);
+			this.buttons.jump.actionOnClick = true;
+			this.buttons.duck = new Button("", () => {this.keyPress("Shift");}, {image:this.img.buttons, rotation:Math.PI, frames:[this.sprite.buttons.getFrame(0,0),this.sprite.buttons.getFrame(1,0),this.sprite.buttons.getFrame(2,0)]}, canvasWidth-40-100,canvasHeight-180, 100,80);
+			this.buttons.duck.actionOnClick = true;
 
 			// Animation variables
 			this.blinkAnim = 0;
@@ -211,6 +221,11 @@ if (true) {
 			keysToDelete.forEach(key => {
 				delete fences[key];
 			});
+
+			// On-screen controls
+			for (const [name, button] of Object.entries(this.buttons)) {
+				button.update(dt);
+			}
 		}
   
 		draw() {
@@ -320,6 +335,11 @@ if (true) {
 				}
 			}
 
+			// On-screen controls
+			for (const [name, button] of Object.entries(this.buttons)) {
+				button.draw();
+			}
+
 			// DEBUG physics
 			if (DEBUGPHYSICS) {
 				drawPhysics(Draw, this.objects, this.world, -cameraX, 0);
@@ -386,6 +406,11 @@ if (true) {
 		}
 
 		mouseClick(button, x, y) {
+			for (const [name, btn] of Object.entries(this.buttons)) {
+				if (btn.click(button, x, y)) {
+					return true;
+				}
+			}
 			if (this.started != true) {
 				minigame.start();
 				return true;
@@ -394,6 +419,14 @@ if (true) {
 				this.chicken.jump();
 			} else if (button == 2) {
 				this.chicken.duck();
+			}
+		}
+
+		mouseRelease(button, x, y) {
+			for (const [name, btn] of Object.entries(this.buttons)) {
+				if (btn.clickRelease(button, x, y)) {
+					return true;
+				}
 			}
 		}
 

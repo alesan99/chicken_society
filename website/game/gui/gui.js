@@ -11,6 +11,7 @@ class Button {
 		this.labelJustify = "center";
 
 		this.textColor = [112, 50, 16];
+		this.rotation = 0;
 
 		if (graphic) {
 			// If specified, render image for button with frames
@@ -31,6 +32,9 @@ class Button {
 			if (graphic.textColor) {
 				this.textColor = graphic.textColor;
 			}
+			if (graphic.rotation) {
+				this.rotation = graphic.rotation;
+			}
 		}
 		this.action = action;
 
@@ -43,6 +47,7 @@ class Button {
 		this.held = false;
 		this.selected = false;
 		this.disabled = false;
+		this.actionOnClick = false; // action performed on click, not release
 
 		if (tooltip) {
 			this.tooltip = new ToolTip(tooltip, this.x+this.w/2, this.y, this);
@@ -80,13 +85,16 @@ class Button {
 		this.hover = this.checkMouseInside();
 		if (this.hover) {//this should only click if you're hovering over the button
 			this.held = true;
+			if (!this.disabled && this.actionOnClick) {
+				this.action(); // Don't wait for click release (useful where input delay matters)
+			}
 			return true; // ignore all other buttons
 		}
 	}
 	clickRelease(button, x, y){
 		if (this.held == true){
 			this.held = false;
-			if (!this.disabled) {
+			if (!this.disabled && !this.actionOnClick) {
 				this.action();
 			}
 		}
@@ -107,7 +115,7 @@ class Button {
 				frame = 1;
 			}
 			Draw.setColor(255,255,255,1);
-			Draw.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
+			Draw.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, this.rotation, 1,1, 0.5,0.5);
 		} else {
 			// Render button with basic rectangles if no image was provided
 			if (this.disabled == true) {
