@@ -60,7 +60,7 @@ function loadGameAssets() {
 	SPRITE.gunshot = new Sprite(IMG.particle, 2,1, 64,64, 0,0, 1,1);
 	SPRITE.dust = new Sprite(IMG.particle, 2,1, 64,64, 0,65, 1,1);
 
-	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.m4a");
+	MUSIC.seeddispensary = AudioSystem.newMusic("assets/music/seeddispensarytrack.mp3");
 	MUSIC.chickendisco = AudioSystem.newMusic("assets/music/chickendisco.mp3");
 	MUSIC.chictoriassecret = AudioSystem.newMusic("assets/music/chicktoriasecret.mp3");
 	MUSIC.welcometothesociety = AudioSystem.newMusic("assets/music/welcometothesociety.mp3");
