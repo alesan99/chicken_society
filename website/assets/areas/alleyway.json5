@@ -67,7 +67,7 @@
 					"questSlotSet": 1,
 				},
 				{
-					"text": ["You look broke dude. Welcome to the gang"],
+					"text": ["You look gangster dude. Welcome to the gang"],
 					"condition": {
 						"quest": "mafia_initiation",
 						"questSlot": 0,
