@@ -93,7 +93,7 @@ const World = class {
 		// Minigames
 		MINIGAME = new MinigameState();
 
-		this.loadArea(area); // Actually load area
+		this.loadArea(area, "initial"); // Actually load area
 	}
 
 	load () {
@@ -115,7 +115,13 @@ const World = class {
 
 		// Transport player to new area
 		PLAYER.area = this.area;
-		PLAYER_CONTROLLER.reset(canvasWidth*0.5, canvasHeight*0.6, "down");
+		let spawnX = canvasWidth*0.5;
+		let spawnY = canvasHeight*0.6;
+		if (fromWarp === "initial") {
+			spawnX += Math.random()*8-4;
+			spawnY += Math.random()*30;
+		}
+		PLAYER_CONTROLLER.reset(spawnX, spawnY, "down");
 		
 		// Clear any uneeded objects
 		for (const [name, npc] of Object.entries(NPCS)) {
