@@ -180,10 +180,10 @@ export default class Player {
 	}
 
 	// Reset state of player and player controller when moving to new area
-	reset(x, y, dir="down") {
+	reset(charX, charY, dir="down") {
 		let char = this.obj;
 		// Teleport character
-		char.setPosition(x, y);
+		char.setPosition(charX, charY);
 		char.dir = dir;
 		if (dir == "left") {
 			char.flip = -1;
@@ -193,7 +193,7 @@ export default class Player {
 
 		// Also teleport pet
 		if (char.pet) {
-			char.petObj.setPosition(x, y);
+			char.petObj.setPosition(charX, charY);
 		}
 
 		// Stop movement

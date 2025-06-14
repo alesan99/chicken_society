@@ -73,6 +73,8 @@ export default class Character extends PhysicsObject {
 		this.imageOffsety = 4;
 		this.scale = profile.scale || 1;
 		this.rotation = 0;
+		this.appearing = false; // in/out. Appearing animation when entering or leaving an area
+		this.appearAnim = 1.0;
 
 		this.timer = 0;
 
@@ -164,6 +166,19 @@ export default class Character extends PhysicsObject {
 			}
 		}
 
+		// Appearing animation
+		if (this.appearing == "in") {
+			this.appearAnim = this.appearAnim + 5*dt;
+			if (this.appearAnim >= 1.0) {
+				this.appearing = false;
+			}
+		} else if (this.appearing == "out") {
+			this.appearAnim = this.appearAnim - 1*dt;
+			if (this.appearAnim <= 0.0) {
+				this.appearing = false;
+			}
+		}
+
 		// Update status effects
 		this.updateStatusEffects(dt);
 
@@ -184,7 +199,17 @@ export default class Character extends PhysicsObject {
 	}
 
 	// Render chicken with accessories with optional different position
-	draw(drawX=this.x, drawY=this.y, dir=this.dir, rot=this.rotation) {
+	draw(drawX=this.x, drawY=this.y, dir=this.dir, scale=this.scale, rot=this.rotation) {
+		// Appearing animation
+		let scaleX = scale;
+		let scaleY = scale;
+		if (this.appearing == "in") {
+			scaleX *= easing("easeOutSine", this.appearAnim);
+		} else if (this.appearing == "out") {
+			let cutoff = 0.8;
+			scaleX *= easing("easeInSine", (Math.max(cutoff,this.appearAnim)-cutoff)/(1.0-cutoff));
+		}
+
 		// Is player dead?
 		if (this.getStatusEffect("dead")) {
 			rot = Math.PI/2;
@@ -198,7 +223,7 @@ export default class Character extends PhysicsObject {
 		// Shadow
 		if (!this.getStatusEffect("dead")) {
 			Draw.setColor(255,255,255,1.0);
-			Draw.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, this.scale, this.scale, 0.5, 1);
+			Draw.image(IMG.shadow, null, drawX, drawY+this.imageOffsety +3, 0, scaleX, scale, 0.5, 1);
 		}
 
 		// Jumping
@@ -207,47 +232,47 @@ export default class Character extends PhysicsObject {
 		// Chicken and accessories
 		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir == "up" || dir == "left")) { // Held item
 			// Render item under chicken if facing up
-			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, rot);
+			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, scaleX, scaleY, rot);
 		}
 
 		// Character image
 		Draw.setColor(this.color[0],this.color[1],this.color[2],1.0);
-		Draw.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1);
+		Draw.image(this.image, this.anim.getFrame(), drawX, drawY+this.imageOffsety, rot, this.flip*scaleX, scaleY, 0.5, 1);
 
 		Draw.setColor(255,255,255,1.0);
 		if ((this.body != false) && (ITEMS.body[this.body] != null) && (ITEMS.body[this.body].sprite != null)) { // Body item
 			// Figure out the center of the body item to place it on the center of the chicken's 'neck'
-			this.drawItem(ITEMS.body[this.body], BODYOFFSET, drawX, drawY, dir, rot);
+			this.drawItem(ITEMS.body[this.body], BODYOFFSET, drawX, drawY, dir, scaleX, scaleY, rot);
 		}
 
-		Draw.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, rot, this.flip*this.scale, this.scale, 0.5, 1); // Uncolored sprite
+		Draw.image(this.image, this.anim.getFrame(null, 3), drawX, drawY+this.imageOffsety, rot, this.flip*scaleX, scaleY, 0.5, 1); // Uncolored sprite
 		
 		if ((this.face != false) && (ITEMS.face[this.face] != null) && (ITEMS.face[this.face].sprite != null)) { // Face item
 			// Figure out the center of the face item to place it on the center of the chicken's face
-			this.drawItem(ITEMS.face[this.face], FACEOFFSET, drawX, drawY, dir, rot);
+			this.drawItem(ITEMS.face[this.face], FACEOFFSET, drawX, drawY, dir, scaleX, scaleY, rot);
 		}
 
 		if ((this.head != false) && (ITEMS.head[this.head] != null) && (ITEMS.head[this.head].sprite != null)) { // Head item
 			// Figure out the center of the head item to place it on the center of the chicken's head
-			this.drawItem(ITEMS.head[this.head], HEADOFFSET, drawX, drawY, dir, rot);
+			this.drawItem(ITEMS.head[this.head], HEADOFFSET, drawX, drawY, dir, scaleX, scaleY, rot);
 		}
 
 		if ((this.item != false) && (ITEMS.item[this.item] != null) && (ITEMS.item[this.item].sprite != null) && (dir != "up" && dir != "left")) { // Held item
-			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, rot);
+			this.drawItem(ITEMS.item[this.item], ITEMOFFSET, drawX, drawY, dir, scaleX, scaleY, rot);
 		}
 	}
 
-	drawItem(item, offsets, drawX=this.x, drawY=this.y, dir=this.dir, rot=0) {
+	drawItem(item, offsets, drawX=this.x, drawY=this.y, dir=this.dir, scaleX=this.scale, scaleY=this.scale, rot=this.rotation) {
 		// Figure out the center of the item to place it on the location defined on character
-		let offsetX = -(SPRITE.chicken.w/2)*this.flip*this.scale + (offsets[dir_lookup[dir]][this.anim.framex][0])*this.flip*this.scale;
-		let offsetY = -SPRITE.chicken.h*this.scale + offsets[dir_lookup[dir]][this.anim.framex][1]*this.scale;
+		let offsetX = -(SPRITE.chicken.w/2)*this.flip*scaleX + (offsets[dir_lookup[dir]][this.anim.framex][0])*this.flip*scaleX;
+		let offsetY = -SPRITE.chicken.h*scaleY + offsets[dir_lookup[dir]][this.anim.framex][1]*scaleY;
 
 		let x = drawX                   + offsetX*Math.cos(rot) - offsetY*Math.sin(rot);
 		let y = drawY+this.imageOffsety + offsetX*Math.sin(rot) + offsetY*Math.cos(rot);
 
 		let centerX = item.center[dir_lookup[dir]][0]/item.sprite.w;
 		let centerY = item.center[dir_lookup[dir]][1]/item.sprite.h;
-		Draw.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, rot+CHICKENROTATION[this.anim.framex], this.flip*this.scale, this.scale, centerX, centerY);
+		Draw.image(item.image, item.sprite.getFrame(0, dir_lookup[dir]), x, y, rot+CHICKENROTATION[this.anim.framex], this.flip*scaleX, scaleY, centerX, centerY);
 	}
 
 	drawOver() {
@@ -563,6 +588,16 @@ export default class Character extends PhysicsObject {
 		// Land on ground after a jump
 		this.sz = 0;
 		this.z = 0;
+	}
+
+	// Area Movement Animations
+	appear() {
+		this.appearing = "in";
+		this.appearAnim = 0.0;
+	}
+	disappear() {
+		this.appearing = "out";
+		this.appearAnim = 1.0;
 	}
 
 	// Collision

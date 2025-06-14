@@ -83,6 +83,7 @@ const World = class {
 		CHARACTER[0] = new Character(PHYSICSWORLD, canvasWidth*0.5, canvasHeight*0.6, PROFILE, this.area, 0);
 		
 		PLAYER = CHARACTER[0];
+		PLAYER.appear();
 		PLAYER_CONTROLLER = new Player(CHARACTER[0]); // Initialize Player controller
 
 		// HUD
@@ -106,9 +107,6 @@ const World = class {
 		if (area == "coop" && ownerId == false) {
 			ownerId = NETPLAY.id;
 		}
-
-		// Let server know player is moving
-		NETPLAY.sendArea(area, ownerId);
 
 		this.oldArea = this.area;
 		this.area = area;
@@ -169,6 +167,9 @@ const World = class {
 			TimedEventsSystem.injectTimedEvents(`areas/${this.area}`, data).then(newData => {
 				// After all jsons have been read, finally load the area
 				loadAreaFile(newData, this, fromWarp, endFunc);
+
+				// Let server know player moved area
+				NETPLAY.sendArea(area, ownerId, PLAYER.x, PLAYER.y);
 			});
 		});
 
@@ -186,6 +187,7 @@ const World = class {
 		AudioSystem.fadeOutMusic(1);
 		PLAYER.static = true; // Don't let player move when in the process of warping
 		PLAYER_CONTROLLER.stop();
+		NETPLAY.sendAction("disappear");
 		Transition.start("iris", "out", 0.6, [character.x, character.y-40], () => {
 			// Display black screen while area is loading...
 			Transition.start("loading", "in", 100, null, null);
@@ -526,7 +528,7 @@ const World = class {
 		}
 		for (const [id, playerData] of Object.entries(NETPLAY.playerList)) {
 			if (playerData.area == area || (this.areaOwner && playerData.area == `${area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
-				this.addPlayerToArea(id, playerData);
+				this.addPlayerToArea(id, playerData, false);
 				players.push(playerData);
 			} else {
 				this.removePlayerFromArea(id);
@@ -535,8 +537,8 @@ const World = class {
 		return players;
 	}
 
-	addPlayerToArea(id, playerData) {
-		// When a player join an area, create a character object for them
+	addPlayerToArea(id, playerData, appearAnimation) {
+		// When a player joins an area, create a character object for them
 		// First, check if player is in -your- area. If they aren't, remove or don't create their character object.
 		let chicken = playerData.chicken;
 		if (playerData.area == PLAYER.area || (this.areaOwner && playerData.area == `${PLAYER.area}:${this.areaOwner}`)) { // Player is in your area (either "area" or "area:owner")
@@ -544,6 +546,10 @@ const World = class {
 				CHARACTER[id] = new Character(PHYSICSWORLD, chicken.x, chicken.y, playerData.profile, playerData.area, id);
 				CHARACTER[id].area = playerData.area;
 				//CHARACTER[id].active = false // Disable collision checks. Should be enabled so collision is accurate even when information isn't being recieved.
+			}
+			CHARACTER[id].setPosition(chicken.x, chicken.y);
+			if (appearAnimation) {
+				CHARACTER[id].appear();
 			}
 		} else { // Player is not in your area
 			this.removePlayerFromArea(id);

@@ -78,13 +78,13 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			// Events //
 			// Players joining
 			socket.on("playerList", (playerList) => {this.recievePlayerList(playerList);});
-			socket.on("addPlayer", (id, playerData) => {this.addPlayer(id, playerData);});
+			socket.on("addPlayer", (id, playerData) => {this.addPlayer(id, playerData, false);});
 			socket.on("removePlayer", (id) => {this.removePlayer(id);});
 			// Global player events
 			socket.on("chat", (id, text) => {this.recieveChat(id, text);});
 			socket.on("updateProfile",(id, profile) => {this.recieveProfile(id, profile);});
 			socket.on("updatePetProfile",(id, profile) => {this.recievePetProfile(id, profile);});
-			socket.on("area", (id, area) => {this.recieveArea(id, area);});
+			socket.on("area", (id, area, x, y) => {this.recieveArea(id, area, x, y);});
 			// Area player events
 			socket.on("chicken", (id, x, y, sx, sy) => {this.recievePosition(id, x, y, sx, sy);});
 			socket.on("action", (id, actions) => {this.recieveAction(id, actions);});
@@ -162,12 +162,13 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Add new playerData entry to playerList
-		addPlayer (id, playerData) {
+		addPlayer (id, playerData, isInitial=false) {
 			if ((id != socket.id) && (this.playerList[id] == null)) {
 				this.playerList[id] = playerData;
 
 				// Add player to area (in world.js)
-				WORLD.addPlayerToArea(id, this.playerList[id]);
+				// if isInitial (You are joining and getting the player data for the first time), don't show others as spawning
+				WORLD.addPlayerToArea(id, this.playerList[id], !isInitial);
 				this.newPlayerJoined = true; // New player! Let them know your information
 
 				// Add to connected player list, if open
@@ -198,7 +199,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			console.log(playerList);
 			for (const [id, playerData] of Object.entries(playerList)) {
 				if ((id != socket.id) && (this.playerList[id] == null)) {
-					this.addPlayer(id, playerData);
+					this.addPlayer(id, playerData, true);
 				}
 			}
 		}
@@ -326,6 +327,9 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 							// args = [jumpHeight]
 							chicken.jump(args[0]);
 							break;
+						case "disappear":
+							chicken.disappear();
+							break;
 						}
 					}
 				}
@@ -333,15 +337,18 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		//Area
-		sendArea(area, ownerId) {
-			socket.emit("area", area, ownerId);
+		sendArea(area, ownerId, x, y) {
+			socket.emit("area", area, ownerId, x, y);
 		}
-		recieveArea(id, area) {
+		recieveArea(id, area, x, y) {
 			if (this.playerList[id] != null) {
 				this.playerList[id].area = area;
+				let chicken = this.playerList[id].chicken;
+				chicken.x = x;
+				chicken.y = y;
 
 				// Add player to area (in world.js)
-				WORLD.addPlayerToArea(id, this.playerList[id]);
+				WORLD.addPlayerToArea(id, this.playerList[id], true);
 			}
 		}
 
@@ -555,7 +562,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 		connect () {}
 		update (dt) {}
-		addPlayer (id, player) {}
+		addPlayer (id, player, isInitial) {}
 		removePlayer (id) {}
 		getPlayerList (playerList) {}
 		recievePosition (id, position) {}
@@ -571,7 +578,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		sendEmote(emote) {}
 		recieveEmote(id, emote) {}
 		sendArea(area) {}
-		recieveArea(id, area) {}
+		recieveArea(id, area, x, y) {}
 		sendMinigame(minigameName) {}
 		mutePlayer(id, doMute) {}
 		getPlayerData(id) {}

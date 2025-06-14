@@ -141,6 +141,9 @@ function listenToClient(socket) {
 				case "jump":
 					actionsToSend.push(action);
 					break;
+				case "disappear":
+					actionsToSend.push(action);
+					break;
 				}
 			}
 			socket.to(`area:${playerData.area}`).emit("action", socket.id, actionsToSend);
@@ -185,7 +188,7 @@ function listenToClient(socket) {
 	});
 	
 	// Player moved area
-	socket.on("area", (area, ownerId=false) =>{
+	socket.on("area", (area, ownerId=false, x, y) =>{
 		let playerData = playerList[socket.id];
 		if (playerData) {
 			// Send player into current area room
@@ -196,13 +199,15 @@ function listenToClient(socket) {
 				area = `coop:${ownerId}`;
 			}
 			playerData.area = area;
+			playerData.chicken.x = x;
+			playerData.chicken.y = y;
 
 			// Leave old area
 			socket.leave(`area:${oldArea}`);
 			// Join new area
 			socket.join(`area:${area}`);
 
-			socket.broadcast.emit("area", socket.id, area); // Let everyone know
+			socket.broadcast.emit("area", socket.id, area, playerData.chicken.x, playerData.chicken.y); // Let everyone know
 
 			// Players in target area have not been updating -this- player about their position/state
 			// Tell this player where everyone is at
