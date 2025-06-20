@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken Society</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<!-- Navigation Bar -->
+<nav>
+    <ul id="navigation-bar-list">
+        <!-- Chicken Society logo -->
+        <li id="home-link">
+            <div id="home">
+                <a href="#"><img src="./assets/logo.png" id="logo"></a>
+            </div>
+        </li>
+        <!-- Sign In and Register dropdowns -->
+        <div id="dropdowns">
+            <li class="dropdown">
+                <button class="dropdown-button">Sign In</button>
+                <div class="dropdown-content">
+                    <div class="loginContainer">
+                        <form id="loginForm">
+                            <input id="username-field" class="login-stuff" type="text" placeholder="Username"
+                                name="username" maxlength="16" autocomplete="off" required />
+                            <input id="password-field" class="login-stuff" type="password" placeholder="Password"
+                                name="password" maxlength="16" autocomplete="off" required />
+                            <button id="login-button" class="login-stuff" type="button">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li class="dropdown">
+                <button class="dropdown-button">Register</button>
+                <div class="dropdown-content">
+                    <div class="loginContainer">
+                        <form id="registerForm">
+                            <input id="register-username-field" class="register-stuff" type="text"
+                                placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off"
+                                required />
+                            <input id="register-password-field" class="register-stuff" type="password"
+                                placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off"
+                                required />
+                            <input id="register-email-field" class="register-stuff" type="email" placeholder="Email"
+                                name="registerEmail" maxlength="32" autocomplete="off" required />
+                            <button id="register-button" class="register-stuff" type="button">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </div>
+    </ul>
+</nav>
+
+<body>
+    <div class="page-container">
+        <div class="content-container">
+            <h1>Terms of Service (placeholder)</h1>
+            <p>Welcome to Chicken Society! By accessing or using our game, you agree to comply with the following terms
+                and conditions. If you do not agree with any part of these terms, you must not use our game.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
