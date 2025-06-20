@@ -25,8 +25,10 @@
 				<div class="dropdown-content">
 					<div class="loginContainer">
 						<form id="loginForm">
-							<input id="username-field" class="login-stuff" type="text" placeholder="Username" name="username" maxlength="16" autocomplete="off" required />
-							<input id="password-field" class="login-stuff" type="password" placeholder="Password" name="password" maxlength="16" autocomplete="off" required />
+							<input id="username-field" class="login-stuff" type="text" placeholder="Username"
+								name="username" maxlength="16" autocomplete="off" required />
+							<input id="password-field" class="login-stuff" type="password" placeholder="Password"
+								name="password" maxlength="16" autocomplete="off" required />
 							<button id="login-button" class="login-stuff" type="button">Login</button>
 						</form>
 					</div>
@@ -37,9 +39,14 @@
 				<div class="dropdown-content">
 					<div class="loginContainer">
 						<form id="registerForm">
-							<input id="register-username-field" class="register-stuff" type="text" placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off" required />
-							<input id="register-password-field" class="register-stuff" type="password" placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off" required />
-							<input id="register-email-field" class="register-stuff" type="email" placeholder="Email" name="registerEmail" maxlength="32" autocomplete="off" required />
+							<input id="register-username-field" class="register-stuff" type="text"
+								placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off"
+								required />
+							<input id="register-password-field" class="register-stuff" type="password"
+								placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off"
+								required />
+							<input id="register-email-field" class="register-stuff" type="email" placeholder="Email"
+								name="registerEmail" maxlength="32" autocomplete="off" required />
 							<button id="register-button" class="register-stuff" type="button">Register</button>
 						</form>
 					</div>
@@ -50,6 +57,22 @@
 </nav>
 
 <body>
+	<!-- Terms of Service & Privacy Policy Modal -->
+	<div id="tos-modal" class="modal-overlay">
+		<div class="modal-content">
+			<h2>Welcome to Chicken Society!</h2>
+			<p>You must agree to our <a href="/website/terms-of-service.html" target="_blank">Terms of Service</a> and
+				<a href="/website/privacy-policy.html" target="_blank">Privacy Policy</a> before using the site.
+			</p>
+			<label>
+				<input type="checkbox" id="agree-checkbox" />
+				I have read and agree to the Terms of Service and Privacy Policy
+			</label>
+			<br />
+			<button id="agree-button" class="disabled" disabled>Continue</button>
+		</div>
+	</div>
+
 	<div class="page-container">
 		<div class="content-container">
 			<!-- Canvas to render Game -->
@@ -63,11 +86,12 @@
 			<div id="footer">
 				<!-- Donation button -->
 				<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-				<script type='text/javascript'>kofiwidget2.init('Support us on Ko-fi', '#72a4f2', '');kofiwidget2.draw();</script> 
+				<script
+					type='text/javascript'>kofiwidget2.init('Support us on Ko-fi', '#72a4f2', ''); kofiwidget2.draw();</script>
 				<!-- Goodest Software Info -->
 				<p>2025 Goodest Software</p>
 				<a href="/website/terms-of-service.html" target="_blank">Terms of Service</a> |
-  				<a href="/website/privacy-policy.html" target="_blank">Privacy Policy</a>
+				<a href="/website/privacy-policy.html" target="_blank">Privacy Policy</a>
 			</div>
 		</div>
 	</div>
@@ -77,7 +101,7 @@
 		{"imports": {}}
 	</script>
 	<script src="game/login.js"></script>
-	
+
 	<!-- Socket.IO v4.7.2 with Msgpack parser -->
 	<!-- May need to be updated whenever server's socket.io version is updated. -->
 	<script src="socket.io.msgpack.min.js"></script>
@@ -92,6 +116,35 @@
 
 	<!-- Run game code -->
 	<script src="game/main.js" type="module"></script>
+
+	<!-- Terms of Service Modal & Privacy Policy Script -->
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const modal = document.getElementById("tos-modal");
+			const checkbox = document.getElementById("agree-checkbox");
+			const button = document.getElementById("agree-button");
+
+			checkbox.addEventListener("change", () => {
+				if (checkbox.checked) {
+					button.disabled = false;
+					button.classList.remove("disabled");
+					button.classList.add("enabled");
+				} else {
+					button.disabled = true;
+					button.classList.remove("enabled");
+					button.classList.add("disabled");
+				}
+			});
+
+			button.addEventListener("click", () => {
+				if (!button.disabled) {
+					modal.style.display = "none";
+				}
+			});
+		});
+	</script>
+
+
 </body>
 
 </html>
