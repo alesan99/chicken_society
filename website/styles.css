@@ -1,3 +1,13 @@
+/* Load fonts */
+@font-face {
+	/* Game fonts (need to be loaded here to be used in Chicken Society) */
+	font-family: 'Pixel';
+	src: url('assets/fonts/publicpixel.ttf') format('truetype');
+	/* You can include additional font formats here for better browser compatibility */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 /* Page content */
 body{
 	/* Background */
@@ -7,6 +17,7 @@ body{
 	width: 100%;
 	height: 100%;
 	overflow: auto;
+    font-family: 'Inter', sans-serif; /* Use a pixel font for the entire page */
 }
 
 .page-container{
@@ -189,6 +200,7 @@ form {
 	background-color: rgb(251, 236, 211);
 	border: 1px solid #e5e5e500;
 	transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+    font-family: 'Inter', sans-serif; 
 } 
 
 #login-button, #register-button {
@@ -225,10 +237,71 @@ form {
 
 }
 
-/* Load fonts */
-@font-face {
-	/* Game fonts (need to be loaded here to be used in Chicken Society) */
-	font-family: 'Pixel';
-	src: url('assets/fonts/publicpixel.ttf') format('truetype');
-	/* You can include additional font formats here for better browser compatibility */
+#footer a {
+    color: #806649;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fffcf0;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+    color: #ec9027;
+}
+
+.modal-content a {
+  color: #1e3a8a;
+  text-decoration: underline;
+}
+
+.modal-content button {
+  background: #ec9027;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0.75rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Style when disabled */
+.modal-content button.disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Style when enabled (normal active state) */
+.modal-content button.enabled {
+  background: #1e40af;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+
+}
+
+.modal-content button.enabled:hover {
+  background: #ec9027;
+}
+
+
