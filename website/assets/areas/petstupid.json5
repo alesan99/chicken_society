@@ -94,12 +94,12 @@
           ],
           condition: {
             quest: "study_in_violet",
-            questSlot: 2,
-            questSlotValue: 0,
+            questTask: 2,
+            questTaskValue: 0,
           },
           quest: "study_in_violet",
-          questSlot: 0,
-          questSlotSet: 1,
+          questTask: 0,
+          questTaskSet: 1,
         },
         // Default dialogue
         {
@@ -145,13 +145,13 @@
 
       action: "quest",
       quest: "egg_hunt",
-      questSlot: 5,
-      questSlotAdd: 1,
+      questTask: 5,
+      questTaskAdd: 1,
 
       condition: {
         quest: "egg_hunt",
-        questSlot: 5,
-        questSlotValue: 0,
+        questTask: 5,
+        questTaskValue: 0,
       },
 
       sprite: {

@@ -56,8 +56,8 @@
           "text": ["Where could my eggs be?"],
           "condition": {
             "quest": "egg_hunt",
-            "questSlot": 0,
-            "questSlotValue": 0
+            "questTask": 0,
+            "questTaskValue": 0
           }
         },
         {
@@ -65,8 +65,8 @@
           "text": ["You found my eggs!"],
           "condition": {
             "quest": "egg_hunt",
-            "questSlot": [0, 1, 2, 3, 4],
-            "questSlotValue": [1, 1, 1, 1, 1]
+            "questTask": [0, 1, 2, 3, 4],
+            "questTaskValue": [1, 1, 1, 1, 1]
           },
           "quest": "egg_hunt"
         },
@@ -129,13 +129,13 @@
 
       "action": "quest",
       "quest": "egg_hunt",
-      "questSlot": 2,
-      "questSlotAdd": 1,
+      "questTask": 2,
+      "questTaskAdd": 1,
 
       "condition": {
         "quest": "egg_hunt",
-        "questSlot": 2,
-        "questSlotValue": 0
+        "questTask": 2,
+        "questTaskValue": 0
       },
 
       "sprite": {

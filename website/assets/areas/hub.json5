@@ -129,13 +129,13 @@
 
 			"action": "quest",
 			"quest": "egg_hunt",
-			"questSlot": 0,
-			"questSlotAdd": 1,
+			"questTask": 0,
+			"questTaskAdd": 1,
 
 			"condition": {
 				"quest": "egg_hunt",
-				"questSlot": 0,
-				"questSlotValue": 0
+				"questTask": 0,
+				"questTaskValue": 0
 			},
 
 			"sprite": {

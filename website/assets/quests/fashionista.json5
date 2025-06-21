@@ -12,9 +12,9 @@
 			// Clothing must add up to 100 nuggets or more
 			"type": "clothes",
 			"costGreater": 100,
-			"questSlotSet": 1,
+			"questTaskSet": 1,
 
-			"questSlotDefault": 0
+			"questTaskDefault": 0
 		},
 		false
 	],

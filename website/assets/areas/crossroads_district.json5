@@ -63,12 +63,12 @@
 					],
 					"condition": {
 						"quest": "factory_explosion",
-						"questSlot": [2, 3],
-						"questSlotValue": [1, 0]
+						"questTask": [2, 3],
+						"questTaskValue": [1, 0]
 					},
 					"quest": "factory_explosion",
-					"questSlot": 3,
-					"questSlotSet": 1,
+					"questTask": 3,
+					"questTaskSet": 1,
 				},
 				// Talk to him/her after you are no longer the no. 1 suspect
 				{
@@ -91,8 +91,8 @@
 						"You're my number one suspect right now. I'm keeping my eyes on you, bomber."
 					],
 					"quest": "factory_explosion",
-					"questSlot": 1,
-					"questSlotSet": 1,
+					"questTask": 1,
+					"questTaskSet": 1,
 				}
 			],
 		}
@@ -144,15 +144,15 @@
 						"(It looks like a piece of skin. This could be a clue, I should show this to the detective.)"
 					],
 					"quest": "factory_explosion",
-					"questSlot": 2,
-					"questSlotSet": 1,
+					"questTask": 2,
+					"questTaskSet": 1,
 				}
 			],
 
 			"condition": {
 				"quest": "factory_explosion",
-				"questSlot": [1, 2],
-				"questSlotValue": [1, 0]
+				"questTask": [1, 2],
+				"questTaskValue": [1, 0]
 			},
 
 			"sprite": {

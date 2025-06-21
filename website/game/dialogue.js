@@ -504,10 +504,10 @@ const DialogueSystem = (function() {
 
 			// Quest progress from talking
 			if (d.quest) {
-				if (d.questSlotAdd) {
-					QuestSystem.progress(d.quest, d.questSlot, d.questSlotAdd);
-				} else if (d.questSlotSet) {
-					QuestSystem.setProgress(d.quest, d.questSlot, d.questSlotSet);
+				if (d.questTaskAdd) {
+					QuestSystem.progress(d.quest, d.questTask, d.questTaskAdd);
+				} else if (d.questTaskSet) {
+					QuestSystem.setProgress(d.quest, d.questTask, d.questTaskSet);
 				}
 			}
 

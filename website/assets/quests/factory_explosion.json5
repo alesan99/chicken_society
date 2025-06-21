@@ -9,13 +9,13 @@
 		"Investigate rubble.",
 		"Prove you may be innocent."
 	],
-	"progressDescriptionSlotRequirement": [false, false],
+	"progressDescriptionTaskRequirement": [false, false],
 	"progressEvents": [
 		{
 			// Visit Crossroads District
 			"type": "area",
 			"area": "crossroads_district",
-			"questSlotSet": 1
+			"questTaskSet": 1
 		},
 		false,
 		false,

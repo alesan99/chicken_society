@@ -109,8 +109,8 @@ const QuestSystem = (function() {
 				// Check all quests to see if any are affected by this event
 				let quest = activeQuests[questName];
 				if (quest.progressEvents) {
-					for (let slot=0; slot < quest.progressEvents.length; slot++) {
-						let event = quest.progressEvents[slot];
+					for (let task=0; task < quest.progressEvents.length; task++) {
+						let event = quest.progressEvents[task];
 						if (event != false && event.type == type && (quest.condition == null || checkCondition(quest.condition))) {
 							// Quest is accepting event!
 							let doProgress = false;
@@ -179,15 +179,15 @@ const QuestSystem = (function() {
 	
 							// Progress quest
 							if (doProgress) {
-								if (event.questSlotAdd) {
-									this.progress(questName, slot, event.questSlotAdd);
-								} else if (event.questSlotSet) {
-									this.setProgress(questName, slot, event.questSlotSet);
+								if (event.questTaskAdd) {
+									this.progress(questName, task, event.questTaskAdd);
+								} else if (event.questTaskSet) {
+									this.setProgress(questName, task, event.questTaskSet);
 								}
 							} else {
 								// Quest event may have a property to undo progress if event isn't accepted
-								if (event.questSlotDefault) {
-									this.setProgress(questName, slot, event.questSlotDefault);
+								if (event.questTaskDefault) {
+									this.setProgress(questName, task, event.questTaskDefault);
 								}
 							}
 						}
@@ -201,8 +201,8 @@ const QuestSystem = (function() {
 			// Anything that type of quest event that can be completed before quest starts NEEDS to be here.
 			let quest = this.getQuest(questName);
 			if (quest.progressEvents) {
-				for (let slot=0; slot < quest.progressEvents.length; slot++) {
-					let event = quest.progressEvents[slot];
+				for (let task=0; task < quest.progressEvents.length; task++) {
+					let event = quest.progressEvents[task];
 					if (event != false && (quest.condition == null || checkCondition(quest.condition))) {
 						let type = event.type;
 						// Minigame highscore might've been reached before quest started
@@ -221,16 +221,16 @@ const QuestSystem = (function() {
 			}
 		},
 
-		// Set quest progress slot to a value.
-		setProgress(questName, progressSlot, value) {
+		// Set quest progress task to a value.
+		setProgress(questName, progressTask, value) {
 			let quest = this.getQuest(questName);
 			if (quest) {
-				let oldProgress = quest.progress[progressSlot];
-				quest.progress[progressSlot] = value;
+				let oldProgress = quest.progress[progressTask];
+				quest.progress[progressTask] = value;
 
 				// Show notification for completing this step of the quest
-				if (value >= quest.progressFinish[progressSlot] && value != oldProgress) {
-					Notify.new(`[✔] ${quest.progressDescription[progressSlot]}`, 5, [80,80,80]);
+				if (value >= quest.progressFinish[progressTask] && value != oldProgress) {
+					Notify.new(`[✔] ${quest.progressDescription[progressTask]}`, 5, [80,80,80]);
 				}
 
 				// Save progress
@@ -250,18 +250,18 @@ const QuestSystem = (function() {
 			}
 		},
 
-		// Increment quest progress slot by value.
-		progress(questName, progressSlot, value=1) {
+		// Increment quest progress task by value.
+		progress(questName, progressTask, value=1) {
 			let quest = this.getQuest(questName);
 			if (quest) {
-				let currentValue = quest.progress[progressSlot];
-				this.setProgress(questName, progressSlot, currentValue + value);
+				let currentValue = quest.progress[progressTask];
+				this.setProgress(questName, progressTask, currentValue + value);
 			}
 		},
 
 		// Mark quest as complete, save progress, and remove from activeQuest update list.
 		complete(questName) {
-			// FYI: a quest is complete once all progress slots are >= progressFinish slots
+			// FYI: a quest is complete once all progress tasks are >= progressFinish tasks
 			let quest = this.getQuest(questName);
 			if (quest) {
 				// Notify
@@ -300,15 +300,15 @@ const QuestSystem = (function() {
 			return activeQuests[questName];
 		},
 
-		// Return quest progress slot
-		getProgress(questName, slot) {
+		// Return quest progress task
+		getProgress(questName, task) {
 			let quest = this.getQuest(questName);
 			if (quest) {
 				// If quest is active, return current progress
-				return quest.progress[slot];
+				return quest.progress[task];
 			} else if (SAVEDATA.quests.completed[questName]) {
 				// If quest is complete, return saved progress
-				return SAVEDATA.quests.completed[questName][slot];
+				return SAVEDATA.quests.completed[questName][task];
 			}
 		},
 

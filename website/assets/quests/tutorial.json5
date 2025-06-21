@@ -8,20 +8,20 @@
 		"Visit the arcade and play a mini-game.",
 		"Visit the Old Town."
 	],
-	"progressDescriptionSlotRequirement": [false, false, false],
+	"progressDescriptionTaskRequirement": [false, false, false],
 
 	"progressEvents": [
 		false,
 		{
 			// Play any minigame to progress
 			"type": "minigame",
-			"questSlotSet": 1
+			"questTaskSet": 1
 		},
 		{
 			// Visit Old Town to progress
 			"type": "area",
 			"area": "oldtown",
-			"questSlotSet": 1
+			"questTaskSet": 1
 		}
 	],
 

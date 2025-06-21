@@ -10,7 +10,7 @@
 		"Hide the body", // You don't actually do this either
 		"Repent" // You may do this if you want
 	],
-	"progressDescriptionSlotRequirement": [
+	"progressDescriptionTaskRequirement": [
 		false,
 		0,
 		false,

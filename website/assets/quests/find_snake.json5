@@ -14,7 +14,7 @@
 		"Capture the snake.",
 		"Interrogate the snake.",
 	],
-	"progressDescriptionSlotRequirement": [
+	"progressDescriptionTaskRequirement": [
 		false,
 		0,
 		0,

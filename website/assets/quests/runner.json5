@@ -13,7 +13,7 @@
 			"type": "minigameHighscore",
 			"minigame": "runner",
 			"score": 99,
-			"questSlotSet": 1
+			"questTaskSet": 1
 		},
 		false
 	],

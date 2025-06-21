@@ -84,8 +84,8 @@
 					],
 					"condition": {
 						"quest": "runner",
-						"questSlot": 0,
-						"questSlotValue": 0
+						"questTask": 0,
+						"questTaskValue": 0
 					}
 				},
 				{
@@ -97,12 +97,12 @@
 					],
 					"condition": {
 						"quest": "runner",
-						"questSlot": 0,
-						"questSlotValue": 1
+						"questTask": 0,
+						"questTaskValue": 1
 					},
 					"quest": "runner",
-					"questSlot": 1,
-					"questSlotAdd": 1
+					"questTask": 1,
+					"questTaskAdd": 1
 				},
 				{
 					"id": "runnerComplete",
@@ -224,13 +224,13 @@
 
 			"action": "quest",
 			"quest": "egg_hunt",
-			"questSlot": 3,
-			"questSlotAdd": 1,
+			"questTask": 3,
+			"questTaskAdd": 1,
 
 			"condition": {
 				"quest": "egg_hunt",
-				"questSlot": 3,
-				"questSlotValue": 0
+				"questTask": 3,
+				"questTaskValue": 0
 			},
 
 			"sprite": {

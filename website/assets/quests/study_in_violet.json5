@@ -8,7 +8,7 @@
 		"Find the trashed history book.", // Hidden until you complete previous step
 		"Read the dumpster history book." // Read dumpster book after joining the Mafia
 	],
-	"progressDescriptionSlotRequirement": [
+	"progressDescriptionTaskRequirement": [
 		false,
 		0,
 		1

@@ -8,7 +8,7 @@
 		"Investigate the scene.",
 		"Interrogate the snake again. Torture time?"
 	],
-	"progressDescriptionSlotRequirement": [
+	"progressDescriptionTaskRequirement": [
 		false,
 		0,
 		1

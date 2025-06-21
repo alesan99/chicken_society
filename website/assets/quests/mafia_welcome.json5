@@ -20,16 +20,16 @@
 			// Visit Sewer to progress
 			"type": "area",
 			"area": "sewer",
-			"questSlotSet": 1,
+			"questTaskSet": 1,
 			"condition": {
 				"quest": "mafia_welcome",
-				"questSlot": 1,
-				"questSlotValue": 1
+				"questTask": 1,
+				"questTaskValue": 1
 			}
 		}
 	],
 
-	"progressDescriptionSlotRequirement": [
+	"progressDescriptionTaskRequirement": [
 		false,
 		false,
 		1

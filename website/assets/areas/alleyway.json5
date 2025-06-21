@@ -59,24 +59,24 @@
 					"text": ["Turn on your microphone and say 'I pledge alegiance to the flag, of the Mafia'"],
 					"condition": {
 						"quest": "mafia_initiation",
-						"questSlot": 1,
-						"questSlotValue": 1
+						"questTask": 1,
+						"questTaskValue": 1
 					},
 					"quest": "mafia_initiation",
-					"questSlot": 2,
-					"questSlotSet": 1,
+					"questTask": 2,
+					"questTaskSet": 1,
 				},
 				{
 					"text": ["You look gangster dude. Welcome to the gang"],
 					"condition": {
 						"quest": "mafia_initiation",
-						"questSlot": 0,
-						"questSlotValue": 1
+						"questTask": 0,
+						"questTaskValue": 1
 					},
 					
 					"quest": "mafia_initiation",
-					"questSlot": 1,
-					"questSlotSet": 1,
+					"questTask": 1,
+					"questTaskSet": 1,
 				},
 				// Talking after looking in the dumpster
 				{
@@ -88,8 +88,8 @@
 					],
 					"condition": {
 						"quest": "study_in_violet",
-						"questSlot": 1,
-						"questSlotValue": 1
+						"questTask": 1,
+						"questTaskValue": 1
 					},
 					"startQuest": "mafia_initiation"
 				},
@@ -134,8 +134,8 @@
 						"Tragically, all snakes were exiled to far off lands where snakekind met its demise."
 					],
 					"quest": "study_in_violet",
-					"questSlot": 2,
-					"questSlotSet": 1,
+					"questTask": 2,
+					"questTaskSet": 1,
 					"condition": {
 						"quest": "mafia_initiation",
 						"questComplete": true
@@ -148,8 +148,8 @@
 						"That dumpster and everything in it is property of the Mafia!",
 					],
 					"quest": "study_in_violet",
-					"questSlot": 1,
-					"questSlotSet": 1
+					"questTask": 1,
+					"questTaskSet": 1
 				}
 			],
 			"sprite": {
@@ -160,16 +160,16 @@
 			},
 			"condition": {
 				"quest": "study_in_violet",
-				"questSlot": 0,
-				"questSlotValue": 1
+				"questTask": 0,
+				"questTaskValue": 1
 			}
 		},
 		// Entrance to sewer
 		"sewer_cover": {
 			"condition": {
 				"quest": "mafia_welcome",
-				"questSlot": 0,
-				"questSlotValue": 1
+				"questTask": 0,
+				"questTaskValue": 1
 			},
 			"x": 935,
 			"y": 379,

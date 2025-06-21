@@ -107,10 +107,10 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 			} else if (action == "quest") {
 				// Progress quest
 				func = function() {
-					if (trig.questSlotAdd) {
-						QuestSystem.progress(trig.quest, trig.questSlot, trig.questSlotAdd);
-					} else if (trig.questSlotSet) {
-						QuestSystem.setProgress(trig.quest, trig.questSlot, trig.questSlotSet);
+					if (trig.questTaskAdd) {
+						QuestSystem.progress(trig.quest, trig.questTask, trig.questTaskAdd);
+					} else if (trig.questTaskSet) {
+						QuestSystem.setProgress(trig.quest, trig.questTask, trig.questTaskSet);
 					}
 				};
 			} else if (action == "dialogue") {
@@ -207,17 +207,17 @@ function checkCondition(c) {
 			// Quest is active; make sure progress conditions are met
 			let progressMet = true;
 
-			if (c.questSlot != null) {
-				let slot = c.questSlot;
-				let value = c.questSlotValue;
-				// Check if slot is a list of values
-				if (!Array.isArray(slot)) {
+			if (c.questTask != null) {
+				let task = c.questTask;
+				let value = c.questTaskValue;
+				// Check if task is a list of values
+				if (!Array.isArray(task)) {
 					// turn it into a list for code simplicity
-					slot = [slot];
+					task = [task];
 					value = [value];
 				}
-				for (let i=0; i<slot.length; i++) {
-					if (QuestSystem.getProgress(questName, slot[i]) != value[i]) {
+				for (let i=0; i<task.length; i++) {
+					if (QuestSystem.getProgress(questName, task[i]) != value[i]) {
 						progressMet = false;
 					}
 				}

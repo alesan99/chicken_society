@@ -15,8 +15,8 @@
 				"Tragically, all snakes were exiled to far off lands where snakekind met its demise."
 			],
 			"quest": "study_in_violet",
-			"questSlot": 2,
-			"questSlotSet": 1
+			"questTask": 2,
+			"questTaskSet": 1
 		}
 	]
 }

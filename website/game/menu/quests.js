@@ -174,9 +174,9 @@ MENUS["questsMenu"] = new class extends Menu {
 										progressFinish: quest.progressFinish[j],
 									};
 									// Check if progress description should be hidden
-									if (quest.progressDescriptionSlotRequirement) {
-										let requiredSlot = quest.progressDescriptionSlotRequirement[j];
-										if (quest.progress[requiredSlot] < quest.progressFinish[requiredSlot]) {
+									if (quest.progressDescriptionTaskRequirement) {
+										let requiredTask = quest.progressDescriptionTaskRequirement[j];
+										if (quest.progress[requiredTask] < quest.progressFinish[requiredTask]) {
 											progressEntry.text = "???";
 										}
 									}
