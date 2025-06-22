@@ -24,8 +24,8 @@
     "table"
   ],
   "head": [
-    "police_hat",
     "hoodie",
+    "police_hat",
     "snapback",
     "top_hat"
   ],
@@ -37,8 +37,8 @@
     "gun",
     "heroin",
     "kernels",
-    "snake_book",
     "seeds",
+    "snake_book",
     "sunflower_seeds"
   ],
   "pet": [

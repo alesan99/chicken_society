@@ -103,6 +103,8 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			// Pet Race
 			socket.on("petRaceData", (data) => {this.recievePetRaceData(data);});
 			socket.on("petRaceFinish", (pet) => {});
+			// Coop
+			// Savedata
 		}
 
 		// Connect to server for the first time and send information about yourself
@@ -550,6 +552,30 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			socket.emit("requestCoopData", id, (response) => {
 				console.log("Recieved coop data:", response);
 				callback(response);
+			});
+		}
+
+		// Get savedta
+		sendSavedata(SaveData) {
+			socket.emit("updateSavedata", SaveData, (response) => {
+				if (response.success) {
+					console.log("Savedata saved successfully.");
+				}
+				else {
+					console.error("Failed to save savedata:", response.error);
+				}
+			});
+		}
+		requestSavedata(callback) {
+			console.log("Requesting savedata from server...");
+			socket.emit("requestSavedata", (response) => {
+				if (response.success) {
+					console.log("Recieved savedata:", response.data);
+					callback(response.data);
+				} else {
+					console.error("Failed to get savedata:", response.error);
+					callback(false);
+				}
 			});
 		}
 	};

@@ -1,15 +1,18 @@
-// Functionality:
-// After connecting to user, serves them index.html and the game.
-// Stores the user"s information to a list
-// Recieves all players profile information and their characters current position
-// Sends out that information to all connnected clients so their games are all synced
-// Activates global timed events (like holiday celebrations)
-// NOT IMPLEMENTED: Storing user data to database
+/**
+	Functionality:
+	After connecting to user, serves them index.html and the game.
+	Stores the user's information to a list
+	Recieves all players profile information and their characters current position
+	Sends out that information to all connnected clients so their games are all synced
+	Activates global timed events (like holiday celebrations)
+	NOT IMPLEMENTED: Storing user data to database
+ */
 
 // Currently supports hosting the server locally and to current network
 
 // Note about storing player IDs: Please use a regular session ID (either sent in a cookie, or stored in the localStorage and sent in the auth payload).
 
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const app = express();
@@ -21,7 +24,7 @@ const path = require("path"); // Used to build paths
 
 // Session; used for user data
 const sessionMiddleware = session({
-	secret: Math.random().toString(36).substring(2), // TODO: Use a library for this
+	secret: process.env.SESSION_SECRET || Math.random().toString(36).substring(2), // TODO: Use a library for this
 	resave: true,
 	saveUninitialized: true,
 	account: null,
@@ -71,36 +74,8 @@ const {listenToClient, serverLoop} = require("./server/sync.js");
 io.on("connection", (socket) => {listenToClient(socket);});
 
 // User data database
-const useDB = false;
-if (useDB) {
-	const db = require("./server/db/create_db.js");
-	const con = db.initializeDB();
-	con.query("SHOW TABLES like 'user'", (err, result, fields) => {
-		// if (err) throw err;
-		// console.log(result);
-		if (result.length == 0) {
-			console.log("No user found");
-			const createTableQuery = `
-			CREATE TABLE user (
-			id INT AUTO_INCREMENT PRIMARY KEY,
-			username VARCHAR(255) NOT NULL,
-			password VARCHAR(255) NOT NULL,
-			email VARCHAR(255) NOT NULL
-			)`;
-			con.query(createTableQuery, (createError) => {
-				if (createError) {
-					console.error("Error creating user table:", createError);
-					return;
-				}
-				console.log("User table created");
-			});
-		}
-		else {
-			console.log("User table already exists");
-		}
-	});
-	db.createPlayerTable(con);
-}
+const { Database } = require("./server/db/db.js");
+Database.load();
 
 // Start server on port
 const localIPAddress = "localhost"; // ipv4 //"10.104.58.91" // IPv4 or localhost

@@ -3,11 +3,13 @@
 // Profile: Stores only chicken information; this is information that's always accessible to other players
 
 import { ITEMS } from "./assets.js";
-import { SAVEDATA } from "./main.js";
+import { SAVEDATA, NETPLAY, PROFILE } from "./main.js"; // TODO: Remove circular dependency
+import { PLAYER } from "./world.js"; // TODO: Remove circular dependency
 import { CHAT } from "./world.js";
 import { MENUS } from "./menu.js";
 import QuestSystem from "./quests.js";
 import AudioSystem from "./engine/audio.js";
+import { RGBtoHEX, HEXtoRGB } from "./lib/color.js";
 
 function makeSaveData() {
 	let saveData = {
@@ -140,21 +142,47 @@ function saveSaveData(saveData) {
 	// Convert the object to a JSON string
 	const jsonString = JSON.stringify(saveData);
 	
-	// Store the JSON string in localStorage
-	localStorage.setItem("guestSaveData", jsonString);
-	console.log("saved SaveData to localStorage at 'guestSaveData'");
+	if (NETPLAY.id == "OFFLINE") {
+		// Store the JSON string in localStorage
+		localStorage.setItem("guestSaveData", jsonString);
+		console.log("saved SaveData to localStorage at 'guestSaveData'");
+	} else {
+		// Save to server
+		NETPLAY.sendSavedata(saveData, () => {
+			console.log("saved SaveData to server");
+		});
+	}
 }
 
-function loadSaveData(saveData) {
+function loadSaveData(callback) {
 	// Load data from browser storage
 	// This is for guests who have not made an account
 
 	// Retrieve the JSON string from localStorage
-	const storedJsonString = localStorage.getItem("guestSaveData");
+	let storedJsonString;
+	
+	if (NETPLAY.id == "OFFLINE") {
+		storedJsonString = localStorage.getItem("guestSaveData");
 
-	if (!storedJsonString) {
-		console.log("could not get localStorage data at 'guestSaveData'");
-		return false;
+		if (!storedJsonString) {
+			console.log("could not get localStorage data at 'guestSaveData'");
+			return false;
+		}
+	} else {
+		// Load from server
+		storedJsonString = NETPLAY.requestSavedata((data) => {
+			if (data === false) {
+				console.log("could not get SaveData from server");
+				return false;
+			}
+			// SaveData loaded successfully
+			console.log("loaded SaveData from server");
+			callback(data);
+		});
+		if (!storedJsonString) {
+			console.log("could not get SaveData from server");
+			return false;
+		}
 	}
 	
 	// Parse the JSON string back into a JavaScript object
@@ -165,12 +193,21 @@ function loadSaveData(saveData) {
 
 	console.log("loaded SaveData from localStorage at 'guestSaveData'");
 	console.log(retrievedObject);
+	callback(retrievedObject);
 	return retrievedObject;
+}
+
+function applySaveData(data) {
+	replaceObjectValues(SAVEDATA, data);
+	console.log(PROFILE, SAVEDATA.profile);
+	replaceObjectValues(PROFILE, SAVEDATA.profile);
+	PLAYER.updateProfile(PROFILE, "sendToServer");
+	applySettings();
 }
 
 function replaceObjectValues(objectTo, objectFrom) {
 	// Replace all values in objectTo with values from objectFrom
-	// This is only needed because
+	// This is needed to prevent references to old objects
 	for (const key in objectFrom) {
 		objectTo[key] = objectFrom[key];
 	}
@@ -291,32 +328,6 @@ function removeFurniture(itemId, x, y) {
 	return false;
 }
 
-// Color storage methods
-function RGBtoHEX(r, g, b) {
-	// Convert each RGB component to a two-digit hexadecimal value
-	const hexR = r.toString(16).padStart(2, "0");
-	const hexG = g.toString(16).padStart(2, "0");
-	const hexB = b.toString(16).padStart(2, "0");
-
-	// Combine the hexadecimal values to form the final color code
-	const hexColor = `#${hexR}${hexG}${hexB}`;
-
-	return hexColor;
-}
-
-function HEXtoRGB(hex) {
-	// Remove the '#' symbol
-	hex = hex.substring(1, 7);
-
-	// Split the hex string into three parts: red, green, and blue
-	const red = parseInt(hex.substring(0, 2), 16);
-	const green = parseInt(hex.substring(2, 4), 16);
-	const blue = parseInt(hex.substring(4, 6), 16);
-
-	// Return the RGB values as an object
-	return [red, green, blue];
-}
-
 function applySettings() {
 	AudioSystem.setVolume(
 		SAVEDATA.settings.volume,
@@ -325,4 +336,4 @@ function applySettings() {
 	);
 }
 
-export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues, applySettings};
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, applySaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues, applySettings};

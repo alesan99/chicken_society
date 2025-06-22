@@ -10,7 +10,7 @@ import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, re
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
 import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
-import {saveSaveData, loadSaveData, applySettings} from "../savedata.js";
+import {saveSaveData, loadSaveData, applySaveData} from "../savedata.js";
 
 MENUS["customization"] = new class extends Menu {
 	//Initialize
@@ -26,16 +26,11 @@ MENUS["customization"] = new class extends Menu {
 
 		// Profile loading from local browser storage (NOT from server)
 		this.buttons["load"] = new Button("Load", ()=>{
-			let data = loadSaveData(SAVEDATA);
-			if (data) {
-				replaceObjectValues(SAVEDATA, data);
-				console.log(PROFILE, SAVEDATA.profile);
-				replaceObjectValues(PROFILE, SAVEDATA.profile);
-				PLAYER.updateProfile(PROFILE, "sendToServer");
+			loadSaveData((data)=>{
+				applySaveData(data);
 				this.buttons["name"].text = PROFILE.name;
-				applySettings();
 				// TODO: Move all this logic to savedata.js
-			}
+			});
 		}, null, 263,404, 100,32);
 		this.buttons["save"] = new Button("Save", ()=>{
 			saveSaveData(SAVEDATA);

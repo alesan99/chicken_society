@@ -3,6 +3,7 @@ const {io, playerList} = require("../server.js");
 const {TimedEvents} = require("./timedevents.js");
 const {PetRaceClass} = require("./petrace.js");
 const {hasBadWords} = require("./filter.js");
+const {Database} = require("./db/db.js");
 
 const PetRace = new PetRaceClass();
 
@@ -392,6 +393,51 @@ function listenToClient(socket) {
 		// Confirm a successful connection to client
 		callback(data);
 	});
+
+	// Savedata
+	socket.on("requestSavedata", (callback) => {
+		console.log(`Requesting savedata for player ${socket.id}`);
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			// Get savedata from database
+			Database.getSavedata(playerData.accountId).then((savedata) => {
+				if (savedata) {
+					// Send savedata to client
+					console.log(`Savedata for player ${playerData.name} received successfully.`);
+					callback({success: true, data: savedata});
+				} else {
+					console.log(`Error: Could not get savedata for player ${playerData.name}`);
+					callback({success: false, error: "Could not get savedata"});
+				}
+			});
+		} else {
+			console.log(`Error: Could not get savedata for player with ID ${socket.id}`);
+			callback({success: false, error: "Player not found"});
+		}
+	});
+	socket.on("updateSavedata", (savedata, callback) => {
+		let playerData = playerList[socket.id];
+		if (playerData) {
+			if (!playerData.loggedIn) {
+				console.log(`Error: Player ${playerData.name} is not logged in, cannot save savedata.`);
+				callback({success: false, error: "Player not logged in"});
+				return false;
+			}
+			// Save savedata to database
+			Database.updateSavedata(playerData.accountId, savedata).then((success) => {
+				if (success) {
+					console.log(`Savedata for player ${playerData.name} saved successfully.`);
+					callback({success: true});
+				} else {
+					console.log(`Error: Could not save savedata for player ${playerData.name}`);
+					callback({success: false, error: "Could not save savedata"});
+				}
+			});
+		} else {
+			console.log(`Error: Could not save savedata for player with ID ${socket.id}`);
+			callback({success: false, error: "Player not found"});
+		}
+	});
 }
 
 // All the playerData in playerList gets sent to clients.
@@ -434,16 +480,17 @@ function getPlayerFromSession(sessionId) {
 
 // // Log in player
 // // Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
-// function loginPlayer(player, db_Id) {
-// 	if (player) {
-// 		player.loggedIn = true;
-// 		player.accountId = db_Id ; // TODO: Get account ID from database
-// 		console.log(`Session belongs to ${player.name}.`);
-// 	} else {
-// 		console.log("Session does not belong to a player.");
-// 		return false
-// 	}
-// }
+function loginPlayer(player, accountId) {
+	if (player) {
+		player.loggedIn = true;
+		console.log(`Account ID ${accountId} logged in for player ${player.name}.`);
+		player.accountId = accountId; // TODO: Get account ID from database
+		console.log(`Session belongs to ${player.name}.`);
+	} else {
+		console.log("Session does not belong to a player.");
+		return false;
+	}
+}
 
 // Continuously update game logic
 // Used for:
@@ -509,5 +556,6 @@ function handleClientMessage(id, header, contents) {
 module.exports = {
 	listenToClient,
 	serverLoop,
-	getPlayerFromSession
+	getPlayerFromSession,
+	loginPlayer,
 };
