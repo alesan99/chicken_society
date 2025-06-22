@@ -23,6 +23,21 @@ It will be served to http://localhost:3000/
 
 Crtl+C to stop
 
+If you want to use a database, use the following:  
+Install MySQL: https://dev.mysql.com/downloads/  
+Add a .env file to the main directory (where server.js is):  
+```
+SESSION_SECRET = "CHANGE_THIS_STRING"
+
+USE_DB = "true"
+
+MYSQL_HOST = "localhost"
+MYSQL_PORT = 3306
+MYSQL_USER = "MYSQL USER HERE"
+MYSQL_PASSWORD = "MYSQL PASSWORD HERE"
+MYSQL_DATABASE = "chicken_society"
+```
+
 ## Initializing Dependencies
 These commands were used to set up node.js for use in the project.
 This is NOT required to simply install the project on a new machine.
