@@ -16,7 +16,7 @@
 	"warps": {
 			"1Exit": {
 			"to": "sewer",
-			"fromWarp": "sewerEntrance",
+			"fromWarp": "poop",
 			"facing": "down",
 			"x": 500,
 			"y": 560,

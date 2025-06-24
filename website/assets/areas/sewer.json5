@@ -23,7 +23,7 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1Entrance": {
+		"poop": {
 			"to": "sewer1",
 			"fromWarp": "1Exit",
 			"facing": "up",
