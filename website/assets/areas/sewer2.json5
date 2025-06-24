@@ -11,23 +11,43 @@
         [88,291, 120,232, 360,308, 358,401],
         [358,401, 355,331, 529,308, 529,400],
         [529,400, 542,318, 806,104, 819,123],
-        [621,560, 760,231, 869,189, 933,560]
+        [621,560, 784,231, 869,189, 933,560]
 	],
 
 	"warps": {
-			"2Exit": {
+			"2Exit1": {
 			"to": "sewer1",
-			"fromWarp": "2Entrance",
-			"facing": "down",
+			"fromWarp": "sewer1Left",
+			"facing": "up",
 			"x": 285,
 			"y": 560,
 			"w": 100,
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1Entrance": {
+			"2Exit2": {
 			"to": "sewer1",
-			"fromWarp": "2Entrance",
+			"fromWarp": "sewer3Right",
+			"facing": "up",
+			"x": 295,
+			"y": 560,
+			"w": 10,
+			"h": 10,
+			"sound": "woosh"
+		},
+		"2Exit3": {
+			"to": "sewer1",
+			"fromWarp": "sewer6Left",
+			"facing": "up",
+			"x": 295,
+			"y": 570,
+			"w": 10,
+			"h": 10,
+			"sound": "woosh"
+		},
+		"sewer2Left": {
+			"to": "sewer1",
+			"fromWarp": "1Exit",
 			"facing": "up",
 			"x": 78,
 			"y": 318,
@@ -35,10 +55,10 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"3Entrance": {
+		"sewer2Right": {
 			"to": "sewer3",
 			"fromWarp": "3Exit",
-			"facing": "up",
+			"facing": "down",
 			"x": 813,
 			"y": 158,
 			"w": 30,

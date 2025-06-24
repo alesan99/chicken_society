@@ -16,17 +16,17 @@
 	"warps": {
 			"5Exit": {
 			"to": "sewer4",
-			"fromWarp": "4Entrance",
-			"facing": "down",
+			"fromWarp": "sewer4Left",
+			"facing": "up",
 			"x": 500,
 			"y": 560,
 			"w": 100,
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1Entrance": {
+		"sewer5Left": {
 			"to": "sewer1",
-			"fromWarp": "1Entrance",
+			"fromWarp": "1Exit2",
 			"facing": "up",
 			"x": 154,
 			"y": 193,
@@ -34,10 +34,10 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"6Entrance": {
+		"sewer5Right": {
 			"to": "sewer6",
 			"fromWarp": "6Exit",
-			"facing": "up",
+			"facing": "left",
 			"x": 839,
 			"y": 186,
 			"w": 30,

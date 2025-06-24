@@ -23,10 +23,10 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"poop": {
+		"labyrinthEntrance": {
 			"to": "sewer1",
 			"fromWarp": "1Exit",
-			"facing": "up",
+			"facing": "down",
 			"x": 530,
 			"y": 263,
 			"w": 30,

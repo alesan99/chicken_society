@@ -11,34 +11,44 @@
         [88,291, 120,232, 360,308, 358,401],
         [358,401, 355,331, 529,308, 529,400],
         [529,400, 542,318, 806,104, 819,123],
-        [621,560, 760,231, 869,189, 933,560]
+        [621,560, 784,231, 869,189, 933,560]
 	],
 
 	"warps": {
 			"4Exit": {
 			"to": "sewer3",
-			"fromWarp": "4Entrance",
-			"facing": "down",
+			"fromWarp": "sewer3Left",
+			"facing": "up",
 			"x": 285,
 			"y": 560,
 			"w": 100,
 			"h": 30,
 			"sound": "woosh"
 		},
-		"5Entrance": {
+		"4Exit2": {
+			"to": "sewer3",
+			"fromWarp": "sewer8Left",
+			"facing": "up",
+			"x": 285,
+			"y": 570,
+			"w": 10,
+			"h": 10,
+			"sound": "woosh"
+		},
+		"sewer4Left": {
 			"to": "sewer5",
 			"fromWarp": "5Exit",
-			"facing": "up",
+			"facing": "right",
 			"x": 78,
 			"y": 318,
 			"w": 30,
 			"h": 30,
 			"sound": "woosh"
 		},
-		"3Entrance": {
+		"sewer4Right": {
 			"to": "sewer3",
 			"fromWarp": "3Exit",
-			"facing": "up",
+			"facing": "down",
 			"x": 813,
 			"y": 158,
 			"w": 30,

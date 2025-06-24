@@ -16,25 +16,25 @@
 	"warps": {
 			"7Exit": {
 			"to": "sewer6",
-			"fromWarp": "7Entrance",
-			"facing": "down",
+			"fromWarp": "sewer6Right",
+			"facing": "up",
 			"x": 500,
 			"y": 560,
 			"w": 100,
 			"h": 30,
 			"sound": "woosh"
 		},
-		"8Entrance": {
+		"sewer7Left": {
 			"to": "sewer8",
 			"fromWarp": "8Exit",
-			"facing": "up",
+			"facing": "down",
 			"x": 154,
 			"y": 193,
 			"w": 30,
 			"h": 30,
 			"sound": "woosh"
 		},
-		"3Entrance": {
+		"sewer7Right": {
 			"to": "sewer3",
 			"fromWarp": "3Exit",
 			"facing": "up",
