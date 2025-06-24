@@ -1,0 +1,11 @@
+{
+    "name": "Mob Boss Accessories",
+    "description": "Essential for the aspiring mob boss. Fedora and cigar included!",
+    "cost": 1000,
+
+    "center": [
+        [62,35],
+        [89,35],
+        [63,35]
+    ]
+}

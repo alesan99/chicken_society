@@ -49,6 +49,25 @@
 		}
 	},
 
+	
+	"NPCs": {
+		"Capo": {
+			"profile": {
+				"name": "Capo",
+				"color": "#367000",
+				"head": false,
+				"face": "mobbossaccessories",
+				"body": false
+			},
+			"x": 145,
+			"y": 400,
+			"facing": "down",
+			"roamRadius": 1,
+			"interactRange": 20,
+			"speechBubble": ["Hmmm..."],
+		},
+	},
+
 	"triggers": {
 		"invisibility_cloak": {
 			"x": 221,
