@@ -2,6 +2,9 @@ class MockDatabase {
 	initialize() {
 		console.log("Database not initialized. Using mock database.");
 	}
+	load() {
+
+	}
 	createUser(session, username, password, email) {
 		console.log(`Mock create user: ${username}`);
 		return true;

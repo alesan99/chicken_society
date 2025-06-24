@@ -9,6 +9,8 @@ var PARTICLES;
 var CHAT;
 var DEBUGPHYSICS = false;
 var MINIGAME;
+let DEBUGMOUSEX = 0;
+let DEBUGMOUSEY = 0;
 
 import { canvasWidth, canvasHeight, Draw } from "./engine/canvas.js";
 import { RenderImage } from "./engine/render.js";
@@ -397,11 +399,16 @@ const World = class {
 				}
 			}
 
-			// Display Corrdinates
+			// Display Cordinates
 			let [mouseX, mouseY] = getMousePos();
 			Draw.setColor(255,255,255,1.0);
 			Draw.setFont(FONT.caption, 4);
-			Draw.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, mouseX+10, mouseY+20);
+			Draw.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, Math.min(mouseX+10, canvasWidth-92), mouseY+20);
+			if (DEBUGMOUSEX && DEBUGMOUSEY) { // mouse pin
+				Draw.text(`(${Math.floor(DEBUGMOUSEX)}, ${Math.floor(DEBUGMOUSEY)})`, DEBUGMOUSEX+10, DEBUGMOUSEY+20);
+				Draw.setColor(255,0,0,1.0);
+				Draw.circle(DEBUGMOUSEX, DEBUGMOUSEY, 3, "fill");
+			}
 		}
 
 		// HUD
@@ -446,6 +453,12 @@ const World = class {
 
 	// Recieved mouse input
 	mouseClick(button, x, y) {
+		// DEBUG mouse pin
+		if (DEBUGPHYSICS && button == 2) {
+			DEBUGMOUSEX = x;
+			DEBUGMOUSEY = y;
+		}
+
 		// Do not click while transitioning
 		if (Transition.playing()) {
 			return true;
