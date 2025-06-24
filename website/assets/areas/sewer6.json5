@@ -15,9 +15,9 @@
 	],
 
 	"warps": {
-			"2cExit": {
-			"to": "sewer1c",
-			"fromWarp": "2cEntrance",
+			"6Exit": {
+			"to": "sewer5",
+			"fromWarp": "6Entrance",
 			"facing": "down",
 			"x": 285,
 			"y": 560,
@@ -25,9 +25,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"2aEntrance": {
-			"to": "sewer2a",
-			"fromWarp": "2aExit",
+		"2Entrance": {
+			"to": "sewer2",
+			"fromWarp": "2Exit",
 			"facing": "up",
 			"x": 78,
 			"y": 318,
@@ -35,9 +35,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1dEntrance": {
-			"to": "sewer1d",
-			"fromWarp": "1dExit",
+		"7Entrance": {
+			"to": "sewer7",
+			"fromWarp": "7Exit",
 			"facing": "up",
 			"x": 813,
 			"y": 158,

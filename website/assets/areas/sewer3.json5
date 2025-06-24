@@ -1,5 +1,5 @@
 {
-	"name": "Sewer 1",
+	"name": "Sewer 3",
 	"mapLocation": false,
 	"music": "alleywaytrack",
 
@@ -14,9 +14,9 @@
 	],
 
 	"warps": {
-			"1aExit": {
-			"to": "sewer",
-			"fromWarp": "sewerEntrance",
+			"3Exit": {
+			"to": "sewer2",
+			"fromWarp": "3Entrance",
 			"facing": "down",
 			"x": 500,
 			"y": 560,
@@ -24,9 +24,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"2aEntrance": {
-			"to": "sewer2a",
-			"fromWarp": "2aExit",
+		"4Entrance": {
+			"to": "sewer4",
+			"fromWarp": "4Entrance",
 			"facing": "up",
 			"x": 154,
 			"y": 193,
@@ -34,9 +34,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"sewerEntrance2": {
-			"to": "sewer",
-			"fromWarp": "1aEntrance",
+		"2Entrance": {
+			"to": "sewer2",
+			"fromWarp": "2Entrance",
 			"facing": "up",
 			"x": 839,
 			"y": 186,

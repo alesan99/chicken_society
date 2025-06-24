@@ -23,9 +23,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1aEntrance": {
-			"to": "sewer1a",
-			"fromWarp": "1aExit",
+		"1Entrance": {
+			"to": "sewer1",
+			"fromWarp": "1Exit",
 			"facing": "up",
 			"x": 530,
 			"y": 263,

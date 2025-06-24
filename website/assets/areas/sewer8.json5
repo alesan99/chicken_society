@@ -1,5 +1,5 @@
 {
-	"name": "Sewer 4",
+	"name": "Sewer 8",
 	"mapLocation": false,
 	"music": "alleywaytrack",
 
@@ -15,9 +15,9 @@
 	],
 
 	"warps": {
-			"2bExit": {
-			"to": "sewer1b",
-			"fromWarp": "2bEntrance",
+			"8Exit": {
+			"to": "sewer7",
+			"fromWarp": "8Entrance",
 			"facing": "down",
 			"x": 285,
 			"y": 560,
@@ -25,9 +25,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1cEntrance": {
-			"to": "sewer1c",
-			"fromWarp": "1cExit",
+		"4Entrance": {
+			"to": "sewer4",
+			"fromWarp": "4Exit",
 			"facing": "up",
 			"x": 78,
 			"y": 318,
@@ -35,9 +35,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"1bEntrance": {
-			"to": "sewer1b",
-			"fromWarp": "1bEntrance",
+		"hideoutEntrance": {
+			"to": "mafia_hideout",
+			"fromWarp": "hideoutExit",
 			"facing": "up",
 			"x": 813,
 			"y": 158,

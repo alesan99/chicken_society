@@ -1,5 +1,5 @@
 {
-	"name": "Sewer 8",
+	"name": "Sewer 2",
 	"mapLocation": false,
 	"music": "alleywaytrack",
 
@@ -15,9 +15,9 @@
 	],
 
 	"warps": {
-			"2dExit": {
-			"to": "sewer1d",
-			"fromWarp": "2dEntrance",
+			"2Exit": {
+			"to": "sewer1",
+			"fromWarp": "2Entrance",
 			"facing": "down",
 			"x": 285,
 			"y": 560,
@@ -25,9 +25,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"2bEntrance": {
-			"to": "sewer2b",
-			"fromWarp": "2bExit",
+		"1Entrance": {
+			"to": "sewer1",
+			"fromWarp": "2Entrance",
 			"facing": "up",
 			"x": 78,
 			"y": 318,
@@ -35,9 +35,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"hideoutEntrance": {
-			"to": "mafia_hideout",
-			"fromWarp": "hideoutExit",
+		"3Entrance": {
+			"to": "sewer3",
+			"fromWarp": "3Exit",
 			"facing": "up",
 			"x": 813,
 			"y": 158,
