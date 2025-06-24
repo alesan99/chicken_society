@@ -23,10 +23,10 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"mafia_hideoutEntrance": {
-			"to": "mafia_hideout",
-			"fromWarp": "mafia_hideoutExit",
-			"facing": "down",
+		"1aEntrance": {
+			"to": "sewer1a",
+			"fromWarp": "1aExit",
+			"facing": "up",
 			"x": 530,
 			"y": 263,
 			"w": 30,

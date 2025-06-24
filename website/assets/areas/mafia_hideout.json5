@@ -16,9 +16,9 @@
 	],
 
 	"warps": {
-		"mafia_hideoutExit": {
+		"hideoutExit": {
 			"to": "sewer",
-			"fromWarp": "mafia_hideoutEntrance",
+			"fromWarp": "hideoutEntrance",
 			"facing": "right",
 			"x": 29,
 			"y": 268,

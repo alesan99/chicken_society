@@ -1,0 +1,49 @@
+{
+	"name": "Sewer 7",
+	"mapLocation": false,
+	"music": "alleywaytrack",
+
+
+	"walls": [
+		[0, 576, 1024, 576, 1024, 600, 0, 600], // bottom of screen
+		[0,565, 43,199, 216,264, 320,565],
+		[684,565, 750,267, 931,182, 1024,565],
+		[412,297, 405,203, 541,203, 542,291],
+		[176,182, 176,137, 402,200, 414,294],
+		[550,278, 550,193, 853,110, 867,140]
+	],
+
+	"warps": {
+			"1dExit": {
+			"to": "sewer2c",
+			"fromWarp": "1dEntrance",
+			"facing": "down",
+			"x": 500,
+			"y": 560,
+			"w": 100,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"2dEntrance": {
+			"to": "sewer2d",
+			"fromWarp": "2dExit",
+			"facing": "up",
+			"x": 154,
+			"y": 193,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"1bEntrance": {
+			"to": "sewer1b",
+			"fromWarp": "1bExit",
+			"facing": "up",
+			"x": 839,
+			"y": 186,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		}
+	}
+}
+

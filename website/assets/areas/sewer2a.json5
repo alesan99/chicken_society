@@ -1,0 +1,50 @@
+{
+	"name": "Sewer 2",
+	"mapLocation": false,
+	"music": "alleywaytrack",
+
+
+	"walls": [
+		[0, 576, 1024, 576, 1024, 600, 0, 600], // bottom of screen
+        [-10,565, -10,371, 0,371, 0,565],
+		[0,407, 0,252, 87,266, 85,407],
+        [88,291, 120,232, 360,308, 358,401],
+        [358,401, 355,331, 529,308, 529,400],
+        [529,400, 542,318, 806,104, 819,123],
+        [621,560, 760,231, 869,189, 933,560]
+	],
+
+	"warps": {
+			"2aExit": {
+			"to": "sewer1a",
+			"fromWarp": "2aEntrance",
+			"facing": "down",
+			"x": 285,
+			"y": 560,
+			"w": 100,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"1aEntrance": {
+			"to": "sewer1a",
+			"fromWarp": "2aEntrance",
+			"facing": "up",
+			"x": 78,
+			"y": 318,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"1bEntrance": {
+			"to": "sewer1b",
+			"fromWarp": "1bExit",
+			"facing": "up",
+			"x": 813,
+			"y": 158,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		}
+	}
+}
+
