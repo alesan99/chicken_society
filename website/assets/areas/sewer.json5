@@ -23,9 +23,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"mafia_hideoutEntrance": {
-			"to": "mafia_hideout",
-			"fromWarp": "mafia_hideoutExit",
+		"labyrinthEntrance": {
+			"to": "sewer1",
+			"fromWarp": "1Exit",
 			"facing": "down",
 			"x": 530,
 			"y": 263,

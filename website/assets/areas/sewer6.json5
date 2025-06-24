@@ -1,0 +1,50 @@
+{
+	"name": "Sewer 6",
+	"mapLocation": false,
+	"music": "alleywaytrack",
+
+
+	"walls": [
+		[0, 576, 1024, 576, 1024, 600, 0, 600], // bottom of screen
+        [-10,565, -10,371, 0,371, 0,565],
+		[0,407, 0,252, 87,266, 85,407],
+        [88,291, 120,232, 360,308, 358,401],
+        [358,401, 355,331, 529,308, 529,400],
+        [529,400, 542,318, 806,104, 819,123],
+        [621,560, 784,231, 869,189, 933,560]
+	],
+
+	"warps": {
+			"6Exit": {
+			"to": "sewer5",
+			"fromWarp": "sewer5Right",
+			"facing": "up",
+			"x": 285,
+			"y": 560,
+			"w": 100,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"sewer6Left": {
+			"to": "sewer2",
+			"fromWarp": "2Exit3",
+			"facing": "up",
+			"x": 78,
+			"y": 318,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		},
+		"sewer6Right": {
+			"to": "sewer7",
+			"fromWarp": "7Exit",
+			"facing": "down",
+			"x": 813,
+			"y": 158,
+			"w": 30,
+			"h": 30,
+			"sound": "woosh"
+		}
+	}
+}
+
