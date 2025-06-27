@@ -58,7 +58,7 @@
 
 <body>
 	<!-- Terms of Service & Privacy Policy Modal -->
-	<div id="tos-modal" class="modal-overlay">
+	<div id="tos-modal" class="modal-overlay" style="display:none">
 		<div class="modal-content">
 			<h2>Welcome to Chicken Society!</h2>
 			<p>You must agree to our <a href="/website/terms-of-service.html" target="_blank">Terms of Service</a> and
@@ -72,6 +72,38 @@
 			<button id="agree-button" class="disabled" disabled>Continue</button>
 		</div>
 	</div>
+	<!-- Terms of Service Modal & Privacy Policy Script -->
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const modal = document.getElementById("tos-modal");
+			const checkbox = document.getElementById("agree-checkbox");
+			const button = document.getElementById("agree-button");
+			const accepted = localStorage.getItem("acceptedTermOfService") === "true";
+			const urlParams = new URLSearchParams(window.location.search);
+			if (!accepted && !urlParams.get("dev")) {
+				modal.style.display = "flex";
+			}
+
+			checkbox.addEventListener("change", () => {
+				if (checkbox.checked) {
+					button.disabled = false;
+					button.classList.remove("disabled");
+					button.classList.add("enabled");
+				} else {
+					button.disabled = true;
+					button.classList.remove("enabled");
+					button.classList.add("disabled");
+				}
+			});
+
+			button.addEventListener("click", () => {
+				if (!button.disabled) {
+            		localStorage.setItem("acceptedTermOfService", "true");
+					modal.style.display = "none";
+				}
+			});
+		});
+	</script>
 
 	<div class="page-container">
 		<div class="content-container">
@@ -117,35 +149,6 @@
 
 	<!-- Run game code -->
 	<script src="game/main.js" type="module"></script>
-
-	<!-- Terms of Service Modal & Privacy Policy Script -->
-	<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			const modal = document.getElementById("tos-modal");
-			const checkbox = document.getElementById("agree-checkbox");
-			const button = document.getElementById("agree-button");
-
-			checkbox.addEventListener("change", () => {
-				if (checkbox.checked) {
-					button.disabled = false;
-					button.classList.remove("disabled");
-					button.classList.add("enabled");
-				} else {
-					button.disabled = true;
-					button.classList.remove("enabled");
-					button.classList.add("disabled");
-				}
-			});
-
-			button.addEventListener("click", () => {
-				if (!button.disabled) {
-					modal.style.display = "none";
-				}
-			});
-		});
-	</script>
-
-
 </body>
 
 </html>
