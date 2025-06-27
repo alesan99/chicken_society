@@ -17,7 +17,7 @@ body{
 	width: 100%;
 	height: 100%;
 	overflow: auto;
-    font-family: 'Inter', sans-serif; /* Use a pixel font for the entire page */
+	font-family: 'Inter', sans-serif; /* Use Inter font for the entire page */
 }
 
 .page-container{
@@ -26,8 +26,8 @@ body{
 	width: 100%;
 	padding: 0;
 	display: flex; /* Change this line */
-    justify-content: center; 
-    align-items: center;
+	justify-content: center; 
+	align-items: center;
 }
 
 .content-container{
@@ -37,115 +37,115 @@ body{
 
 	background-color: rgb(255, 235, 208);
 	display: flex;
-    justify-content: center; 
-    flex-direction: column;
-    align-items: center; 
+	justify-content: center; 
+	flex-direction: column;
+	align-items: center; 
 	padding : 10px;
-    min-width : 200px;
-    position: relative;
-    top: 0px;
+	min-width : 200px;
+	position: relative;
+	top: 0px;
 }
 
 #canvas-container {
 	/* Contains the game canvas */
 	/* Create black border around the canvas */
-    margin-top: 0vh;
-    margin-bottom: 4px;
-    z-index: 10000;
-    max-width: 100%; /* Ensure the canvas never exceeds the width of the window */
-    overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
+	margin-top: 0vh;
+	margin-bottom: 4px;
+	z-index: 10000;
+	max-width: 100%; /* Ensure the canvas never exceeds the width of the window */
+	overflow: hidden; /* Hide any overflow if the canvas is larger than the container */
 
 	/* Center the canvas */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-    width: 1920px; /* Do not change, it gets redefined in canvas.js */
+	width: 1920px; /* Do not change, it gets redefined in canvas.js */
 	background-color: #000000;
-    padding: 6px;
+	padding: 6px;
 }
 
 
 /* Navigation bar */
 nav {
-    background-color: #fffcf0;
-    list-style-type: none;
-    display: flex;
-    padding: 0px;
-    margin: 0;
-    height: 60px;
-    align-items: center; 
-    box-shadow: 0 4px 9px 0 rgba(37, 27, 27, 0.2); 
-    position: sticky;
-    top: 0;
-    z-index: 9999; /* Increase this value */
+	background-color: #fffcf0;
+	list-style-type: none;
+	display: flex;
+	padding: 0px;
+	margin: 0;
+	height: 60px;
+	align-items: center; 
+	box-shadow: 0 4px 9px 0 rgba(37, 27, 27, 0.2); 
+	position: sticky;
+	top: 0;
+	z-index: 9999; /* Increase this value */
 }
 
 #navigation-bar-list {
-    display: flex;
-    align-items: center;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    height: 100%; /* Take up the entire height of the navigation bar */
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	height: 100%; /* Take up the entire height of the navigation bar */
 	width: 100%;
 }
 
 nav ul li {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 	height: 100%;
 }
 
 #home {
 	height: 100%;
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 #logo {
 	padding-left: 10px;
 	padding-right: 10px;
-    height: 60px;
-    display: block; /* Ensure the image is displayed as a block element */
-    margin: 0 auto; /* Center the image horizontally */
+	height: 60px;
+	display: block; /* Ensure the image is displayed as a block element */
+	margin: 0 auto; /* Center the image horizontally */
 }
 
 /* Style the dropdown content */
 .dropdown {
-    position: relative;
-    display: inline-block;
-    height: 100%; /* Take up the entire height of the navigation bar */
-    margin-left: auto;
+	position: relative;
+	display: inline-block;
+	height: 100%; /* Take up the entire height of the navigation bar */
+	margin-left: auto;
 }
 
 #dropdowns {
-    position: relative;
-    display: inline-block;
-    height: 100%; /* Take up the entire height of the navigation bar */
-    margin-left: auto;
+	position: relative;
+	display: inline-block;
+	height: 100%; /* Take up the entire height of the navigation bar */
+	margin-left: auto;
 }
 
 .dropdown-button {
-    background-color: #ffeedd;
-    color: #000000;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    height: 100%; /* Take up the entire height of the navigation bar */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+	background-color: #ffeedd;
+	color: #000000;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	height: 100%; /* Take up the entire height of the navigation bar */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
 }
 
 /* Add a down arrow to the dropdown button */
 .dropdown-button::after {
-    content: ' \25BC'; /* Unicode character for down arrow */
+	content: ' \25BC'; /* Unicode character for down arrow */
 	color: #c7a361;
-    font-size: 12px;
-    margin-left: 8px;
+	font-size: 12px;
+	margin-left: 8px;
 }
 
 .dropdown-button:hover {
@@ -153,35 +153,35 @@ nav ul li {
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    right: 0; /* Align to the right of the dropdown button */
-    left: auto; /* Ensure left is not set */
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 200px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+	right: 0; /* Align to the right of the dropdown button */
+	left: auto; /* Ensure left is not set */
 }
 
 .dropdown-content .loginContainer {
-    padding: 12px 16px;
+	padding: 12px 16px;
 }
 
 /* Show the dropdown content on hover */
 .dropdown:hover .dropdown-content {
-    display: block;
+	display: block;
 }
 
 .dropdown:hover .dropdown-button,
 .dropdown:focus-within .dropdown-button {
-    background-color: #f9ddcc;
+	background-color: #f9ddcc;
 }
 
 /* Login stuff */
 #login-li{
-    margin-left: auto;
-    margin-right: 0;
-    justify-content: flex-end;
+	margin-left: auto;
+	margin-right: 0;
+	justify-content: flex-end;
 }
 
 form {
@@ -200,7 +200,7 @@ form {
 	background-color: rgb(251, 236, 211);
 	border: 1px solid #e5e5e500;
 	transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
-    font-family: 'Inter', sans-serif; 
+	font-family: 'Inter', sans-serif; 
 } 
 
 #login-button, #register-button {
@@ -230,78 +230,76 @@ form {
 
 /* Style the footer */
 #footer {
-    width: 100%;
-    color: #806649; /* Example background color */
-    text-align: center; /* Center the footer content */
+	width: 100%;
+	color: #806649; /* Example background color */
+	text-align: center; /* Center the footer content */
 	font-size: 12px;
-
 }
 
 #footer a {
-    color: #806649;
+	color: #806649;
 }
 
+/* Terms of Service dialog */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.55);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
 }
 
 .modal-content {
-  background: #fffcf0;
-  padding: 2rem;
-  border-radius: 10px;
-  max-width: 400px;
-  text-align: center;
+	background: #fffcf0;
+	padding: 2rem;
+	border-radius: 10px;
+	max-width: 400px;
+	text-align: center;
 }
 
 .modal-content h2 {
-  margin: 0;
-  font-size: 1.5rem;
-    color: #ec9027;
+	margin: 0;
+	font-size: 1.5rem;
+	color: #ec9027;
 }
 
 .modal-content a {
-  color: #1e3a8a;
-  text-decoration: underline;
+	color: #1e3a8a;
+	text-decoration: underline;
 }
 
 .modal-content button {
-  background: #ec9027;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 0.75rem;
-  transition: background-color 0.3s ease-in-out;
+	background: #ec9027;
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 0.75rem;
+	transition: background-color 0.3s ease-in-out;
 }
 
-/* Style when disabled */
 .modal-content button.disabled {
-  background-color: #a0a0a0;
-  cursor: not-allowed;
-  pointer-events: none;
+    /* Style when disabled */
+	background-color: #a0a0a0;
+	cursor: not-allowed;
+	pointer-events: none;
 }
 
-/* Style when enabled (normal active state) */
 .modal-content button.enabled {
-  background: #1e40af;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s ease-in-out;
+    /* Style when enabled (normal active state) */
+	background: #1e40af;
+	color: white;
+	cursor: pointer;
+	transition: 0.3s ease-in-out;
 
 }
 
 .modal-content button.enabled:hover {
-  background: #ec9027;
+	background: #ec9027;
 }
-
-
