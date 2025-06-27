@@ -1,4 +1,5 @@
 const tableQueries = [
+	// profiles table is currently unused
 	`CREATE TABLE IF NOT EXISTS profiles (
 		profile_id INT AUTO_INCREMENT PRIMARY KEY,
 		name VARCHAR(255) NOT NULL,
@@ -10,11 +11,18 @@ const tableQueries = [
 		pet VARCHAR(255)
 	)`,
 
+	`CREATE TABLE IF NOT EXISTS coops (
+		coop_id INT AUTO_INCREMENT PRIMARY KEY,
+		data TEXT
+	)`,
+
 	`CREATE TABLE IF NOT EXISTS savedata (
 		savedata_id INT AUTO_INCREMENT PRIMARY KEY,
 		profile_id INT,
+		coop_id INT,
 		data TEXT,
-		FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
+		FOREIGN KEY (profile_id) REFERENCES profiles(profile_id),
+		FOREIGN KEY (coop_id) REFERENCES coops(coop_id)
 	)`,
 
 	`CREATE TABLE IF NOT EXISTS accounts (

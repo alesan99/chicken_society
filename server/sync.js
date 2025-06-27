@@ -64,12 +64,6 @@ function listenToClient(socket) {
 				y: 0,
 				dead: false
 			},
-			
-			// TEMPORARY: This should use a more sophisticated system designed around the database once its finished
-			coop: {
-				theme: false,
-				furniture: []
-			},
 		};
 
 		socket.join(`area:${playerList[socket.id].area}`); // Listen for events in area
@@ -260,7 +254,7 @@ function listenToClient(socket) {
 				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
 				delete minigameData.players[socket.id];
 			} else {
-				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`);
+				console.error(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`);
 			}
 		}
 		delete playerList[socket.id];
@@ -323,7 +317,7 @@ function listenToClient(socket) {
 				socket.to(`minigame:${minigameName}`).emit("minigameRemovePlayer", socket.id);
 				delete minigameData.players[socket.id];
 			} else {
-				console.log(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`);
+				console.error(`Error: Attempting to remove ${playerList[socket.id].name} from minigame, but cannot find minigame "${minigameName}"`);
 			}
 			playerList[socket.id].minigame = false;
 		}
@@ -340,7 +334,7 @@ function listenToClient(socket) {
 		}
 		
 		if (!minigameName) {
-			console.log(`Error: ${playerData.name}'s minigame doesn't exist`);
+			console.error(`Error: ${playerData.name}'s minigame doesn't exist.`);
 			return false;
 		}
 
@@ -372,70 +366,75 @@ function listenToClient(socket) {
 
 	// Coops
 	// Receive coop layout updates
-	socket.on("coopData", (data) => {
+	socket.on("updateCoopData", (data) => {
 		let playerData = playerList[socket.id];
 		if (playerData) {
-			playerData.coop = data;
+			Database.updateCoopData(playerData.accountId, data).catch((err) => {
+				console.error(`Error: Cannot update coop data for ${playerData.name}.`)
+			});
 		}
 	});
 	// send coop data once requested
 	socket.on("requestCoopData", (id, callback) => {
 		let playerData = playerList[id];
-		let data = false;
+		// Default coop data as fallback
+		let data = {
+			theme: false,
+			furniture: []
+		};
+		// Get data from database if it exists
 		if (playerData) {
-			data = playerData.coop;
+			Database.getCoopData(playerData.accountId).then((coopData) => {
+				if (coopData) {
+					callback({success:true, data:coopData});
+				} else {
+					callback({success:true, data:data});
+					console.error(`Error: Could not get coop data for player ${playerData.name}.`);
+				}
+			}).catch((err) => {
+				console.error(`Error: Could not get coop data for player ${playerData.name}. (${err})`);
+				callback({success:true, data:data});
+			});
 		} else {
-			data = {
-				theme: false,
-				furniture: []
-			};
+			callback({success:true, data:data});
 		}
-		// Confirm a successful connection to client
-		callback(data);
 	});
 
-	// Savedata
-	socket.on("requestSavedata", (callback) => {
-		console.log(`Requesting savedata for player ${socket.id}`);
+	// Save data
+	socket.on("requestSaveData", (callback) => {
 		let playerData = playerList[socket.id];
 		if (playerData) {
 			// Get savedata from database
-			Database.getSavedata(playerData.accountId).then((savedata) => {
-				if (savedata) {
-					// Send savedata to client
-					console.log(`Savedata for player ${playerData.name} received successfully.`);
-					callback({success: true, data: savedata});
-				} else {
-					console.log(`Error: Could not get savedata for player ${playerData.name}`);
-					callback({success: false, error: "Could not get savedata"});
-				}
+			Database.getSaveData(playerData.accountId).then((savedata) => {
+				// Send savedata to client
+				callback({success: true, data: savedata});
+			}).catch((err) => {
+				console.error(`Error: Could not get saveData for player ${playerData.name}. (${err})`);
+				callback({success: false, error: "Could not get savedata"});
 			});
 		} else {
-			console.log(`Error: Could not get savedata for player with ID ${socket.id}`);
+			console.error(`Error: Could not get saveData for player with ID ${socket.id}`);
 			callback({success: false, error: "Player not found"});
 		}
 	});
-	socket.on("updateSavedata", (savedata, callback) => {
+	socket.on("updateSaveData", (savedata, callback) => {
 		let playerData = playerList[socket.id];
 		if (playerData) {
 			if (!playerData.loggedIn) {
-				console.log(`Error: Player ${playerData.name} is not logged in, cannot save savedata.`);
+				console.error(`Error: Player ${playerData.name} is not logged in, cannot save saveData.`);
 				callback({success: false, error: "Player not logged in"});
 				return false;
 			}
 			// Save savedata to database
-			Database.updateSavedata(playerData.accountId, savedata).then((success) => {
-				if (success) {
-					console.log(`Savedata for player ${playerData.name} saved successfully.`);
-					callback({success: true});
-				} else {
-					console.log(`Error: Could not save savedata for player ${playerData.name}`);
-					callback({success: false, error: "Could not save savedata"});
-				}
+			Database.updateSaveData(playerData.accountId, savedata).then(() => {
+				callback({success: true});
+			}).catch((err) => {
+				console.error(`Error: Could not save saveData for player ${playerData.name}. (${err})`);
+				callback({success: false, error: "Could not save saveData."});
 			});
 		} else {
-			console.log(`Error: Could not save savedata for player with ID ${socket.id}`);
-			callback({success: false, error: "Player not found"});
+			console.error(`Error: Could not save saveData for player with ID ${socket.id}`);
+			callback({success: false, error: "Player not found."});
 		}
 	});
 }
@@ -483,11 +482,9 @@ function getPlayerFromSession(sessionId) {
 function loginPlayer(player, accountId) {
 	if (player) {
 		player.loggedIn = true;
-		console.log(`Account ID ${accountId} logged in for player ${player.name}.`);
-		player.accountId = accountId; // TODO: Get account ID from database
-		console.log(`Session belongs to ${player.name}.`);
+		player.accountId = accountId;
 	} else {
-		console.log("Session does not belong to a player.");
+		console.error(`Error: Account ID ${accountId} does not belong to a connected player.`);
 		return false;
 	}
 }

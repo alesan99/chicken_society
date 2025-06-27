@@ -7,6 +7,7 @@ import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
+import Notify from "../gui/notification.js";
 
 MENUS["usersMenu"] = new class extends Menu {
 	//Initialize
@@ -28,12 +29,18 @@ MENUS["usersMenu"] = new class extends Menu {
 			}
 			if (ownerId == NETPLAY.id) {
 				// Your coop
-				WORLD.warpToArea("coop", null, null, ownerId, SAVEDATA.coop);
+				NETPLAY.requestCoopData(ownerId, (data)=>{
+					let coopData = data || SAVEDATA.coop;
+					SAVEDATA.coop = coopData; // TODO: Don't store coop in savedata
+					WORLD.warpToArea("coop", null, null, ownerId, coopData);
+				});
 			} else {
 				// Other player's coop (once you've recieved it from the server)
 				NETPLAY.requestCoopData(ownerId, (data)=>{
 					if (data) {
 						WORLD.warpToArea("coop", null, null, ownerId, data);
+					} else {
+						Notify.new("Player does not have a coop.");
 					}
 				});
 			}

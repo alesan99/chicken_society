@@ -281,7 +281,7 @@ function drawPhysics(Draw, objs, spatialHash, offsetX=0, offsetY=0) {
 	for (let x = 0; x <= spatialHash.cw; x++) {
 		for (let y = 0; y <= spatialHash.ch; y++) {
 			let cellSize = spatialHash.cellSize;
-			Draw.polygon([x*cellSize+offsetX,y*cellSize+offsetY, x*cellSize+cellSize+offsetX,y*cellSize+offsetY, x*cellSize+cellSize+offsetX,y*cellSize+cellSize+offsetY, x*cellSize+offsetX,y*cellSize+cellSize+offsetY], "line")
+			Draw.polygon([x*cellSize+offsetX,y*cellSize+offsetY, x*cellSize+cellSize+offsetX,y*cellSize+offsetY, x*cellSize+cellSize+offsetX,y*cellSize+cellSize+offsetY, x*cellSize+offsetX,y*cellSize+cellSize+offsetY], "line");
 			Draw.text(spatialHash.getCell(x, y).size,x*cellSize+cellSize/2+offsetX,y*cellSize+cellSize/2+offsetY);
 		}
 	}

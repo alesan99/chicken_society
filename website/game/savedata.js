@@ -140,6 +140,7 @@ function saveSaveData(saveData) {
 	// This is for guests who have not made an account
 
 	// Convert the object to a JSON string
+	console.log(saveData);
 	const jsonString = JSON.stringify(saveData);
 	
 	if (NETPLAY.id == "OFFLINE") {
@@ -148,7 +149,7 @@ function saveSaveData(saveData) {
 		console.log("saved SaveData to localStorage at 'guestSaveData'");
 	} else {
 		// Save to server
-		NETPLAY.sendSavedata(saveData, () => {
+		NETPLAY.sendSaveData(saveData, () => {
 			console.log("saved SaveData to server");
 		});
 	}
@@ -158,6 +159,14 @@ function loadSaveData(callback) {
 	// Load data from browser storage
 	// This is for guests who have not made an account
 
+	const useSaveData = function(data) {
+		// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
+		QuestSystem.initialize(); // Reload quests
+
+		console.log(data);
+		callback(data);
+	};
+
 	// Retrieve the JSON string from localStorage
 	let storedJsonString;
 	
@@ -165,42 +174,33 @@ function loadSaveData(callback) {
 		storedJsonString = localStorage.getItem("guestSaveData");
 
 		if (!storedJsonString) {
-			console.log("could not get localStorage data at 'guestSaveData'");
+			console.log("Could not get localStorage data at 'guestSaveData'.");
 			return false;
 		}
+		
+		// Parse the JSON string back into a JavaScript object
+		const retrievedObject = JSON.parse(storedJsonString);
+		console.log("Loaded SaveData from localStorage at 'guestSaveData'.");
+		useSaveData(retrievedObject);
 	} else {
 		// Load from server
-		storedJsonString = NETPLAY.requestSavedata((data) => {
+		storedJsonString = NETPLAY.requestSaveData((data) => {
 			if (data === false) {
-				console.log("could not get SaveData from server");
+				console.log("Could not get SaveData from server");
 				return false;
 			}
 			// SaveData loaded successfully
-			console.log("loaded SaveData from server");
-			callback(data);
+			console.log("Loaded SaveData from server.");
+			useSaveData(data);
 		});
-		if (!storedJsonString) {
-			console.log("could not get SaveData from server");
-			return false;
-		}
 	}
-	
-	// Parse the JSON string back into a JavaScript object
-	const retrievedObject = JSON.parse(storedJsonString);
-	// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
-
-	QuestSystem.initialize(); // Reload quests
-
-	console.log("loaded SaveData from localStorage at 'guestSaveData'");
-	console.log(retrievedObject);
-	callback(retrievedObject);
-	return retrievedObject;
 }
 
 function applySaveData(data) {
+	replaceObjectValues(PROFILE, data.profile);
 	replaceObjectValues(SAVEDATA, data);
+	SAVEDATA.profile = PROFILE;
 	console.log(PROFILE, SAVEDATA.profile);
-	replaceObjectValues(PROFILE, SAVEDATA.profile);
 	PLAYER.updateProfile(PROFILE, "sendToServer");
 	applySettings();
 }
