@@ -256,6 +256,7 @@ function loadJSON5(filePath, callBack, errorCallBack) {
 			return false;
 		}
 		return response.text().then(text => {
+			// eslint-disable-next-line no-undef
 			return JSON5.parse(text);
 		});
 	})

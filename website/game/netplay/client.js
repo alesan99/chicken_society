@@ -12,6 +12,7 @@ import { MENUS } from "../menu.js";
 
 var Netplay;
 if (typeof io !== "undefined") { // Check if communication module was loaded (it isn't when testing the game)
+	// eslint-disable-next-line no-undef
 	var socket = io(); // No URL because it defaults to trying to connect to host that serves page
 
 	Netplay = class {
@@ -107,7 +108,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			// Save data
 			// Server connections
 			socket.on("disconnect", (reason) => {this.disconnect(reason);});
-			socket.io.on("reconnect", () => {this.reconnect();})
+			socket.io.on("reconnect", () => {this.reconnect();});
 		}
 
 		// Connect to server for the first time and send information about yourself
@@ -139,6 +140,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			// Clear player list
 			for (const [id, playerData] of Object.entries(this.playerList)) {
 				this.removePlayer(id);
+				this.removeMinigamePlayer(id);
 			}
 		}
 
@@ -443,6 +445,10 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		removeMinigamePlayer (id) {
 			let playerData = this.playerList[id];
 			if (playerData && (id != socket.id)) {
+				if (!this.minigame || !this.minigamePlayerList[id]) {
+					return false;
+				}
+
 				console.log("Attempting to remove player from minigame", playerData.name);
 				// Let minigame know a player left
 				if (this.minigame.removePlayer) {

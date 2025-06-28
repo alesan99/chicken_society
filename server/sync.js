@@ -26,7 +26,7 @@ TimedEvents.loadTimedEvents();
 function listenToClient(socket) {
 	// Creates listeners for client messages
 	// This function is only called ONCE per client connection, the listeners are just callback functions
-	console.log("A user connected");
+	console.log("A user connected.");
 
 	// Link socket.io session to express session (to know if this socket client is logged in)
 	// the session ID is used as a room
@@ -370,7 +370,7 @@ function listenToClient(socket) {
 		let playerData = playerList[socket.id];
 		if (playerData) {
 			Database.updateCoopData(playerData.accountId, data).catch((err) => {
-				console.error(`Error: Cannot update coop data for ${playerData.name}.`)
+				console.error(`Error: Cannot update coop data for ${playerData.name}.`);
 			});
 		}
 	});
@@ -479,10 +479,12 @@ function getPlayerFromSession(sessionId) {
 
 // // Log in player
 // // Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
-function loginPlayer(player, accountId) {
+function loginPlayer(id, accountId) {
+	const player = playerList[id];
 	if (player) {
 		player.loggedIn = true;
 		player.accountId = accountId;
+		return true;
 	} else {
 		console.error(`Error: Account ID ${accountId} does not belong to a connected player.`);
 		return false;

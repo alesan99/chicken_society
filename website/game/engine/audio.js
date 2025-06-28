@@ -14,6 +14,7 @@ const AudioSystem = (function() {
 	const functions = {
 		newMusic(path) {
 			// These need to be streamed
+			// eslint-disable-next-line no-undef
 			return new Howl({
 				src: [path],
 				loop: true,
@@ -24,6 +25,7 @@ const AudioSystem = (function() {
 
 		newSound(path) {
 			// These can be loaded in memory
+			// eslint-disable-next-line no-undef
 			return new Howl({
 				src: [path]
 			});
@@ -88,6 +90,7 @@ const AudioSystem = (function() {
 		},
 
 		setVolume(vol, musicVol, sfxVol) {
+			// eslint-disable-next-line no-undef
 			Howler.volume(vol);
 			masterVolume = vol;
 			if (musicVol !== undefined) {

@@ -16,17 +16,20 @@ app.post("/login-endpoint", (req, res) => {
 		return false;
 	}
 
-	const receivedUsername = req.body.username;
-	const receivedPassword = req.body.password;
+	const username = req.body.username;
+	const password = req.body.password;
 
-	Database.loginUser(session, receivedUsername, receivedPassword).then((accountId) => {
+	Database.loginUser(session, username, password).then((accountId) => {
 		// Officially log in the player
-		loginPlayer(player, accountId);
-
-		console.log(`User ${receivedUsername} logged in successfully.`);
+		if (player && loginPlayer(player.id, accountId)) {
+			console.log(`User ${username} logged in successfully.`);
+			res.json({ success: true, message: "Login successful" });
+			return true;
+		}
+		console.log(`User ${username} logged in successfully, but not connected to game.`);
 		res.json({ success: true, message: "Login successful" });
 	}).catch((err) => {
-		console.warning(`Warning: Login failed for user ${receivedUsername}. (${err})`);
+		console.warning(`Warning: Login failed for user ${username}. (${err})`);
 		res.json({ success: false, message: "Invalid username or password" });
 	});
 });
@@ -48,7 +51,11 @@ app.post("/register", (req, res) => {
 
 	Database.createUser(session, username, password, email).then((accountId) => {
 		// Officially log in the player
-		loginPlayer(true, accountId);
+		if (player && loginPlayer(player.id, accountId)) {
+			console.log(`User ${username} registered and logged in successfully.`);
+			res.json({ success: true, message: "Login successful" });
+			return true;
+		}
 
 		console.log(`User ${username} registered successfully.`);
 		res.json({ success: true, message: "Registration successful" });

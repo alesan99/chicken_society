@@ -113,7 +113,7 @@ class DB {
 						if (match) {
 							resolve(accountId);
 						} else {
-							reject(new Error("Incorrect password"));
+							reject(new Error("Incorrect password."));
 						}
 					});
 				}
@@ -132,7 +132,7 @@ class DB {
 		return new Promise((resolve, reject) => {
 			this.connection.query(getSaveDataSql, [accountId], (err, results) => {
 				if (err) return reject(err);
-				if (results.length === 0) return reject(new Error("No saveData found for user."));
+				if (results.length === 0) return reject(new Error(`No saveData found for account ${accountId}.`));
 				try {
 					const data = JSON.parse(results[0].data);
 					resolve(data);
