@@ -1,3 +1,5 @@
+// Mock database if you start the server without MySQL configured
+
 class MockDatabase {
 	initialize() {
 		console.log("Database not initialized. Using mock database.");

@@ -9,22 +9,24 @@ import {getState} from "../state.js";
 import TimedEventsSystem from "../timedevents.js";
 import PetRaceSystem from "../petrace.js";
 import { MENUS } from "../menu.js";
+import { applySaveData } from "../savedata.js";
 
 var Netplay;
 if (typeof io !== "undefined") { // Check if communication module was loaded (it isn't when testing the game)
+	// eslint-disable-next-line no-undef
 	var socket = io(); // No URL because it defaults to trying to connect to host that serves page
 
 	Netplay = class {
 		constructor () {
-		// Timing for chicken position or minigame data
+			// Timing for chicken position or minigame data
 			this.updateTimer = 0;
 			this.updateInterval = 5/60; //Time inbetween sending data to server
 
 			// Action timings
 			/* Two types of actions:
-		1. Normal: This will be recieved by the server as soon as possible only when theres little client activity, otherwise it will be added to a queue.
-		2. New: This new action will overwrite any old actions in queue.
-		*/
+				1. Normal: This will be recieved by the server as soon as possible only when theres little client activity, otherwise it will be added to a queue.
+				2. New: This new action will overwrite any old actions in queue.
+			*/
 			this.actionQueue = [];
 			this.actionTimer = 0;
 			this.actionInterval = 5/60; // Minimum time inbetween sending actions to server
@@ -34,20 +36,20 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			// Other Clients (lets call them players)
 			// Format (as of 3/18/2025):
 			/* {
-			id: playerData.id,
-			state: playerData.state,
-			minigame: playerData.minigame,
-			area: playerData.area,
-			profile: playerData.profile,
-			name: playerData.name,
-			chicken: playerData.chicken,
-			pet: {
-				name
-				happiness
-				health
-				hunger
-			}
-		} */
+				id: playerData.id,
+				state: playerData.state,
+				minigame: playerData.minigame,
+				area: playerData.area,
+				profile: playerData.profile,
+				name: playerData.name,
+				chicken: playerData.chicken,
+				pet: {
+					name
+					happiness
+					health
+					hunger
+				}
+			} */
 			this.playerList = {};
 
 			this.mutedPlayers = {}; // Which playerIDs not to recieve updates from
@@ -104,33 +106,63 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			socket.on("petRaceData", (data) => {this.recievePetRaceData(data);});
 			socket.on("petRaceFinish", (pet) => {});
 			// Coop
-			// Savedata
+			// Save data
+			socket.on("loggedIn", (data) => {this.loggedIn(data);})
+			// Server connections
+			socket.on("disconnect", (reason) => {this.disconnect(reason);});
+			socket.io.on("reconnect", () => {this.reconnect();});
 		}
 
 		// Connect to server for the first time and send information about yourself
-		connect () {
-		// Send profile (Chicken's appearance)
-			socket.timeout(this.timeOut).emit("profile", PROFILE, (err, response) => {
-				if (err) {
-				// the other side did not acknowledge the event in the given delay
-				} else {
-					console.log(`Successfully connected to server! Status: ${response.status}`);
+		connect() {
+			// Send profile (Chicken's appearance)
+			return new Promise((resolve, reject) => {
+				socket.timeout(this.timeOut).emit("profile", PROFILE, (err, response) => {
+					if (err) {
+						// the other side did not acknowledge the event in the given delay
+						resolve(false);
+					} else {
+						console.log(`Successfully connected to server! Status: ${response.status}`);
 
-					// Update server on other information
-					if (PROFILE.pet) {
-						this.sendPetProfile(SAVEDATA.pet);
+						// Update server on other information
+						if (PROFILE.pet) {
+							this.sendPetProfile(SAVEDATA.pet);
+						}
+
+						resolve(true);
 					}
+				});
+			});
+		}
+
+		disconnect(reason) {
+			console.error(`Disconnected: ${reason}`);
+			Notify.new("Disconnected from server!", 10, [200, 0, 0]);
+
+			// Clear player list
+			for (const [id, playerData] of Object.entries(this.playerList)) {
+				this.removePlayer(id);
+				this.removeMinigamePlayer(id);
+			}
+		}
+
+		reconnect() {
+			this.connect().then((success) => {
+				if (success) {
+					Notify.new("Reconnected!");
+				} else {
+					Notify.new("Could not reconnect.\nPlease refresh.", 10, [200, 0, 0]);
 				}
 			});
 		}
 
-		update (dt) {
+		update(dt) {
 			this.updateTimer += dt;
 			// Continually let server know where this client's chicken is, or what their minigame is doing
 			if (this.updateTimer > this.updateInterval) {
 				if (getState() == "world") { // World
-				// Send chicken position to server
-				// Get velocity of player
+					// Send chicken position to server
+					// Get velocity of player
 					let [sx, sy] = [PLAYER.sx, PLAYER.sy];
 					//let [sx, sy] = [(PLAYER.x-this.oldx)/this.updateInterval, (PLAYER.y-this.oldy)/this.updateInterval]
 					// Check if position has changed since last time position was sent to the server (or if there is a new player that needs this info.)
@@ -144,7 +176,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 					this.oldsx = sx;
 					this.oldsy = sy;
 				} else if (getState() == "minigame") { // Playing minigame
-				// Send minigame data to server
+					// Send minigame data to server
 					this.sendMinigameData(this.minigame.data);
 				}
 
@@ -164,7 +196,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Add new playerData entry to playerList
-		addPlayer (id, playerData, isInitial=false) {
+		addPlayer(id, playerData, isInitial=false) {
 			if ((id != socket.id) && (this.playerList[id] == null)) {
 				this.playerList[id] = playerData;
 
@@ -182,7 +214,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Remove playerData entry from playerList
-		removePlayer (id) {
+		removePlayer(id) {
 			if (id != socket.id) {
 				WORLD.removePlayerFromArea(id);
 				delete this.playerList[id];
@@ -196,7 +228,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Recieve entire list of players when connecting for the first time
-		recievePlayerList (playerList) {
+		recievePlayerList(playerList) {
 			console.log("Recieved Player List:");
 			console.log(playerList);
 			for (const [id, playerData] of Object.entries(playerList)) {
@@ -207,7 +239,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Recive player data from server and reflect changes
-		recievePosition (id, x, y, sx, sy) {
+		recievePosition(id, x, y, sx, sy) {
 			if (this.playerList[id] != null) {
 				let chicken = this.playerList[id].chicken;
 				chicken.x = x;
@@ -215,7 +247,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 
 				// Update player's character object
 				if (CHARACTER[id]) {
-				// Position and speed
+					// Position and speed
 					CHARACTER[id].setPosition(chicken.x, chicken.y);
 					CHARACTER[id].move(sx/CHARACTER[id].speed, sy/CHARACTER[id].speed);
 				}
@@ -223,11 +255,11 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Send chat to everyone
-		sendChat (text) {
+		sendChat(text) {
 			socket.emit("chat", text);
 		}
 
-		recieveChat (id, text) {
+		recieveChat(id, text) {
 			if (this.mutedPlayers[id]) {
 				return false;
 			}
@@ -251,6 +283,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			let playerData = this.playerList[id];
 			if (playerData != null) {
 				playerData.profile = profile;
+				playerData.name = profile.name;
 				// Update player's character object
 				if (CHARACTER[id] != null) {
 					CHARACTER[id].updateProfile(profile);
@@ -265,7 +298,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		recievePetProfile(id, profile) {
 			let playerData = this.playerList[id];
 			if (playerData != null) {
-			// Update player's pet
+				// Update player's pet
 				playerData.pet = profile;
 				if (CHARACTER[id] != null) {
 					let chicken = CHARACTER[id];
@@ -365,11 +398,11 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			this.minigame = minigame;
 			this.minigameName = minigameName;
 			if (this.minigame) {
-			// Connecting to minigame
+				// Connecting to minigame
 				this.minigamePlayerList = {};
 				socket.timeout(this.timeOut).emit("minigame", minigameName, (err, response) => { if (err) { } else { console.log(response); } });
 			} else {
-			// Disconnecting from minigame
+				// Disconnecting from minigame
 				socket.timeout(this.timeOut).emit("minigame", false, (err, response) => { if (err) {} else { console.log(response); } });
 			}
 		}
@@ -414,6 +447,10 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		removeMinigamePlayer (id) {
 			let playerData = this.playerList[id];
 			if (playerData && (id != socket.id)) {
+				if (!this.minigame || !this.minigamePlayerList[id]) {
+					return false;
+				}
+
 				console.log("Attempting to remove player from minigame", playerData.name);
 				// Let minigame know a player left
 				if (this.minigame.removePlayer) {
@@ -468,7 +505,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Mute player
-		// This disables visibility of a player and their action
+		// This disables visibility of a player and their actions
 		mutePlayer(id, doMute) {
 			let playerData = this.playerList[id];
 			if (playerData) {
@@ -546,37 +583,56 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 
 		// Get coop data
 		sendCoopData() {
-			socket.emit("coopData", SAVEDATA.coop);
+			socket.emit("updateCoopData", SAVEDATA.coop, (response) => {
+				if (response.success) {
+					console.log("Coop data saved successfully.");
+				} else {
+					console.error("Failed to save coop data:", response.error);
+				}
+			});
 		}
 		requestCoopData(id, callback) {
 			socket.emit("requestCoopData", id, (response) => {
-				console.log("Recieved coop data:", response);
-				callback(response);
-			});
-		}
-
-		// Get savedta
-		sendSavedata(SaveData) {
-			socket.emit("updateSavedata", SaveData, (response) => {
 				if (response.success) {
-					console.log("Savedata saved successfully.");
-				}
-				else {
-					console.error("Failed to save savedata:", response.error);
-				}
-			});
-		}
-		requestSavedata(callback) {
-			console.log("Requesting savedata from server...");
-			socket.emit("requestSavedata", (response) => {
-				if (response.success) {
-					console.log("Recieved savedata:", response.data);
+					console.log("Recieved coop data:", response.data);
 					callback(response.data);
 				} else {
-					console.error("Failed to get savedata:", response.error);
+					console.error("Failed to save coop data:", response.error);
 					callback(false);
 				}
 			});
+		}
+
+		// Get save data
+		sendSaveData(SaveData) {
+			socket.emit("updateSaveData", SaveData, (response) => {
+				if (response.success) {
+					console.log("SaveData saved successfully.");
+				} else {
+					console.error("Failed to save saveData:", response.error);
+				}
+			});
+		}
+		requestSaveData(callback) {
+			console.log("Requesting saveData from server...");
+			socket.emit("requestSaveData", (response) => {
+				if (response.success) {
+					console.log("Recieved saveData:", response.data);
+					callback(response.data);
+				} else {
+					console.error("Failed to get saveData:", response.error);
+					callback(false);
+				}
+			});
+		}
+		loggedIn(data) {
+			if (data) {
+				Notify.new(`Welcome, ${data.username}!`);
+				const savedata = data.savedata;
+				if (savedata) {
+					applySaveData(savedata);
+				}
+			}
 		}
 	};
 
@@ -611,6 +667,9 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		sendMessageToServer(header, contents) {}
 		sendCoopData() {}
 		requestCoopData(callback) {}
+		sendSaveData() {}
+		requestSaveData() {}
+		loggedIn(data) {}
 	};
 }
 

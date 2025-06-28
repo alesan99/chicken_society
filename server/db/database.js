@@ -53,57 +53,67 @@ class DB {
 
 	createUser(session, username, password, email) {
 		const sessionId = session.id;
-		console.log(`Register request from session ID ${session.id}`);
 
 		const hashedPassword = bcrypt.hashSync(password, saltRounds);
-		const insertQuery = `
+		const insertUserSql = `
 			INSERT INTO accounts (username, password, email)
 			VALUES (?, ?, ?)
 		`;
+		const getUserSql = `
+			SELECT * FROM accounts WHERE username = ?
+		`;
 
 		return new Promise((resolve, reject) => {
-			this.connection.query(insertQuery, [username, hashedPassword, email], (insertErr, insertResults) => {
-				if (insertErr) {
-					console.error("Error inserting user:", insertErr);
-					reject(insertErr);
+			// Check if user already exists
+			this.connection.query(getUserSql, [username], (err, results) => {
+				if (err) return reject(err);
+				if (results.length > 0) {
+					console.log(`Error: User with username ${username} already exists.`);
+					reject("User already exists.");
 					return;
 				}
-				if (insertResults.affectedRows > 0) {
-					console.log("User created successfully");
-					const accountId = insertResults.insertId;
-					resolve({success: true, accountId});
-				} else {
-					console.log("User creation failed");
-					reject(new Error("User creation failed"));
-				}
+
+				this.connection.query(insertUserSql, [username, hashedPassword, email], (insertErr, insertResults) => {
+					if (insertErr) {
+						console.error("Error inserting user:", insertErr);
+						reject(insertErr);
+						return;
+					}
+					if (insertResults.affectedRows > 0) {
+						console.log("User created successfully");
+						const accountId = insertResults.insertId;
+						resolve(accountId);
+					} else {
+						console.log("User creation failed");
+						reject(new Error("User creation failed"));
+					}
+				});
 			});
 		});
 	}
 
 	loginUser(session, username, receivedPassword) {
 		const sessionId = session.id;
-		console.log(`Login request from session ID ${session.id}`);
 
-		const selectQuery = "SELECT password, account_id FROM accounts WHERE username = ?";
+		const getPasswordSql = "SELECT password, account_id FROM accounts WHERE username = ?";
+		
 		return new Promise((resolve, reject) => {
-			this.connection.query(selectQuery, [username], (selectErr, selectResults) => {
-				if (selectErr) return reject(selectErr);
+			// Retrieve password hash belonging to user
+			this.connection.query(getPasswordSql, [username], (err, selectResults) => {
+				if (err) return reject(err);
 				if (selectResults.length > 0) {
 					const hashedPassword = selectResults[0].password;
 					const accountId = selectResults[0].account_id;
-					console.log(`Found user ${username} with account ID ${accountId}`);
+					// Compare password hashes
 					bcrypt.compare(receivedPassword, hashedPassword, (compareErr, match) => {
 						if (compareErr) {
-							console.error("Error comparing passwords:", compareErr);
 							reject(compareErr);
 							return;
 						}
 						if (match) {
-							console.log("Login successful");
-							resolve({success: true, accountId});
+							resolve(accountId);
 						} else {
-							console.log("Incorrect password");
-							reject(new Error("Incorrect password"));
+							reject(new Error("Incorrect password."));
 						}
 					});
 				}
@@ -111,17 +121,95 @@ class DB {
 		});
 	}
 
-	getSavedata(accountId) {
-		const sql = `
+	getSaveData(accountId) {
+		const getSaveDataSql = `
 			SELECT s.data
 			FROM accounts a
 			JOIN savedata s ON a.savedata_id = s.savedata_id
 			WHERE a.account_id = ?
 			LIMIT 1
 		`;
+		return new Promise((resolve, reject) => {
+			this.connection.query(getSaveDataSql, [accountId], (err, results) => {
+				if (err) return reject(err);
+				if (results.length === 0) return reject(new Error(`No saveData found for account ${accountId}.`));
+				try {
+					const data = JSON.parse(results[0].data);
+					resolve(data);
+				} catch (e) {
+					reject(e);
+				}
+			});
+		});
+	}
+
+	updateSaveData(accountId, data) {
+		const getAccountSql = `
+			SELECT username, savedata_id
+			FROM accounts
+			WHERE account_id = ?
+			LIMIT 1
+		`;
+		const updateSaveDataSql = `
+			UPDATE savedata
+			SET data = ?
+			WHERE savedata_id = ?
+		`;
+		const createSaveDataSql = `
+			INSERT INTO savedata (data) VALUES (?)
+		`;
+		const updateAccountSql = `
+			UPDATE accounts SET savedata_id = ? WHERE account_id = ?
+		`;
+
+		const dataString = JSON.stringify(data);
 
 		return new Promise((resolve, reject) => {
-			this.connection.query(sql, [accountId], (err, results) => {
+			// Step 1: Get the account's savedata_id
+			this.connection.query(getAccountSql, [accountId], (err, results) => {
+				if (err) return reject(err);
+				if (results.length === 0) return reject(new Error("Account not found"));
+
+				const savedataId = results[0].savedata_id;
+
+				if (!savedataId) {
+					// Step 2a: No savedata, create it
+					this.connection.query(
+						createSaveDataSql,
+						[dataString],
+						(insertErr, insertResult) => {
+							if (insertErr) return reject(insertErr);
+
+							const newSaveDataId = insertResult.insertId;
+							// Step 3: Update account with new savedata_id
+							this.connection.query(updateAccountSql, [newSaveDataId, accountId], (updateErr) => {
+								if (updateErr) return reject(updateErr);
+								resolve();
+							});
+						}
+					);
+				} else {
+					// Step 2b: Update existing savedata
+					this.connection.query(updateSaveDataSql, [dataString, savedataId], (updateErr) => {
+						if (updateErr) return reject(updateErr);
+						resolve();
+					});
+				}
+			});
+		});
+	}
+
+	getCoopData(accountId) {
+		const getCoopSql = `
+			SELECT c.data
+			FROM accounts a
+			JOIN savedata s ON a.savedata_id = s.savedata_id
+			JOIN coops c ON s.coop_id = c.coop_id
+			WHERE a.account_id = ?
+			LIMIT 1
+		`;
+		return new Promise((resolve, reject) => {
+			this.connection.query(getCoopSql, [accountId], (err, results) => {
 				if (err) return reject(err);
 				if (results.length === 0) return resolve(null);
 				try {
@@ -134,69 +222,55 @@ class DB {
 		});
 	}
 
-	updateSavedata(accountId, data) {
-		console.log(`Updating savedata for account ID ${accountId}`);
-		return new Promise((resolve, reject) => {
-			// Step 1: Get the account's savedata_id
-			const getAccountSql = `
-				SELECT username, savedata_id
-				FROM accounts
-				WHERE account_id = ?
-				LIMIT 1
-			`;
-			this.connection.query(getAccountSql, [accountId], (err, results) => {
-				if (err) return reject(err);
-				if (results.length === 0) return reject(new Error("Account not found"));
+	updateCoopData(accountId, data) {
+		const getCoopIdSql = `
+			SELECT s.coop_id, s.savedata_id
+			FROM accounts a
+			JOIN savedata s ON a.savedata_id = s.savedata_id
+			WHERE a.account_id = ?
+			LIMIT 1
+		`;
+		const updateCoopSql = `
+			UPDATE coops
+			SET data = ?
+			WHERE coop_id = ?
+		`;
+		const insertCoopSql = `
+			INSERT INTO coops (data) VALUES (?)
+		`;
+		const updateSavedataCoopIdSql = `
+			UPDATE savedata SET coop_id = ? WHERE savedata_id = ?
+		`;
 
+		const dataString = JSON.stringify(data);
+
+		return new Promise((resolve, reject) => {
+			this.connection.query(getCoopIdSql, [accountId], (err, results) => {
+				if (err) return reject(err);
+				if (results.length === 0) return reject(new Error("Account or savedata not found"));
+
+				const coopId = results[0].coop_id;
 				const savedataId = results[0].savedata_id;
 
-				if (!savedataId) {
-					// Step 2: No savedata, create it
-					const defaultData = JSON.stringify(data);
-					this.connection.query(
-						"INSERT INTO savedata (data) VALUES (?)",
-						[defaultData],
-						(insertErr, insertResult) => {
-							if (insertErr) return reject(insertErr);
-
-							const newSavedataId = insertResult.insertId;
-							// Step 3: Update account with new savedata_id
-							this.connection.query(
-								"UPDATE accounts SET savedata_id = ? WHERE account_id = ?",
-								[newSavedataId, accountId],
-								(updateErr) => {
-									if (updateErr) return reject(updateErr);
-									resolve(JSON.parse(defaultData));
-								}
-							);
-						}
-					);
-				} else {
-					// Step 4: Update existing savedata
-					const updateSql = `
-						UPDATE savedata
-						SET data = ?
-						WHERE savedata_id = ?
-					`;
-					this.connection.query(updateSql, [JSON.stringify(data), savedataId], (updateErr, updateResult) => {
+				if (coopId) {
+					// Coop exists, update it
+					this.connection.query(updateCoopSql, [dataString, coopId], (updateErr) => {
 						if (updateErr) return reject(updateErr);
 						resolve(data);
+					});
+				} else {
+					// Coop does not exist, insert and update savedata.coop_id
+					this.connection.query(insertCoopSql, [dataString], (insertErr, insertResult) => {
+						if (insertErr) return reject(insertErr);
+						const newCoopId = insertResult.insertId;
+						this.connection.query(updateSavedataCoopIdSql, [newCoopId, savedataId], (updateErr) => {
+							if (updateErr) return reject(updateErr);
+							resolve(data);
+						});
 					});
 				}
 			});
 		});
-		// const sql = `
-		// 	UPDATE savedata s
-		// 	JOIN accounts a ON a.savedata_id = s.savedata_id
-		// 	SET s.data = ?
-		// 	WHERE a.username = ?
-		// `;
-		// return new Promise((resolve, reject) => {
-		// 	this.connection.query(sql, [data, username], (err, result) => {
-		// 		if (err) return reject(err);
-		// 		resolve(result.affectedRows > 0);
-		// 	});
-		// });
 	}
 }
 
