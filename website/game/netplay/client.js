@@ -105,21 +105,49 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			socket.on("petRaceFinish", (pet) => {});
 			// Coop
 			// Save data
+			// Server connections
+			socket.on("disconnect", (reason) => {this.disconnect(reason);});
+			socket.io.on("reconnect", () => {this.reconnect();})
 		}
 
 		// Connect to server for the first time and send information about yourself
 		connect () {
-		// Send profile (Chicken's appearance)
-			socket.timeout(this.timeOut).emit("profile", PROFILE, (err, response) => {
-				if (err) {
-				// the other side did not acknowledge the event in the given delay
-				} else {
-					console.log(`Successfully connected to server! Status: ${response.status}`);
+			// Send profile (Chicken's appearance)
+			return new Promise((resolve, reject) => {
+				socket.timeout(this.timeOut).emit("profile", PROFILE, (err, response) => {
+					if (err) {
+						// the other side did not acknowledge the event in the given delay
+						resolve(false);
+					} else {
+						console.log(`Successfully connected to server! Status: ${response.status}`);
 
-					// Update server on other information
-					if (PROFILE.pet) {
-						this.sendPetProfile(SAVEDATA.pet);
+						// Update server on other information
+						if (PROFILE.pet) {
+							this.sendPetProfile(SAVEDATA.pet);
+						}
+
+						resolve(true);
 					}
+				});
+			});
+		}
+
+		disconnect (reason) {
+			console.error(`Disconnected: ${reason}`);
+			Notify.new("Disconnected from server!", 10, [200, 0, 0]);
+
+			// Clear player list
+			for (const [id, playerData] of Object.entries(this.playerList)) {
+				this.removePlayer(id);
+			}
+		}
+
+		reconnect () {
+			this.connect().then((success) => {
+				if (success) {
+					Notify.new("Reconnected!");
+				} else {
+					Notify.new("Could not reconnect.\nPlease refresh.", 10, [200, 0, 0]);
 				}
 			});
 		}
@@ -251,6 +279,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			let playerData = this.playerList[id];
 			if (playerData != null) {
 				playerData.profile = profile;
+				playerData.name = profile.name;
 				// Update player's character object
 				if (CHARACTER[id] != null) {
 					CHARACTER[id].updateProfile(profile);
