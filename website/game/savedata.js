@@ -160,9 +160,6 @@ function loadSaveData(callback) {
 	// This is for guests who have not made an account
 
 	const useSaveData = function(data) {
-		// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
-		QuestSystem.initialize(); // Reload quests
-
 		console.log(data);
 		callback(data);
 	};
@@ -197,12 +194,14 @@ function loadSaveData(callback) {
 }
 
 function applySaveData(data) {
+	// TODO: insert elements from retrievedObject into the default saveData so there isn't missing information if the saveData format is changed in a game update.
 	replaceObjectValues(PROFILE, data.profile);
 	replaceObjectValues(SAVEDATA, data);
 	SAVEDATA.profile = PROFILE;
 	console.log(PROFILE, SAVEDATA.profile);
 	PLAYER.updateProfile(PROFILE, "sendToServer");
 	applySettings();
+	QuestSystem.initialize(); // Reload quests
 }
 
 function replaceObjectValues(objectTo, objectFrom) {

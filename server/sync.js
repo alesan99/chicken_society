@@ -479,11 +479,24 @@ function getPlayerFromSession(sessionId) {
 
 // // Log in player
 // // Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
-function loginPlayer(id, accountId) {
-	const player = playerList[id];
-	if (player) {
-		player.loggedIn = true;
-		player.accountId = accountId;
+function loginPlayer(id, accountId, username) {
+	const playerData = playerList[id];
+	if (playerData) {
+		playerData.loggedIn = true;
+		playerData.accountId = accountId;
+		// Send savedata
+		Database.getSaveData(accountId).then((savedata) => {
+			playerData.profile = savedata.profile;
+			playerData.name = savedata.name;
+			io.to(id).emit("loggedIn", {
+				username: username,
+				savedata: savedata
+			});
+		}).catch((err) => {
+			io.to(id).emit("loggedIn", {
+				username: username
+			});
+		});
 		return true;
 	} else {
 		console.error(`Error: Account ID ${accountId} does not belong to a connected player.`);

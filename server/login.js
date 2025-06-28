@@ -21,7 +21,7 @@ app.post("/login-endpoint", (req, res) => {
 
 	Database.loginUser(session, username, password).then((accountId) => {
 		// Officially log in the player
-		if (player && loginPlayer(player.id, accountId)) {
+		if (player && loginPlayer(player.id, accountId, username)) {
 			console.log(`User ${username} logged in successfully.`);
 			res.json({ success: true, message: "Login successful" });
 			return true;
@@ -51,7 +51,7 @@ app.post("/register", (req, res) => {
 
 	Database.createUser(session, username, password, email).then((accountId) => {
 		// Officially log in the player
-		if (player && loginPlayer(player.id, accountId)) {
+		if (player && loginPlayer(player.id, accountId, username)) {
 			console.log(`User ${username} registered and logged in successfully.`);
 			res.json({ success: true, message: "Login successful" });
 			return true;

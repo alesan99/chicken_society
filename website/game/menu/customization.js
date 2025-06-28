@@ -29,7 +29,6 @@ MENUS["customization"] = new class extends Menu {
 			loadSaveData((data)=>{
 				applySaveData(data);
 				this.buttons["name"].text = PROFILE.name;
-				// TODO: Move all this logic to savedata.js
 				this.close();
 				openMenu("customization");
 			});
