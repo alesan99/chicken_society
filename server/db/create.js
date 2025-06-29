@@ -30,6 +30,7 @@ const tableQueries = [
 		username VARCHAR(255) NOT NULL,
 		password VARCHAR(255) NOT NULL,
 		email VARCHAR(255),
+		admin BOOL NOT NULL DEFAULT 0,
 		savedata_id INT,
 		FOREIGN KEY (savedata_id) REFERENCES savedata(savedata_id)
 	)`

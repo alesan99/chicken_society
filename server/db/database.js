@@ -95,7 +95,7 @@ class DB {
 	loginUser(session, username, receivedPassword) {
 		const sessionId = session.id;
 
-		const getPasswordSql = "SELECT password, account_id FROM accounts WHERE username = ?";
+		const getPasswordSql = "SELECT password, account_id, admin FROM accounts WHERE username = ?";
 		
 		return new Promise((resolve, reject) => {
 			// Retrieve password hash belonging to user
@@ -104,6 +104,7 @@ class DB {
 				if (selectResults.length > 0) {
 					const hashedPassword = selectResults[0].password;
 					const accountId = selectResults[0].account_id;
+					const admin = selectResults[0].admin;
 					// Compare password hashes
 					bcrypt.compare(receivedPassword, hashedPassword, (compareErr, match) => {
 						if (compareErr) {
@@ -111,12 +112,30 @@ class DB {
 							return;
 						}
 						if (match) {
-							resolve(accountId);
+							resolve({accountId, admin});
 						} else {
 							reject(new Error("Incorrect password."));
 						}
 					});
 				}
+			});
+		});
+	}
+
+	getAccount(accountId) {
+		const getAccountSql = `
+			SELECT username, admin
+			FROM accounts
+			WHERE account_id = ?
+			LIMIT 1
+		`;
+		return new Promise((resolve, reject) => {
+			this.connection.query(getAccountSql, [accountId], (err, results) => {
+				if (err) return reject(err);
+				if (results.length === 0) return reject(new Error(`No account found for account id ${accountId}.`));
+				const username = results[0].username;
+				const admin = results[0].admin;
+				resolve({username, admin});
 			});
 		});
 	}
