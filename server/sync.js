@@ -35,12 +35,13 @@ function listenToClient(socket) {
 	// Recieve information about players; Send out info to everyone
 	socket.on("profile", (profile, callback) => {
 		// TODO: Restructure this
-		playerList[socket.id] = {
+		const playerData = {
 			id: socket.id, // Socket ID; Different for each browser tab
 
 			loggedIn: false,
 			sessionId: session.id, // Session ID; Stored in a cookie, shared across browser tabs
 			accountId: false, // Account ID; ID created for the account data after registration, also the database ID
+			admin: false,
 
 			state: "world",
 			minigame: false,
@@ -65,16 +66,24 @@ function listenToClient(socket) {
 				dead: false
 			},
 		};
+		playerList[socket.id] = playerData;
 
-		socket.join(`area:${playerList[socket.id].area}`); // Listen for events in area
+		socket.join(`area:${playerData.area}`); // Listen for events in area
 
 		// Send -this- client a list of all players
 		socket.emit("playerList", cleanPlayerList(playerList));
 		// Send everyone else just a new entry to their player list
-		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerList[socket.id]));
+		socket.broadcast.emit("addPlayer", socket.id, cleanPlayerData(playerData));
 
 		// Send this player all the timed events
 		sendTimedEvents(socket.id);
+
+		// Check if user is already logged in
+		if (session.accountId) {
+			Database.getAccount(session.accountId).then(({username, admin}) => {
+				loginPlayer(playerData.id, session.accountId, username, admin);
+			});
+		}
 
 		console.log(`Player "${profile.name}" joined.`);
 
@@ -479,24 +488,31 @@ function getPlayerFromSession(sessionId) {
 
 // // Log in player
 // // Call to make a player "aware" they have been logged in. This means their data will periodically be saved to the database.
-function loginPlayer(id, accountId, username) {
+function loginPlayer(id, accountId, username, isAdmin=false) {
 	const playerData = playerList[id];
 	if (playerData) {
+		const oldLoggedIn = playerData.loggedIn;
 		playerData.loggedIn = true;
 		playerData.accountId = accountId;
+		playerData.admin = isAdmin;
 		// Send savedata
-		Database.getSaveData(accountId).then((savedata) => {
-			playerData.profile = savedata.profile;
-			playerData.name = savedata.name;
-			io.to(id).emit("loggedIn", {
-				username: username,
-				savedata: savedata
+		if (oldLoggedIn !== true) {
+			Database.getSaveData(accountId).then((savedata) => {
+				playerData.profile = savedata.profile;
+				playerData.name = savedata.name;
+				io.to(id).emit("loggedIn", {
+					username: username,
+					savedata: savedata,
+					admin: isAdmin,
+				});
+			}).catch((err) => {
+				console.error(err);
+				io.to(id).emit("loggedIn", {
+					username: username,
+					admin: isAdmin,
+				});
 			});
-		}).catch((err) => {
-			io.to(id).emit("loggedIn", {
-				username: username
-			});
-		});
+		}
 		return true;
 	} else {
 		console.error(`Error: Account ID ${accountId} does not belong to a connected player.`);

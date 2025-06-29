@@ -61,7 +61,7 @@ MENUS["chatMenu"] = new class extends Menu {
 	}
 
 	enter() {
-		if (this.value.substring(0, 1) == "/") {
+		if (NETPLAY.admin && this.value.substring(0, 1) == "/") {
 			// Execute command
 			executeCommand(this.value);
 		} else if (this.value.length > 0) {

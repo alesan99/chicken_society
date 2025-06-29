@@ -5,16 +5,14 @@
 	Recieves all players profile information and their characters current position
 	Sends out that information to all connnected clients so their games are all synced
 	Activates global timed events (like holiday celebrations)
-	NOT IMPLEMENTED: Storing user data to database
+	Storing user data to database
  */
 
 // Currently supports hosting the server locally and to current network
 
-// Note about storing player IDs: Please use a regular session ID (either sent in a cookie, or stored in the localStorage and sent in the auth payload).
-
 require("dotenv").config();
 const express = require("express");
-const session = require("express-session");
+const expressSession = require("express-session");
 const app = express();
 const http = require("http"); // Used to start server
 const server = http.createServer(app);
@@ -22,13 +20,24 @@ const { Worker } = require("worker_threads"); // Allow multi-threading
 const rateLimit = require("express-rate-limit"); // Limit requests to server
 const path = require("path"); // Used to build paths
 
-// Session; used for user data
-const sessionMiddleware = session({
-	secret: process.env.SESSION_SECRET || Math.random().toString(36).substring(2), // TODO: Use a library for this
+// Session; used for logins and user data
+const sessionData = {
+	secret: process.env.SESSION_SECRET || Math.random().toString(36).substring(2),
 	resave: true,
 	saveUninitialized: true,
-	account: null,
-});
+	accountId: null,
+	username: null,
+	cookie: {
+		httpOnly: true,
+		sameSite: "lax"
+	}
+	// TODO: use a session store for scalability
+};
+if (app.get("env") === "production") {
+	app.set("trust proxy", 1);
+	sessionData.cookie.secure = true;
+}
+const sessionMiddleware = expressSession(sessionData);
   
 app.use(sessionMiddleware);
 

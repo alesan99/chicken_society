@@ -58,6 +58,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			this.connect();
 			this.id = socket.id; // Socket ID
 			this.isConnected = true; // Still connected to server
+			this.admin = false; // Can you use chat commands?
 
 			// Chicken syncing information
 			this.oldx = 0;
@@ -632,6 +633,10 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 				if (savedata) {
 					applySaveData(savedata);
 				}
+				const admin = data.admin;
+				if (admin) {
+					this.admin = true;
+				}
 			}
 		}
 	};
@@ -641,6 +646,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 	Netplay = class {
 		constructor () {
 			this.id = "OFFLINE";
+			this.admin = true;
 		}
 		connect () {}
 		update (dt) {}

@@ -151,6 +151,9 @@ nav ul li {
 .dropdown-button:hover {
 	background-color: #f9ddcc;
 }
+.dropdown.open > .dropdown-button {
+    background-color: #f1c7ac;
+}
 
 .dropdown-content {
 	display: none;
@@ -167,14 +170,11 @@ nav ul li {
 	padding: 12px 16px;
 }
 
-/* Show the dropdown content on hover */
-.dropdown:hover .dropdown-content {
-	display: block;
+.dropdown .dropdown-content {
+    display: none;
 }
-
-.dropdown:hover .dropdown-button,
-.dropdown:focus-within .dropdown-button {
-	background-color: #f9ddcc;
+.dropdown.open .dropdown-content {
+    display: block;
 }
 
 /* Login stuff */
@@ -203,7 +203,7 @@ form {
 	font-family: 'Inter', sans-serif; 
 } 
 
-#login-button, #register-button {
+#login-button, #register-button, #logout-button {
 	text-transform: uppercase;
 	font-size: 11px;
 	letter-spacing: 1px;
@@ -222,7 +222,7 @@ form {
 	cursor: pointer;
 }
 
-#login-button:hover, #register-button:hover {
+#login-button:hover, #register-button:hover, #logout-button:hover {
 	background-color: rgb(249, 206, 167);
 	box-shadow: 0 0 0 3px rgb(238, 184, 133);
 	color: black;

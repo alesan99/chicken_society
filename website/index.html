@@ -29,6 +29,9 @@
 								name="username" maxlength="16" autocomplete="off" required />
 							<input id="password-field" class="login-stuff" type="password" placeholder="Password"
 								name="password" maxlength="16" autocomplete="off" required />
+							<label>
+								<input type="checkbox" id="remember-login" name="remember-login"> Remember Me
+							</label>
 							<button id="login-button" class="login-stuff" type="button">Login</button>
 						</form>
 					</div>
@@ -52,6 +55,14 @@
 					</div>
 				</div>
 			</li>
+			<li class="dropdown" id="user-dropdown" style="display:none;">
+				<button class="dropdown-button" id="user-dropdown-button">[username]</button>
+				<div class="dropdown-content">
+					<div class="loginContainer">
+						<button id="logout-button" type="button">Sign Out</button>
+					</div>
+				</div>
+			</li>
 		</div>
 	</ul>
 </nav>
@@ -72,9 +83,33 @@
 			<button id="agree-button" class="disabled" disabled>Continue</button>
 		</div>
 	</div>
-	<!-- Terms of Service Modal & Privacy Policy Script -->
+	<!-- Page scripts -->
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
+			// Dropdown logic
+			const dropdowns = document.querySelectorAll('.dropdown');
+			const dropdownButtons = document.querySelectorAll('.dropdown-button');
+			dropdownButtons.forEach((button, i) => {
+				button.addEventListener('click', function(e) {
+					e.stopPropagation();
+					dropdowns.forEach((dropdown, j) => {
+						if (i === j) {
+							dropdown.classList.toggle('open');
+						} else {
+							dropdown.classList.remove('open');
+						}
+					});
+				});
+			});
+			document.addEventListener('click', function() {
+				dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
+			});
+			document.querySelectorAll('.dropdown-content').forEach(content => {
+				content.addEventListener('click', function(e) {
+					e.stopPropagation();
+				});
+			});
+			//Terms of Service Modal & Privacy Policy Script
 			const modal = document.getElementById("tos-modal");
 			const checkbox = document.getElementById("agree-checkbox");
 			const button = document.getElementById("agree-button");
@@ -98,7 +133,7 @@
 
 			button.addEventListener("click", () => {
 				if (!button.disabled) {
-            		localStorage.setItem("acceptedTermOfService", "true");
+					localStorage.setItem("acceptedTermOfService", "true");
 					modal.style.display = "none";
 				}
 			});
