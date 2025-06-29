@@ -9,8 +9,8 @@ class DB {
 	}
 
 	load() {
-		this.connection = null;
-		this.pool = null; // TODO: Allows for multiple connections
+		this.connection = null; // Unused
+		this.pool = null; // Allows for multiple connections
 
 		this.createDatabase().then(() => {
 			this.connect();
@@ -34,20 +34,31 @@ class DB {
 	}
 
 	connect() {
-		this.connection = mysql.createConnection({
+		// this.connection = mysql.createConnection({
+		// 	host: process.env.MYSQL_HOST,
+		// 	port: process.env.MYSQL_PORT,
+		// 	user: process.env.MYSQL_USER,
+		// 	password: process.env.MYSQL_PASSWORD,
+		// 	database: process.env.MYSQL_DATABASE,
+		// });
+
+		// this.connection.connect((err) => {
+		// 	if (err) {
+		// 		console.error("Error connecting to the database:", err);
+		// 		return;
+		// 	}
+		// 	console.log("Connected to the database.");
+		// });
+
+		this.pool = mysql.createPool({
 			host: process.env.MYSQL_HOST,
 			port: process.env.MYSQL_PORT,
 			user: process.env.MYSQL_USER,
 			password: process.env.MYSQL_PASSWORD,
 			database: process.env.MYSQL_DATABASE,
-		});
-
-		this.connection.connect((err) => {
-			if (err) {
-				console.error("Error connecting to the database:", err);
-				return;
-			}
-			console.log("Connected to the database.");
+			waitForConnections: true,
+			connectionLimit: 10,
+			queueLimit: 0
 		});
 	}
 
@@ -65,7 +76,7 @@ class DB {
 
 		return new Promise((resolve, reject) => {
 			// Check if user already exists
-			this.connection.query(getUserSql, [username], (err, results) => {
+			this.pool.query(getUserSql, [username], (err, results) => {
 				if (err) return reject(err);
 				if (results.length > 0) {
 					console.log(`Error: User with username ${username} already exists.`);
@@ -73,7 +84,7 @@ class DB {
 					return;
 				}
 
-				this.connection.query(insertUserSql, [username, hashedPassword, email], (insertErr, insertResults) => {
+				this.pool.query(insertUserSql, [username, hashedPassword, email], (insertErr, insertResults) => {
 					if (insertErr) {
 						console.error("Error inserting user:", insertErr);
 						reject(insertErr);
@@ -99,7 +110,7 @@ class DB {
 		
 		return new Promise((resolve, reject) => {
 			// Retrieve password hash belonging to user
-			this.connection.query(getPasswordSql, [username], (err, selectResults) => {
+			this.pool.query(getPasswordSql, [username], (err, selectResults) => {
 				if (err) return reject(err);
 				if (selectResults.length > 0) {
 					const hashedPassword = selectResults[0].password;
@@ -130,7 +141,7 @@ class DB {
 			LIMIT 1
 		`;
 		return new Promise((resolve, reject) => {
-			this.connection.query(getAccountSql, [accountId], (err, results) => {
+			this.pool.query(getAccountSql, [accountId], (err, results) => {
 				if (err) return reject(err);
 				if (results.length === 0) return reject(new Error(`No account found for account id ${accountId}.`));
 				const username = results[0].username;
@@ -149,7 +160,7 @@ class DB {
 			LIMIT 1
 		`;
 		return new Promise((resolve, reject) => {
-			this.connection.query(getSaveDataSql, [accountId], (err, results) => {
+			this.pool.query(getSaveDataSql, [accountId], (err, results) => {
 				if (err) return reject(err);
 				if (results.length === 0) return reject(new Error(`No saveData found for account ${accountId}.`));
 				try {
@@ -185,7 +196,7 @@ class DB {
 
 		return new Promise((resolve, reject) => {
 			// Step 1: Get the account's savedata_id
-			this.connection.query(getAccountSql, [accountId], (err, results) => {
+			this.pool.query(getAccountSql, [accountId], (err, results) => {
 				if (err) return reject(err);
 				if (results.length === 0) return reject(new Error("Account not found"));
 
@@ -193,7 +204,7 @@ class DB {
 
 				if (!savedataId) {
 					// Step 2a: No savedata, create it
-					this.connection.query(
+					this.pool.query(
 						createSaveDataSql,
 						[dataString],
 						(insertErr, insertResult) => {
@@ -201,7 +212,7 @@ class DB {
 
 							const newSaveDataId = insertResult.insertId;
 							// Step 3: Update account with new savedata_id
-							this.connection.query(updateAccountSql, [newSaveDataId, accountId], (updateErr) => {
+							this.pool.query(updateAccountSql, [newSaveDataId, accountId], (updateErr) => {
 								if (updateErr) return reject(updateErr);
 								resolve();
 							});
@@ -209,7 +220,7 @@ class DB {
 					);
 				} else {
 					// Step 2b: Update existing savedata
-					this.connection.query(updateSaveDataSql, [dataString, savedataId], (updateErr) => {
+					this.pool.query(updateSaveDataSql, [dataString, savedataId], (updateErr) => {
 						if (updateErr) return reject(updateErr);
 						resolve();
 					});
@@ -228,7 +239,7 @@ class DB {
 			LIMIT 1
 		`;
 		return new Promise((resolve, reject) => {
-			this.connection.query(getCoopSql, [accountId], (err, results) => {
+			this.pool.query(getCoopSql, [accountId], (err, results) => {
 				if (err) return reject(err);
 				if (results.length === 0) return resolve(null);
 				try {
@@ -264,7 +275,7 @@ class DB {
 		const dataString = JSON.stringify(data);
 
 		return new Promise((resolve, reject) => {
-			this.connection.query(getCoopIdSql, [accountId], (err, results) => {
+			this.pool.query(getCoopIdSql, [accountId], (err, results) => {
 				if (err) return reject(err);
 				if (results.length === 0) return reject(new Error("Account or savedata not found"));
 
@@ -273,16 +284,16 @@ class DB {
 
 				if (coopId) {
 					// Coop exists, update it
-					this.connection.query(updateCoopSql, [dataString, coopId], (updateErr) => {
+					this.pool.query(updateCoopSql, [dataString, coopId], (updateErr) => {
 						if (updateErr) return reject(updateErr);
 						resolve(data);
 					});
 				} else {
 					// Coop does not exist, insert and update savedata.coop_id
-					this.connection.query(insertCoopSql, [dataString], (insertErr, insertResult) => {
+					this.pool.query(insertCoopSql, [dataString], (insertErr, insertResult) => {
 						if (insertErr) return reject(insertErr);
 						const newCoopId = insertResult.insertId;
-						this.connection.query(updateSavedataCoopIdSql, [newCoopId, savedataId], (updateErr) => {
+						this.pool.query(updateSavedataCoopIdSql, [newCoopId, savedataId], (updateErr) => {
 							if (updateErr) return reject(updateErr);
 							resolve(data);
 						});

@@ -44,7 +44,7 @@ app.post("/login", (req, res) => {
 			res.json({ success: true, message: "Login successful" });
 		});
 	}).catch((err) => {
-		console.warning(`Warning: Login failed for user ${username}. (${err})`);
+		console.warn(`Warning: Login failed for user ${username}. (${err})`);
 		res.json({ success: false, message: "Invalid username or password" });
 	});
 });

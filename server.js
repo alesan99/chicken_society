@@ -51,7 +51,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 const { Server } = require("socket.io");
-const msgpack = require("socket.io-msgpack-parser"); // Import the socket.io-msgpack-parser module. If this crashes run "npm ci" again
+const msgpack = require("socket.io-msgpack-parser"); // Import the socket.io-msgpack-parser module. If this crashes run "npm ci" again.
 const io = new Server(server, {
 	parser: msgpack // Use msgpack for faster serialization
 });
