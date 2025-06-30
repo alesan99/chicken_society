@@ -148,7 +148,6 @@ function saveSaveData(saveData, callback) {
 		localStorage.setItem("guestSaveData", jsonString);
 		console.log("saved SaveData to localStorage at 'guestSaveData'");
 		if (callback) callback();
-		Notify.new("Saved!", 3);
 	} else {
 		// Save to server
 		NETPLAY.sendSaveData(saveData, () => {
@@ -195,7 +194,6 @@ function loadSaveData(callback) {
 		const retrievedObject = JSON.parse(storedJsonString);
 		console.log("Loaded SaveData from localStorage at 'guestSaveData'.");
 		useSaveData(retrievedObject);
-		Notify.new("Loaded!", 3);
 	} else {
 		// Load from server
 		storedJsonString = NETPLAY.requestSaveData((data) => {
