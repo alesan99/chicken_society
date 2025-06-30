@@ -434,6 +434,15 @@ function listenToClient(socket) {
 				callback({success: false, error: "Player not logged in"});
 				return false;
 			}
+			// Check invalid savedata
+			if (typeof savedata !== "object" ||
+				savedata === null ||
+				typeof savedata.profile !== "object" ||
+				savedata.profile === null) {
+				console.warn(`Warning: Player ${playerData.name} tried saving invalid saveData {}.`)
+				callback({success: false, error: "Invalid savedata."});
+				return false;
+			}
 			// Save savedata to database
 			Database.updateSaveData(playerData.accountId, savedata).then(() => {
 				callback({success: true});
@@ -498,8 +507,10 @@ function loginPlayer(id, accountId, username, isAdmin=false) {
 		// Send savedata
 		if (oldLoggedIn !== true) {
 			Database.getSaveData(accountId).then((savedata) => {
-				playerData.profile = savedata.profile;
-				playerData.name = savedata.name;
+				if (savedata) {
+					playerData.profile = savedata.profile;
+					playerData.name = savedata.name;
+				}
 				io.to(id).emit("loggedIn", {
 					username: username,
 					savedata: savedata,

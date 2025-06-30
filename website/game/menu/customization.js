@@ -10,7 +10,8 @@ import {HEXtoRGB, RGBtoHEX, removeNuggets, addNuggets, spendNuggets, addItem, re
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {PLAYER, PLAYER_CONTROLLER} from "../world.js";
 import {requestItem, compareItems, clearItems, useItem, adoptPet} from "../items.js";
-import {saveSaveData, loadSaveData, applySaveData} from "../savedata.js";
+import {saveSaveData, loadSaveData, applySaveData, autoSave} from "../savedata.js";
+import Notify from "../gui/notification.js";
 
 MENUS["customization"] = new class extends Menu {
 	//Initialize
@@ -21,11 +22,17 @@ MENUS["customization"] = new class extends Menu {
 	load () {
 		this.openTimer = 0;
 
+		this.changed = false;
+
 		this.buttons = {};
-		this.buttons["close"] = new Button("✖", ()=>{closeMenu();}, null, 740,128, 32,32);
+		this.buttons["close"] = new Button("✖", ()=>{
+			autoSave(SAVEDATA);
+			closeMenu();
+		}, null, 740,128, 32,32);
 
 		// Profile loading from local browser storage (NOT from server)
 		this.buttons["load"] = new Button("Load", ()=>{
+			Notify.new("Loading...", 2);
 			loadSaveData((data)=>{
 				applySaveData(data);
 				this.buttons["name"].text = PROFILE.name;
@@ -34,7 +41,10 @@ MENUS["customization"] = new class extends Menu {
 			});
 		}, null, 263,404, 100,32);
 		this.buttons["save"] = new Button("Save", ()=>{
-			saveSaveData(SAVEDATA);
+			Notify.new("Saving...", 2);
+			saveSaveData(SAVEDATA, () => {
+				console.log("gestset");
+			});
 			replaceObjectValues(PROFILE, SAVEDATA.profile);
 		}, null, 373,404, 100,32);
 
@@ -51,6 +61,7 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["colorHue"] = new ColorSlider(328,360, 140,12, this.hue, 0, 1,
 			(value)=>{ return this.HSVtoRGB(value, 1.0, 1.0); }, // get color at value
 			(value)=>{ // Change value
+				this.changed = true;
 				this.hue = value;
 				this.colorSel = this.HSVtoRGB(this.hue, this.sat, this.val);
 				this.hueColorSel = this.HSVtoRGB(this.hue, 1.0, 1.0);
@@ -63,6 +74,7 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["colorSat"] = new ColorSlider(328,360+12, 140,12, this.sat, 0, 0.9,
 			(value)=>{ return this.HSVtoRGB(0, value, 0); }, // get color at value
 			(value)=>{ // Change value
+				this.changed = true;
 				this.sat = value;
 				this.colorSel = this.HSVtoRGB(this.hue, this.sat, this.val);
 				PROFILE.color = RGBtoHEX(this.colorSel[0], this.colorSel[1], this.colorSel[2]);
@@ -74,6 +86,7 @@ MENUS["customization"] = new class extends Menu {
 		this.buttons["colorVal"] = new ColorSlider(328,360+12+12, 140,12, this.val, 0.2, 1,
 			(value)=>{ return this.HSVtoRGB(0, 0, value); }, // get color at value
 			(value)=>{ // Change value
+				this.changed = true;
 				this.val = value;
 				this.colorSel = this.HSVtoRGB(this.hue, this.sat, this.val);
 				PROFILE.color = RGBtoHEX(this.colorSel[0], this.colorSel[1], this.colorSel[2]);
@@ -109,6 +122,7 @@ MENUS["customization"] = new class extends Menu {
 						this.selectedItemDescription = Draw.wrapText(item.description, 300);
 					}
 				}
+				this.changed = true;
 				if (useItem(itemId, itemType)) { // Set clothing item or use consumable
 					this.filterInventory(this.filter); // Refresh item list
 				}

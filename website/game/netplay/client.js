@@ -60,6 +60,10 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 			this.isConnected = true; // Still connected to server
 			this.admin = false; // Can you use chat commands?
 
+			// Savedata and autosave
+			this.lastSaved = new Date();
+			this.autoSaveWaitTime = 30; // Only autosave every 30 seconds.
+
 			// Chicken syncing information
 			this.oldx = 0;
 			this.oldy = 0;
@@ -605,10 +609,14 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 		}
 
 		// Get save data
-		sendSaveData(SaveData) {
+		sendSaveData(SaveData, callback) {
 			socket.emit("updateSaveData", SaveData, (response) => {
 				if (response.success) {
+					this.lastSaved = new Date();
 					console.log("SaveData saved successfully.");
+					if (callback) {
+						callback();
+					}
 				} else {
 					console.error("Failed to save saveData:", response.error);
 				}

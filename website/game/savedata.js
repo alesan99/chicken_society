@@ -10,6 +10,7 @@ import { MENUS } from "./menu.js";
 import QuestSystem from "./quests.js";
 import AudioSystem from "./engine/audio.js";
 import { RGBtoHEX, HEXtoRGB } from "./lib/color.js";
+import Notify from "./gui/notification.js";
 
 function makeSaveData() {
 	let saveData = {
@@ -135,30 +136,45 @@ function makePetData() {
 }
 
 // Saving SaveData
-function saveSaveData(saveData) {
+function saveSaveData(saveData, callback) {
 	// Store data to browser storage
 	// This is for guests who have not made an account
 
 	// Convert the object to a JSON string
-	console.log(saveData);
 	const jsonString = JSON.stringify(saveData);
 	
 	if (NETPLAY.id == "OFFLINE") {
 		// Store the JSON string in localStorage
 		localStorage.setItem("guestSaveData", jsonString);
 		console.log("saved SaveData to localStorage at 'guestSaveData'");
+		if (callback) callback();
+		Notify.new("Saved!", 3);
 	} else {
 		// Save to server
 		NETPLAY.sendSaveData(saveData, () => {
 			console.log("saved SaveData to server");
+			if (callback) callback();
+			Notify.new("Saved!", 3);
 		});
+	}
+}
+
+function autoSave(saveData, callback) {
+	if (NETPLAY.id == "OFFLINE") {
+		saveSaveData(saveData, callback);
+	} else {
+		const currentTime = new Date();
+		const lastSaved = NETPLAY.lastSaved;
+		const autoSaveWaitTime = NETPLAY.autoSaveWaitTime;
+		if (!lastSaved || ((currentTime - lastSaved) / 1000) >= autoSaveWaitTime) {
+			saveSaveData(saveData, callback);
+		}
 	}
 }
 
 function loadSaveData(callback) {
 	// Load data from browser storage
 	// This is for guests who have not made an account
-
 	const useSaveData = function(data) {
 		console.log(data);
 		callback(data);
@@ -179,6 +195,7 @@ function loadSaveData(callback) {
 		const retrievedObject = JSON.parse(storedJsonString);
 		console.log("Loaded SaveData from localStorage at 'guestSaveData'.");
 		useSaveData(retrievedObject);
+		Notify.new("Loaded!", 3);
 	} else {
 		// Load from server
 		storedJsonString = NETPLAY.requestSaveData((data) => {
@@ -189,6 +206,7 @@ function loadSaveData(callback) {
 			// SaveData loaded successfully
 			console.log("Loaded SaveData from server.");
 			useSaveData(data);
+			Notify.new("Loaded!", 3);
 		});
 	}
 }
@@ -258,6 +276,8 @@ function addItem(id, type, count=1) {
 
 	// New item notification
 	MENUS["chatMenu"].notification("customization", true);
+
+	autoSave(SAVEDATA);
 }
 
 function removeItem(id, type, count=1) {
@@ -272,6 +292,8 @@ function removeItem(id, type, count=1) {
 	if (SAVEDATA.items[type][id] <= 0) {
 		delete SAVEDATA.items[type][id];
 	}
+
+	autoSave(SAVEDATA);
 }
 
 function getItemCategory(id) {
@@ -335,4 +357,4 @@ function applySettings() {
 	);
 }
 
-export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, applySaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues, applySettings};
+export {makeSaveData, makeProfile, makePetData, saveSaveData, loadSaveData, autoSave, applySaveData, removeNuggets, addNuggets, spendNuggets, addItem, removeItem, getItemCategory, getItemData, getItem, placeFurniture, removeFurniture, RGBtoHEX, HEXtoRGB, replaceObjectValues, applySettings};

@@ -10,6 +10,7 @@ import { addNuggets, addItem } from "./savedata.js";
 import { MENUS } from "./menu.js";
 import { OBJECTS, PLAYER, PLAYER_CONTROLLER, PHYSICSWORLD } from "./world.js";
 import {checkCondition} from "./area.js";
+import {autoSave} from "./savedata.js";
 
 const QuestSystem = (function() {
 	let questData = {};
@@ -235,6 +236,7 @@ const QuestSystem = (function() {
 
 				// Save progress
 				SAVEDATA.quests.active[questName] = quest.progress;
+				autoSave(SAVEDATA);
 				
 				conditionsUpdate();
 
