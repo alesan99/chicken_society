@@ -37,7 +37,44 @@
 	},
 
 	"NPCs": {
-		"book": {
+		"bigCluck": {
+			"profile": {
+				"name": "Big Cluck",
+				"color": "#0077bb",
+				"head": false,
+				"face": "mobboss_hat",
+				"body": false
+			},
+			"x": 131,
+			"y": 248,
+			"facing": "down",
+			"speechBubble": ["I'm a Big Cluck, y'hear?"],
+			"dialogue": [
+				{
+					"text": [
+						"So you're the new goon, eh? I'm Big Cluck, your Capo.",
+						"Addy Earl just sent me a snap about you. Something about you finding you in one of our dumpsters?",
+						"Disgusting.",
+						"What? You were trying to find out who blew up the North Chikpea Factory?",
+						"...and your first thought was to go digging in dumpsters?",
+						"Listen, its simple: Bhurgert did it, see?",
+						"Bhurgert was one of our business partners until he went rogue. Ever since, he's been trying to tear this organization down.",
+						"But I'm not here to chit-chat. You wanna learn more about him? Go see what he's done for yourself.",
+						"I'm going to give you a list of our \"locations\" that Bhurgert messed up. As your first tasks I need to you fix em up, y'hear?",
+						"From here on out you report to me, capiche? Come to me once you've finished a task.",
+						"Well? What are you waiting for? GO."
+						],
+					"condition": {
+						"quest": "mafia_initiation",
+						"questComplete": true,
+					}
+				},
+				{
+					"text": ["You gonna buy or just stare? I'm not playing games, capiche?"]
+				}
+			]
+		},
+		"brook": {
 			"profile": {
 				"name": "Brook",
 				"color": "#aabb60",

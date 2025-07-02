@@ -56,18 +56,37 @@
 			],
 			"dialogue": [
 				{
-					"text": ["Turn on your microphone and say 'I pledge alegiance to the flag, of the Mafia'"],
+					"id": "just_got_into_mafia",
+					"text": ["Fellow goon, go ahead and report to your Capo, Big Cluck.",
+						"She's running our booth in the market."],
+					"condition": {
+						"quest": "mafia_initiation",
+						"questComplete": true
+					},
+				},
+				{
+					"text": ["Turn on your microphone and say 'I pledge alegiance to the flag, of the Mafia'.",
+						"...",
+						"It's official. Welcome to the family.",
+						],
 					"condition": {
 						"quest": "mafia_initiation",
 						"questTask": 1,
 						"questTaskValue": 1
 					},
+					"to": "just_got_into_mafia",
 					"quest": "mafia_initiation",
 					"questTask": 2,
 					"questTaskSet": 1,
 				},
 				{
-					"text": ["You look gangster dude. Welcome to the gang"],
+					"text": ["You look gangster dude. I'll ask Da Boss what he thinks about you.",
+						"Let me take a pic. I'll send it to him on snap.",
+						"*click*",
+						"Alright, sending...",
+						"...",
+						"Da Boss gave ya thumbs up.",
+						"I think you're ready to take the oath now. Talk to me when you're ready."],
 					"condition": {
 						"quest": "mafia_initiation",
 						"questTask": 0,
@@ -84,7 +103,7 @@
 						"I can't have you snooping in our dumpster. Boss's orders.",
 						"Our \"partners\" pay a good amount of nuggets for the privilege of dumping their trash here. You understand, right?",
 						"If you were a trusted Mafia goon like me I'd let you look in there.",
-						"But if ya wanna look in there so bad, prove your worth to me and I can see about bringing you up to the boss."
+						"But if ya wanna look in there so bad, prove your worth to me and I can see about bringing you up to Da Boss."
 					],
 					"condition": {
 						"quest": "study_in_violet",
@@ -147,6 +166,7 @@
 						"Hey! Don't touch that!",
 						"That dumpster and everything in it is property of the Mafia!",
 					],
+          			speaker: "Addy Earl",
 					"quest": "study_in_violet",
 					"questTask": 1,
 					"questTaskSet": 1

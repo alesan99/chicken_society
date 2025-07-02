@@ -51,13 +51,13 @@
 
 	
 	"NPCs": {
-		"Capo": {
+		"daBoss": {
 			"profile": {
-				"name": "Capo",
+				"name": "Da Boss",
 				"color": "#367000",
 				"head": false,
-				"face": "mobbossaccessories",
-				"body": false
+				"face": "mobboss_hat",
+				"body": "mobboss_accessories"
 			},
 			"x": 145,
 			"y": 400,

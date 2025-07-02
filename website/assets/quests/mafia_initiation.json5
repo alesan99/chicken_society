@@ -4,9 +4,9 @@
 	"priority": true, // Important Story Quest
 
 	"progressDescription": [
-		"Dress like a gangster",
-		"Show Addy Earl your drip",
-		"Take the oath" // Player should be prompted to say the oath out loud IRL
+		"Dress like a gangster.",
+		"Show Addy Earl your drip.",
+		"Take the oath." // Player should be prompted to say the oath out loud IRL
 	],
 
 	

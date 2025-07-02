@@ -1,10 +1,11 @@
 {
   "body": [
     "barista_accessories",
-    "bud_accessories",
     "beefcake_accessories",
+    "bud_accessories",
     "chains",
     "petstupid_uniform",
+    "mobboss_accessories",
     "police_uniform",
     "scarf",
     "silver_chains",
@@ -12,8 +13,8 @@
   ],
   "face": [
     "cat_ears",
-    "mobbossaccessories",
     "sunglasses",
+    "mobboss_hat",
     "toothpick",
     "visors"
   ],
@@ -25,9 +26,9 @@
     "table"
   ],
   "head": [
+    "hoodie",
     "police_hat",
     "snapback",
-    "hoodie",
     "top_hat"
   ],
   "item": [
