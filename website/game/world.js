@@ -413,7 +413,7 @@ const World = class {
 			Draw.setFont(FONT.caption, 4);
 			Draw.text(`(${Math.floor(mouseX)}, ${Math.floor(mouseY)})`, Math.min(mouseX+10, canvasWidth-92), mouseY+20);
 			if (DEBUGMOUSEX && DEBUGMOUSEY) { // mouse pin
-				Draw.text(`(${Math.floor(DEBUGMOUSEX)}, ${Math.floor(DEBUGMOUSEY)})`, DEBUGMOUSEX+10, DEBUGMOUSEY+20);
+				Draw.text(`(${Math.floor(DEBUGMOUSEX)}, ${Math.floor(DEBUGMOUSEY)})`, Math.min(DEBUGMOUSEX+10, canvasWidth-92), DEBUGMOUSEY+20);
 				Draw.setColor(255,0,0,1.0);
 				Draw.circle(DEBUGMOUSEX, DEBUGMOUSEY, 3, "fill");
 			}

@@ -85,7 +85,7 @@ MENUS["questsMenu"] = new class extends Menu {
 				if (!b.priority && b.complete) {
 					return -1;
 				}
-				return a.name.localeCompare(b.name);
+				return a.name?.localeCompare(b.name);
 			} else if (!a.complete) {
 				if (b.priority && !b.complete) {
 					return 1;
@@ -93,14 +93,14 @@ MENUS["questsMenu"] = new class extends Menu {
 				if (b.complete) {
 					return -1;
 				}
-				return a.name.localeCompare(b.name);
+				return a.name?.localeCompare(b.name);
 			} else if (a.complete) {
 				if (!b.complete) {
 					return 1;
 				}
-				return a.name.localeCompare(b.name);
+				return a.name?.localeCompare(b.name);
 			}
-			return a.name.localeCompare(b.name);
+			return a.name?.localeCompare(b.name);
 		});
 		this.generateList("refresh");
 

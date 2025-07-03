@@ -28,6 +28,9 @@ const QuestSystem = (function() {
 			for (let questName in SAVEDATA.quests.active) {
 				this.start(questName, "initial");
 			}
+			for (let questName in SAVEDATA.quests.completed) {
+				this.loadQuestData(questName);
+			}
 		},
 
 		// Start quest if it isn't active and hasn't been completed yet.
@@ -85,12 +88,12 @@ const QuestSystem = (function() {
 			loadJSON5(`assets/quests/${questName}.json5`, (data) => {
 				questData[questName] = data;
 				let quest = questData[questName];
+				quest.complete = false;
 				if (SAVEDATA.quests.completed[questName]) {
 					quest.progress = SAVEDATA.quests.completed[questName];
 					quest.complete = true;
 				}
-				quest.complete = false;
-				func(data);
+				if (func) func(data);
 			});
 		},
 		// Get quest data even if its not active

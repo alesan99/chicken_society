@@ -100,8 +100,12 @@ logoutButton.addEventListener("click", (e) => {
 // Get current login status
 document.addEventListener("DOMContentLoaded", () => {
 	fetch("/session", { credentials: "include" })
-		.then(res => res.json())
-		.then(data => {
+		.then(res => {
+			if (!res.ok) {
+				return false;
+			}
+			res.json();
+		}).then(data => {
 			if (data.loggedIn) {
 				setLoggedIn(true, data.username);
 			} else {
