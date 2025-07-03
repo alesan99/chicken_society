@@ -100,7 +100,7 @@ class Button {
 		}
 	}
 
-	draw(){
+	draw(alpha){
 		if (!this.visible) {
 			// Don't render if button was specified to be not visible
 			return false;
@@ -114,39 +114,39 @@ class Button {
 			} else if (this.hover == true){
 				frame = 1;
 			}
-			Draw.setColor(255,255,255,1);
+			Draw.setColor(255,255,255,alpha);
 			Draw.image(this.image,this.frames[frame], this.x+this.w/2, this.y+this.h/2, this.rotation, 1,1, 0.5,0.5);
 		} else {
 			// Render button with basic rectangles if no image was provided
 			if (this.disabled == true) {
-				Draw.setColor(208,125,68,1); //darkest
+				Draw.setColor(208,125,68,alpha); //darkest
 			} else if (this.held == true){
-				Draw.setColor(216,151,91,1); //dark
+				Draw.setColor(216,151,91,alpha); //dark
 			} else if (this.hover == true){
-				Draw.setColor(248,222,187,1); //medium
+				Draw.setColor(248,222,187,alpha); //medium
 			} else if (this.selected == true){
-				Draw.setColor(242,161,99,1); //dark
+				Draw.setColor(242,161,99,alpha); //dark
 			} else {
-				Draw.setColor(242,199,140,1); //light
+				Draw.setColor(242,199,140,alpha); //light
 			}
 			
 			Draw.rectangle(this.x, this.y, this.w, this.h);
-			Draw.setColor(168, 85, 38, 1);
+			Draw.setColor(168, 85, 38, alpha);
 			Draw.setLineWidth(2);
 			Draw.rectangle(this.x+1, this.y+1, this.w-2, this.h-2, "line");
 
-			Draw.setColor(255,255,255, 0.4);
+			Draw.setColor(255,255,255, alpha*0.4);
 			Draw.line(this.x+3, this.y+4, this.x+this.w-3, this.y+4); // Highlight
 		}
 
 		if (this.icon) {
 			// Icon
-			Draw.setColor(255,255,255,1);
+			Draw.setColor(255,255,255,alpha);
 			Draw.image(this.icon,this.iconFrame, this.x+this.w/2, this.y+this.h/2, 0, 1,1, 0.5,0.5);
 		} else if (this.label) {
 			// Label
 			Draw.setFont(FONT.guiLabel);
-			Draw.setColor(this.textColor[0], this.textColor[1], this.textColor[2],1);
+			Draw.setColor(this.textColor[0], this.textColor[1], this.textColor[2],alpha);
 			if (this.labelJustify == "center") {
 				Draw.text(this.label, this.x+this.w/2, this.y+this.h/2+7, this.labelJustify);
 			} else if (this.labelJustify == "left") {

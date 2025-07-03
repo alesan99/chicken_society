@@ -295,6 +295,12 @@ export default class Character extends PhysicsObject {
 		// Chat bubble
 		if (this.bubbleText != false) {
 			let offsetY = 140;
+			let maxY = 100;
+			if (this.npc && this.controller.awaitingReply) {
+				// Leave space for npc replies
+				maxY = 130;
+			}
+			let bubbleY = Math.max(maxY, Math.floor(this.y) -offsetY);
 
 			// Goofy chat bubble animation
 			// Slowly embiggen bubble
@@ -314,7 +320,7 @@ export default class Character extends PhysicsObject {
 			let flip = 1-Math.floor((this.bubbleTimer%1)*2)*2;
 			
 			Draw.setColor(255,255,255,1.0);
-			Draw.image(IMG.speechBubble, null, this.x, Math.max(100, Math.floor(this.y) -offsetY), 0, scale*flip, scale, 0.5, 1);
+			Draw.image(IMG.speechBubble, null, this.x, bubbleY, 0, scale*flip, scale, 0.5, 1);
 
 			// Render wrapped text so it fits into the bubble
 			Draw.setFont(FONT.speechBubble);
@@ -323,7 +329,7 @@ export default class Character extends PhysicsObject {
 			let verticalSpacing = 18;
 			for (let line = 0; line < this.bubbleTextWrapped.length; line++) {
 				let textSegment = this.bubbleTextWrapped[line];
-				Draw.text(textSegment, Math.floor(this.x), Math.max(100, Math.floor(this.y) -offsetY) + line*verticalSpacing-(this.bubbleTextWrapped.length*verticalSpacing/2)-41, "center");
+				Draw.text(textSegment, Math.floor(this.x), bubbleY + line*verticalSpacing-(this.bubbleTextWrapped.length*verticalSpacing/2)-41, "center");
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import {PhysicsObject,Character,Player,Pet,Trigger,Wall,Warp,Furniture,Particle}
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 import {checkCondition} from "../area.js";
+import { Draw } from "../main.js";
 
 export default class NPC {
 	//Initialize: object, roam? radius in pixels of area to walk around, interactable interactRange, clickable region, shop menu?
@@ -149,8 +150,19 @@ export default class NPC {
 	draw() {
 		// Responses
 		if (this.replyButtons.length > 0) {
+			Draw.setColor(255, 255, 255, 1.0);
+			let animLength = 1/6;
+			let endAnimLength = 1/8;
+			let alpha = 1.0;
+			if (this.obj.bubbleTimer < animLength) {
+				let t = Math.min(1, this.obj.bubbleTimer/animLength); // Animation position
+				alpha = easing("easeOutQuad", t);
+			} else if (this.obj.bubbleTimer > this.obj.bubbleTime-endAnimLength) {
+				let t = Math.min(1, (this.obj.bubbleTime-this.obj.bubbleTimer)/endAnimLength); // Animation position
+				alpha = easing("easeOutQuad", t);
+			}
 			for (const replyButton of this.replyButtons) {
-				replyButton.draw();
+				replyButton.draw(alpha);
 			}
 		}
 	}
@@ -183,6 +195,7 @@ export default class NPC {
 	requestReply(options){
 		this.awaitingReply = true;
 		let replies = options.length;
+		let buttonY = Math.max(0, this.obj.y-275);
 		for (let i = 0; i < replies; i++) {
 			let label = options[i][0];
 			let func = options[i][1];
@@ -193,7 +206,7 @@ export default class NPC {
 					SPRITE.replyBubble.getFrame(0),
 					SPRITE.replyBubble.getFrame(1)],
 				textColor: [30, 30, 32]
-			}, this.obj.x+66*i-(replies*66/2), this.obj.y-275, 64,32);
+			}, this.obj.x+66*i-(replies*66/2), buttonY, 64,32);
 			this.replyButtons.push(button);
 		}
 	}

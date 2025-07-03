@@ -221,17 +221,18 @@ class ItemGrid {
 			let i = cx + (cy+this.scroll)*this.gw; // Index of cell
 			if (this.list[i]) {
 				let itemType = getItemCategory(this.list[i]);
+				let name = this.list[i];
 				if (itemType && ITEMS[itemType][this.list[i]]) { // Make sure item has been loaded
-					let name = ITEMS[itemType][this.list[i]].name;
-					let textWidth = Math.ceil(Draw.getTextWidth(name));
-					Draw.setColor(255,255,255, 0.75);
-					Draw.rectangle(mouseX+20, mouseY, textWidth, 24, "fill");
-					Draw.setColor(128,128,128, 0.75);
-					Draw.setLineWidth(1);
-					Draw.rectangle(mouseX+20+0.5, mouseY+0.5, textWidth-1, 24-1, "line");
-					Draw.setColor(0, 0, 0, 1);
-					Draw.text(name, mouseX+20, mouseY+18, "left");
+					name = ITEMS[itemType][this.list[i]].name;
 				}
+				let textWidth = Math.ceil(Draw.getTextWidth(name));
+				Draw.setColor(255,255,255, 0.75);
+				Draw.rectangle(mouseX+20, mouseY, textWidth, 24, "fill");
+				Draw.setColor(128,128,128, 0.75);
+				Draw.setLineWidth(1);
+				Draw.rectangle(mouseX+20+0.5, mouseY+0.5, textWidth-1, 24-1, "line");
+				Draw.setColor(0, 0, 0, 1);
+				Draw.text(name, mouseX+20, mouseY+18, "left");
 			}
 		}
 	}
