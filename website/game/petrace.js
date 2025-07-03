@@ -39,10 +39,11 @@ const PetRaceSystem = (function() {
 
 					let length = 800;
 					let posRange = 100;
+					let trackY = 80;
 
 					// Draw pet in race line
 					let x = (canvasWidth-length)/2 + (pos/posRange)*length;
-					let y = 140 + (i-1)*60;
+					let y = trackY + (i-1)*60;
 
 					if (!ITEMS.pet[itemId]) {
 						console.log(`There is no pet with itemId ${itemId}`);
