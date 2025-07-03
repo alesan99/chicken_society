@@ -1,5 +1,8 @@
 import { addItem, getItem, getItemData } from "../savedata.js";
 import Notify from "../gui/notification.js";
+import { loadSaveData, applySaveData } from "../savedata.js";
+import { WORLD, NETPLAY } from "../main.js";
+import LoadingScreen from "../loading.js";
 
 // Activate events based on special URLs
 export function handleUrl() {
@@ -27,6 +30,21 @@ export function handleUrl() {
 		if (addedItems > 1) {
 			Notify.new("Thanks for joining! \n You got some free goodies!", 15);
 		}
+	}
+
+	// Dev mode
+	const devMode = params.get("dev") && NETPLAY.id == "OFFLINE";
+	if (devMode) {
+		loadSaveData((data) => {
+			applySaveData(data);
+		});
+	}
+
+	// Warp to area
+	const area = params.get("area");
+	if (devMode) {
+		LoadingScreen.start(() => {});
+		WORLD.loadArea(area, "chatWarp");
 	}
 
 	// Remove params the url
