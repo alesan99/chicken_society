@@ -13,7 +13,7 @@ import Netplay from "./netplay/client.js";
 var NETPLAY;
 var CURSOR = {on: false, cursor: "auto"};
 
-import { applySettings, makeSaveData } from "./savedata.js";
+import { applySettings, makeSaveData, loadSaveData, applySaveData } from "./savedata.js";
 var SAVEDATA = makeSaveData();
 applySettings();
 var PROFILE = SAVEDATA.profile;
@@ -42,6 +42,13 @@ function gameLoad() {
 		setState(WORLD);
 
 		Transition.start("fade", "in", 0.2);
+
+		// Load savedata if offline
+		if (NETPLAY.id === "OFFLINE") {
+			loadSaveData((data) => {
+				applySaveData(data);
+			});
+		}
 
 		// Handle special URLs
 		handleUrl();

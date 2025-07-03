@@ -35,9 +35,7 @@ export function handleUrl() {
 	// Dev mode
 	const devMode = params.get("dev") && NETPLAY.id == "OFFLINE";
 	if (devMode) {
-		loadSaveData((data) => {
-			applySaveData(data);
-		});
+		console.log("Dev mode");
 	}
 
 	// Warp to area
