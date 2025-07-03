@@ -32,6 +32,7 @@ import { getMousePos } from "./engine/input.js";
 import Coop from "./coop.js";
 import { NETPLAY } from "./main.js";
 import { MENUS } from "./menu.js";
+import Notify from "./gui/notification.js";
 
 import {} from "./menu/chat.js";
 import {} from "./menu/emote.js";
@@ -179,6 +180,13 @@ const World = class {
 				// Let server know player moved area
 				NETPLAY.sendArea(area, ownerId, PLAYER.x, PLAYER.y);
 			});
+		}, (error) => {
+			// If error occured, just go back to hub
+			Notify.new(`Area ${this.area} does not exist.`);
+			if (this.area !== this.oldArea) {
+				this.loadArea(this.oldArea);
+				return false;
+			}
 		});
 
 		// Progress Quests

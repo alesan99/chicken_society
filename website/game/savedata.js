@@ -160,7 +160,7 @@ function saveSaveData(saveData, callback) {
 
 function autoSave(saveData, callback) {
 	if (NETPLAY.id == "OFFLINE") {
-		saveSaveData(saveData, callback);
+		//saveSaveData(saveData, callback);
 	} else {
 		const currentTime = new Date();
 		const lastSaved = NETPLAY.lastSaved;
