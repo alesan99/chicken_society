@@ -183,8 +183,8 @@ const World = class {
 		}, (error) => {
 			// If error occured, just go back to hub
 			Notify.new(`Area ${this.area} does not exist.`);
-			if (this.area !== this.oldArea) {
-				this.loadArea(this.oldArea);
+			if (fromWarp !== "_error") {
+				this.loadArea(this.oldArea, "_error");
 				return false;
 			}
 		});
