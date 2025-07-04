@@ -183,12 +183,16 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 function checkCondition(c) {
 	// Handle list of multiple conditions
 	if (Array.isArray(c)) {
+		let anyConditionTrue = false; // allows for optional conditions (or statements bascially)
 		for (const condition of c) {
-			if (!checkCondition(condition)) {
+			const optional = condition.optional;
+			if (checkCondition(condition)) {
+				anyConditionTrue = true;
+			} else if (!optional) {
 				return false;
 			}
 		}
-		return true;
+		return anyConditionTrue;
 	}
 
 	if (c.quest) {
@@ -205,7 +209,6 @@ function checkCondition(c) {
 			return false;
 		} else if (c.questActive !== undefined) {
 			// Check if quest is not active
-			console.log(c.questActive);
 			let questActive = QuestSystem.getQuest(questName);
 			if (c.questActive === true && questActive) { // Quest must be active
 				return true;
@@ -220,15 +223,33 @@ function checkCondition(c) {
 			if (c.questTask != null) {
 				let task = c.questTask;
 				let value = c.questTaskValue;
+				let valueGreaterThan = c.questTaskValueGreaterThan;
+				let valueLessThan = c.questTaskValueLessThan;
 				// Check if task is a list of values
 				if (!Array.isArray(task)) {
 					// turn it into a list for code simplicity
 					task = [task];
 					value = [value];
+					valueGreaterThan = [valueGreaterThan];
+					valueLessThan = [valueLessThan];
 				}
 				for (let i=0; i<task.length; i++) {
-					if (QuestSystem.getProgress(questName, task[i]) != value[i]) {
-						progressMet = false;
+					const taskValue = QuestSystem.getProgress(questName, task[i]);
+					if (valueGreaterThan[i] !== undefined && valueGreaterThan[i] !== false) {
+						// Greater than check
+						if (!(taskValue > valueGreaterThan[i])) {
+							progressMet = false;
+						}
+					} else if (valueLessThan[i] !== undefined && valueLessThan[i] !== false) {
+						// Less than check
+						if (!(taskValue < valueLessThan[i])) {
+							progressMet = false;
+						}
+					} else {
+						// Equality check
+						if (taskValue != value[i]) {
+							progressMet = false;
+						}
 					}
 				}
 			}
