@@ -77,12 +77,11 @@
 					{
 						"quest": "mafia_welcome",
 						"questTask": 2,
-						"questTaskValue": 1,
+						"questTaskValue": 2,
 					}],
 					"quest": "mafia_welcome",
 					"questTask": 3,
 					"questTaskSet": 1,
-					"questStart": "mafia_hideout",
 				},
 				{
 					"id": "meeting_for_first_time",

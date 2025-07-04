@@ -186,6 +186,7 @@
 						"Fine, I'll give you the nuggets this time. But I expect to compensated, IN FULL, once Burghert is caught!",
 						"Here you go. Good luck with the search.",
 					],
+					"condition": {"isResponse": true},
 					"quest": "mafia_welcome",
 					"questTask": 1,
 					"questTaskSet": 1,

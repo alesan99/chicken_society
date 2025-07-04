@@ -1,8 +1,8 @@
 {
   "body": [
     "barista_accessories",
-    "bud_accessories",
     "beefcake_accessories",
+    "bud_accessories",
     "chains",
     "mobboss_accessories",
     "petstupid_uniform",
@@ -18,8 +18,8 @@
     "visors"
   ],
   "furniture": [
-    "lamp",
     "frame",
+    "lamp",
     "room_blue",
     "rug",
     "table"
@@ -36,14 +36,15 @@
     "black_coffee",
     "bullet",
     "cannabis_seeds",
-    "gun",
     "heroin",
+    "gun",
     "kernels",
-    "snake_book",
     "seeds",
+    "snake_book",
     "sunflower_seeds"
   ],
   "pet": [
+    "crocodile",
     "pillbug"
   ]
 }

@@ -511,6 +511,11 @@ const DialogueSystem = (function() {
 				}
 			}
 
+			// Warp
+			if (d.warp) {
+				WORLD.warpToArea(d.warp, d.fromWarp || "dialogue", PLAYER);
+			}
+
 			// Give item
 			if (d.giveItem) {
 				addItem(d.giveItem);

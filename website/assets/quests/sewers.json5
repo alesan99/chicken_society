@@ -6,11 +6,22 @@
 	"progressDescription": [
 		"Find the manhole",
 		"Find a way to traverse the sewers",
-		"Find the secret tunnels"
+		"Enter the secret tunnels"
 	],
 
 	"progressStart": [0,0,0],
 	"progressFinish": [1,1,1],
+
+	"progressEvents": [
+		false,
+		false,
+		{
+			// Visit Sewer to progress
+			"type": "area",
+			"area": "sewer",
+			"questTaskSet": 1,
+		}
+	],
 
 	"reward": {
 		"nuggets": 10

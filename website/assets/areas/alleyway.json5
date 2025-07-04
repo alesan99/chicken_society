@@ -186,18 +186,89 @@
 		},
 		// Entrance to sewer
 		"sewer_cover": {
-			"condition": {
-				"quest": "mafia_welcome",
-				"questTask": 0,
-				"questTaskValue": 1
-			},
 			"x": 935,
 			"y": 379,
-			"shape": [-30, -30, 30, -30, 30, 30, -30, 30],
+			"shape": [-30,-30, 30,-30, 30,30, -30,30],
 			"icon": true,
 			"clickable": true,
-			"action": "warp",
+			"action": "dialogue",
 			"area": "sewer",
-		}
+			"dialogue": [
+				{
+					"text": ["Your crocodile is looking at the manhole..."],
+					"condition": [{
+						"item": "crocodile",
+					},
+					{
+						"quest": "sewers",
+						"questActive": true,	
+					},
+					{
+						"quest": "sewers",
+						"questTask": 0,
+						"questTaskValue": 1,
+					},
+					{
+						"quest": "sewers",
+						"questTask": 1,
+						"questTaskValue": 0,	
+					}],
+					"quest": "sewers",
+					"questTask": 1,
+					"questTaskSet": 1,
+					"to": "enter-sewer",
+				},
+				{
+					"id": "enter-sewer",
+					"text": ["(Your crocodile took off the manhole cover.)"],
+					"condition": [{
+						"item": "crocodile",
+					},
+					[{
+						"quest": "sewers",
+						"questTask": 0,
+						"questTaskValue": 1,
+						"optional": true
+					},
+					{
+						"quest": "sewers",
+						"questComplete": true,
+						"optional": true,
+					}]],
+					"quest": "sewers",
+					"questTask": 2,
+					"questTaskSet": 1,
+					"warp": "sewer"
+				},
+				{
+					"text": [
+						"This must be the entrance to the sewers Big Cluck was talking about.",
+						"But the manhole cover is too heavy to take off by yourself.",
+						"It looks like there are teeth marks on the manhole cover.",
+					],
+					"quest": "sewers",
+					"questTask": 0,
+					"questTaskSet": 1,
+					"startQuest": "sewers",
+				},
+			],
+			"condition": [
+				{
+					"quest": "sewers",
+					"questComplete": true,
+					"optional": true,
+				},
+				{
+					"quest": "sewers",
+					"questActive": true,
+					"optional": true,
+				},
+				{
+					"quest": "mafia_hideout",
+					"questActive": true,
+					"optional": true,
+				},
+			],
+		},
 	}
 }

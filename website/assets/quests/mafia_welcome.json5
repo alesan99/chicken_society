@@ -14,26 +14,6 @@
 	"progressStart": [0,0,0,0],
 	"progressFinish": [1,1,2,1],
 
-
-	"progressEvents": [
-		false,
-		false,
-		false,
-		false,
-		// UNUSED v
-		{
-			// Visit Sewer to progress
-			"type": "area",
-			"area": "sewer",
-			"questTaskSet": 1,
-			"condition": {
-				"quest": "mafia_welcome",
-				"questTask": 1,
-				"questTaskValue": 1
-			}
-		}
-	],
-
 	"progressDescriptionTaskRequirement": [
 		false,
 		0,
