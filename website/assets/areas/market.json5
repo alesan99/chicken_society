@@ -1,16 +1,24 @@
 {
 	"name": "River Market",
-	"mapLocation": false,
+	"mapLocation": [226, 99],
 	"music": "markettrack", 
 
 	"walls": [
+		// Bottom border
         [0,564, 0,517, 1024,517, 1024,564],
+		// Top border
         [0,197, 0,56, 1024,5, 1024,197],
-        [17,345, 19,261, 248,261, 171,340],
+		// Left border
+        [-50,0, 0,0, 0,576, -50,576],
+		// Bottom-right border
+        [1024,0, 1050,0, 1050,576, 1024,576],
+		// Left stand
+        [18,315, 19,261, 248,261, 239,304],
+		[18,315, 189,309, 176,347, 80,352, 19,344],
+		// Middle stand
         [489,271, 512,241, 678,240, 678,271],
-        [797,297, 769,269, 932,254, 982,289],
-        [0,510, 0,192, 10,194, 10,510],
-        [1020,510, 1020,420, 1024,420, 1024,510]
+		// Right stand
+        [796,305, 769,269, 935,260, 992,289],
 	],
 
 	"warps": {
@@ -41,36 +49,74 @@
 			"profile": {
 				"name": "Big Cluck",
 				"color": "#0077bb",
-				"head": false,
-				"face": "mobboss_hat",
+				"head": "mobboss_hat",
+				"face": "toothpick",
 				"body": false
 			},
-			"x": 131,
-			"y": 248,
+			"x": 140,
+			"y": 260,
 			"facing": "down",
-			"speechBubble": ["I'm a Big Cluck, y'hear?"],
+			"interactRange": [-30,-30, 30,-30, 30,130, -30,130],
+			"speechBubble": ["I'm Big Cluck, y'hear?"],
 			"dialogue": [
 				{
+					"id": "got_all_collection_money",
 					"text": [
-						"So you're the new goon, eh? I'm Big Cluck, your Capo.",
+						"You got all of the nuggets, eh? And you didn't have to break any legs?",
+						"Pretty impressive for a low level goon such as yourself.",
+						"Tell ya what, I'll put in a good word for you with da boss. Why don't you go meet with him?",
+						"He's in our secret hideout. You can only access it through the sewers, see?",
+						"We have a secret manhole entrance somewhere here in Chikensas City. You're gonna need a croc to open it, too.",
+						"That's all I'm telling you. If you can't figure out how to get there then you probably don't have what it takes to move up the ranks, capiche?"
+					],
+					"condition": [{
+						"quest": "mafia_welcome",
+						"questTask": 1,
+						"questTaskValue": 1,
+					},
+					{
+						"quest": "mafia_welcome",
+						"questTask": 2,
+						"questTaskValue": 1,
+					}],
+					"quest": "mafia_welcome",
+					"questTask": 3,
+					"questTaskSet": 1,
+					"questStart": "mafia_hideout",
+				},
+				{
+					"id": "meeting_for_first_time",
+					"text": [
+						"So you're the new goon, eh? I'm Big Cluck, your captain. From here on out you report to me, capiche?",
 						"Addy Earl just sent me a snap about you. Something about you finding you in one of our dumpsters?",
 						"Disgusting.",
 						"What? You were trying to find out who blew up the North Chikpea Factory?",
 						"...and your first thought was to go digging in dumpsters?",
-						"Listen, its simple: Bhurgert did it, see?",
-						"Bhurgert was one of our business partners until he went rogue. Ever since, he's been trying to tear this organization down.",
+						"Listen, its simple: Burghert did it, see?",
+						"Burghert was one of our... associates, you could say. That is, until he went rogue.",
 						"But I'm not here to chit-chat. You wanna learn more about him? Go see what he's done for yourself.",
-						"I'm going to give you a list of our \"locations\" that Bhurgert messed up. As your first tasks I need to you fix em up, y'hear?",
-						"From here on out you report to me, capiche? Come to me once you've finished a task.",
-						"Well? What are you waiting for? GO."
+						"I'm going to have you make collections. Burghert has been hitting our partners' businesses, but they still owe us money.",
+						"I need you to pay a visit to Clucktails and The Seed Dispensary.",
+						"They'll give you some sob story about something Burghert did but don't leave them alone until they give you the nuggets.",
+						"If they can't pay, I'll have them wacked, capiche?",
+						"Come to me once you've collected all the nuggets.",
+						"Well? What are you waiting for? Shoo."
 						],
 					"condition": {
-						"quest": "mafia_initiation",
-						"questComplete": true,
-					}
+						"quest": "mafia_welcome",
+						"questActive": true,
+					},
+					"quest": "mafia_welcome",
+					"questTask": 0,
+					"questTaskSet": 1,
 				},
 				{
-					"text": ["You gonna buy or just stare? I'm not playing games, capiche?"]
+					"text": [
+						"You gonna buy or just stare? I'm not playing games, capiche?",
+						"I'm a big cluck.",
+						"We got tomatoes, oranges, and apples. what more do ya want, eh?",
+						],
+					"randomDialogue": true
 				}
 			]
 		},
@@ -110,16 +156,16 @@
 			"h": 100,
 			"x": 0, 
 			"y": 420,
-					"worldy": 490 
+			"worldy": 490 
 		},
 
-			"leftStall": {
+		"leftStall": {
 			"image": "leftstall.png",
 			"w": 300,
 			"h": 400,
 			"x": 3, 
 			"y": 38,
-					"worldy": 265
+			"worldy": 265
 		},
 
 		"middleStall": {
@@ -128,7 +174,7 @@
 			"h": 400,
 			"x": 482, 
 			"y": 48,
-					"worldy": 265 
+			"worldy": 265 
 		},
 
 		"rightStall": {
@@ -137,7 +183,7 @@
 			"h": 400,
 			"x": 768, 
 			"y": 38,
-					"worldy": 270 
+			"worldy": 280 
 		}
 	}
 }

@@ -20,6 +20,187 @@
 		[-10,0, 0,0, 0,600, -10,600]	
 		],
 
+	//
+	"NPCs": {
+		"iggy": {
+			"profile": {
+				"name": "Iggy",
+				"color": "#2255bb",
+				"head": false,
+				"face": "sunglasses",
+				"body": false
+			},
+			"x": 766,
+			"y": 422,
+			"facing": "left",
+			"roamRadius": 20,
+			"speechBubble": [
+				// Temporary dialogue
+				"Clucktails will be opening soon!"
+			],
+			"dialogue": [
+				{
+					"id": "collection-start",
+					"text": [
+						"Hiya! I'm the owner of Clucktails. What's up?"
+					],
+					"responses": [
+						{
+							"text": "Give me the nuggets.",
+							"to": "collection-1b",
+						},
+						{
+							"text": "Big Cluck sent me.",
+							"to": "collection-1a",
+						}
+					],
+					"condition": {
+						"quest": "mafia_welcome",
+						"questTask": 1,
+						"questTaskValue": 0,
+					},
+				},
+				{
+					"id": "collection-1b",
+					"text": ["What? I'm not giving you nuggets! Go away."],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-1a",
+					"text": [
+						"Oh, you're one of her goons. Don't you have anything better to do?",
+						"I don't care who sent you. Go tell Big Cluck she can eat my shorts!",
+						"(Metaphorically.)",
+						"Now go away, punk."
+					],
+					"responses": [
+						{
+							"text": "You owe us.",
+							"to": "collection-2a",
+						},
+						{
+							"text": "Okay.",
+						}
+					],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-2a",
+					"text": [
+						"Oh yeah? Really? What do I owe you money for?",
+						"As I recall, I've been paying you guys because one of your goon friends threatened me into paying a protection fee.",
+						"I don't have money to pay you because Burghert broke in again and stole all the nuggets I had in the register.",
+						"WHAT THE HELL HAVE I BEEN PAYING YOU FOR? That's it, no more. I'm not paying your so-called \"protection\" fee."
+					],
+					"responses": [
+						{
+							"text": "Burghert?",
+							"to": "collection-3a",
+						},
+						{
+							"text": "Pretty please?",
+							"to": "collection-3b",
+						},
+						{
+							"text": "I'm sorry.",
+							"to": "collection-3c",
+						}
+					],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-3b",
+					"text": [
+						"Oh, well if you're asking like that I can't say no.",
+						"Here are the nuggets.",
+						"SYKE. Go away, lowlife. Tell Big Cluck that she's a big",
+						"meanie.",
+					],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-3c",
+					"text": [
+						"I could care less if you're sorry.",
+						"...",
+						"I couldn't care less I mean.",
+						"GO AWAY!",
+					],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-3a",
+					"text": [
+						"He's been sneaking into my building in the middle of the night.",
+						"After the first time he robbed me I've made a habit of staying here overnight to keep watch. I've been losing sleep over this!",
+						"Every time I catch him in the act he says something along the lines of \"Try and stop me! You can't stop the great Burghert, chicken!\".",
+						"He's a cunning thief alright. I only saw him last time because I noticed a shiny purple glint in the corner of my eye.",
+						"That sly bastard would've left me with nothing had I not seen him in time.",
+						"But don't you see I have it bad enough as it is? You goons certainly aren't making it any better!",
+					],
+					"responses": [
+						{
+							"text": "I'll find him.",
+							"to": "collection-4a",
+						},
+						{
+							"text": "Gimme what you got.",
+							"to": "collection-4b",
+						},
+					],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-4b",
+					"text": [
+						"Kick a chick while she's down why don't you!",
+						"No! I refuse!",
+						"Go tell Big Cluck she can kiss my ass!",
+						"(Literally.)",
+					],
+					"condition": {"isResponse": true},
+				},
+				{
+					"id": "collection-4a",
+					"text": [
+						"You're looking for Burghert? You just joined the mafia to get information about him?",
+						"Well if you find him you can get my nuggets back!",
+						"If you can stop him you won't have to worry about me missing my payments. But I'm not giving you anything until that happens!",
+					],
+					"condition": {"isResponse": true},
+					"responses": [
+						{
+							"text": "Sorry.",
+							"to": "collection-3c",
+						},
+						{
+							"text": "You'll be wacked.",
+							"to": "collection-end",
+						},
+					],
+				},
+				{
+					"id": "collection-end",
+					"text": [
+						"Are you serious? Great, as if things couldn't get worse.",
+						"Fine, I'll give you the nuggets this time. But I expect to compensated, IN FULL, once Burghert is caught!",
+						"Here you go. Good luck with the search.",
+					],
+					"quest": "mafia_welcome",
+					"questTask": 1,
+					"questTaskSet": 1,
+				},
+				{
+					// Temporary dialogue
+					"text": [
+						"I had to take on some loans to get Clucktails up and running.",
+						"Well, its not quite up an running..."
+					],
+				}
+			]
+		},
+	},
+
 	// Warps to different areas
 	"warps": {
 		"pl_districtExit": {

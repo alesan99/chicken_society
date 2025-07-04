@@ -1,11 +1,11 @@
 {
   "body": [
     "barista_accessories",
-    "beefcake_accessories",
     "bud_accessories",
+    "beefcake_accessories",
     "chains",
-    "petstupid_uniform",
     "mobboss_accessories",
+    "petstupid_uniform",
     "police_uniform",
     "scarf",
     "silver_chains",
@@ -14,19 +14,19 @@
   "face": [
     "cat_ears",
     "sunglasses",
-    "mobboss_hat",
     "toothpick",
     "visors"
   ],
   "furniture": [
-    "frame",
     "lamp",
+    "frame",
     "room_blue",
     "rug",
     "table"
   ],
   "head": [
     "hoodie",
+    "mobboss_hat",
     "police_hat",
     "snapback",
     "top_hat"
@@ -39,8 +39,8 @@
     "gun",
     "heroin",
     "kernels",
-    "seeds",
     "snake_book",
+    "seeds",
     "sunflower_seeds"
   ],
   "pet": [

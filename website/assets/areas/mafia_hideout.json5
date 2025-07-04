@@ -1,4 +1,8 @@
 {
+	"name": "Mafia Hideout",
+	"mapLocation": false,
+	"music": "chictoriassecret", 
+
 	"walls": [
         [0,576, 1024,576, 1024,600, 0,600], // lower border
 		[81,193, 138,174, 244,183, 98,242], // left crates
@@ -55,8 +59,8 @@
 			"profile": {
 				"name": "Da Boss",
 				"color": "#367000",
-				"head": false,
-				"face": "mobboss_hat",
+				"head": "mobboss_hat",
+				"face": false,
 				"body": "mobboss_accessories"
 			},
 			"x": 145,

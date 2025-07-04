@@ -8,7 +8,7 @@ import { BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM } from "./assets.js";
 import { RenderImage } from "./engine/render.js";
 import { Sprite, DrawableSprite, Animation } from "./engine/sprite.js";
 import { setState } from "./state.js";
-import { addItem, removeNuggets } from "./savedata.js";
+import { addItem, getItem, removeNuggets } from "./savedata.js";
 import QuestSystem from "./quests.js";
 import DialogueSystem from "./dialogue.js";
 import Transition from "./transition.js";
@@ -181,9 +181,19 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 // It determines if the element should activate if the conditions are met
 // Example: "egg" should only appear in an area if the egg Quest is active
 function checkCondition(c) {
+	// Handle list of multiple conditions
+	if (Array.isArray(c)) {
+		for (const condition of c) {
+			if (!checkCondition(condition)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	if (c.quest) {
 		let questName = c.quest;
-		if (c.questComplete != null) {
+		if (c.questComplete !== undefined) {
 			// "questComplete" just checks if the quest has ever been completed
 			// Setting it to false will check if it has never been completed
 			let questCompleted = SAVEDATA.quests.completed[questName];
@@ -193,7 +203,7 @@ function checkCondition(c) {
 				return true;
 			}
 			return false;
-		} else if (c.questActive != null) {
+		} else if (c.questActive !== undefined) {
 			// Check if quest is not active
 			console.log(c.questActive);
 			let questActive = QuestSystem.getQuest(questName);
@@ -231,8 +241,14 @@ function checkCondition(c) {
 	}
 	if (c.item) {
 		// Check if player has item
-		let itemCount = SAVEDATA.items[c.item];
+		let itemCount = getItem(c.item);
 		if (itemCount) {
+			if (c.itemCount !== undefined) {
+				if (itemCount > c.itemCount) {
+					return true;
+				}
+				return false;
+			}
 			return true;
 		} else {
 			return false;

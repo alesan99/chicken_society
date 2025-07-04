@@ -4,18 +4,23 @@
 	"priority": true, // Important Story Quest
 
 	"progressDescription": [
-		"Meet your Capo.",
-		"Complete your first task.", //steal eggs, chickpeas, pennywise sewer style
-		"Learn the secrets of the sewers."
+		"Meet your capo.",
+		//steal eggs, chickpeas, pennywise sewer style (?)
+		"Collect nuggets from Clucktails.",
+		"Collect nuggets from The Seed Dispensary.",
+		"Report back to Big Cluck."
 	],
 
-	"progressStart": [0,0,0],
-	"progressFinish": [1,1,2],
+	"progressStart": [0,0,0,0],
+	"progressFinish": [1,1,1,1],
 
 
 	"progressEvents": [
 		false,
 		false,
+		false,
+		false,
+		// UNUSED v
 		{
 			// Visit Sewer to progress
 			"type": "area",
@@ -31,8 +36,9 @@
 
 	"progressDescriptionTaskRequirement": [
 		false,
-		false,
-		1
+		0,
+		0,
+		0
 	],
 
 	"reward": {

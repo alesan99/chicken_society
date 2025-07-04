@@ -32,7 +32,7 @@
 	},
 
 	"NPCs": {
-		"cashier": {
+		"benny": {
 			"profile": {
 				"name": "Bazooka Benny",
 				"color": "#84d34a",
@@ -60,7 +60,50 @@
 						"cannabis_seeds": {"items": {"sunflower_seeds": 10}},
 					}
 				}
-			}
+			},
+			"dialogue": [
+				{
+					"text": [
+						"You bought my seeds dude, great!",
+						"Oh wouldn't you know it, I just found nuggets to pay Big Cluck!",
+						"Thanks for your business. Here's the stuff."
+					],
+					"condition": [
+						{
+							"quest": "mafia_welcome",
+							"questTask": 2,
+							"questTaskValue": 0,
+						},
+						{
+							"item": "cannabis_seeds",
+						}
+					],
+					"quest": "mafia_welcome",
+					"questTask": 2,
+					"questTaskSet": 1,
+				},
+				{
+					"id": "collection-start",
+					"text": [
+						"Hey! Oh boy... Big Cluck sent you? Dude, lame.",
+						"I just uhhh, don't have the money for you this time dude.",
+						"Did Burghert the snake steal it? Who's that?",
+						"Uh I mean yeah. He totally stole all my nuggets dude. DARN.",
+						"That slippery snake haha, boy do I hate him.",
+						"I'm supposed to like give you a part of my profits for supplying me right? Well zero is a part of zero nuggets!",
+						"So yeah dude, sorry. Buuut maybe if you buy some seeds I might have luck finding some leftover nuggets.",
+						"I have a feeling I'll only be able to find them if you buy my finest seeds. You get what I mean, dude?"
+					],
+					"condition": {
+						"quest": "mafia_welcome",
+						"questTask": 2,
+						"questTaskValue": 0,
+					},
+				},
+				{
+					"text": ["We got a lot of seeds!"]
+				}
+			],
 		}
 	},
 

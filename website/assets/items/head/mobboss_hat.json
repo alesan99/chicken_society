@@ -1,0 +1,11 @@
+{
+    "name": "Mob Boss Hat",
+    "description": "Essential for the aspiring mob boss.",
+    "cost": 1000,
+
+    "center": [
+        [62,35],
+        [89,35],
+        [63,35]
+    ]
+}

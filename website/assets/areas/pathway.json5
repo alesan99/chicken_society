@@ -1,29 +1,18 @@
 {
-  "name": "Old Town",
-  "mapLocation": [137, 187],
+  "name": "Pathway",
+  "mapLocation": [416, 282],
   "music": "genericoutdoors",
 
   "walls": [
 		[0, 576, 1024, 576, 1024, 600, 0, 600],
 		[-5, 576, -5, 163, 0, 163, 0, 576],
 		[1024, 576, 1024, 163, 1030, 163, 1030, 576],
-        [533,209,665,201,593,284,533,284],
-        [812,328,812,225,975,225,975,328],
-        [36,257,36,189,240,189,240,215]
+    [533,209,665,201,593,284,533,284],
+    [812,328,812,225,975,225,975,328],
+    [36,257,36,189,240,189,240,215]
   ],
 
   "warps": {
-    "shellaveEntrance": {
-      "to": "pathway", //future: "shellave",
-      "fromWarp": "pathwayEntrance", //future: "shellaveExit",
-      "facing": "right",
-      "x": 13,
-      "y": 296,
-      "w": 50,
-      "h": 200,
-			"sound": "woosh"
-    },
-
     "pathwayExit": {
       "to": "neighborhood",
       "fromWarp": "pathwayEntrance",
@@ -35,7 +24,18 @@
 			"sound": "woosh"
     },
 
-        "raceTrackEntrance": {
+    "shellaveEntrance": {
+      "to": "pathway", //future: "shellave",
+      "fromWarp": "shellaveExit", //future: "shellaveExit",
+      "facing": "right",
+      "x": 13,
+      "y": 296,
+      "w": 50,
+      "h": 200,
+			"sound": "woosh"
+    },
+
+    "raceTrackEntrance": {
       "to": "racetrack",
       "fromWarp": "raceTrackExit",
       "facing": "left",
@@ -46,9 +46,9 @@
 			"sound": "woosh"
     },
 
-        "beachEntrance": {
+    "beachEntrance": {
       "to": "pathway", //future: "beach",
-      "fromWarp": "pathwayEntrance", //future: "beachExit",
+      "fromWarp": "beachExit", //future: "beachExit",
       "facing": "down",
       "x": 387,
       "y": 158,
@@ -57,7 +57,7 @@
 			"sound": "woosh"
     },
 
-        "marketEntrance": {
+    "marketEntrance": {
       "to": "market",
       "fromWarp": "marketExit",
       "facing": "down",

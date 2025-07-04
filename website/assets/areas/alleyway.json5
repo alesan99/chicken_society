@@ -80,12 +80,12 @@
 					"questTaskSet": 1,
 				},
 				{
-					"text": ["You look gangster dude. I'll ask Da Boss what he thinks about you.",
+					"text": ["You look gangster dude. I'll ask da boss what he thinks about you.",
 						"Let me take a pic. I'll send it to him on snap.",
 						"*click*",
 						"Alright, sending...",
 						"...",
-						"Da Boss gave ya thumbs up.",
+						"Da boss gave ya a thumbs up.",
 						"I think you're ready to take the oath now. Talk to me when you're ready."],
 					"condition": {
 						"quest": "mafia_initiation",
@@ -103,7 +103,7 @@
 						"I can't have you snooping in our dumpster. Boss's orders.",
 						"Our \"partners\" pay a good amount of nuggets for the privilege of dumping their trash here. You understand, right?",
 						"If you were a trusted Mafia goon like me I'd let you look in there.",
-						"But if ya wanna look in there so bad, prove your worth to me and I can see about bringing you up to Da Boss."
+						"But if ya wanna look in there so bad, prove your worth to me and I can see about bringing you up to da boss."
 					],
 					"condition": {
 						"quest": "study_in_violet",
