@@ -30,7 +30,7 @@ export default class Trigger extends PhysicsObject {
 		this.actionIconFrame = false;
 		if (icon) {
 			if (icon === true) { // default icon requested
-				icon = {frame: 1, x: (this.shape.x2-this.shape.x1)/2, y: 0};
+				icon = { frame: 1, x: (this.shape.x2+this.shape.x1)/2, y: 0 };
 			}
 			this.actionIconFrame = icon.frame;
 			this.actionIconX = icon.x;
