@@ -178,6 +178,11 @@
 					"quest": "mafia_hideout",
 					"questTask": 1,
 					"questTaskSet": 1,
+				},
+				{
+					"text": [
+						"Did you wack em' yet? Oops, wrong goon. Move along.",
+					]
 				}
 			],
 		},
@@ -216,7 +221,7 @@
 					},
 					"quest": "mafia_hideout",
 					"questTask": 5,
-					"questTaskValue": 1,
+					"questTaskSet": 1,
 					"giveItem": "gris_dynamite",
 					"startQuest": "find_snake",
 				},
