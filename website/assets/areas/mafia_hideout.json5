@@ -69,6 +69,28 @@
 			"roamRadius": 1,
 			"interactRange": 20,
 			"speechBubble": ["Hmmm..."],
+			"dialogue": [
+				{
+					"text": [
+						"...",
+						"What is it, goon? Are you the one Big Cluck sent over?",
+						"You sure took your sweet time to get here.",
+						"I'm Da Boss, put some respect on my name.",
+						"Big Cluck told me about your work so far. You're what, a level 2 goon? I can bump you up.",
+						"But you're going to have to do next level work.",
+						// This should be about distributing chikpeas somehow
+						"We have some dead drops I need you to pick up around the city. They're shiny metal cans.",
+						"We cannot risk any leaks, so you'll have to find them yourself."
+					],
+					"condition": {
+						"quest": "mafia_hideout",
+						"questComplete": false,
+					},
+					"quest": "mafia_hideout",
+					"questTask": 1,
+					"questTaskValue": 1,
+				}
+			],
 		},
 	},
 

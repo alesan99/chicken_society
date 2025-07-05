@@ -115,7 +115,7 @@ const QuestSystem = (function() {
 				if (quest.progressEvents) {
 					for (let task=0; task < quest.progressEvents.length; task++) {
 						let event = quest.progressEvents[task];
-						if (event != false && event.type == type && (quest.condition == null || checkCondition(quest.condition))) {
+						if (event != false && event.type == type && (event.condition === undefined || checkCondition(event.condition))) {
 							// Quest is accepting event!
 							let doProgress = false;
 							if (type == "minigame") {

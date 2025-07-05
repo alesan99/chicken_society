@@ -237,5 +237,31 @@
 			"y": 0,
 			"worldy": 356
 		}
-	}
+	},
+
+	"triggers": {
+		// Dead drop 2
+		"deaddrop2": {
+			"x": 126,
+			"y": 268,
+			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
+			"clickable": true,
+			"action": "dialogue",
+			"icon": true,
+			"sprite": {
+				"image": "deaddrop.png",
+				"w": 50,
+				"h": 50,
+				"worldy": 268
+			},
+			"condition": {
+				"quest": "mafia_hideout",
+				"questTask": 3,
+				"questTaskValue": 0
+			},
+			"quest": "mafia_hideout",
+			"questTask": 3,
+			"questTaskSet": 1,
+		},
+  	},
 }

@@ -161,6 +161,30 @@
           speaker: "Dah Lad-Nah"
         }
       ]
-    }
+    },
+
+		// Dead drop 3
+		"deaddrop3": {
+			"x": 126,
+			"y": 268,
+			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
+			"clickable": true,
+			"action": "dialogue",
+			"icon": true,
+			"sprite": {
+				"image": "deaddrop.png",
+				"w": 50,
+				"h": 50,
+				"worldy": 268
+			},
+			"condition": {
+				"quest": "mafia_hideout",
+				"questTask": 4,
+				"questTaskValue": 0
+			},
+			"quest": "mafia_hideout",
+			"questTask": 4,
+			"questTaskSet": 1,
+		},
   }
 }

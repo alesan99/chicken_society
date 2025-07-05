@@ -6,10 +6,10 @@
 	"progressDescription": [
 		"Find the Mafia Hideout.",
 		"Speak with the Boss.",
-		"Drug deal #1",
-		"Drug deal #2",
-		"Drug deal #3",
-		"Deliver the money" // Find file about Burghert here, find out he's a fox and not the snake
+		"Dead drop pickup #1",
+		"Dead drop pickup #2",
+		"Dead drop pickup #3",
+		"Return to the Mafia Storage Room." // Find file about Burghert here, find out he's a fox and not the snake
 	],
 	// Hide steps 3-6 until you speak with the Don
 	"progressDescriptionTaskRequirement":[
@@ -19,6 +19,30 @@
 		1,
 		1,
 		1
+	],
+
+	"progressEvents": [
+		{
+			"type": "area",
+			"area": "mafia_hideout",
+			"questTaskSet": 1,
+		},
+		false,
+		false,
+		false,
+		false,
+		{
+			"type": "area",
+			"area": "mafia_hideout",
+			"questTaskSet": 1,
+			"condition": [
+				{
+					"quest": "mafia_hideout",
+					"questTask": [2,3,4],
+					"questTaskValue": [1,1,1],
+				}
+			]
+		},
 	],
 
 	"progressStart": [0,0,0,0,0,0],
