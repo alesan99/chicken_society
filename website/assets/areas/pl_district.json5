@@ -20,8 +20,9 @@
 		[-10,0, 0,0, 0,600, -10,600]	
 		],
 
-	//
+	// NPCs
 	"NPCs": {
+		// Clucktails owner (Some temporary dialogue here)
 		"iggy": {
 			"profile": {
 				"name": "Iggy",
@@ -242,26 +243,60 @@
 	"triggers": {
 		// Dead drop 2
 		"deaddrop2": {
-			"x": 126,
-			"y": 268,
+			"x": 82,
+			"y": 274,
 			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
 			"clickable": true,
-			"action": "dialogue",
 			"icon": true,
+      		"action": "quest",
 			"sprite": {
 				"image": "deaddrop.png",
 				"w": 50,
 				"h": 50,
 				"worldy": 268
 			},
-			"condition": {
+			"condition": [{
 				"quest": "mafia_hideout",
 				"questTask": 3,
 				"questTaskValue": 0
 			},
+			{
+				"quest": "mafia_hideout",
+				"questTask": 1,
+				"questTaskValue": 1
+			}],
 			"quest": "mafia_hideout",
 			"questTask": 3,
 			"questTaskSet": 1,
 		},
+
+		// Find snake quest
+		// Grisworld falls for trap
+		"trap_works": {
+			"x": 208,
+			"y": 266,
+			"shape": [0, 0, 130, 0, 130, 200, 0, 200],
+			"clickable": false,
+			"walkOver": true,
+			"activateOnce": true,
+			"icon": false,
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"HSSSSSSSSSSSSSSSSSSSSS!!!!!!",
+						"(That sounds like a snake!)"
+					],
+					"quest": "find_snake",
+					"questTask": 4,
+					"questTaskSet": 1,
+				}
+			],
+			"condition": {
+				"quest": "find_snake",
+				"questTask": [3,4],
+				"questTaskValue": [1,0],
+			},
+		}
   	},
 }

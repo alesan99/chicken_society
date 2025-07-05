@@ -176,6 +176,11 @@ const QuestSystem = (function() {
 								if (nuggets >= event.nuggetsGreater) {
 									doProgress = true;
 								}
+							} else if (type == "getItem") {
+								let item = args[0];
+								if (item === event.item) {
+									doProgress = true;
+								}
 							} else {
 								// Not a predefined event
 								doProgress = true;
@@ -219,6 +224,9 @@ const QuestSystem = (function() {
 							this.event("clothes", PLAYER.head, PLAYER.face, PLAYER.body, PLAYER.item);
 						} else if (type == "nuggets") {
 							this.event("nuggets", SAVEDATA.nuggets);
+						} else if (type == "getItem") {
+							// TODO
+							// Instead of iterating through all the players items, iterate through items in event
 						}
 					}
 				}

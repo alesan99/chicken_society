@@ -3,7 +3,6 @@
 	"mapLocation": false,
 	"music": false,
 
-
 	"walls": [
 		[0,259, 279,259, 274,292, 0,566],
 
@@ -18,7 +17,72 @@
         [0,576, 1024,576, 1024,600, 0,600]
 	],
 
-    	"warps": {
+	"NPCs": {
+		"burghert": {
+			"profile": {
+				"name": "Burghert",
+				"color": "#000000",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 513,
+			"y": 318,
+			"facing": "up",
+			"speechBubble": ["Well well well..."],
+			"dialogue": [
+				{
+					"text": [
+						"So, you found me. Now what? Are you gonna kill me?",
+						"I'd like to see you try! You can't stop me!",
+						"You come for my son and you expect me to back down? NO! I'm not having it!",
+						"I know who you are. The police were saying you blew up the factory. That the reason why you joined the mafia, isn't it?",
+						"You must've figured it out pretty early on, that my son, Griswold, blew up that building.",
+						"No one believed you, but the mafia had plenty of information on me for you to find out about me huh.",
+						"But do you really know who you're working for. The chicken mafia? They're animals!",
+						"If only you knew about things they've been doing...",
+						"I was chased out of my own home by the IRS. I had no choice to escape. And when I arrive here in Chikensas City I'm immediately forced into servitude by the Chicken Mafia?",
+						"I bargain for my life and my son's by handling the smuggling of nuggets to the Fox Contintent.",
+						"Those nuggets... what do you think they are?",
+						"The Fox Continent is facing a severe food shortage. Yet, they are willing to negotiate for peace with chickens as long as they recieve nuggets.",
+						"Those nuggets, they certianly aren't made of gold!",
+						"And those Chikpeas they give out. You think they're doing that out of the goodness of their hearts?",
+						"It's all about controlling the masses. Those savages.",
+						"Well you know what? All those chickens I killed. I did it because I liked it! And I'd do it all again!",
+					],
+					"condition": {
+						"quest": "kill_burghert",
+						"questActive": true,
+					},
+					"quest": "kill_burghert",
+					"questTask": 2,
+					"questTaskSet": 1,
+					"to": "monologue-end",
+				},
+				{
+					"id": "monologue-end",
+					"text": [
+						"But you... we aren't so different, you and I.",
+						"We're both morally flexible, we both have reptile friends.",
+						"Together, we can destroy them. What do you say? Will you join me?"
+					],
+					"condition": {"isRepsonse": true},
+					"quest": "kill_burghert",
+					"questTask": 3,
+					"questTaskSet": 1,
+					"warp": "end",
+				},
+				{
+					"text": [
+						"I love my son. I'll kill anyone who tries to harm him.",
+						"No one can stop us! Not you, not the mafia, and not the IRS!"
+					],
+				},
+			]
+		}
+	},
+
+    "warps": {
 		"burghertsLairExit": {
 			"to": "hub",
 			"fromWarp": "burghertsLairEntrance",
@@ -31,7 +95,7 @@
 		}
 	},
 
-    	"sprites": {
+    "sprites": {
 		// Layer: Suspicious Box of Radiation
 		"factoryLayer": {
 			"image": "burghertslair_layer.png",

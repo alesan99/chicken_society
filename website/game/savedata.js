@@ -272,6 +272,9 @@ function addItem(id, type, count=1) {
 	}
 	SAVEDATA.items[type][id] += count;
 
+	// Quest progression
+	QuestSystem.event("getItem", id, SAVEDATA.items[type][id]);
+
 	// New item notification
 	MENUS["chatMenu"].notification("customization", true);
 

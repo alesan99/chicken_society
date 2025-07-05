@@ -61,7 +61,7 @@ const DialogueSystem = (function() {
 			dialogueTree = dialogueTreeData; // List of dialogue blocks (not really a tree structurally)
 			defaultSpeaker = speakerName; // Default speaker name
 			speakerNPC = npc; // NPC object of speaker
-			this.setSpeaker(speakerName, true); // Defauly name of speaker for a dialogue block
+			this.setSpeaker(speakerName, true); // Default name of speaker for a dialogue block
 
 			serverMessage = false; // Reset server message
 

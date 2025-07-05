@@ -165,23 +165,28 @@
 
 		// Dead drop 3
 		"deaddrop3": {
-			"x": 126,
-			"y": 268,
+			"x": 276,
+			"y": 349,
 			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
 			"clickable": true,
-			"action": "dialogue",
 			"icon": true,
+      "action": "quest",
 			"sprite": {
 				"image": "deaddrop.png",
 				"w": 50,
 				"h": 50,
 				"worldy": 268
 			},
-			"condition": {
+			"condition": [{
 				"quest": "mafia_hideout",
 				"questTask": 4,
 				"questTaskValue": 0
 			},
+			{
+				"quest": "mafia_hideout",
+				"questTask": 1,
+				"questTaskValue": 1
+			}],
 			"quest": "mafia_hideout",
 			"questTask": 4,
 			"questTaskSet": 1,

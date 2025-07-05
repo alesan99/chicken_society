@@ -36,12 +36,15 @@
     "black_coffee",
     "bullet",
     "cannabis_seeds",
-    "heroin",
+    "gris_dynamite",
     "gun",
+    "heroin",
     "kernels",
     "seeds",
     "snake_book",
-    "sunflower_seeds"
+    "sunflower_seeds",
+    "trap_box",
+    "trap_stick"
   ],
   "pet": [
     "crocodile",

@@ -42,9 +42,7 @@ MENUS["customization"] = new class extends Menu {
 		}, null, 263,404, 100,32);
 		this.buttons["save"] = new Button("Save", ()=>{
 			Notify.new("Saving...", 2);
-			saveSaveData(SAVEDATA, () => {
-				console.log("gestset");
-			});
+			saveSaveData(SAVEDATA, () => {});
 			replaceObjectValues(PROFILE, SAVEDATA.profile);
 		}, null, 373,404, 100,32);
 

@@ -226,13 +226,11 @@ function checkCondition(c) {
 				let valueGreaterThan = c.questTaskValueGreaterThan;
 				let valueLessThan = c.questTaskValueLessThan;
 				// Check if task is a list of values
-				if (!Array.isArray(task)) {
-					// turn it into a list for code simplicity
-					task = [task];
-					value = [value];
-					valueGreaterThan = [valueGreaterThan];
-					valueLessThan = [valueLessThan];
-				}
+				// turn it into a list for code simplicity
+				if (!Array.isArray(task)) task = [task];
+				if (!Array.isArray(value)) value = [value];
+				if (!Array.isArray(valueGreaterThan)) valueGreaterThan = [valueGreaterThan];
+				if (!Array.isArray(valueLessThan)) valueLessThan = [valueLessThan];
 				for (let i=0; i<task.length; i++) {
 					const taskValue = QuestSystem.getProgress(questName, task[i]);
 					if (valueGreaterThan[i] !== undefined && valueGreaterThan[i] !== false) {

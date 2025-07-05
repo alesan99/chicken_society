@@ -33,5 +33,60 @@
 			"h": 30,
 			"sound": "woosh"
 		}
+	},
+
+	"triggers": {
+		"burghertsLairEntrance": {
+			"x": 525,
+			"y": 434,
+			"shape": [0,0, 80,0, 80,80, 0,80],
+			"clickable": true,
+			"icon": true,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"Snake skin! This definitely came from Griswold, probably in the panic.",
+						"It looks like theres a pipe in the water, could that be where Burghert and Griswold went?",
+						"Only one way to find out..."
+					],
+					"condition": [
+						{
+							"quest": "kill_burghert",
+							"questActive": true,
+						}
+					],
+					"quest": "kill_burghert",
+					"questTask": 1,
+					"questTaskSet": 1,
+					"warp": "burghertslair",
+					"fromWarp": "burghertsLairEntrance",
+				},
+				{
+					"text": ["This is the pipe to Burghert's lair."],
+					"warp": "burghertslair",
+					"fromWarp": "burghertsLairEntrance",
+				}
+			],
+			"sprite": {
+				"image": "snake_skin.png",
+				"w": 80,
+				"h": 80,
+				"worldy": 434
+			},
+			"condition": [
+				{
+					"quest": "kill_burghert",
+					"questActive": true,
+					"optional": true,
+				},
+				{
+					"quest": "kill_burghert",
+					"questComplete": true,
+					"optional": true,
+				},
+			]
+		}
 	}
 }

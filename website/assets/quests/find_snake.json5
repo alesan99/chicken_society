@@ -1,16 +1,23 @@
 {
 	"name": "Find the Snake!",
-	"description": "The Mafia wants you to capture the snake who blew up the Chickpea Factory. Turns out Burghert was not a snake at all!",
+	"description": "The Mafia wants you to capture the snake who blew up the Chickpea Factory. Turns out Burghert was not the snake!",
 	"priority": true, // Important Story Quest
 
 	// You're investigation the snake again like in the beginning of the story
 	// What has changed? Why weren't you able to get a solid lead last time?
 	// Maybe the Mafia was conducting their own investigation and have more clues for you
 	// That would explain why they were willing to let you, the lead suspect, join the Mafia
+	// Update:
+	// You have to capture Griswold using griswold's dynamite as bait, which the mafia discovered and kept.
+	// The mafia asks you to capture him because they thought Bhurgert blew up their factory.
+	// They didn't know about the snake skin you found, and they didn't know Bhurgert's
+	// snake was capable of making bombs.
+	// With this new found knowledge, you can now try to capture Griswold.
 	"progressDescription": [
-		"Ask around for possible snake sightings.",
-		"Gather materials for the snake trap.",
-		"Set up the trap.",
+		"Come up with a way to capture the snake.",
+		"Acquire a stick.",
+		"Acquire a box.",
+		"Set up the trap in front of the chikpea factory.",
 		"Capture the snake.",
 		"Interrogate the snake.",
 	],
@@ -19,14 +26,33 @@
 		0,
 		0,
 		0,
-		0
+		false,
+		false
+	],
+	"progressEvents": [
+		false,
+		{
+			"type": "getItem",
+			"item": "trap_stick",
+			"questTaskSet": 1,
+			"questTaskDefault": 0
+		},
+		{
+			"type": "getItem",
+			"item": "trap_box",
+			"questTaskSet": 1,
+			"questTaskDefault": 0
+		},
+		false,
+		false,
+		false
 	],
 
-	"progressStart": [0,0,0,0,0],
-	"progressFinish": [1,1,1,1,1],
+	"progressStart": [0,0,0,0,0,0],
+	"progressFinish": [1,1,1,1,1,2],
 
 	"reward": {
 		"nuggets": 50,
-		"quest": "second_explosion"
+		"quest": "kill_burghert",
 	}
 }

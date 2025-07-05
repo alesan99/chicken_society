@@ -66,7 +66,7 @@
 						"Pretty impressive for a low level goon such as yourself.",
 						"Tell ya what, I'll put in a good word for you with da boss. Why don't you go meet with him?",
 						"He's in our secret hideout. You can only access it through the sewers, see?",
-						"We have a secret manhole entrance somewhere here in Chikensas City. You're gonna need a croc to open it, too.",
+						"We have a secret manhole entrance somewhere here in Chikensas City.",
 						"That's all I'm telling you. If you can't figure out how to get there then you probably don't have what it takes to move up the ranks, capiche?"
 					],
 					"condition": [{
@@ -118,6 +118,29 @@
 					"randomDialogue": true
 				}
 			]
+		},
+		"seller": {
+			"profile": {
+				"name": "Seller",
+				"color": "#5220CC",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"x": 861,
+			"y": 258,
+			"facing": "down",
+			"interactRange": 20,
+			"speechBubble": ["Take a look at my items!"],
+			"shop": {
+				"name": "Seller's Stall",
+				"items": {
+					"item": {
+						"trap_box": true,
+						"trap_stick": true
+					},
+				}
+			},
 		},
 		"brook": {
 			"profile": {
@@ -184,5 +207,5 @@
 			"y": 38,
 			"worldy": 280 
 		}
-	}
+	},
 }

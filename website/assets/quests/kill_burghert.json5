@@ -1,27 +1,25 @@
 {
-	"name": "Wack Burghert",
-	"description": "Burghert has betrayed the Mafia and ran off with Griswold! The Mafia wants you to kill him.",
+	"name": "Kill Burghert!",
+	"description": "Burghert has blown up the second factory and ran off with Griswold! The Mafia wants you to find him and kill him.",
 	"priority": true, // Important Story Quest
 
 	"progressDescription": [
+		"Investigate the second factory explosion.",
 		"Find out where Burghert's hideout is.",
-		"Travel the sewers",
 		"Kill Burghert", // You don't actually do this
 		"Hide the body", // You don't actually do this either
-		"Repent" // You may do this if you want
 	],
 	"progressDescriptionTaskRequirement": [
 		false,
 		0,
-		false,
-		false,
-		false
+		0,
+		0,
 	],
 
-	"progressStart": [0,0,0,0,0],
-	"progressFinish": [1,1,1,1,1],
+	"progressStart": [0,0,0,0],
+	"progressFinish": [1,1,1,1],
 
 	"reward": {
-		"nuggets": 10
+		"nuggets": 50
 	}
 }

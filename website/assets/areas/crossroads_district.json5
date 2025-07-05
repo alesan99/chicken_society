@@ -48,10 +48,59 @@
 			"speechBubble": [
 				"How could someone do such a thing?"
 			],
-			"condition": {
-				"quest": "factory_explosion"
-			},
+			"condition": [
+				{
+					"quest": "factory_explosion",
+					"questActive": true,
+					"optional": true,
+				},
+				{
+					"quest": "find_snake",
+					"questActive": true,
+					"optional": true,
+				},
+				{
+					"quest": "kill_burghert",
+					"questActive": true,
+					"optional": true,
+				},
+			],
 			"dialogue": [
+				// Second explosion
+				{
+					"text": [
+						"Oh sweet Dah'lad-Nah, I can't believe it happened again! Another explosion!",
+						"I saw him! I saw the culprit! It's that Burghert fox everyone's been complaining about!",
+						"He took the snake out of the shoddy trap you set up, and then set off the dynamite he had with him!",
+						"The very same dynamite you said was neutralized, bomber!",
+						"I oughtta be a lot more angry with you, but I'm gonna be in hot water once the chief finds out this happened under my watch",
+						"How about you find this Burghert fellow and his snake cohort and I'll overlook your numerous screw ups? Do we have a deal, bomber?",
+						"I saw him run jump into a hole, maybe into the sewers? The entrance is covered by the rubble now, though.",
+						"That's all I saw though... sorry."
+					],
+					"condition": {
+						"quest": "kill_burghert",
+						"questActive": true,
+					},
+					"quest": "kill_burghert",
+					"questTask": 0,
+					"questTaskSet": 1,
+				},
+				// Find snake quest
+				{
+					"text": [
+						"WHAT ARE YOU DOING WITH THAT BOMB?",
+						"You really were the bomber all along! I had a hunch.",
+						"Huh? You're setting up a trap to catch the shiny purple snake you think is responsible?",
+						"That certainly would explain the shiny purple skin you found...",
+						"But am I really to believe that that dynamite is neutralized?",
+						"I'm keeping my eyes on you, bomber. If that factory gets blown up I'm coming straight for you.",
+					],
+					"condition": {
+						"quest": "find_snake",
+						"questActive": true
+					}
+				},
 				// Show him/her the snake skin after you find it
 				{
 					"text": [
@@ -161,6 +210,99 @@
 				"h": 50,
 				"worldy": 200
 			}
-		}
+		},
+		// Find Snake Quest
+		"trap_start": {
+			"x": 278,
+			"y": 438,
+			"shape": [-50,-50, 50,-50, 50,50, -50,50],
+			"clickable": true,
+			"icon": true,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"(This is the perfect place to lay the trap.)",
+						"(If Griswold gets caught here it'll be clear he's the bomber.)"
+					],
+					"quest": "find_snake",
+					"questTask": 3,
+					"questTaskSet": 1,
+				},
+			],
+
+			"condition": {
+				"quest": "find_snake",
+				"questTask": [0,1,2,3],
+				"questTaskValue": [1,1,1,0]
+			},
+		},
+		"trap_check": {
+			"x": 203,
+			"y": 353,
+			"shape": [0,0, 160,0, 160,160, 0,160],
+			"clickable": true,
+			"icon": true,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"(The trap is laid. Let's see if it works. It's probably best stay away from this place in the meanwhile.)"
+					],
+					"quest": "find_snake",
+					"questTask": 3,
+					"questTaskSet": 1,
+				}
+			],
+
+			"condition": {
+				"quest": "find_snake",
+				"questTask": [3,4],
+				"questTaskValue": [1,0],
+			},
+			"sprite": {
+				"image": "trap.png",
+				"w": 160,
+				"h": 160,
+				"worldy": 450
+			}
+		},
+		"trap_snake": {
+			"x": 203,
+			"y": 353,
+			"shape": [0,0, 160,0, 160,160, 0,160],
+			"clickable": true,
+			"icon": true,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"Ss ssss ssssssss!!!!",
+						"(You're not gonna get much information out of him.)",
+						"(Maybe you should report back to the boss.)",
+					],
+					"quest": "find_snake",
+					"questTask": 5,
+					"questTaskSet": 1,
+				}
+			],
+
+			"condition": {
+				"quest": "find_snake",
+				"questTask": 4,
+				"questTaskValue": 1,
+			},
+			"sprite": {
+				"image": "trap.png",
+				"ox": 160,
+				"oy": 0,
+				"w": 160,
+				"h": 160,
+				"worldy": 450
+			}
+		},
 	}
 }
