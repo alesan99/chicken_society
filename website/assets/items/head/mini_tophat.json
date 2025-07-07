@@ -1,0 +1,11 @@
+{
+    "name": "Mini Top Hat",
+    "description": "For only the most chic and fashionable chickens.",
+    "cost": 40,
+
+    "center": [
+        [62,32],
+        [87,36],
+        [60,33]
+    ]
+}

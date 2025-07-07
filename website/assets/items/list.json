@@ -9,13 +9,20 @@
     "police_uniform",
     "scarf",
     "silver_chains",
-    "spike_choker"
+    "spike_choker",
+    "bandana_blue",
+    "long_scarf",
+    "bowtie_purple",
+    "keffiyeh",
+    "pearl_necklace"
   ],
   "face": [
     "cat_ears",
     "sunglasses",
     "toothpick",
-    "visors"
+    "visors",
+    "chic_glasses",
+    "round_glasses"
   ],
   "furniture": [
     "frame",
@@ -29,7 +36,10 @@
     "mobboss_hat",
     "police_hat",
     "snapback",
-    "top_hat"
+    "top_hat",
+    "cowboy_hat",
+    "jester_hat",
+    "mini_tophat"
   ],
   "item": [
     "beer",

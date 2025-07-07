@@ -1,0 +1,11 @@
+{
+    "name": "Long Yellow Scarf",
+    "description": "A long, flowing scarf perfect for chilly winter days.",
+    "cost": 12,
+
+    "center": [
+        [61,89],
+        [85,82],
+        [63,82]
+    ]
+}

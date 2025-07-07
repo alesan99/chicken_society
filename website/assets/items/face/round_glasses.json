@@ -1,0 +1,11 @@
+{
+    "name": "Round Glasses",
+    "description": "Instantly doubles your brain power.",
+    "cost": 8,
+
+    "center": [
+        [65,35],
+        [87,36],
+        [63,33]
+    ]
+}

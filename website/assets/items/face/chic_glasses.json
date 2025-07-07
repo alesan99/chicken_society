@@ -1,0 +1,11 @@
+{
+    "name": "Chic Glasses",
+    "description": "To add a touch of sophistication to your look.",
+    "cost": 30,
+
+    "center": [
+        [62,30],
+        [87,36],
+        [63,33]
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Blue Bandana",
+    "description": "A classic bandana, perfect for adding a touch of rugged style to your outfit.",
+    "cost": 15,
+
+    "center": [
+        [61,89],
+        [85,82],
+        [63,82]
+    ]
+}

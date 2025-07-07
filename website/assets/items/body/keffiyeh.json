@@ -1,0 +1,11 @@
+{
+    "name": "Keffiyeh",
+    "description": "Free Palestine!",
+    "cost": 10,
+
+    "center": [
+        [61,89],
+        [85,82],
+        [63,82]
+    ]
+}

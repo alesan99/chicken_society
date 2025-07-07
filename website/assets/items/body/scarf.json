@@ -1,7 +1,7 @@
 {
     "name": "Scarf",
     "description": "A warm and cozy scarf. Perfect for chilly days.",
-    "cost": 5,
+    "cost": 10,
 
     "center": [
         [63,58],

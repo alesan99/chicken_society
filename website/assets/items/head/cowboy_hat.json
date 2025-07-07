@@ -1,0 +1,11 @@
+{
+    "name": "Cowboy Hat",
+    "description": "For all your horse riding and cattle wrangling needs.",
+    "cost": 25,
+
+    "center": [
+        [62,32],
+        [86,30],
+        [63,35]
+    ]
+}
