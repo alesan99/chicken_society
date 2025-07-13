@@ -1,6 +1,6 @@
 {
 	"name": "Down the Sewers",
-	"description": "Find and explore the sewers.",
+	"description": "Find and explore the sewers. Completing this quest will unlock warping via the map menu!",
 	"priority": true, // Important Story Quest
 
 	"progressDescription": [

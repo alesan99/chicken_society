@@ -1,11 +1,13 @@
 // Map menu; Displays map and allows quick travel (?)
 
 import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "../main.js";
+import {PLAYER} from "../world.js";
 import {Draw} from "../engine/canvas.js";
-import {IMG, SPRITE, ANIM, FONT, ITEMS} from "../assets.js";
+import {IMG, SPRITE, ANIM, FONT, ITEMS, MAPLOCATIONS} from "../assets.js";
 import {Menu, MENUS} from "../menu.js";
 import {Button, TextField, ColorSlider, ScrollBar} from "../gui/gui.js";
 import {openMenu, closeMenu, getOpenMenu} from "../state.js";
+import { checkCondition } from "../area.js";
 
 MENUS["mapMenu"] = new class extends Menu {
 	//Initialize
@@ -21,6 +23,45 @@ MENUS["mapMenu"] = new class extends Menu {
 
 		this.mapX = 23;
 		this.mapY = 25;
+
+		// Warp buttons
+		// Only if player has unlocked warping
+		this.canWarp = checkCondition({
+			quest: "sewers",
+			questComplete: true
+		});
+		if (this.canWarp) {
+			const size = 24;
+			// Warpable locations
+			this.locations = MAPLOCATIONS;
+			for (const [area, coords] of Object.entries(this.locations)) {
+				if (area === PLAYER.area) {
+					continue;
+				}
+				const x = coords[0];
+				const y = coords[1];
+				const warpFunc = function() {
+					WORLD.warpToArea(area, "mapWarp", PLAYER);
+					closeMenu(this);
+				};
+				this.buttons[`area-${area}`] = new Button(
+					"",
+					warpFunc,
+					{
+						image: IMG.map,
+						frames: [
+							SPRITE.mapIcons.getFrame(2,0),
+							SPRITE.mapIcons.getFrame(2,0),
+							SPRITE.mapIcons.getFrame(2,0)
+						]
+					},
+					this.x+this.mapX+x-size/2,
+					this.y+this.mapY+y-size/2,
+					size,
+					size,
+				);
+			}
+		}
 
 		this.iconAnimationTimer = 0;
 	}

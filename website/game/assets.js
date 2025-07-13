@@ -24,6 +24,8 @@ var BACKGROUNDIMG = [];
 var BACKGROUNDSPRITE = [];
 var BACKGROUNDANIM = [];
 
+var MAPLOCATIONS;
+
 //DIRECTORYTREE = {}
 
 function loadGameAssets() {
@@ -100,9 +102,20 @@ function loadGameAssets() {
 	SPRITE.items = new Sprite(IMG.items, 6,1, 30,30, 0,0, 1,1);
 	IMG.map = new RenderImage("assets/gui/map.png");
 	SPRITE.map = new Sprite(IMG.map, 1,1, 512,304);
-	SPRITE.mapIcons = new Sprite(IMG.map, 2,1, 36,36, 0,304, 1,1);
+	SPRITE.mapIcons = new Sprite(IMG.map, 3,1, 36,36, 0,304, 1,1);
 	IMG.colorSlider = new RenderImage("assets/gui/color.png");
 	SPRITE.colorSlider = new Sprite(IMG.color, 1,4, 140,12);
+
+	// Map
+	MAPLOCATIONS = {
+		hub: [307, 158],
+		oldtown: [231, 171],
+		neighborhood: [164, 194],
+		pathway: [161, 151],
+		racetrack: [234, 132],
+		market: [226, 99],
+		pl_district: [300, 107],
+	};
 
 	// Chicken Customization
 	HEADOFFSET = [ // Center of chicken head where hat should be placed
@@ -282,4 +295,4 @@ function loadJSON5(filePath, callBack, errorCallBack) {
 // 	.catch(error => { console.error(error) });
 // console.log(DIRECTORYTREE)
 
-export { IMG, SPRITE, ANIM, FONT, MUSIC, SFX, loadGameAssets, loadJSON, loadJSON5, ITEMS, HEADOFFSET, FACEOFFSET, BODYOFFSET, ITEMOFFSET, CHICKENROTATION, BACKGROUND, BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM };
+export { IMG, SPRITE, ANIM, FONT, MUSIC, SFX, loadGameAssets, loadJSON, loadJSON5, ITEMS, HEADOFFSET, FACEOFFSET, BODYOFFSET, ITEMOFFSET, CHICKENROTATION, BACKGROUND, BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM, MAPLOCATIONS };
