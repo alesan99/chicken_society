@@ -21,14 +21,15 @@
 		"burghert": {
 			"profile": {
 				"name": "Burghert",
-				"color": "#000000",
+				"color": "#FFFFFF",
 				"head": false,
 				"face": false,
 				"body": false
 			},
+			"image": "burghert",
 			"x": 513,
-			"y": 318,
-			"facing": "up",
+			"y": 326,
+			"facing": "down",
 			"speechBubble": ["Well well well..."],
 			"dialogue": [
 				{
@@ -66,7 +67,7 @@
 						"We're both morally flexible, we both have reptile friends.",
 						"Together, we can destroy them. What do you say? Will you join me?"
 					],
-					"condition": {"isRepsonse": true},
+					"condition": {"isResponse": true},
 					"quest": "kill_burghert",
 					"questTask": 3,
 					"questTaskSet": 1,

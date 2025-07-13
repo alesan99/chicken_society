@@ -4,7 +4,7 @@
 import { SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR } from "./main.js";
 import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS } from "./world.js";
 import AudioSystem from "./engine/audio.js";
-import { BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM } from "./assets.js";
+import { IMG, BACKGROUNDIMG, BACKGROUNDSPRITE, BACKGROUNDANIM } from "./assets.js";
 import { RenderImage } from "./engine/render.js";
 import { Sprite, DrawableSprite, Animation } from "./engine/sprite.js";
 import { setState } from "./state.js";
@@ -59,9 +59,13 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				isActive = checkCondition(npc.condition);
 			}
 			if (isActive) {
-				OBJECTS["Character"][name] = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area, null);
+				const char = new Character(PHYSICSWORLD, npc.x, npc.y, npc.profile, area, null);
+				OBJECTS["Character"][name] = char;
 				NPCS[name] = new NPC(OBJECTS["Character"][name], npc.speechBubble, npc.facing, npc.roamRadius, npc.interactRange, {shop: npc.shop, dialogue: npc.dialogue}, npc.image);
 				NPCS[name].condition = npc.condition;
+				if (npc.image) {
+					char.image = IMG[npc.image];
+				}
 			}
 		}
 	}

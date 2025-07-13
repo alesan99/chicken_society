@@ -44,6 +44,8 @@ function loadGameAssets() {
 	ANIM.sit = [[3], 99999];
 	ANIM.wave = [[4,5,4,5,4,5], 0.2];
 	ANIM.tbag = [[0,3,0,3,0,3,0,3,0,3], 0.15];
+	IMG.burghert = new RenderImage("assets/burghert.png");
+	IMG.burghert.makeColorable();
 
 	IMG.shadow = new RenderImage("assets/shadow.png");
 	IMG.moveCursor = new RenderImage("assets/move_cursor.png");
