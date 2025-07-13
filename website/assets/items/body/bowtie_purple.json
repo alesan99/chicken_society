@@ -1,0 +1,11 @@
+{
+    "name": "Purple Bowtie",
+    "description": "A dapper accessory that adds a touch of elegance to any outfit.",
+    "cost": 20,
+
+    "center": [
+        [64,89],
+        [85,82],
+        [63,82]
+    ]
+}

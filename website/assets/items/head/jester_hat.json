@@ -1,0 +1,11 @@
+{
+    "name": "Jester Hat",
+    "description": "For when you're in a sily goofy mood.",
+    "cost": 16,
+
+    "center": [
+        [62,32],
+        [86,30],
+        [63,35]
+    ]
+}
