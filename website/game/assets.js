@@ -189,7 +189,8 @@ function loadItem(category, itemId) {
 	item.name = "";
 	item.description = "";
 	item.cost = 0;
-	item.center = [[0.5, 0.7],[0.5, 0.7],[0.5, 0.7]];
+	item.defaultCenter = true;
+	item.center = [[0,0],[0,0],[0,0]];
 	item.sprite = SPRITE.placeholder;
 	loadJSON(`assets/items/${category}/${itemId}.json`, (data) => {
 		// Get item properties
@@ -209,6 +210,7 @@ function loadItem(category, itemId) {
 		item.disease = data.disease;
 		if (data.center) { // Center of frames
 			item.center = data.center;
+			item.defaultCenter = false;
 		}
 
 		// Utility
@@ -224,16 +226,22 @@ function loadItem(category, itemId) {
 
 		item.coopTheme = data.coopTheme;
 	});
-	let async = function() {
+	let callback = function() {
 		if (category == "pet") {
 			// Pet with animations and emotions
 			item.sprite = new Sprite(item.image, 4, 2, (item.image.w-3)/4,(item.image.h-1)/2, 0,0, 1,1);
 		} else {
 			// Clothing / equipables
 			item.sprite = new Sprite(item.image, 1, 3, item.image.w,(item.image.h-2)/3, 0,0, 1,1);
+		
+			// Update default center to the center of the loaded image
+			if (item.defaultCenter) {
+				let [w, h] = [item.image.w/2, ((item.image.h-2)/3) /2];
+				item.center = [[w, h],[w, h],[w, h]];
+			}
 		}
 	};
-	item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, async);
+	item.image = new RenderImage(`assets/items/${category}/${itemId}.png`, callback);
 }
 
 // Load array with JSON data; filePath, callBack function called after file is finished loading
