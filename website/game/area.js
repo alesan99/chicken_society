@@ -89,49 +89,9 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 			OBJECTS["Trigger"][name].active = isActive;
 			OBJECTS["Trigger"][name].condition = trig.condition;
 				
-			// TODO: Put this code somewhere else (area.js?)
-			if (action == "minigame") {
-				// Start minigame
-				func = function() {
-					// Does this trigger cost something?
-					if (trig.cost) {
-						removeNuggets(trig.cost);
-					}
-
-					AudioSystem.fadeOutMusic(1);
-					world.areaMusicPosition = AudioSystem.getMusicPosition();
-					PLAYER_CONTROLLER.stop();
-					PLAYER.static = true; // Don't let player move
-					Transition.start("wipeLeft", "out", 0.8, null, () => {
-						OBJECTS["Trigger"][name].reset();
-						setState(MINIGAME, trig.minigameName); // Start minigame after transition
-						Transition.start("wipeRight", "in", 0.8, null, null);
-					});
-				};
-			} else if (action == "quest") {
-				// Progress quest
-				func = function() {
-					if (trig.questTaskAdd) {
-						QuestSystem.progress(trig.quest, trig.questTask, trig.questTaskAdd);
-					} else if (trig.questTaskSet) {
-						QuestSystem.setProgress(trig.quest, trig.questTask, trig.questTaskSet);
-					}
-				};
-			} else if (action == "dialogue") {
-				// Start dialogue
-				func = function() {
-					DialogueSystem.start(trig.dialogue);
-					OBJECTS["Trigger"][name].reset();
-				};
-			} else if (action == "warp") {
-				// Warp to another area
-				func = function() {
-					WORLD.warpToArea(trig.area, name, PLAYER);
-				};
-			} else if (action == "item") {
-				// Give item
-				addItem(trig.item);
-			}
+			func = function() {
+				return WorldEvent.event(action);
+			};
 
 			OBJECTS["Trigger"][name].action = func;
 				
@@ -147,7 +107,6 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				if (!data.sprites) { data.sprites = {}; }
 				data.sprites[name] = sprite;
 			}
-			//}
 		}
 	}
 	

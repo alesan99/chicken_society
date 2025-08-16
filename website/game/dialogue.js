@@ -497,36 +497,7 @@ const DialogueSystem = (function() {
 			let d = dialogueData;
 
 			// Do any actions defined for the end of the dialogue
-			// Start a quest
-			if (d.startQuest) {
-				QuestSystem.start(d.startQuest);
-			}
-
-			// Quest progress from talking
-			if (d.quest) {
-				if (d.questTaskAdd) {
-					QuestSystem.progress(d.quest, d.questTask, d.questTaskAdd);
-				} else if (d.questTaskSet) {
-					QuestSystem.setProgress(d.quest, d.questTask, d.questTaskSet);
-				}
-			}
-
-			// Warp
-			if (d.warp) {
-				WORLD.warpToArea(d.warp, d.fromWarp || "dialogue", PLAYER);
-			}
-
-			// Give item
-			if (d.giveItem) {
-				addItem(d.giveItem);
-			}
-
-			// Send a message to the server
-			if (d.sendServerMessage) {
-				let header = d.serverMessageHeader;
-				let message = serverMessage;
-				NETPLAY.sendMessageToServer(header, message);
-			}
+			WorldEvent.event(event);
 
 			// Go to next dialogue block, if defined
 			if (d.to) {
