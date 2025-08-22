@@ -1,90 +1,78 @@
+import DialogueSystem from "./dialogue.js";
+import AudioSystem from "./engine/audio.js";
+import QuestSystem from "./quests.js";
+import Transition from "./transition.js";
+import { checkCondition } from "./area.js";
+import { addItem, getItem, addNuggets, removeNuggets } from "./savedata.js";
+import {SAVEDATA, PROFILE, WORLD, NETPLAY, CURSOR} from "./main.js";
+import { setState } from "./state.js";
+import { PHYSICSWORLD, PLAYER, PLAYER_CONTROLLER, MINIGAME, OBJECTS, NPCS } from "./world.js";
+
 const WorldEvent = (function() {
 	const functions = {
-		event(name, ...args) {
-			if (name == "minigame") {
-				// Start minigame
-				func = function() {
-					// Does this trigger cost something?
-					if (trig.cost) {
-						removeNuggets(trig.cost);
-					}
-
-					AudioSystem.fadeOutMusic(1);
-					world.areaMusicPosition = AudioSystem.getMusicPosition();
-					PLAYER_CONTROLLER.stop();
-					PLAYER.static = true; // Don't let player move
-					Transition.start("wipeLeft", "out", 0.8, null, () => {
-						OBJECTS["Trigger"][name].reset();
-						setState(MINIGAME, trig.minigameName); // Start minigame after transition
-						Transition.start("wipeRight", "in", 0.8, null, null);
-					});
-				};
-			} else if (name == "quest") {
-				// Progress quest
-				func = function() {
-					if (trig.questTaskAdd) {
-						QuestSystem.progress(trig.quest, trig.questTask, trig.questTaskAdd);
-					} else if (trig.questTaskSet) {
-						QuestSystem.setProgress(trig.quest, trig.questTask, trig.questTaskSet);
-					}
-				};
-			} else if (name == "dialogue") {
-				// Start dialogue
-				func = function() {
-					DialogueSystem.start(trig.dialogue);
-					OBJECTS["Trigger"][name].reset();
-				};
-			} else if (name == "warp") {
-				// Warp to another area
-				func = function() {
-					WORLD.warpToArea(trig.area, name, PLAYER);
-				};
-			} else if (name == "item") {
-				// Give item
-				addItem(trig.item);
+		/**
+		 * Causes something to happen to the player or the world.
+		 * Used for triggers, dialogue events, quest rewards, etc.
+		 * @param {Object|Object[]} event - An object or list of objects describing the event.
+		 * @param {function} callback - (Optional) Function to be called
+		 */
+		event(event, callback, triggeredBy="event") {
+			// Check if event is an array of multiple events
+			if (Array.isArray(event)) {
+				for (let e in event) {
+					this.event(e, callback);
+				}
+				return;
 			}
 
-			if (rewardType == "nuggets") {
-				// Nuggets
-				addNuggets(quest.reward[rewardType]);
-			} else if (rewardType == "item") {
-				// Item
-				addItem(quest.reward[rewardType]);
-			} else if (rewardType == "quest") {
-				// Start new quest
-				let questName = quest.reward[rewardType];
-				this.start(questName);
-			}
-
-			// Start a quest
-			if (d.startQuest) {
-				QuestSystem.start(d.startQuest);
-			}
-
-			// Quest progress from talking
-			if (d.quest) {
-				if (d.questTaskAdd) {
-					QuestSystem.progress(d.quest, d.questTask, d.questTaskAdd);
-				} else if (d.questTaskSet) {
-					QuestSystem.setProgress(d.quest, d.questTask, d.questTaskSet);
+			// Check if event should trigger.
+			if (event.condition) {
+				if (!checkCondition(event.condition)) {
+					return false;
 				}
 			}
 
-			// Warp
-			if (d.warp) {
-				WORLD.warpToArea(d.warp, d.fromWarp || "dialogue", PLAYER);
-			}
+			const name = event.name;
 
-			// Give item
-			if (d.giveItem) {
-				addItem(d.giveItem);
-			}
+			if (name == "minigame") {
+				// Start minigame
+				// Does this trigger cost something?
+				if (event.cost) {
+					removeNuggets(event.cost);
+				}
 
-			// Send a message to the server
-			if (d.sendServerMessage) {
-				let header = d.serverMessageHeader;
-				let message = serverMessage;
-				NETPLAY.sendMessageToServer(header, message);
+				AudioSystem.fadeOutMusic(1);
+				WORLD.areaMusicPosition = AudioSystem.getMusicPosition();
+				PLAYER_CONTROLLER.stop();
+				PLAYER.static = true; // Don't let player move
+				Transition.start("wipeLeft", "out", 0.8, null, () => {
+					if (callback) callback(); // For reseting triggers, but doesn't really make sense for much else.
+					setState(MINIGAME, event.minigameName); // Start minigame after transition
+					Transition.start("wipeRight", "in", 0.8, null, null);
+				});
+			} else if (name == "quest") {
+				// Progress quest
+				if (event.questTaskAdd) {
+					QuestSystem.progress(event.quest, event.questTask, event.questTaskAdd);
+				} else if (event.questTaskSet) {
+					QuestSystem.setProgress(event.quest, event.questTask, event.questTaskSet);
+				}
+			} else if (name == "dialogue") {
+				// Start dialogue
+				DialogueSystem.start(event.dialogue);
+				if (callback) callback();  // For reseting triggers.
+			} else if (name == "warp") {
+				// Warp to another area
+				WORLD.warpToArea(event.area, event.fromWarp || triggeredBy, PLAYER);
+			} else if (name == "giveItem") {
+				// Give item
+				addItem(event.item);
+			} else if (name == "giveNuggets") {
+				// Nuggets
+				addNuggets(event.nuggets);
+			} else if (name == "startQuest") {
+				// Start new quest
+				QuestSystem.start(event.quest);
 			}
 		}
 	};

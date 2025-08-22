@@ -13,7 +13,7 @@ import QuestSystem from "./quests.js";
 import DialogueSystem from "./dialogue.js";
 import Transition from "./transition.js";
 import { PhysicsObject, Character, Player, NPC, Pet, Trigger, Wall, Warp, Furniture, Particle } from "./objects/objects.js";
-
+import { WorldEvent } from "./worldevent.js";
 
 // Load area data from .json
 function loadAreaFile(data, world, fromWarp, endFunc) {
@@ -90,7 +90,10 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 			OBJECTS["Trigger"][name].condition = trig.condition;
 				
 			func = function() {
-				return WorldEvent.event(action);
+				const callback = function() {
+					OBJECTS["Trigger"][name].reset();
+				};
+				return WorldEvent.event(action, callback);
 			};
 
 			OBJECTS["Trigger"][name].action = func;

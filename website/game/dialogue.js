@@ -13,6 +13,7 @@ import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js";
 import { canvasWidth, canvasHeight } from "./engine/canvas.js";
 import { ctx } from "./engine/canvas.js";
 import {getMousePos, checkMouseInside} from "./engine/input.js";
+import { WorldEvent } from "./worldevent.js";
 
 import * as pdfjsLib from "./lib/pdf.min.mjs";
 // set worker src
@@ -497,7 +498,16 @@ const DialogueSystem = (function() {
 			let d = dialogueData;
 
 			// Do any actions defined for the end of the dialogue
-			WorldEvent.event(event);
+			if (d.event) {
+				WorldEvent.event(d.event);
+			}
+
+			// Send a message to the server
+			if (d.sendServerMessage) {
+				let header = d.serverMessageHeader;
+				let message = serverMessage;
+				NETPLAY.sendMessageToServer(header, message);
+			}
 
 			// Go to next dialogue block, if defined
 			if (d.to) {
