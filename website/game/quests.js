@@ -282,17 +282,7 @@ const QuestSystem = (function() {
 				
 				// Give reward(s)
 				for (let rewardType in quest.reward) {
-					if (rewardType == "nuggets") {
-						// Nuggets
-						addNuggets(quest.reward[rewardType]);
-					} else if (rewardType == "item") {
-						// Item
-						addItem(quest.reward[rewardType]);
-					} else if (rewardType == "quest") {
-						// Start new quest
-						let questName = quest.reward[rewardType];
-						this.start(questName);
-					}
+					WorldEvent.event(reward);
 				}
 
 				// Mark as complete

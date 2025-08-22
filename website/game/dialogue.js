@@ -13,6 +13,7 @@ import {Button, TextField, ColorSlider, ScrollBar} from "./gui/gui.js";
 import { canvasWidth, canvasHeight } from "./engine/canvas.js";
 import { ctx } from "./engine/canvas.js";
 import {getMousePos, checkMouseInside} from "./engine/input.js";
+import { WorldEvent } from "./worldevent.js";
 
 import * as pdfjsLib from "./lib/pdf.min.mjs";
 // set worker src
@@ -497,28 +498,8 @@ const DialogueSystem = (function() {
 			let d = dialogueData;
 
 			// Do any actions defined for the end of the dialogue
-			// Start a quest
-			if (d.startQuest) {
-				QuestSystem.start(d.startQuest);
-			}
-
-			// Quest progress from talking
-			if (d.quest) {
-				if (d.questTaskAdd) {
-					QuestSystem.progress(d.quest, d.questTask, d.questTaskAdd);
-				} else if (d.questTaskSet) {
-					QuestSystem.setProgress(d.quest, d.questTask, d.questTaskSet);
-				}
-			}
-
-			// Warp
-			if (d.warp) {
-				WORLD.warpToArea(d.warp, d.fromWarp || "dialogue", PLAYER);
-			}
-
-			// Give item
-			if (d.giveItem) {
-				addItem(d.giveItem);
+			if (d.event) {
+				WorldEvent.event(d.event);
 			}
 
 			// Send a message to the server
