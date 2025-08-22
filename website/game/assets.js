@@ -76,6 +76,7 @@ function loadGameAssets() {
 	MUSIC.pldistrictsong = AudioSystem.newMusic("assets/music/pldistrictsong.mp3");
 	MUSIC.thefunnychicken = AudioSystem.newMusic("assets/music/thefunnychicken.mp3");
 	MUSIC.oldtownsong = AudioSystem.newMusic("assets/music/oldtownsong.mp3");
+	MUSIC.nonegglideansong = AudioSystem.newMusic("assets/music/Project_40.mp3");
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg");
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg");
