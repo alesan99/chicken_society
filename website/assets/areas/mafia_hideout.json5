@@ -1,7 +1,7 @@
 {
 	"name": "Mafia Hideout",
 	"mapLocation": false,
-	"music": "chictoriassecret", 
+	"music": "mafiahideoutsong", 
 
 	"walls": [
         [0,576, 1024,576, 1024,600, 0,600], // lower border
@@ -30,9 +30,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"speakeasyEntrance_1": {
-			"to": "mafia_hideout", // future: "speakeasy",
-			"fromWarp": "mafia_hideoutEntrance", // future: "speakeasyExit_1",
+		"peppinellosEntrance_2": {
+			"to": "peppinellos", //future: storage
+			"fromWarp": "peppinellosExit_1", //future: storageExit_2 
 			"facing": "down",
 			"x": 821,
 			"y": 96,

@@ -1,0 +1,71 @@
+{
+  name: "Peppinello's",
+  mapLocation: false,
+  music: "peppinellossong",
+
+  walls: [
+	// Bottom of screen
+	[0, 576, 1024, 576, 1024, 600, 0, 600],
+
+    //Left wall/table
+    [0,316, 85,249, 91,297, 0,408],
+    [110,195, 152,179, 148,228, 114, 239],
+    [12, 327, 144,380, 56,428, 0,440],
+
+    //back wall/counter/barrels
+    [152,184, 885,159,890,220, 144,230],
+    [358,224, 416,220, 367,304, 288,341],
+    [376,313, 726,310, 779,339, 297,348], //front counter
+    [720,220, 885,224, 941,301, 740,305],
+
+    //bottom right wall/table
+    [985,324, 1024,355, 1024,418, 978,370],
+    [1024,426, 1030,426, 1030,576, 1024,576],
+    [724,510, 991,517, 991,576, 724,576],//table
+    [828,474, 873,466, 873,502, 823,510]//chair
+
+  ],
+
+  warps: {
+    peppinellosExit_1: {  // right side (to storage)
+      to: "mafia_hideout", //future: storage
+      fromWarp: "peppinellosEntrance_2", //future: storageExit_1
+      facing: "left",
+      x: 976,
+      y: 322,
+      w: 30,
+      h: 30,
+      sound: "woosh",
+    },
+    peppinellosExit_2: {  // left side  (to roostery)
+      to: "oldtown", //future: roostery
+      fromWarp: "oldtownEntrance",
+      facing: "left",
+      x: 106,
+      y: 252,
+      w: 30,
+      h: 30,
+    },
+  },
+
+  sprites: {
+    leftTable: {
+      image: "peppinelloLeftTable.png",
+      w: 300,
+      h: 300,
+      x: 0,
+      y: 250,
+      worldy: 391,
+    },
+    rightTable: {
+      image: "peppinelloRightTable.png",
+      w: 350,
+      h: 300,
+      x: 674,
+      y: 376,
+      worldy: 550,
+    },
+  },
+
+
+}
