@@ -30,9 +30,9 @@
 			"h": 30,
 			"sound": "woosh"
 		},
-		"peppinellosEntrance_2": {
-			"to": "peppinellos", //future: storage
-			"fromWarp": "peppinellosExit_1", //future: storageExit_2 
+		"storageEntrance": {
+			"to": "storageroom", 
+			"fromWarp": "storageExit_2",
 			"facing": "down",
 			"x": 821,
 			"y": 96,

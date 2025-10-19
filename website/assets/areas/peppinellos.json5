@@ -15,10 +15,11 @@
     //back wall/counter/barrels
     [152,184, 885,159,890,220, 144,230],
     [358,224, 416,220, 367,304, 288,341],
-    [376,313, 726,310, 779,339, 297,348], //front counter
+    [376,313, 783,310, 779,339, 297,348], //front counter
     [720,220, 885,224, 941,301, 740,305],
 
     //bottom right wall/table
+    [-10,437, 0,437, 0,576, -10,576],
     [985,324, 1024,355, 1024,418, 978,370],
     [1024,426, 1030,426, 1030,576, 1024,576],
     [724,510, 991,517, 991,576, 724,576],//table
@@ -27,9 +28,9 @@
   ],
 
   warps: {
-    peppinellosExit_1: {  // right side (to storage)
-      to: "mafia_hideout", //future: storage
-      fromWarp: "peppinellosEntrance_2", //future: storageExit_1
+    peppinellosExit_1: {  
+      to: "storageroom", 
+      fromWarp: "storageExit_1",
       facing: "left",
       x: 976,
       y: 322,
@@ -65,7 +66,50 @@
       y: 376,
       worldy: 550,
     },
+    leftCounter: {
+      image: "peppinellosLeftCounter.png",
+      w: 150,
+      h: 210,
+      x: 285,
+      y: 154,
+      worldy: 350,
+    },
+    frontCounter: {
+      image: "peppinellosFrontCounter.png",
+      w: 550,
+      h: 210,
+      x: 283,
+      y: 248,
+      worldy: 350,
+    }
   },
 
-
+  "NPCs": {
+		"peppinello": {
+			"profile": {
+				"name": "Peppinello",
+				"color": "#49ab4eff",
+				"head": false,
+				"face": false,
+				"body": "silver_chains",
+			},
+			"x": 540,
+			"y": 280,
+			"facing": "down",
+			"roamRadius": 0,
+			"interactRange": 70,
+			"speechBubble": [
+				"What do you want?",
+        "Order or move along."
+			],
+			"shop": {
+				"name": "Peppinello's Bar",
+				"items": {
+					"item": {
+						"beer": true,
+					},
+				}
+			},
+		}
+  }
 }

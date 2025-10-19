@@ -1,0 +1,72 @@
+{
+	"name": "Storage Room",
+	"mapLocation": false,
+	"music": "seeddispensary",
+
+	"walls": [
+        [174,299, 228,290, 226,336, 175,332],
+        [237,253, 433,248, 424,322, 252,311],
+        [0,555, 152,424, 223,423, 120,576],
+        [123,400, 170,365, 167,400, 123,440],
+
+        [546,283, 605,287, 607,309, 560,309],
+        [608,314, 702,316, 721,343, 631,351],
+        [726,350, 818,250, 899,449, 802,451],
+        [910,421, 973,426, 973,461, 904,459],
+        [970,512, 1024,516, 1034,576, 1024,576],
+
+        [434,243, 546,253, 541,287, 434,287],
+		[0,576, 1024,576, 1024,600, 0,600]
+	],
+
+	"warps": {
+        "storageExit_1": {
+			"to": "peppinellos",
+			"fromWarp": "peppinellosExit_1",
+			"facing": "right",
+			"x": 183,
+			"y": 341,
+			"w": 30,
+			"h": 50,
+			"sound": "woosh"
+		},
+		"storageExit_2": {
+			"to": "mafia_hideout",
+			"fromWarp": "storageEntrance",
+			"facing": "left",
+			"x": 972,
+			"y": 484,
+			"w": 30,
+			"h": 50,
+			"sound": "woosh"
+		}
+	},
+
+    "sprites": {
+        crate: {
+            image: "storageroomcrate.png",
+            w: 350,
+            h: 300,
+            x: 99,
+            y: 356,
+            worldy: 428,
+        },
+    	sleepanimation: {
+			image: "zZ.png",
+			framesx: 2,
+			framesy: 1,
+			anim: {
+				frames: [0, 1],
+				delay: 0.8
+			},
+			ox: 0,
+            oy: 0,
+            w: 30,
+			h: 40,
+
+			x: 310,
+			y: 150,
+			worldy: 356
+		}
+    }
+}
