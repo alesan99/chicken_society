@@ -242,7 +242,9 @@ const QuestSystem = (function() {
 
 				// Show notification for completing this step of the quest
 				if (value >= quest.progressFinish[progressTask] && value != oldProgress) {
-					Notify.new(`[✔] ${quest.progressDescription[progressTask]}`, 5, [80,80,80]);
+					if (!quest.hidden) {
+						Notify.new(`[✔] ${quest.progressDescription[progressTask]}`, 5, [80,80,80]);
+					}
 				}
 
 				// Save progress
@@ -278,7 +280,9 @@ const QuestSystem = (function() {
 			let quest = this.getQuest(questName);
 			if (quest) {
 				// Notify
-				Notify.new("You completed the quest: " + quest.name);
+				if (!quest.hidden) {
+					Notify.new("You completed the quest: " + quest.name);
+				}
 				
 				// Give reward(s)
 				for (let rewardType in quest.reward) {

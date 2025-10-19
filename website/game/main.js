@@ -37,18 +37,18 @@ function gameLoad() {
 		// Start netplay
 		NETPLAY = new Netplay();
 
-		// Start world game state
-		WORLD = new World("hub");
-		setState(WORLD);
-
-		Transition.start("fade", "in", 0.2);
-
 		// Load savedata if offline
 		if (NETPLAY.id === "OFFLINE") {
 			loadSaveData((data) => {
 				applySaveData(data);
 			});
 		}
+
+		// Start world game state
+		WORLD = new World("hub");
+		setState(WORLD);
+
+		Transition.start("fade", "in", 0.2);
 
 		// Handle special URLs
 		handleUrl();

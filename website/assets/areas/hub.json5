@@ -120,6 +120,34 @@
 	},
 
 	"triggers": {
+		"tutorial": {
+			"x": 512,
+			"y": 360,
+			"shape": [-20,-20, 20,-20, 20,20, -20,20],
+			"condition": {
+				"quest": "world",
+				"questTask": 0,
+				"questTaskValue": 0
+			},
+			"walkOver": true,
+			"activateOnce": true,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"Hello! Welcome to Chicken Society! Click or press the space key to continue.",
+						"To move, click anywhere on screen or use the arrow keys. Interact with NPCs and stuff by clicking on them too!",
+						"Customize your chicken by clicking the shirt button below.",
+						"Finally, click on the quest button (The journal) to find out what to do next. Have fun!"
+					],
+					"speaker": "Tutorial Guide",
+					"quest": "world",
+					"questTask": 0,
+					"questTaskSet": 1,
+				}
+			]
+		},
 		"egg1": {
 			"x": 76,
 			"y": 479,
