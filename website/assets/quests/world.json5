@@ -7,14 +7,17 @@
 	"hidden": true,
 
 	"progressDescription": [
-		"Placeholder"
+		"Tutorial",
+		"Placeholder",
 	],
 
 	"progressStart": [
-		0
+		0,
+		0,
 	],
 
 	"progressFinish": [
-		1
+		1,
+		1,
 	]
 }

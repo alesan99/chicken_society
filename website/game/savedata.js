@@ -175,7 +175,6 @@ function loadSaveData(callback) {
 	// Load data from browser storage
 	// This is for guests who have not made an account
 	const useSaveData = function(data) {
-		console.log(data);
 		callback(data);
 	};
 
@@ -214,8 +213,7 @@ function applySaveData(data) {
 	replaceObjectValues(PROFILE, data.profile);
 	replaceObjectValues(SAVEDATA, data);
 	SAVEDATA.profile = PROFILE;
-	console.log(PROFILE, SAVEDATA.profile);
-	PLAYER.updateProfile(PROFILE, "sendToServer");
+	PLAYER?.updateProfile(PROFILE, "sendToServer");
 	applySettings();
 	QuestSystem.initialize(); // Reload quests
 }
