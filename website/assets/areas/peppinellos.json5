@@ -39,9 +39,9 @@
       sound: "woosh",
     },
     peppinellosExit_2: {  // left side  (to roostery)
-      to: "oldtown", //future: roostery
-      fromWarp: "oldtownEntrance",
-      facing: "left",
+      to: "roostery",
+      fromWarp: "roosteryExit_2",
+      facing: "right",
       x: 106,
       y: 252,
       w: 30,

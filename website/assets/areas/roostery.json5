@@ -1,0 +1,106 @@
+{
+  name: "Roostery",
+  mapLocation: false,
+  music: "peppinellossong",
+
+  walls: [
+	// Bottom of screen
+	[0, 576, 1024, 576, 1024, 600, 0, 600],
+
+    //Left wall/table
+    [0,350, 158,158, 158,212, 0,446],
+
+    //back wall/counters
+    [170,172, 492,172,492,212, 170,212],
+    [572,172, 875,172,875,212, 572,212],
+    [583,212, 645,212, 698,385, 663,383],
+    [727,337,958,337, 980,361, 757,361],
+  
+
+    //bottom right walls
+    [-10,437, 0,437, 0,576, -10,576],
+    [1024,426, 1030,426, 1030,576, 1024,576],
+    [867,164, 1024,370, 1024,440, 868,206],
+
+  ],
+
+  warps: {
+    roosteryExit_1: {  
+      to: "oldtown", 
+      fromWarp: "roosteryEntrance",
+      facing: "down",
+      x: 523,
+      y: 181,
+      w: 30,
+      h: 30,
+      sound: "door",
+    },
+    roosteryExit_2: {  // left side  (to peppinellos)
+      to: "peppinellos", 
+      fromWarp: "peppinellosExit_2",
+      facing: "right",
+      x: 95,
+      y: 272,
+      w: 30,
+      h: 30,
+      sound: "woosh",
+    },
+  },
+
+  sprites: {
+    bookshelf: {
+      image: "roostery_shelf.png",
+      w: 117,
+      h: 238,
+      x: 60,
+      y: 122,
+      worldy: 283,
+    },
+    frontCounter: {
+      image: "roostery_front_counter.png",
+      w: 130,
+      h: 250,
+      x: 582,
+      y: 142,
+      worldy: 10,
+    },
+    rightCounter: {
+      image: "roostery_right_counter.png",
+      w: 215,
+      h: 170,
+      x: 771,
+      y: 222,
+      worldy: 340,
+    }
+  },
+
+  "NPCs": {
+		"lidia": {
+            profile: {
+                "name": "Crowbar Lidia",
+                "color": "#a3ffb4",
+                "head": false,
+                "face": false,
+                "body": "barista_accessories",
+            },
+            x: 800,
+            y: 265,
+            facing: "down",
+            roamRadius: 5,
+            interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
+            speechBubble: [
+                "Welcome to the Roostery! What can I getchya?",
+                "To order, solve this initial value problem: 4y''-y=0, y(-2)=1, y'(-2)=-1.",
+                "\"Nihil est sine ratione\" - Gottfried Leibniz",
+            ],
+			"shop": {
+				"name": "The Roostery",
+				"items": {
+					"item": {
+						"black_coffee": true,
+					},
+				}
+			},
+    }
+  }
+}

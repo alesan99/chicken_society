@@ -79,6 +79,8 @@ function loadGameAssets() {
 	MUSIC.nonegglideansong = AudioSystem.newMusic("assets/music/Project_40.mp3");
 	MUSIC.peppinellossong = AudioSystem.newMusic("assets/music/Project_67.mp3");
 	MUSIC.mafiahideoutsong = AudioSystem.newMusic("assets/music/mafia_hideout.mp3");
+	MUSIC.roostery = AudioSystem.newMusic("assets/music/the_roostery.mp3");
+
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg");
 	SFX.woosh = AudioSystem.newSound("assets/sfx/woosh.ogg");

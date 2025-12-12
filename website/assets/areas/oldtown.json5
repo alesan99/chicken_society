@@ -32,6 +32,17 @@
       "w": 240,
       "h": 10,
 			"sound": "woosh"
+    },
+
+    "roosteryEntrance": {
+      "to": "roostery",
+      "fromWarp": "roosteryExit_1",
+      "facing": "down",
+      "x": 653,
+      "y": 243,
+      "w": 50,
+      "h": 60,
+			"sound": "door"
     }
   },
 
