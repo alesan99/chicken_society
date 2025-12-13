@@ -1,7 +1,7 @@
 {
   name: "Roostery",
   mapLocation: false,
-  music: "peppinellossong",
+  music: "roostery",
 
   walls: [
 	// Bottom of screen
