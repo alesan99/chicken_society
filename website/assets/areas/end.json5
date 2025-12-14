@@ -18,11 +18,29 @@
 		"exit": {
 			"to": "hub",
 			"fromWarp": "end",
-			"facing": "rup",
-			"x": 0,
-			"y": 250,
-			"w": 50,
-			"h": 600
+			"facing": "down",
+			"x": 250,
+			"y": 125,
+			"w": 80,
+			"h": 50
+		},
+		"toCoop": {
+			"to": "coop",
+			"fromWarp": "end",
+			"facing": "down",
+			"x": 740,
+			"y": 115,
+			"w": 80,
+			"h": 50
+		},
+		"toWTF": {
+			"to": "icosahedralhoneycomb",
+			"fromWarp": "end",
+			"facing": "down",
+			"x": 155,
+			"y": 576,
+			"w": 20,
+			"h": 50
 		},
 	},
 }

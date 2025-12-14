@@ -134,8 +134,8 @@
 	"triggers": {
 		// Snake History Book
 		"snake_book": {
-			"x": 126,
-			"y": 268,
+			"x": 195,
+			"y": 195,
 			"shape": [0, 0, 50, 0, 50, 50, 0, 50],
 			"clickable": true,
 			"action": "dialogue",

@@ -26,7 +26,7 @@
   },
 
     NPCs: {
-    cashier: {
+    lidia: {
       profile: {
         "name": "Crowbar Lidia",
         "color": "#a3ffb4",
@@ -35,15 +35,64 @@
         "body": "barista_accessories",
       },
       x: 804,
-      y: 375,
+      y: 475,
       facing: "down",
       roamRadius: 5,
       interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
       speechBubble: [
-        "\"Nihil est sine ratione\" - Gottfried Leibniz",
-        "Solve this initial value problem: 4y'' - y = 0, y(-2) = 1, y'(-2) = -1",
-        "If n≥0, and x and y are numbers, then (x+y)^n = n∑k=0 (n;k) x^(n-k) ⋅ y^k",
+        "I love math.",
       ]
+    },
+    beefcake: {
+      profile: {
+				"name": "Beefcake",
+				"color": "#fff0ff",
+				"head": false,
+				"face": false,
+				"body": "beefcake_accessories"
+      },
+      x: 850,
+      y: 200,
+      facing: "down",
+      roamRadius: 5,
+      interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
+      speechBubble: [
+        "Yeah I'm a horsegirl, what you gonna do about it?",      
+        ]
+    },
+    bud: {
+      profile: {
+				"name": "Bud",
+				"color": "#c8d2ff",
+				"head": false,
+				"face": "visors",
+				"body": "bud_accessories"
+      },
+      x: 220,
+      y: 200,
+      facing: "down",
+      roamRadius: 5,
+      interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
+      speechBubble: [
+        "Ermmmm",      
+        ]
+    },
+    addy: {
+      profile: {
+				"name": "Addy Earl",
+				"color": "#285032",
+				"head": "hoodie",
+				"face": false,
+				"body": false
+      },
+      x: 250,
+      y: 475,
+      facing: "down",
+      roamRadius: 5,
+      interactRange: [-50, -30, 160, -30, 160, 50, -50, 50],
+      speechBubble: [
+        "I swear I'm not an alcoholic...",      
+        ]
     }
   }
 }
