@@ -147,7 +147,7 @@
 				"name": "Brook",
 				"color": "#aabb60",
 				"head": false,
-				"face": false,
+				"face": "chic_glasses",
 				"body": false
 			},
 			"x": 815,
@@ -155,11 +155,14 @@
 			"facing": "down",
 			"roamRadius": 1,
 			"interactRange": 20,
-			"speechBubble": ["how curious"],
+			"speechBubble": [
+				"Do you have what it takes to be an Acolyte of Dah Lad-Nah?",
+				"Have you heard the good word of our lord and savior, Dah Lad-Nah?"
+			],
 			"dialogue": [
 				{
 					"id": "book_start",
-					"text": ["look at this book big dawg"],
+					"text": ["Beholde! The righteous words of Dah Lad-Nah! See it for yourself--here!"],
 					"to": "book"
 				},
 				{

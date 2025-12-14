@@ -104,8 +104,8 @@
         },
         // Default dialogue
         {
-          text: ["-"],
-          speaker: "PLACEHOLDER"
+          text: ["Welcome to Pet'stupid! We're out of worms, bees, and ladybugs today. Sorry!"],
+          speaker: "Whisker Willikers"
         },
       ],
     },

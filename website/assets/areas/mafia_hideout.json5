@@ -109,7 +109,7 @@
 						"Sir, an explosion has hit the second factory.",
 					],
 					"condition": {"isResponse": true},
-					"speaker": false,
+					"speaker": "Goon",
 					"to": "find_snake_explosion_4",
 				},
 				{
@@ -131,7 +131,7 @@
 				{
 					"text": [
 						"Good job on the pickups.",
-						"What's that? Are you saying it was Burghert's snake that blew up our Chikpea factory?",
+						"What's that? Are you saying it was Burghert's snake that blew up our Chickpea factory?",
 						"And you think you can lure him with the dynamite?",
 						"I think this could work. They've probably been staking out our factories, if you place it at the factory along with a trap it would be the perfect way to catch him.",
 						"It should be safe, the bomb was neutralized by one of the goons.",
@@ -150,7 +150,7 @@
 				{
 					"text": [
 						"Still haven't caught the snake?",
-						"This plan of yours better work. We cannot jeopardize our last remaining chikpea factory."
+						"This plan of yours better work. We cannot jeopardize our last remaining chickpea factory."
 					],
 					"condition": {
 						"quest": "find_snake",
@@ -166,7 +166,7 @@
 						"I'm Da Boss, put some respect on my name.",
 						"Big Cluck told me about your work so far. You're what, a level 2 goon? You're not a level 100 boss like myself, but I can raise you up.",
 						"Though you're going to have to do next level work.",
-						// This should be about distributing chikpeas somehow
+						// This should be about distributing chickpeas somehow
 						"We have some dead drops I need you to pick up around the city. They're shiny metal cans.",
 						"We cannot risk any leaks, so you'll have to find them yourself.",
 						"Put them in the barrel we have here once you've collected them all",
@@ -206,7 +206,7 @@
 						"There's a photo, its of Burghert with a purple snake around his neck.",
 						"It looks like Burghert wasn't the name of the snake after all.",
 						"The document details how Burghert was aiding the mafia with the shipment of nuggets overseas.",
-						"Apparently, the Chicken Mafia had worked out a deal with the Fox Mafia from the neighboring continent top stop all conflict in exchange for nuggets.",
+						"Apparently, the Chicken Mafia had worked out a deal with the Fox Mafia from the neighboring continent to stop all conflict in exchange for nuggets.",
 						"Burghert was caught smuggling more nuggets than he was supposed to, causing some tension.",
 						"It all culminated in Burghert attempting to blow up the mafia hideout. But he was caught before he could detonate the bomb.",
 						"Burghert escaped and has been in hiding ever since, but the mafia got ahold of the bomb and neutralized it.",
