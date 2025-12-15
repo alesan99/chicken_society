@@ -166,8 +166,10 @@
 		// South Factory layer
 		"factoryLayer": {
 			"image": "crossroads-overlay.png",
-			"framesx": 1,
+			"framesx": 2,
 			"framesy": 1,
+			"ox": 0,
+			"oy": 0,
 			"w": 275,
 			"h": 400,
 			"x": 0,
@@ -304,5 +306,38 @@
 				"worldy": 450
 			}
 		},
+	"second_explosion": {
+			"x": 0,
+			"y": 0,
+			"shape": [0,0, 275,0, 275,400, 0,400],
+			"clickable": false,
+			"icon": false,
+
+			"action": "dialogue",
+			"dialogue": [
+				{
+					"text": [
+						"(It seems a second explosion hit the factories...)",
+					],
+				}
+			],
+
+			"condition": {
+				"quest": "kill_burghert",
+			},
+
+			"sprite": {
+				"image": "crossroads-overlay.png",
+				"framesx": 2,
+				"framesy": 1,
+				"ox": 275,
+				"oy": 0,
+				"w": 275,
+				"h": 400,
+				"x": 0,
+				"y": 0,
+				"worldy": 400
+			}
+		}
 	}
 }

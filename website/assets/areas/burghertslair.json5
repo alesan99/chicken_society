@@ -51,8 +51,6 @@
                         "It's all about controlling the masses. Those savages.", 
                         "Well you know what? All those chickens I killed? I did it because I liked it! And I'd do it all again!", 
                     ],
-
-					],
 					"condition": {
 						"quest": "kill_burghert",
 						"questActive": true,
