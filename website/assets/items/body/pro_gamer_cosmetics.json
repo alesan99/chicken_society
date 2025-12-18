@@ -1,0 +1,11 @@
+{
+    "name": "Gamer Fit",
+    "description": "For when you're ready to lock in and game.",
+    "cost": 100,
+
+    "center": [
+        [61,86],
+        [87,82],
+        [63,82]
+    ]
+}

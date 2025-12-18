@@ -50,10 +50,10 @@
     "eggery": {
       "profile": {
         "name": "Eggery",
-        "color": "#ff5252",
+        "color": "#bbdef9ff",
         "head": false,
         "face": false,
-        "body": false
+        "body": "eggery_cosmetics"
       },
       "x": 815,
       "y": 469,

@@ -1,0 +1,11 @@
+{
+    "name": "Eggery's Outfit",
+    "description": "For chickens with style (and amnesia...)",
+    "cost": 100,
+
+    "center": [
+        [61,89],
+        [85,82],
+        [63,82]
+    ]
+}

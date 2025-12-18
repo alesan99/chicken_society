@@ -46,6 +46,8 @@ function loadGameAssets() {
 	ANIM.tbag = [[0,3,0,3,0,3,0,3,0,3], 0.15];
 	IMG.burghert = new RenderImage("assets/burghert.png");
 	IMG.burghert.makeColorable();
+	IMG.griswold = new RenderImage("assets/griswold.png");
+	IMG.griswold.makeColorable();
 
 	IMG.shadow = new RenderImage("assets/shadow.png");
 	IMG.moveCursor = new RenderImage("assets/move_cursor.png");
@@ -80,6 +82,7 @@ function loadGameAssets() {
 	MUSIC.peppinellossong = AudioSystem.newMusic("assets/music/Project_67.mp3");
 	MUSIC.mafiahideoutsong = AudioSystem.newMusic("assets/music/mafia_hideout.mp3");
 	MUSIC.roostery = AudioSystem.newMusic("assets/music/the_roostery.mp3");
+	MUSIC.burghertstheme = AudioSystem.newMusic("assets/music/burghertstheme.mp3");
 
 
 	SFX.door = AudioSystem.newSound("assets/sfx/door.ogg");

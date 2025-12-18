@@ -1,7 +1,7 @@
 {
 	"name": "Burghert's Lair",
 	"mapLocation": false,
-	"music": false,
+	"music": "burghertstheme",
 
 	"walls": [
 		[0,259, 279,259, 274,292, 0,566],
@@ -30,6 +30,7 @@
 			"x": 513,
 			"y": 326,
 			"facing": "down",
+			"roamRadius": 10,			
 			"speechBubble": ["Well well well..."],
 			"dialogue": [
 				{
@@ -80,6 +81,21 @@
 					],
 				},
 			]
+		},
+				"griswold": {
+			"profile": {
+				"name": "Griswold",
+				"color": "#FFFFFF",
+				"head": false,
+				"face": false,
+				"body": false
+			},
+			"image": "griswold",
+			"x": 192,
+			"y": 416,
+			"facing": "down",
+			"roamRadius": 10,			
+			"speechBubble": ["Sssss! SssSSssssSSss!"]	
 		}
 	},
 

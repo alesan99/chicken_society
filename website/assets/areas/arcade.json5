@@ -59,10 +59,10 @@
 		"expert": {
 			"profile": {
 				"name": "Pro Gamer",
-				"color": "#282828",
+				"color": "#4e4e4eff",
 				"head": false,
 				"face": false,
-				"body": false
+				"body": "pro_gamer_cosmetics"
 			},
 			"x": 820,
 			"y": 500,

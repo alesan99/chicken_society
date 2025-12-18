@@ -1,0 +1,11 @@
+{
+    "name": "Bartender Outfit",
+    "description": "For chickens who like to mix things up!",
+    "cost": 100,
+
+    "center": [
+        [61,89],
+        [85,82],
+        [63,82]
+    ]
+}
