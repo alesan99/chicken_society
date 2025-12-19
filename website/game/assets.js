@@ -90,7 +90,11 @@ function loadGameAssets() {
 	SFX.gun = AudioSystem.newSound("assets/sfx/gun.ogg");
 	SFX.cluck = [];
 	for (let i=1; i<=6; i++) {
-		SFX.cluck.push(AudioSystem.newSound(`assets/sfx/chickenSoc_cluck_${i}.ogg`));
+		SFX.cluck.push(AudioSystem.newSound(`assets/sfx/chicken/cluck_${i}.ogg`));
+	}
+	SFX.foxnoise = [];
+	for (let i=1; i<=6; i++) {
+		SFX.foxnoise.push(AudioSystem.newSound(`assets/sfx/fox/foxnoise_${i}.ogg`));
 	}
 
 	// CHAT MENU & HUD

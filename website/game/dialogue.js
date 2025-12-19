@@ -227,7 +227,11 @@ const DialogueSystem = (function() {
 						// Play dialog sound
 						if (speakerNPC) {
 							if (dialogueProgress > oldDialogueProgress && dialogueProgress%8 == 1) {
-								AudioSystem.playSound(SFX.cluck[Math.random()*SFX.cluck.length|0]);
+								if (speaker === "Burghert") {
+									AudioSystem.playSound(SFX.foxnoise[Math.random()*SFX.foxnoise.length|0]);
+								} else {
+									AudioSystem.playSound(SFX.cluck[Math.random()*SFX.cluck.length|0]);
+								}
 							}
 						}
 					} else {
