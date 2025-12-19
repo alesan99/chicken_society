@@ -206,6 +206,7 @@ export default class Player {
 		let char = this.obj;
 		// Stop mouse movement
 		this.target = false;
+		this.mouseHold = false;
 		char.move(0, 0);
 		// Stop keyboard movement
 		this.arrowKeys.left = false;

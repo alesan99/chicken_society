@@ -496,7 +496,7 @@ const DialogueSystem = (function() {
 		},
 
 		finish() {
-			open = false;
+			this.close();
 
 			let d = dialogueData;
 
@@ -536,6 +536,10 @@ const DialogueSystem = (function() {
 			if (d.to) {
 				this.goToDialogueBlock(d.to);
 			}
+		},
+
+		close() {
+			open = false;
 		},
 
 		// Show respnonse buttons
