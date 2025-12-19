@@ -640,6 +640,7 @@ if (typeof io !== "undefined") { // Check if communication module was loaded (it
 				const savedata = data.savedata;
 				if (savedata) {
 					applySaveData(savedata);
+					WORLD.loadArea("hub", "initial");
 				}
 				const admin = data.admin;
 				if (admin) {
