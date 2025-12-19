@@ -4,6 +4,18 @@ const { createDatabase } = require("./create.js");
 const bcrypt = require("bcrypt");
 const saltRounds = 5;
 
+// Helper function to get MySQL config, supporting both standard and Railway naming conventions
+function getMySQLConfig() {
+	const port = process.env.MYSQLPORT || process.env.MYSQL_PORT || "3306";
+	return {
+		host: process.env.MYSQLHOST || process.env.MYSQL_HOST,
+		port: parseInt(port, 10),
+		user: process.env.MYSQLUSER || process.env.MYSQL_USER,
+		password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD,
+		database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE
+	};
+}
+
 class DB {
 	initialize() {
 	}
@@ -20,14 +32,15 @@ class DB {
 	}
 
 	createDatabase() {
+		const config = getMySQLConfig();
 		const connection = mysql.createConnection({
-			host: process.env.MYSQL_HOST,
-			port: process.env.MYSQL_PORT,
-			user: process.env.MYSQL_USER,
-			password: process.env.MYSQL_PASSWORD,
+			host: config.host,
+			port: config.port,
+			user: config.user,
+			password: config.password,
 		});
 
-		const dbName = process.env.MYSQL_DATABASE;
+		const dbName = config.database;
 		return createDatabase(connection, dbName).then(() => {
 			connection.end();
 		});
@@ -50,16 +63,18 @@ class DB {
 		// 	console.log("Connected to the database.");
 		// });
 
+		const config = getMySQLConfig();
 		this.pool = mysql.createPool({
-			host: process.env.MYSQL_HOST,
-			port: process.env.MYSQL_PORT,
-			user: process.env.MYSQL_USER,
-			password: process.env.MYSQL_PASSWORD,
-			database: process.env.MYSQL_DATABASE,
+			host: config.host,
+			port: config.port,
+			user: config.user,
+			password: config.password,
+			database: config.database,
 			waitForConnections: true,
 			connectionLimit: 10,
 			queueLimit: 0
 		});
+		console.log("Database connection pool created.");
 	}
 
 	createUser(session, username, password, email) {
