@@ -87,10 +87,12 @@ const { Database } = require("./server/db/db.js");
 Database.load();
 
 // Start server on port
-const localIPAddress = "localhost"; // ipv4 //"10.104.58.91" // IPv4 or localhost
-const port = 3000;
-server.listen(port, localIPAddress, () => {
-	console.log(`Server is running on http://${localIPAddress}:${port}`);
+// Use Railway's PORT or default to 3000 for local development
+const port = parseInt(process.env.PORT || "3000", 10);
+// Listen on 0.0.0.0 to accept connections from all interfaces (required for Railway)
+const host = process.env.HOST || "0.0.0.0";
+server.listen(port, host, () => {
+	console.log(`Server is running on http://${host}:${port}`);
 });
 
 // Start game loop
