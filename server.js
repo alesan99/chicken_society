@@ -29,7 +29,8 @@ const sessionData = {
 	username: null,
 	cookie: {
 		httpOnly: true,
-		sameSite: "lax"
+		sameSite: "lax",
+		maxAge: 7*24*60*60*1000 // Default 7 days for session persistence
 	}
 	// TODO: use a session store for scalability
 };
