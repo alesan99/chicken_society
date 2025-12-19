@@ -74,6 +74,34 @@
     }
   },
 
+  "triggers": {
+    "furnitureCatalog": {
+      "x": 445,
+      "y": 122,
+      "shape": [
+        -40, -40,
+        40, -40,
+        40, 40,
+        -40, 40,
+      ],
+      "clickable": true,
+      "icon": true,
+      "action": "shop",
+      "shop": {
+        "name": "Furniture Catalog",
+        "items": {
+          "furniture": {
+            "rug": true,
+            "table": true,
+            "frame": true,
+            "lamp": true,
+            "room_blue": true,
+          },
+        },
+      }
+    }
+  },
+
   "NPCs": {
 		"lidia": {
             profile: {
