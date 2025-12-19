@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Credits - Chicken Society</title>
+	<link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<style>
+		.credits-container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 2rem;
+		}
+		.credits-container h1 {
+			color: #ec9027;
+			font-size: 2.5rem;
+			margin-bottom: 0.5rem;
+			text-align: center;
+		}
+		.credits-container h2 {
+			color: #806649;
+			font-size: 1.8rem;
+			margin-top: 2.5rem;
+			margin-bottom: 1rem;
+			border-bottom: 2px solid #e0c5ac;
+			padding-bottom: 0.5rem;
+		}
+		.credits-section {
+			margin-bottom: 2rem;
+		}
+		.credits-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		.credits-list li {
+			padding: 0.75rem 0;
+			font-size: 1.1rem;
+			color: #595959;
+			border-bottom: 1px solid #f0e6d8;
+		}
+		.credits-list li:last-child {
+			border-bottom: none;
+		}
+		.credits-list li strong {
+			color: #806649;
+			font-weight: 600;
+		}
+		.credits-list ul {
+			list-style: disc;
+			margin-left: 2rem;
+			margin-top: 0.5rem;
+			margin-bottom: 0.5rem;
+		}
+		.credits-list ul li {
+			padding: 0.25rem 0;
+			font-size: 0.95rem;
+			border-bottom: none;
+		}
+		.credits-description {
+			color: #666;
+			font-size: 0.95rem;
+			margin-top: 0.25rem;
+			font-style: italic;
+		}
+		.credits-intro {
+			text-align: center;
+			color: #595959;
+			font-size: 1.1rem;
+			margin-bottom: 2rem;
+			line-height: 1.6;
+		}
+		.credits-footer {
+			margin-top: 3rem;
+			padding-top: 2rem;
+			border-top: 2px solid #e0c5ac;
+			text-align: center;
+			color: #806649;
+			font-size: 0.95rem;
+		}
+		.credits-footer a {
+			color: #806649;
+		}
+	</style>
+</head>
+
+<!-- Navigation Bar -->
+<nav>
+	<ul id="navigation-bar-list">
+		<!-- Chicken Society logo -->
+		<li id="home-link">
+			<div id="home">
+				<a href="./index.html"><img src="./assets/logo.png" id="logo"></a>
+			</div>
+		</li>
+		<!-- Sign In and Register dropdowns -->
+		<div id="dropdowns">
+			<li class="dropdown">
+				<button class="dropdown-button">Sign In</button>
+				<div class="dropdown-content">
+					<div class="loginContainer">
+						<form id="loginForm">
+							<input id="username-field" class="login-stuff" type="text" placeholder="Username"
+								name="username" maxlength="16" autocomplete="off" required />
+							<input id="password-field" class="login-stuff" type="password" placeholder="Password"
+								name="password" maxlength="16" autocomplete="off" required />
+							<label>
+								<input type="checkbox" id="remember-login" name="remember-login"> Remember Me
+							</label>
+							<button id="login-button" class="login-stuff" type="button">Login</button>
+						</form>
+					</div>
+				</div>
+			</li>
+			<li class="dropdown">
+				<button class="dropdown-button">Register</button>
+				<div class="dropdown-content">
+					<div class="loginContainer">
+						<form id="registerForm">
+							<input id="register-username-field" class="register-stuff" type="text"
+								placeholder="Username" name="registerUsername" maxlength="16" autocomplete="off"
+								required />
+							<input id="register-password-field" class="register-stuff" type="password"
+								placeholder="Password" name="registerPassword" maxlength="16" autocomplete="off"
+								required />
+							<input id="register-email-field" class="register-stuff" type="email" placeholder="Email"
+								name="registerEmail" maxlength="32" autocomplete="off" required />
+							<button id="register-button" class="register-stuff" type="button">Register</button>
+						</form>
+					</div>
+				</div>
+			</li>
+			<li class="dropdown" id="user-dropdown" style="display:none;">
+				<button class="dropdown-button" id="user-dropdown-button">[username]</button>
+				<div class="dropdown-content">
+					<div class="loginContainer">
+						<button id="logout-button" type="button">Sign Out</button>
+					</div>
+				</div>
+			</li>
+		</div>
+	</ul>
+</nav>
+
+<body>
+	<div class="page-container">
+		<div class="content-container">
+			<div class="credits-container">
+				<h1>Credits</h1>
+				<p class="credits-intro">
+					Thank you to everyone who has contributed to making Chicken Society possible. 
+					This game wouldn't exist without the hard work and creativity of our talented team.
+				</p>
+
+				<div class="credits-section">
+					<h2>EXECUTIVES</h2>
+					<ul class="credits-list">
+						<li><strong>Alejandro Sandoval:</strong> Technical Director</li>
+						<li><strong>Bella W. Black:</strong> Creative Director</li>
+						<li><strong>Mikey Cauthon:</strong> Executive Producer</li>
+						<li><strong>Pashia Vang:</strong> Executive Producer</li>
+					</ul>
+				</div>
+
+				<div class="credits-section">
+					<h2>ENGINEERING</h2>
+					<ul class="credits-list">
+						<li><strong>Alejandro Sandoval:</strong> Lead Programmer</li>
+						<li><strong>Mikey Cauthon:</strong> Network Engineer</li>
+						<li><strong>Pashia Vang:</strong> Frontend Engineer and Data Analyst</li>
+					</ul>
+				</div>
+
+				<div class="credits-section">
+					<h2>VISUAL ART</h2>
+					<ul class="credits-list">
+						<li><strong>Bella W. Black:</strong> Art Director and Environment Artist</li>
+						<li><strong>Elizabeth Miller:</strong> Concept Artist</li>
+						<li><strong>com.chi:</strong> Character Artist</li>
+						<li><strong>theultimatericelord:</strong> Cosmetics Artist</li>
+					</ul>
+				</div>
+
+				<div class="credits-section">
+					<h2>SOUND</h2>
+					<ul class="credits-list">
+						<li>
+							<strong>thadmint:</strong> Audio Director and Lead Composer
+							<ul>
+								<li>chickendisco</li>
+								<li>chicktoriassecret</li>
+								<li>pldistrictsong</li>
+								<li>thefunnychicken</li>
+								<li>oldtownsong</li>
+								<li>theroostery</li>
+								<li>burghertstheme</li>
+								<li>Chicken and Fox SFX</li>
+							</ul>
+						</li>
+						<li>
+							<strong>Bella W. Black:</strong> Composer and Sound Designer
+							<ul>
+								<li>welcometothesociety</li>
+								<li>wttspetstupidremix</li>
+								<li>alleywaytrack</li>
+								<li>genericoutdoors</li>
+								<li>rivermarkettrack</li>
+								<li>crossroadstrack</li>
+							</ul>
+						</li>
+						<li>
+							<strong>Momo:</strong> Composer
+							<ul>
+								<li>Project_40</li>
+								<li>Project_67</li>
+								<li>mafia_hideout</li>
+							</ul>
+						</li>
+						<li><strong>Marco Martinez:</strong> Assistant Sound Designer & SFX Artist</li>
+					</ul>
+				</div>
+
+				<div class="credits-section">
+					<h2>WRITING TEAM</h2>
+					<ul class="credits-list">
+						<li><strong>Lead Writers:</strong></li>
+						<li>Bella W. Black</li>
+						<li>Mikey Cauthon</li>
+						<li>Alejandro Sandoval</li>
+						<li>Pashia Vang</li>
+						<li style="margin-top: 1rem;"><strong>Assistant Writers:</strong></li>
+						<li>Maral Bat</li>
+						<li>Anya Combs</li>
+						<li>Hunter Long</li>
+						<li>Marco Martinez</li>
+						<li>Elizabeth Miller</li>
+						<li>Morgan Nguyen</li>
+						<li>Rory Short</li>
+					</ul>
+				</div>
+
+				<div class="credits-footer">
+					<p>© 2025 Goodest Software. All rights reserved.</p>
+					<p style="margin-top: 0.5rem;">
+						<a href="./index.html">Return to Game</a> |
+						<a href="./terms-of-service.html" target="_blank">Terms of Service</a> |
+						<a href="./privacy-policy.html" target="_blank">Privacy Policy</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="game/login.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			// Dropdown logic
+			const dropdowns = document.querySelectorAll('.dropdown');
+			const dropdownButtons = document.querySelectorAll('.dropdown-button');
+			dropdownButtons.forEach((button, i) => {
+				button.addEventListener('click', function(e) {
+					e.stopPropagation();
+					dropdowns.forEach((dropdown, j) => {
+						if (i === j) {
+							dropdown.classList.toggle('open');
+						} else {
+							dropdown.classList.remove('open');
+						}
+					});
+				});
+			});
+			document.addEventListener('click', function() {
+				dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
+			});
+			document.querySelectorAll('.dropdown-content').forEach(content => {
+				content.addEventListener('click', function(e) {
+					e.stopPropagation();
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>
