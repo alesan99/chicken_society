@@ -100,9 +100,12 @@
 						"questTask": 0,
 						"questTaskValue": 1
 					},
-					"quest": "runner",
-					"questTask": 1,
-					"questTaskAdd": 1
+					"event": {
+						"type": "quest",
+						"quest": "runner",
+						"questTask": 1,
+						"questTaskAdd": 1
+					}
 				},
 				{
 					"id": "runnerComplete",
@@ -222,10 +225,12 @@
 			"clickable": true,
 			"icon": {"frame": 1, "x": 15, "y": -10},
 
-			"action": "quest",
-			"quest": "egg_hunt",
-			"questTask": 3,
-			"questTaskAdd": 1,
+			"event": {
+				"type": "quest",
+				"quest": "egg_hunt",
+				"questTask": 3,
+				"questTaskAdd": 1,
+			},
 
 			"condition": {
 				"quest": "egg_hunt",
