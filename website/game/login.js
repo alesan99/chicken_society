@@ -102,15 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
 	fetch("/session", { credentials: "include" })
 		.then(res => {
 			if (!res.ok) {
-				return false;
+				return { loggedIn: false };
 			}
-			res.json();
+			return res.json();
 		}).then(data => {
-			if (data.loggedIn) {
+			if (data && data.loggedIn) {
 				setLoggedIn(true, data.username);
 			} else {
 				setLoggedIn(false);
 			}
+		}).catch(error => {
+			console.error("Error checking session:", error);
+			setLoggedIn(false);
 		});
 });
 

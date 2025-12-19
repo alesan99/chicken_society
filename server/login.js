@@ -31,7 +31,8 @@ app.post("/login", (req, res) => {
 				// Remember logins for 31 days
 				req.session.cookie.maxAge = 31*24*60*60*1000;
 			} else {
-				req.session.cookie.expires = false;
+				// Session persists for 7 days (covers refreshes but not as long as "remember")
+				req.session.cookie.maxAge = 7*24*60*60*1000;
 			}
 			
 			if (player && loginPlayer(player.id, accountId, username, admin)) {
@@ -71,6 +72,8 @@ app.post("/register", (req, res) => {
 			player.sessionId = session.id;
 			req.session.accountId = accountId;
 			req.session.username = username;
+			// Default session persists for 7 days
+			req.session.cookie.maxAge = 7*24*60*60*1000;
 
 			if (player && loginPlayer(player.id, accountId, username, false)) {
 				console.log(`User ${username} registered and logged in successfully.`);

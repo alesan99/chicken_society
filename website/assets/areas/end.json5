@@ -1,7 +1,7 @@
 {
 	"name": "???",
 	"mapLocation": false,
-	"music": false,
+	"music": "burghertstheme",
 
 	"walls": [
 		// Top border
@@ -19,8 +19,8 @@
 			"to": "hub",
 			"fromWarp": "end",
 			"facing": "down",
-			"x": 250,
-			"y": 125,
+			"x": 100,
+			"y": 150,
 			"w": 80,
 			"h": 50
 		},
@@ -28,8 +28,8 @@
 			"to": "coop",
 			"fromWarp": "end",
 			"facing": "down",
-			"x": 740,
-			"y": 115,
+			"x": 900,
+			"y": 150,
 			"w": 80,
 			"h": 50
 		},

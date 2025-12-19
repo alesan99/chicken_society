@@ -101,7 +101,7 @@
 
     "warps": {
 		"burghertsLairExit": {
-			"to": "hub",
+			"to": "sewer",
 			"fromWarp": "burghertsLairEntrance",
 			"facing": "left",
 			"x": 952,
