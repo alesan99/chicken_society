@@ -56,9 +56,12 @@
 						"quest": "kill_burghert",
 						"questActive": true,
 					},
-					"quest": "kill_burghert",
-					"questTask": 2,
-					"questTaskSet": 1,
+					"event": {
+						"type": "quest",
+						"quest": "kill_burghert",
+						"questTask": 2,
+						"questTaskSet": 1,
+					},
 					"to": "monologue-end",
 				},
 				{
@@ -69,10 +72,18 @@
 						"Together, we can destroy them. What do you say? Will you join me?"
 					],
 					"condition": {"isResponse": true},
-					"quest": "kill_burghert",
-					"questTask": 3,
-					"questTaskSet": 1,
-					"warp": "end",
+					"event": [
+						{
+							"type": "quest",
+							"quest": "kill_burghert",
+							"questTask": 3,
+							"questTaskSet": 1,
+						},
+						{
+							"type": "warp",
+							"warp": "end",
+						}
+					]
 				},
 				{
 					"text": [
