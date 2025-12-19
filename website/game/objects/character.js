@@ -608,8 +608,11 @@ export default class Character extends PhysicsObject {
 
 	// Collision
 	collide(name, obj, nx, ny) {
-		if (name == "Character" || name == "Trigger") {
+		if (name == "Character") {
 			return false;
+		}
+		if (name == "Trigger") {
+			return obj.solid;
 		}
 		if (name == "Furniture" && obj.rug) {
 			return false;

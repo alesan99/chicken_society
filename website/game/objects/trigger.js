@@ -13,7 +13,7 @@ import {openMenu, closeMenu, getOpenMenu} from "../state.js";
 
 export default class Trigger extends PhysicsObject {
 	//Initialize: x pos, y pos, shape in points, action func, activate when clicked?, icon: {frame, x, y}, activate when walked over?
-	constructor (spatialHash, x, y, shape, action, clickable=false, icon=false, walkOver=false, activateOnce=false, sound=false) {
+	constructor (spatialHash, x, y, shape, action, clickable=false, icon=false, walkOver=false, activateOnce=false, sound=false, wall=false) {
 		// Collision
 		super(spatialHash,x,y);
 		this.x = x || 0;
@@ -63,6 +63,11 @@ export default class Trigger extends PhysicsObject {
 		this.sound = sound;
 		// Particle
 		this.particle = true;
+		// Wall
+		this.wall = wall;
+		if (this.wall) {
+			this.solid = true;
+		}
 
 		// Is active according to conditions?
 		this.isActive = true;
@@ -140,6 +145,9 @@ export default class Trigger extends PhysicsObject {
 		
 	// Collision
 	collide(name, obj, nx, ny) {
+		if (obj.static !== true && this.solid) {
+			return true;
+		}
 		return false;
 	}
 

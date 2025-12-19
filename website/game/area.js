@@ -85,7 +85,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 			if (trig.cost && trig.icon) { // apply cost to icon text
 				trig.icon.text = trig.cost;
 			}
-			OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound);
+			OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound, trig.wall);
 			OBJECTS["Trigger"][name].active = isActive;
 			OBJECTS["Trigger"][name].condition = trig.condition;
 				
