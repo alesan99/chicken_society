@@ -74,6 +74,48 @@
     }
   },
 
+  "triggers": {
+    "furnitureCatalog": {
+      "x": 445,
+      "y": 122,
+      "shape": [
+        -40, -40,
+        40, -40,
+        40, 40,
+        -40, 40,
+      ],
+      "clickable": true,
+      "icon": true,
+      "action": "shop",
+      "shop": {
+        "name": "Furniture Catalog",
+        "items": {
+          "furniture": {
+            "rug": true,
+            "table": true,
+            "frame": true,
+            "lamp": true,
+            "room_blue": true,
+          },
+        },
+      }
+    },
+    "secretBookshelf": {
+      "x": 123,
+      "y": 236,
+      "shape": [
+        -60, -75,
+        3, -113,
+        43, -113,
+        43, 40,
+        -4, 119,
+        -60, 119,
+      ],
+      "clickable": true,
+      "wall": true,
+    }
+  },
+
   "NPCs": {
 		"lidia": {
             profile: {

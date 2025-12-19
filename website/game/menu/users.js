@@ -27,7 +27,10 @@ MENUS["usersMenu"] = new class extends Menu {
 			if (this.listSelection > 0) {
 				ownerId = this.list[this.listSelection];
 			}
-			if (ownerId == NETPLAY.id) {
+			if (NETPLAY.id === "OFFLINE") {
+				// Your coop offline
+				WORLD.warpToArea("coop", null, null, ownerId, SAVEDATA.coop);
+			} else if (ownerId == NETPLAY.id) {
 				// Your coop
 				NETPLAY.requestCoopData(ownerId, (data)=>{
 					let coopData = data || SAVEDATA.coop;

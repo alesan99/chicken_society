@@ -13,7 +13,7 @@ import QuestSystem from "./quests.js";
 import DialogueSystem from "./dialogue.js";
 import Transition from "./transition.js";
 import { PhysicsObject, Character, Player, NPC, Pet, Trigger, Wall, Warp, Furniture, Particle } from "./objects/objects.js";
-
+import { openMenu } from "./state.js";
 
 // Load area data from .json
 function loadAreaFile(data, world, fromWarp, endFunc) {
@@ -85,7 +85,7 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 			if (trig.cost && trig.icon) { // apply cost to icon text
 				trig.icon.text = trig.cost;
 			}
-			OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound);
+			OBJECTS["Trigger"][name] = new Trigger(PHYSICSWORLD, trig.x, trig.y, trig.shape, null, trig.clickable, trig.icon, trig.walkOver, trig.activateOnce, trig.sound, trig.wall);
 			OBJECTS["Trigger"][name].active = isActive;
 			OBJECTS["Trigger"][name].condition = trig.condition;
 				
@@ -130,7 +130,15 @@ function loadAreaFile(data, world, fromWarp, endFunc) {
 				};
 			} else if (action == "item") {
 				// Give item
-				addItem(trig.item);
+				func = function() {
+					addItem(trig.item);
+				};
+			} else if (action === "shop") {
+				// Open a shop
+				func = function() {
+					openMenu("shop", trig.shop, trig.sell);
+					OBJECTS["Trigger"][name].reset();
+				};
 			}
 
 			OBJECTS["Trigger"][name].action = func;
