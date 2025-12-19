@@ -34,13 +34,14 @@ export function handleUrl() {
 
 	// Dev mode
 	const devMode = params.get("dev") && NETPLAY.id == "OFFLINE";
-	if (devMode) {
+	if (devMode && NETPLAY.id === "OFFLINE") {
 		console.log("Dev mode");
+		NETPLAY.admin = true;
 	}
 
 	// Warp to area
 	const area = params.get("area");
-	if (devMode) {
+	if (area && devMode) {
 		LoadingScreen.start(() => {});
 		WORLD.loadArea(area, "chatWarp");
 	}
