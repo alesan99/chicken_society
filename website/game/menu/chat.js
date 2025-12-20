@@ -153,10 +153,10 @@ MENUS["chatMenu"] = new class extends Menu {
 		// Display chat messages
 		if (this.messageLogTimer > 0) {
 			Draw.setColor(255, 255, 255, 1);
-			Draw.image(IMG.chatMessage, null, 212, 490);
+			Draw.image(IMG.chatMessage, null, this.x+32, this.y-35);
 			Draw.setFont(FONT.caption);
 			Draw.setColor(0, 0, 0, 1);
-			Draw.text(this.messages[this.messages.length - 1], this.x+24, this.y-10, "left");
+			Draw.text(this.messages[this.messages.length - 1], this.x+39, this.y-10, "left");
 		}
 
 		// Emote Menu
