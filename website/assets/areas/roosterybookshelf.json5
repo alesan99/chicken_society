@@ -1,0 +1,69 @@
+{
+	"name": "Roostery",
+  	"mapLocation": [231, 171],
+  	"music": "roostery",
+
+	"triggers": {
+		// Secret book in bookshelf
+		"roosteryExit_2": {
+			"x": 300,
+			"y": 111,
+			"shape": [
+				-40, -100,
+				40, -100,
+				40, 100,
+				-40, 100,
+			],
+			"clickable": true,
+			"action": "warp",
+			"area": "peppinellos",
+			"fromWarp": "roosteryExit_2",
+			"condition": {
+				"quest": "sewers",
+				"questComplete": true,
+				"optional": true,
+			},
+			
+		}
+	},
+
+	"warps": {
+		"entrance": {
+			"to": "roostery", 
+			"fromWarp": "secretBookshelf",
+			"facing": "down",
+			"x": 512,
+			"y": 700,
+			"w": 1000,
+			"h": 30,
+			"sound": "woosh",
+		},
+		"exitBottom": {
+			"to": "roostery", 
+			"facing": "up",
+			"x": 512,
+			"y": 820,
+			"w": 1000,
+			"h": 30,
+			"sound": "woosh",
+		},
+		"exitLeft": {
+			"to": "roostery", 
+			"facing": "right",
+			"x": 412,
+			"y": 740,
+			"w": 30,
+			"h": 100,
+			"sound": "woosh",
+		},
+		"exitRight": {
+			"to": "roostery", 
+			"facing": "left",
+			"x": 612,
+			"y": 740,
+			"w": 30,
+			"h": 100,
+			"sound": "woosh",
+		}
+	},
+}

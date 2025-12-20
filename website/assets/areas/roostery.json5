@@ -1,6 +1,6 @@
 {
   name: "Roostery",
-  mapLocation: false,
+  mapLocation: [231, 171],
   music: "roostery",
 
   walls: [
@@ -113,6 +113,8 @@
       ],
       "clickable": true,
       "wall": true,
+      "action": "warp",
+      "area": "roosterybookshelf"
     }
   },
 
