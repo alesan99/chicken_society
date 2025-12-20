@@ -32,7 +32,15 @@
     "lamp",
     "room_blue",
     "rug",
-    "table"
+    "table",
+    "wooden_chair",
+    "tabletop_plant",
+    "bean_bag_yellow",
+    "bean_bag_pink",
+    "bean_bag_green",
+    "floor_pillow_yellow",
+    "floor_pillow_purple",
+    "floor_pillow_green"
   ],
   "head": [
     "hoodie",

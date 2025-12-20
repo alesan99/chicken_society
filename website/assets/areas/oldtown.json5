@@ -38,10 +38,10 @@
       "to": "roostery",
       "fromWarp": "roosteryExit_1",
       "facing": "down",
-      "x": 653,
+      "x": 636,
       "y": 243,
-      "w": 50,
-      "h": 60,
+      "w": 20,
+      "h": 40,
 			"sound": "door"
     }
   },

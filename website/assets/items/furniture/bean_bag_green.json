@@ -1,0 +1,21 @@
+{
+    "name": "Green Bean Bag",
+    "description": "A comfy, green bean bag.",
+    "cost": 12,
+
+    "center": [
+        [50,80],
+        [50,80],
+        [50,80]
+    ],
+
+    "table": true,
+    "height": 62,
+    "solid": false,
+
+    "shape": [
+        [-50,-10, 50,-10, 50,29, -50,29],
+        [-50,-10, 50,-10, 50,29, -50,29],
+        [-50,-10, 50,-10, 50,29, -50,29]
+    ]
+}
