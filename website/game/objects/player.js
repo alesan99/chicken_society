@@ -62,7 +62,7 @@ export default class Player {
 
 			if ((((targetX-futureX > 0) != (targetX-char.x > 0)) || ((targetY-futureY > 0) != (targetY-char.y > 0))) // Don't move anymore if crossing target coordinate
 				|| (this.targetTimer < 0) ) { // Or don't move if target hasn't been reached in a while
-				this.stop();
+				this.stop(false);
 			} else {
 				char.move(dx, dy);
 			}
@@ -202,11 +202,13 @@ export default class Player {
 	}
 
 	// Stop moving towards target
-	stop() {
+	stop(stopMouseHold=true) {
 		let char = this.obj;
 		// Stop mouse movement
 		this.target = false;
-		this.mouseHold = false;
+		if (stopMouseHold) {
+			this.mouseHold = false;
+		}
 		char.move(0, 0);
 		// Stop keyboard movement
 		this.arrowKeys.left = false;
