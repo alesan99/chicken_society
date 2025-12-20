@@ -60,7 +60,11 @@
       "facing": "down",
       "roamRadius": 1,
       "interactRange": 20,
-      "speechBubble": ["Sighhhhhh"],
+      "speechBubble": [
+        "Sighhhhhh",
+        "The IRS hates my dependent count.",
+        "I miss my wife."
+      ],
       "dialogue": [
         {
           "id": "egg_huntFail",
