@@ -1,0 +1,21 @@
+{
+    "name": "Green Floor Pillow",
+    "description": "A comfy, green floor pillow.",
+    "cost": 12,
+
+    "center": [
+        [50,80],
+        [50,80],
+        [50,80]
+    ],
+
+    "table": true,
+    "height": 62,
+    "solid": false,
+
+    "shape": [
+        [-30,-10, 70,-10, 70,29, -30,29],
+        [-60,-10, 60,-10, 60,29, -60,29],
+        [-30,0, 70,0, 70,29, -30,29]
+    ]
+}
