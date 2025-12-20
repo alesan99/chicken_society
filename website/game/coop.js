@@ -166,11 +166,17 @@ const Coop = (function() {
 			}
 			return true;
 		},
-
+		
+		// Start editing furniture placement
 		moveFurniture(itemId) {
 			if (this.owner != NETPLAY.id) {
 				// Can't edit coop if you're not the owner
 				return false;
+			}
+
+			// If currently placing furniture already, stop.
+			if (this.furniture && this.furnitureObj) {
+				this.furnitureObj.destroy();
 			}
 			
 			// Start placing furniture
