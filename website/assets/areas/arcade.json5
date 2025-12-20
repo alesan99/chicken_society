@@ -1,6 +1,6 @@
 {
 	"name": "Arcade",
-	"mapLocation": [261, 196],
+	"mapLocation": [307, 158],
 	"music": "chickendisco",
 
 	"walls": [
@@ -70,10 +70,10 @@
 			"roamRadius": false,
 			"speechBubble": [
 				"Psst. Press the emote button in the chat HUD.",
-				"Psst. Type /head top_hat",
-				"Psst. Type /body scarf",
-				"Psst. Press the '/' key to type in the chat.",
-				"Psst. Change your name with /name YOURNAME"
+				"Psst. Visit your home by clicking the users button in the HUD.",
+				"Psst. Put on clothing by pressing the shirt button in the HUD.",
+				"Psst. Type chat messages in the input bar.",
+				"Psst. Change your name by pressing the shirt button in the HUD.",
 			],
 
 			"dialogue": [
