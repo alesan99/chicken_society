@@ -4,9 +4,84 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Chicken Society</title>
+	<title>Privacy Policy - Chicken Society</title>
 	<link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="styles.css">
+	<style>
+		.content-container {
+			width: 1100px;
+			min-width: 1100px;
+		}
+		.legal-container {
+			width: 100%;
+			padding: 0;
+		}
+		.legal-container h1 {
+			color: #ec9027;
+			font-size: 2.5rem;
+			margin-bottom: 0.5rem;
+			text-align: center;
+			padding: 2rem 6rem 0 6rem;
+		}
+		.legal-container h2 {
+			color: #806649;
+			font-size: 1.8rem;
+			margin-top: 2.5rem;
+			margin-bottom: 1rem;
+			border-bottom: 2px solid #e0c5ac;
+			padding-bottom: 0.5rem;
+		}
+		.legal-container h3 {
+			color: #806649;
+			font-size: 1.4rem;
+			margin-top: 1.5rem;
+			margin-bottom: 0.75rem;
+		}
+		.legal-container h4 {
+			color: #806649;
+			font-size: 1.2rem;
+			margin-top: 1.25rem;
+			margin-bottom: 0.5rem;
+		}
+		.legal-content {
+			padding: 0 6rem;
+			color: #595959;
+			font-size: 1rem;
+			line-height: 1.6;
+		}
+		.legal-content p {
+			margin-bottom: 1rem;
+		}
+		.legal-content ul, .legal-content ol {
+			margin-bottom: 1rem;
+			padding-left: 2rem;
+		}
+		.legal-content li {
+			margin-bottom: 0.5rem;
+		}
+		.legal-content strong {
+			color: #806649;
+			font-weight: 600;
+		}
+		.legal-content a {
+			color: #806649;
+			text-decoration: underline;
+		}
+		.legal-footer {
+			margin-top: 3rem;
+			padding: 2rem 6rem;
+			border-top: 2px solid #e0c5ac;
+			text-align: center;
+			color: #806649;
+			font-size: 0.95rem;
+		}
+		.legal-footer a {
+			color: #806649;
+		}
+	</style>
 </head>
 
 <!-- Navigation Bar -->
@@ -59,8 +134,10 @@
 <body>
 	<div class="page-container">
 		<div class="content-container">
-			<h1>Privacy Policy</h1>
-			<p>Last updated: June 30, 2025</p>
+			<div class="legal-container">
+				<div class="legal-content">
+					<h1>Privacy Policy</h1>
+					<p>Last updated: June 30, 2025</p>
 			<p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
 			<p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the <a href="https://www.termsfeed.com/privacy-policy-generator/" target="_blank">Privacy Policy Generator</a>.</p>
 			<h2>Interpretation and Definitions</h2>
@@ -230,11 +307,41 @@
 			<h2>Contact Us</h2>
 			<p>If you have any questions about this Privacy Policy, You can contact us:</p>
 			<ul>
-			<li>By email: contact@chickensociety.net</li>
+			<li>github.com/alesan99/chicken_society/discussions/landing</li>
 			</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 
+	<script src="game/login.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			// Dropdown logic
+			const dropdowns = document.querySelectorAll('.dropdown');
+			const dropdownButtons = document.querySelectorAll('.dropdown-button');
+			dropdownButtons.forEach((button, i) => {
+				button.addEventListener('click', function(e) {
+					e.stopPropagation();
+					dropdowns.forEach((dropdown, j) => {
+						if (i === j) {
+							dropdown.classList.toggle('open');
+						} else {
+							dropdown.classList.remove('open');
+						}
+					});
+				});
+			});
+			document.addEventListener('click', function() {
+				dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
+			});
+			document.querySelectorAll('.dropdown-content').forEach(content => {
+				content.addEventListener('click', function(e) {
+					e.stopPropagation();
+				});
+			});
+		});
+	</script>
 </body>
 
 </html>
