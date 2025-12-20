@@ -27,6 +27,8 @@ export default class Furniture extends PhysicsObject {
 		// Can be a single shape: [x,y, x,y, x,y...]
 		// OR 3 shapes for down, right, up [[x,y, x,y...], [x,y, x,y...], [x,y, x,y...]]
 		this.setDir(dir);
+		this.solid = true;
+		if (this.item.solid === false) this.solid = false;
 
 		// Graphics
 		this.center = item.center;
@@ -131,6 +133,9 @@ export default class Furniture extends PhysicsObject {
 	// Collision
 	collide(name, obj, nx, ny) {
 		if (this.static) {
+			if (name === "Character") {
+				return this.solid;
+			}
 			return true;
 		} else {
 			return false; // Can collide, but don't move furniture (while placing)

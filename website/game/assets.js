@@ -230,6 +230,7 @@ function loadItem(category, itemId) {
 
 		// Furniture
 		item.shape = data.shape;
+		item.solid = data.solid;
 		item.rug = data.rug;
 		item.table = data.table;
 		item.height = data.height;

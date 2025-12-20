@@ -13,7 +13,7 @@ loginButton.addEventListener("click", (e) => {
 
 	const username = document.getElementById("username-field").value;
 	const password = document.getElementById("password-field").value;
-	const remember = document.getElementById("remember-login").value;
+	const remember = document.getElementById("remember-login").checked;
 
 	// Send data securely using the Fetch API
 	fetch("/login", {

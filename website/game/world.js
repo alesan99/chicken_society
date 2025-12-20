@@ -125,6 +125,7 @@ const World = class {
 			spawnY += Math.random()*30;
 		}
 		PLAYER_CONTROLLER.reset(spawnX, spawnY, "down");
+		DialogueSystem.close();
 		
 		// Clear any uneeded objects
 		for (const [name, npc] of Object.entries(NPCS)) {
