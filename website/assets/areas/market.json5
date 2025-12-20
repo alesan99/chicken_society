@@ -122,7 +122,7 @@
 		"seller": {
 			"profile": {
 				"name": "Seller",
-				"color": "#5220CC",
+				"color": "#e2d58aff",
 				"head": false,
 				"face": false,
 				"body": false
