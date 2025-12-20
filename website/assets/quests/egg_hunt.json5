@@ -8,13 +8,14 @@
 		"Find egg #3.",
 		"Find egg #4.",
 		"Find egg #5.",
-		"Find egg #6."
+		"Find egg #6.",
+		"Find egg #7.",
 	],
 
-	"progressStart": [0,0,0,0,0,0],
-	"progressFinish": [1,1,1,1,1,1],
+	"progressStart": [0,0,0,0,0,0,0],
+	"progressFinish": [1,1,1,1,1,1,1],
 
 	"reward": {
-		"nuggets": 50
+		"nuggets": 100
 	}
 }

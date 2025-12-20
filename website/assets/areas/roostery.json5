@@ -122,7 +122,32 @@
       "wall": true,
       "action": "warp",
       "area": "roosterybookshelf"
-    }
+    },
+    "egg7": {
+      "x": 274,
+      "y": 245,
+      "shape": [0, 0, 40, 0, 40, 40, 0, 40],
+      "clickable": true,
+      "icon": true,
+
+      "action": "quest",
+      "quest": "egg_hunt",
+      "questTask": 6,
+      "questTaskAdd": 1,
+
+      "condition": {
+        "quest": "egg_hunt",
+        "questTask": 6,
+        "questTaskValue": 0,
+      },
+
+      "sprite": {
+        "image": "egg.png",
+        "w": 30,
+        "h": 40,
+        "worldy": 0,
+      },
+    },
   },
 
   "NPCs": {
