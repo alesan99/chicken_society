@@ -1,0 +1,15 @@
+{
+    "name": "Stocking",
+    "description": "A holiday stocking to hang by your fire.",
+    "cost": 2,
+
+    "center": [
+        [30,90],
+        [30,90],
+        [30,90]
+    ],
+
+    "walls": true,
+
+    "shape": [-20,-60, 20,-60, 20,8, -20,8]
+}

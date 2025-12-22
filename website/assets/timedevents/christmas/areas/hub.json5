@@ -4,13 +4,24 @@
 			"profile": {
 				"name": "Santa",
 				"color": "#EE4040",
-				"head": false,
-				"face": false,
+				"head": "santa_hat",
+				"face": "santa_fit",
 				"body": false
 			},
-			"x": 800,
-			"y": 450,
-			"speechBubble": ["Ho ho ho!"]
+			"x": 719,
+			"y": 479,
+			"speechBubble": ["Ho ho ho!"],
+			"shop": {
+				"name": "Santa's Sleigh",
+				"items": {
+					"head": {
+						"santa_hat": true
+					},
+					"furniture": {
+						"stocking": true
+					}
+				}
+			}
 		}
 	}
 }

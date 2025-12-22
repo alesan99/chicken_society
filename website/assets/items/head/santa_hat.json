@@ -1,0 +1,11 @@
+{
+    "name": "Santa Hat",
+    "description": "For your holiday merriment needs.",
+    "cost": 10,
+
+    "center": [
+        [40,18],
+        [47,20],
+        [54,18]
+    ]
+}

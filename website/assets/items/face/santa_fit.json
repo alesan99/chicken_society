@@ -1,0 +1,11 @@
+{
+    "name": "Santa's Glasses & Beard",
+    "description": "Ho ho ho!",
+    "cost": 20,
+
+    "center": [
+        [63,33],
+        [87,33],
+        [63,30]
+    ]
+}

@@ -25,7 +25,8 @@
     "toothpick",
     "visors",
     "chic_glasses",
-    "round_glasses"
+    "round_glasses",
+    "santa_fit"
   ],
   "furniture": [
     "frame",
@@ -40,7 +41,8 @@
     "bean_bag_green",
     "floor_pillow_yellow",
     "floor_pillow_purple",
-    "floor_pillow_green"
+    "floor_pillow_green",
+    "stocking"
   ],
   "head": [
     "hoodie",
@@ -50,7 +52,8 @@
     "top_hat",
     "cowboy_hat",
     "jester_hat",
-    "mini_tophat"
+    "mini_tophat",
+    "santa_hat"
   ],
   "item": [
     "beer",
